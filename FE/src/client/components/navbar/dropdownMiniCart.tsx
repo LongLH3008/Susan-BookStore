@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom'
-import * as icon from '../../../assets/icon'
-import * as img from '../../../assets/img'
-
-type Props = {}
+import * as icon from '@/assets/icon'
+import * as img from '@/assets/img'
 
 const ItemMiniCart = () => {
   return (
@@ -25,7 +23,7 @@ const ItemMiniCart = () => {
   )
 }
 
-const DropdownMiniCart = (props: Props) => {
+const DropdownMiniCart = () => {
   return (
     <>
       <Link to={'/'} className='min-[1000px]:hidden relative '>
@@ -44,7 +42,7 @@ const DropdownMiniCart = (props: Props) => {
       {/* Dropdown Info User */}
       <div
         id='dropdown_miniCart'
-        className='z-10 w-[320px] h-fit p-[30px] mt-5 border hidden text-[12px] bg-white shadow dark:bg-gray-700'
+        className='z-20 w-[320px] h-fit p-[30px] mt-5 border hidden text-[12px] bg-white shadow dark:bg-gray-700'
       >
         <div className='text-zinc-600 pb-5 grid gap-y-5 border-b overscrollHidden overflow-y-scroll scroll-smooth h-[200px]'>
           <ItemMiniCart />

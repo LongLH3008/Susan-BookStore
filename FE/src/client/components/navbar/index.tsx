@@ -12,7 +12,7 @@ const Navbar = (props: Props) => {
     <nav className='min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] max-[1000px]:h-[68px] h-[95px] text-[14px] flex justify-between items-center shadow'>
       <Link id='logo_header' to={'/'}>
         <img
-          width={75.5}
+          width={100}
           className='cursor-pointer'
           src='https://susan-demo.myshopify.com/cdn/shop/files/Logo_057b3bc4-c82c-4a1d-8aec-fc99c1e4b647_100x.png?v=1613600725'
           alt=''
