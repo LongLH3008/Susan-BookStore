@@ -13,7 +13,7 @@ const DropdownInfoUser = (props: Props) => {
       {/* Dropdown Info User */}
       <div
         id='dropdown_infoUser'
-        className='z-10 w-[260px] p-[40px] mt-5 border hidden text-[12px] bg-white shadow dark:bg-gray-700'
+        className='z-20 w-[260px] p-[40px] mt-5 border hidden text-[12px] bg-white shadow dark:bg-gray-700'
       >
         <p className='font-semibold'>MY ACCOUNT</p>
         <ul
