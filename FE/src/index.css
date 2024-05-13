@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ẩn thanh cuộn*/
+.overscrollHidden::-webkit-scrollbar {
+    width: 0;
+}
+
+.overscrollHidden::-webkit-scrollbar-thumb {
+    background-color: transparent;
+}
