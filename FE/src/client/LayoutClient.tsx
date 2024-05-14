@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "./components/navbar";
-import Footer from "./components/footer/footer";
+import Navbar from "./components/reuse/navbar";
+import Footer from "./components/reuse/footer/footer";
 
 type Props = {};
 

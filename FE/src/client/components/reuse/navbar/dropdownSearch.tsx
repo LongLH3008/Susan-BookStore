@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import * as icon from '../../../assets/icon'
-import * as img from '../../../assets/img'
+import * as icon from '../../../../assets/icon'
+import * as img from '../../../../assets/img'
 import { useState } from 'react'
 
 type Props = {}
@@ -46,7 +46,7 @@ const DropdownSearch = () => {
         className='hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 min-[1000px]:z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full'
       >
         <div className='relative p-4 w-3/5 max-h-full'>
-          <div className='relative p-7 bg-white rounded-lg shadow dark:bg-gray-700'>
+          <div className='relative p-7 bg-white rounded-lg shadow dark:bg-gray-700 duration-[2s] ease-linear '>
             {/* <!-- Modal header --> */}
             <div className='flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600'>
               <form className='w-full mx-auto'>

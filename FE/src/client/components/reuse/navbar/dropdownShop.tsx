@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import * as icon from '../../../assets/icon'
-import * as img from '../../../assets/img'
+import * as icon from '../../../../assets/icon'
+import * as img from '../../../../assets/img'
 
 type Props = {}
 
@@ -19,7 +19,7 @@ const DropdownShop = (props: Props) => {
       </Link>
       <div
         id='dropdownDelay_Shop'
-        className='z-10 w-3/5 p-[50px] pt-[45px] mt-5 ml-[200px] hidden text-[14px] bg-white shadow-md dark:bg-gray-700'
+        className='z-20 w-3/5 p-[50px] pt-[45px] mt-5 ml-[200px] hidden text-[14px] bg-white shadow-md dark:bg-gray-700'
       >
         <div className='grid grid-cols-4 mb-10 *:border-r *:border-r-zinc-200 *:ps-6 *:flex *:flex-col *:gap-y-6 first:ps-0 *:font-normal *:text-zinc-500'>
           <div className=''>

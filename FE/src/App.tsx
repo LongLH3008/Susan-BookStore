@@ -6,7 +6,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<LayoutClient />}>
-        <Route path="/" element={<Home />}/>
+        <Route path="/" element={<Home />} />
       </Route>
     </Routes>
   )
