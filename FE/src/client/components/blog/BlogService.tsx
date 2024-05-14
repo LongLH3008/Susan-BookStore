@@ -4,14 +4,16 @@ import { Link } from "react-router-dom";
 const BlogService = () => {
   return (
     <>
-      <div className="grid-cols-1">
+      <div className="lg:grid-cols-1 divide-y divide-gray-200">
         {/* Search */}
-        <div className="search pb-10  border-b-2 border-gray-200">
-          <h3 className="font-semibold text-xl text-[#292929]">Search</h3>
-          <form className="max-w-md mx-auto mt-5">
+        <div className="search pb-10 ">
+          <h3 className="font-semibold text-xl text-[#292929] max-lg:mt-16">
+            Search
+          </h3>
+          <form className=" mx-auto mt-5">
             <label
               htmlFor="default-search"
-              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+              className="mb-4 text-sm font-medium text-gray-900 sr-only dark:text-white"
             >
               Search
             </label>
@@ -19,7 +21,7 @@ const BlogService = () => {
               <input
                 type="search"
                 id="default-search"
-                className="block w-full p-3 ps-4 text-sm text-gray-900 border border-gray-300  bg-gray-50 focus:ring-stone-800 focus:border-y-stone-800 dark:bg-gray-700 dark:border-gray-800 dark:placeholder-gray-800 dark:text-white dark:focus:ring-stone-800 dark:focus:border-stone-800"
+                className=" w-full p-3 ps-4 text-sm text-gray-900 border border-gray-300  bg-gray-50 focus:ring-stone-800 focus:border-y-stone-800 dark:bg-gray-700 dark:border-gray-800 dark:placeholder-gray-800 dark:text-white dark:focus:ring-stone-800 dark:focus:border-stone-800"
                 placeholder="Search out store"
                 required
               />
@@ -28,7 +30,7 @@ const BlogService = () => {
                 className="text-gray-950  absolute end-2.5 bottom-2.5  focus:ring-4 focus:outline-none  font-medium  text-sm   px-2"
               >
                 <svg
-                  className="w-4 h-4 text-slate-950 dark:text-gray-400"
+                  className="w-4 h-4 mb-1 text-slate-950 dark:text-gray-400"
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -48,7 +50,7 @@ const BlogService = () => {
         </div>
         {/* End Search */}
         {/* Custom Menu */}
-        <div className="customMenu py-10 border-b-2 border-gray-200">
+        <div className="customMenu py-10  ">
           <h3 className="text-xl font-semibold mb-5 text-[#292929]">
             Custom Menu
           </h3>
@@ -87,27 +89,31 @@ const BlogService = () => {
         </div>
         {/* End Custom Menu */}
         {/* Recent Post */}
-        <div className="recentPost py-10 border-b-2 border-gray-200">
+        <div className="recentPost py-10  ">
           <h3 className="text-xl font-semibold text-[#292929]">Recent Post</h3>
           <div className="*:py-5">
             <div className="flex">
-              <img
-                className="w-1/3 pr-2"
-                src="https://susan-demo.myshopify.com/cdn/shop/articles/reading-books-might-help-you-live-longer-according-to-new-research-1_medium.jpg?v=1567855567"
-                alt=""
-              />
               <div className="">
-                <h4 className="font-semibold max-w-[170px] overflow-hidden truncate text-[13px] text-[#292929]">
+                <Link to="/">
+                  <img
+                    className="w-[91px] mr-2 hover:border-[3px] border-[#00BFC5]"
+                    src="https://susan-demo.myshopify.com/cdn/shop/articles/reading-books-might-help-you-live-longer-according-to-new-research-1_medium.jpg?v=1567855567"
+                    alt=""
+                  />
+                </Link>
+              </div>
+              <Link to="/" className="">
+                <h4 className="font-semibold 2xl:max-w-[170px] lg:max-w-[100px]   sm:overflow-hidden sm:truncate text-[13px] text-[#292929] hover:text-[#00BFC5]">
                   Testing has a signficant info number of benefits
                 </h4>
                 <p className="text-[#707070] text-xs ">Jan 25, 2022</p>
-              </div>
+              </Link>
             </div>
           </div>
         </div>
         {/* End Recent Post */}
         {/* Archive */}
-        <div className="Archive py-10 border-b-2 border-gray-200">
+        <div className="Archive py-10  ">
           <h3 className="text-xl font-semibold text-[#292929] mb-5">Archive</h3>
           <ul className="*:text-[#707070] *:my-2">
             <li className="font-bold">January 2022</li>
@@ -135,7 +141,7 @@ const BlogService = () => {
         </div>
         {/* End Archive */}
         {/* Tags */}
-        <div className="tags py-10">
+        <div className="tags py-10 ">
           <h3 className="text-xl font-semibold text-[#292929] mb-5">Tags</h3>
           <div className="flex flex-wrap">
             <Link

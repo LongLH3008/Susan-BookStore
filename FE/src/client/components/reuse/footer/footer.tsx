@@ -47,7 +47,7 @@ const Footer = () => {
               Contact
             </Link>
           </div>
-          <div className="grid *:pb-4">
+          <div className="grid *:pb-4 ">
             <p className="font-bold text-[#292929] text-[16px] mb-4">
               Extras Menu
             </p>
@@ -80,7 +80,7 @@ const Footer = () => {
           </p>
         </div>
 
-        <div className="flex justify-end *:text-[#707070] *:cursor-pointer *:px-6 min-[320px]:justify-center *:text-[16px]">
+        <div className="flex justify-end *:text-[#707070] *:cursor-pointer *:px-6 min-[320px]:justify-center *:text-[16px] max-sm:mt-5">
           <i className="hover:text-[#00BFC5] fa-brands fa-twitter"></i>
           <i className="hover:text-[#00BFC5] fa-brands fa-instagram"></i>
           <i className="hover:text-[#00BFC5] fa-brands fa-google"></i>
