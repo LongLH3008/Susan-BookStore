@@ -1,6 +1,7 @@
 import * as img from "@/assets/img";
 import ModalDetail from "./modal_detail";
 import ProductFeatures from "./features";
+import ModalCompare from "./modal_compare";
 
 type Props = {};
 
@@ -13,7 +14,9 @@ const Product = (props: Props) => {
 					{/* Status */}
 					<span className="absolute top-[5%] rounded-full left-[5%] bg-[#00BFC5] w-[50px] h-[30px]">New</span>
 					{/* Discount */}
-					<span className="absolute top-[5%] rounded-full right-[5%] bg-zinc-800 w-[50px] h-[30px]">- 11%</span>
+					<span className="absolute top-[5%] rounded-full right-[5%] bg-zinc-800 w-[50px] h-[30px]">
+						- 11%
+					</span>
 				</div>
 
 				<div
@@ -31,6 +34,7 @@ const Product = (props: Props) => {
 				</div>
 				<ProductFeatures />
 				<ModalDetail />
+				<ModalCompare />
 			</section>
 		</>
 	);
