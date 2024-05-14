@@ -3,22 +3,22 @@ import React, { useState } from "react";
 type Props = {};
 
 const ProductFeatures = (props: Props) => {
-    const [loading, setLoading] = useState<Boolean>(false);
-    const [like, setLike] = useState<Boolean>(false);
+	const [loading, setLoading] = useState<Boolean>(false);
+	const [like, setLike] = useState<Boolean>(false);
 
 	const loadCart = () => {
 		setLoading(true);
 		setTimeout(() => {
 			setLoading(false);
 		}, 1500);
-    };
-    
-    const pressLike = () => {
+	};
+
+	const pressLike = () => {
 		setLike(true);
 		setTimeout(() => {
 			setLike(false);
 		}, 1500);
-    }
+	};
 
 	return (
 		<div
@@ -50,11 +50,14 @@ const ProductFeatures = (props: Props) => {
 						/>
 					</svg>
 					<span className="sr-only">Loading...</span>
-                </div>
-                <div onClick={pressLike}>
-                    <i className={`${like && 'text-[#00BFC5]'} hover:text-[#00BFC5] fa-solid fa-heart`}></i>
-                </div>
-				<i className="hover:text-[#00BFC5] fa-solid fa-sliders"></i>
+				</div>
+				<div onClick={pressLike}>
+					<i className={`${like && "text-[#00BFC5]"} hover:text-[#00BFC5] fa-solid fa-heart`}></i>
+				</div>
+				{/* Compare must be "modal_compare_product ( data attribute )" */}
+				<button className="max-[500px]:hidden" data-modal-target="modal_compare_product" data-modal-toggle="modal_compare_product">
+					<i className="hover:text-[#00BFC5] fa-solid fa-sliders"></i>
+				</button>
 				<button data-modal-target="modal_detail_product" data-modal-toggle="modal_detail_product" type="button">
 					<i className="hover:text-[#00BFC5] fa-solid fa-arrow-up-right-from-square"></i>
 				</button>
