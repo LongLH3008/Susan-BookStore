@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import * as icon from '../../../assets/icon'
+import * as icon from '../../../../assets/icon'
 
 type Props = {}
 
