@@ -1,14 +1,26 @@
 import * as img from "@/assets/img";
-import ModalDetail from "./modal_detail";
 import ProductFeatures from "./features";
-import ModalCompare from "./modal_compare";
+import useProductContext, { ProdContextProvider } from "../../context/ContextProduct";
 
 type Props = {};
 
-const Product = (props: Props) => {
+const Product = () => {
+	return (
+		<ProdContextProvider>
+			<ProdContent />
+		</ProdContextProvider>
+	);
+};
+
+const ProdContent = (props: Props) => {
+	const { featuresProduct } = useProductContext();
 	return (
 		<>
-			<section className="border cursor-pointer">
+			<section
+				onMouseEnter={() => featuresProduct.open()}
+				onMouseLeave={() => featuresProduct.close()}
+				className="relative border cursor-pointer"
+			>
 				<div className="relative flex items-center justify-center h-[337px] overflow-hidden cursor-pointer *:text-white *:text-[14px] *:grid *:place-items-center">
 					<img className="w-full h-full" src={img.demo} alt="" />
 					{/* Status */}
@@ -32,9 +44,8 @@ const Product = (props: Props) => {
 						<span className="line-through ms-3 text-zinc-500">$ Old Price</span>
 					</div>
 				</div>
+				{/* <ProductFeatures show={open} /> */}
 				<ProductFeatures />
-				<ModalDetail />
-				<ModalCompare />
 			</section>
 		</>
 	);

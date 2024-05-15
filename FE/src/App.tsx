@@ -9,6 +9,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<LayoutClient />}>
         <Route path="/" element={<Home />} />
+        {/* <Route path="/test" element={<Test />} /> */}
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog_detail" element={<BlogDetail />} />
       </Route>

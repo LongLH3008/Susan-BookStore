@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import  { useState } from "react";
+import ModalCompare from "./modal_compare";
+import ModalDetail from "./modal_detail";
+import useProductContext from "../../context/ContextProduct";
 
-type Props = {};
+const ProductFeatures = () => {
+	const { feature , featuresProduct } = useProductContext();
 
-const ProductFeatures = (props: Props) => {
 	const [loading, setLoading] = useState<Boolean>(false);
 	const [like, setLike] = useState<Boolean>(false);
 
@@ -22,8 +25,9 @@ const ProductFeatures = (props: Props) => {
 
 	return (
 		<div
-			id="product1"
-			className="z-10 hidden bg-white shadow-md rounded-sm w-[48%] max-[500px]:w-[28%] lg:w-[200px] h-[58px] py-[15px]"
+			className={`${
+				feature ? "open_features" : "hidden"
+			} absolute h-[58px] left-[10%] z-10 bg-white shadow-md rounded-sm w-[80%] py-[15px]`}
 		>
 			<div className="grid grid-cols-4 w-full h-full *:border-r *:grid *:place-items-center *:cursor-pointer *:text-zinc-700">
 				<div className="" role="status">
@@ -49,18 +53,14 @@ const ProductFeatures = (props: Props) => {
 							fill="currentFill"
 						/>
 					</svg>
-					<span className="sr-only">Loading...</span>
 				</div>
 				<div onClick={pressLike}>
 					<i className={`${like && "text-[#00BFC5]"} hover:text-[#00BFC5] fa-solid fa-heart`}></i>
 				</div>
-				{/* Compare must be "modal_compare_product ( data attribute )" */}
-				<button className="max-[500px]:hidden" data-modal-target="modal_compare_product" data-modal-toggle="modal_compare_product">
-					<i className="hover:text-[#00BFC5] fa-solid fa-sliders"></i>
-				</button>
-				<button data-modal-target="modal_detail_product" data-modal-toggle="modal_detail_product" type="button">
-					<i className="hover:text-[#00BFC5] fa-solid fa-arrow-up-right-from-square"></i>
-				</button>
+				{/* Compare */}
+				<ModalCompare />
+				{/* Mini Detail */}
+				<ModalDetail />
 			</div>
 		</div>
 	);

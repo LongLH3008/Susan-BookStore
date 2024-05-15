@@ -18,22 +18,22 @@ const Navbar = (props: Props) => {
           alt=''
         />
       </Link>
-      <div className='max-[1000px]:hidden max-[1300px]:gap-[17%] max-[1300px]:mr-[17%] flex justify-center items-center gap-[27%] *:font-semibold mr-[15%] transition-all'>
-        <Link className='hover:text-[#00BFC5]' to='/'>
+      <div className='w-[40%] h-full relative max-[1000px]:hidden max-[1300px]:gap-[17%] max-[1300px]:mr-[17%] flex justify-start items-center gap-[14%] *:font-semibold mr-[15%] transition-all'>
+        <Link className='hover:text-[#00BFC5] h-full grid place-items-center' to='/'>
           HOME
         </Link>
         <DropdownShop />
-        <Link className='hover:text-[#00BFC5]' to='/blog'>
+        <Link className='hover:text-[#00BFC5] h-full grid place-items-center' to='/blog'>
           BLOG
         </Link>
-        <Link className='hover:text-[#00BFC5]' to='/about'>
+        <Link className='hover:text-[#00BFC5] h-full grid place-items-center' to='/about'>
           ABOUT
         </Link>
-        <Link className='hover:text-[#00BFC5]' to='/contact'>
+        <Link className='hover:text-[#00BFC5] h-full grid place-items-center' to='/contact'>
           CONTACT
         </Link>
       </div>
-      <div className='flex justify-end items-center max-[1000px]:w-[20%] gap-[25%] *:cursor-pointer'>
+      <div className='h-full flex justify-end items-center max-[1000px]:gap-[10%] max-[1000px]:w-[20%] gap-[25%] *:cursor-pointer'>
         <DropdownSearch />
         <DropdownMiniCart />
         <DropdownInfoUser />

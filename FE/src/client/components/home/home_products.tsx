@@ -1,3 +1,4 @@
+import { ProdContextProvider } from "../context/ContextProduct";
 import Product from "../reuse/product/product";
 
 type Props = {};
@@ -17,15 +18,13 @@ const HomeProducts = (props: Props) => {
 				<span className="hover:bg-zinc-800 hover:text-white relative">Cook</span>
 			</div>
 			{/* List Prods  */}
-			<div id="home_list_products" className="homeproducts grid min-[500px]:grid-cols-2 md:grid-cols-3 min-[1100px]:grid-cols-4 gap-[30px]">
-                <Product />
-                <Product />
-                <Product />
-				<Product />
-				<Product />
-                <Product />
-                <Product />
-				<Product />
+			<div
+				id="home_list_products"
+				className="homeproducts grid min-[500px]:grid-cols-2 md:grid-cols-3 min-[1100px]:grid-cols-4 gap-[30px]"
+			>
+				<ProdContextProvider>
+					<Product />
+				</ProdContextProvider>
 			</div>
 		</div>
 	);

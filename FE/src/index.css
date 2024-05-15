@@ -11,4 +11,16 @@
 	background-color: transparent;
 }
 
+.open_features {
+	animation: open_features 0.5s forwards;
+}
 
+@keyframes open_features {
+	0% {
+		bottom: 20%;
+		opacity: 0;
+	}
+	100% {
+		bottom: 30%;
+	}
+}
