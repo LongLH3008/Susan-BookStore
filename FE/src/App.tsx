@@ -2,8 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import LayoutClient from "@/client/LayoutClient";
 import Home from "@/client/pages/home";
 import Blog from "./client/pages/Blog";
-// import Test from "./client/pages/test";
-
+import BlogDetail from "./client/pages/BlogDetail";
 
 export default function App() {
   return (
@@ -12,6 +11,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         {/* <Route path="/test" element={<Test />} /> */}
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog_detail" element={<BlogDetail />} />
       </Route>
     </Routes>
   );

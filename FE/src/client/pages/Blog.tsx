@@ -1,6 +1,6 @@
 import BannerBlog from "../components/blog/BannerBlog.tsx";
 import BlogItem from "../components/blog/BlogItem.tsx";
-import BlogService from "../components/blog/BlogService.tsx";
+import BlogService from "../components/reuse/blog/BlogService.tsx";
 
 const Blog = () => {
   return (
