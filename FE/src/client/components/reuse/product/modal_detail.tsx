@@ -1,40 +1,27 @@
 import * as img from "@/assets/img";
+import { CustomModalDetail } from "@/client/themes/CustomModalDetail";
+import { Modal } from "flowbite-react";
+import useProductContext from "../../context/ContextProduct";
 
 type Props = {};
 
 const ModalDetail = (props: Props) => {
+	const { detail, detailModal, featuresProduct } = useProductContext()
+
+	const openDetail = () => {
+		detailModal.open()
+		featuresProduct.close();
+	}
+
 	return (
-		<div
-			id="modal_detail_product"
-			tabIndex="-1"
-			aria-hidden="true"
-			className="hidden overflow-x-hidden fixed top-0 right-0 left-0 z-50 max-[768px]:p-2 max-[1100px]:p-10  justify-center items-center md:inset-0 h-[calc(100%-1rem)] max-h-full"
-		>
-			<div className="relative max-[1100px]:w-full w-3/5 max-h-full">
-				<div className="max-[968px]:w-full relative bg-white rounded-lg shadow dark:bg-gray-700 duration-[2s] ease-linear ">
-					<button
-						type="button"
-						className="absolute right-2  top-2 text-gray-400 bg-transparent hover:bg-zinc-500 hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-						data-modal-hide="modal_detail_product"
-					>
-						<svg
-							className="w-3 h-3"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 14 14"
-						>
-							<path
-								stroke="currentColor"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-							/>
-						</svg>
-						<span className="sr-only">Close modal</span>
-					</button>
-					<div className="grid max  sm:grid-cols-2 p-5">
+		<>
+			<span onClick={openDetail}>
+				<i className="hover:text-[#00BFC5] fa-solid fa-arrow-up-right-from-square"></i>
+			</span>
+			<Modal theme={CustomModalDetail} show={detail} onClose={() => detailModal.close()}>
+				<Modal.Header />
+				<Modal.Body>
+				<div className="grid max sm:grid-cols-2 p-5">
 						<span className="h-[465px] flex justify-center items-center overflow-hidden border">
 							<img className="h-full" src={img.demo} alt="" />
 						</span>
@@ -91,9 +78,9 @@ const ModalDetail = (props: Props) => {
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
+				</Modal.Body>
+			</Modal>
+		</>
 	);
 };
 
