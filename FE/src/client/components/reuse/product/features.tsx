@@ -1,10 +1,10 @@
-import  { useState } from "react";
+import { useState } from "react";
 import ModalCompare from "./modal_compare";
 import ModalDetail from "./modal_detail";
-import useProductContext from "../../context/ContextProduct";
+import useProductContext from "../../../context/product/ContextProduct";
 
 const ProductFeatures = () => {
-	const { feature , featuresProduct } = useProductContext();
+	const { feature } = useProductContext();
 
 	const [loading, setLoading] = useState<Boolean>(false);
 	const [like, setLike] = useState<Boolean>(false);
@@ -26,8 +26,8 @@ const ProductFeatures = () => {
 	return (
 		<div
 			className={`${
-				feature ? "open_features" : "hidden"
-			} absolute h-[58px] left-[10%] z-10 bg-white shadow-md rounded-sm w-[80%] py-[15px]`}
+				feature ? "bottom-[30%] opacity-1" : "bottom-[20%] opacity-0"
+			} absolute ease-in duration-200 h-[58px] left-[10%] bg-white shadow-md rounded-sm w-[80%] py-[15px]`}
 		>
 			<div className="grid grid-cols-4 w-full h-full *:border-r *:grid *:place-items-center *:cursor-pointer *:text-zinc-700">
 				<div className="" role="status">

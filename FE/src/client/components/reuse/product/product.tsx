@@ -1,6 +1,6 @@
 import * as img from "@/assets/img";
 import ProductFeatures from "./features";
-import useProductContext, { ProdContextProvider } from "../../context/ContextProduct";
+import useProductContext, { ProdContextProvider } from "../../../context/product/ContextProduct";
 
 type Props = {};
 

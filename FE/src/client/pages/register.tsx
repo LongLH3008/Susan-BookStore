@@ -9,7 +9,7 @@ const Register = (props: Props) => {
 			<Breadcrumb current="Register" from="Home" />
 			<div className="xl:px-[11.5%] 2xl:px-[17.5%] h-[696px] flex justify-center *:h-full py-[100px]">
 				<div className="w-[540px] h-full bg-[#f3f3f3] flex flex-col justify-start gap-2 items-center px-[40px] py-[37px]">
-					<p className="text-[30px] leading-[36px] font-medium text-[#333]">Create Account</p>
+					<p className="text-[30px] leading-[36px] font-medium text-[#333] poppins">Create Account</p>
 					<p className="text-[#666] text-[15px] leading-[15px]">
 						Please Register using account detail bellow.
 					</p>

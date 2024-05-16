@@ -2,7 +2,7 @@ import * as img from "@/assets/img";
 import { Link } from "react-router-dom";
 import { Modal } from "flowbite-react";
 import { CustomModalCompare } from "@/client/themes/CustomModalCompare";
-import useProductContext from "../../context/ContextProduct";
+import useProductContext from "../../../context/product/ContextProduct";
 
 type Props = {};
 
@@ -45,9 +45,9 @@ const ModalCompare = (props: Props) => {
 					<table className="w-full mt-5 text-[14px] text-zinc-700 text-center">
 						<tbody>
 							<tr className="*:p-[12px] border *:border-x">
-								<th scope="col" className="w-[20%]">
+								<td scope="col" className="w-[20%]">
 									Action
-								</th>
+								</td>
 								<td>
 									<i className="fa-solid fa-xmark"></i>
 								</td>
@@ -56,23 +56,23 @@ const ModalCompare = (props: Props) => {
 								</td>
 							</tr>
 							<tr className="*:p-[12px] border *:border-x">
-								<th scope="col" className="">
+								<td scope="col" className="">
 									<div className="flex justify-center items-start h-full">Product name</div>{" "}
-								</th>
+								</td>
 								<td>555 77 854</td>
 								<td>555 77 854</td>
 							</tr>
 							<tr className="*:p-[12px] border *:border-x">
-								<th scope="col" className="h-[227px]">
+								<td scope="col" className="h-[227px]">
 									<div className="flex justify-center items-start h-full">Product image</div>
-								</th>
+								</td>
 								<DetailCompareImg />
 								<DetailCompareImg />
 							</tr>
 							<tr className="*:p-[12px] border *:border-x">
-								<th scope="col" className="h-[100px]">
+								<td scope="col" className="h-[100px]">
 									<div className="flex justify-center items-start h-full">Product description</div>{" "}
-								</th>
+								</td>
 								<td>
 									As opposed to using 'Content here, content here', making it look like readable
 									English. Many desktop publishing packages and web page editors now use Lorem Ipsum
@@ -85,9 +85,9 @@ const ModalCompare = (props: Props) => {
 								</td>
 							</tr>
 							<tr className="*:p-[12px] border *:border-x">
-								<th scope="col" className="uppercase">
+								<td scope="col" className="uppercase">
 									availability
-								</th>
+								</td>
 								<td>Available In stock</td>
 								<td>Available In stock</td>
 							</tr>
