@@ -1,4 +1,4 @@
-import { ProdContextProvider } from "../context/ContextProduct";
+import { ProdContextProvider } from "../../context/product/ContextProduct";
 import Product from "../reuse/product/product";
 
 type Props = {};

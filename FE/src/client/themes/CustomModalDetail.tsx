@@ -44,7 +44,7 @@ export const CustomModalDetail : FlowbiteModalTheme = {
 		popup: "border-b-0 p-2",
 		title: "",
 		close: {
-			base: "absolute border-0 right-2 top-2 text-gray-400 bg-transparent hover:bg-zinc-500 hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center",
+			base: "absolute border-0 outline-0 ring-0 right-2 top-2 text-gray-400 bg-transparent hover:bg-zinc-500 hover:text-white rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center",
 			icon: "h-5 w-5",
 		},
 	},

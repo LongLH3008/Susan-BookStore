@@ -8,9 +8,11 @@ const LayoutClient = (props: Props) => {
 	return (
 		<>
 			{/* min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] => Responsive */}
-			<Navbar />
-			<Outlet />
-			<Footer />
+			<div className="relative h-fit">
+				<Navbar />
+				<Outlet />
+				<Footer />
+			</div>
 		</>
 	);
 };

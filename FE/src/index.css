@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+.poppins {
+	font-family: Poppins;
+}
+
+.lato {
+	font-family: Lato;
+}
+
 /* Ẩn thanh cuộn*/
 .overscrollHidden::-webkit-scrollbar {
 	width: 0;
@@ -9,18 +17,4 @@
 
 .overscrollHidden::-webkit-scrollbar-thumb {
 	background-color: transparent;
-}
-
-.open_features {
-	animation: open_features 0.5s forwards;
-}
-
-@keyframes open_features {
-	0% {
-		bottom: 20%;
-		opacity: 0;
-	}
-	100% {
-		bottom: 30%;
-	}
 }
