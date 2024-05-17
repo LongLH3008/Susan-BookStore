@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import Breadcrumb from "../components/reuse/breadcrumb/breadcrumb";
 import CustomFloatingField from "../components/reuse/floatingfield/CustomFloatingField";
+import *  as icon from '@/assets/icon'
 
 type Props = {};
 
@@ -16,16 +17,19 @@ const Register = (props: Props) => {
 					</p>
 					<form
 						action=""
-						className="w-full flex flex-col gap-3 justify-between mt-5 h-full *:text-[14px] *:text-zinc-900"
+						className="w-full flex flex-col gap-3 justify-between mt-5 h-full *:text-[14px] *:text-zinc-900 bg-white p-[30px]"
 					>
 							<CustomFloatingField id="firstname_register" label="First Name" isValidated message="Invalid Character" />
 							<CustomFloatingField id="lastname_register" label="Last Name" isValidated message="Invalid Character" />
 							<CustomFloatingField id="email_register" label="Email Name" isValidated message="Invalid Email" />
 							<CustomFloatingField id="password_register" type="password" label="Password" isValidated message="Password must have ..." />
 							<CustomFloatingField id="confirmpassword_register" type="password" label="Confirm Password" isValidated message="Password not match" />
-						<div className="my-3">
-							<button type="submit" className="max-[500px]:w-full bg-black text-white py-[8px] px-[25px]">
+						<div className="my-3 grid gap-2 sm:flex sm:justify-between">
+							<button type="submit" className="max-[500px]:w-full bg-black text-white py-[10px] px-[25px]">
 								Register
+							</button>
+							<button type="submit" className="max-[500px]:w-full text-black border border-zinc-400 duration-200 hover:bg-black hover:text-white bg-white py-[10px] px-[25px] flex justify-center gap-2">
+							<img src={icon.ggIcon} width={20} alt="" /> Register with Google
 							</button>
 						</div>
 						<Link to="/login" state={{from: location.pathname}} className="max-[500px]:text-center">

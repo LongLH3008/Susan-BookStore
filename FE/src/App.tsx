@@ -1,12 +1,10 @@
 import { Route, Routes } from "react-router-dom";
 import LayoutClient from "@/client/LayoutClient";
-
 import Blog from "./client/pages/Blog";
 import BlogDetail from "./client/pages/BlogDetail";
-
 import Checkout from "./client/pages/Checkout";
 import Cart from "./client/pages/Cart";
-import Home from "./client/pages/home";
+import Home from "./client/pages/Home";
 import Login from "./client/pages/login";
 import Register from "./client/pages/register";
 import Shop from "./client/pages/Shop";

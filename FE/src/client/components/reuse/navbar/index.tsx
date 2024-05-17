@@ -26,9 +26,9 @@ const Navbar = (props: Props) => {
 		<>
 			<div
 				className={`
-			${scroll < 5 && "h-[95px] duration-0"}
+			${scroll < 5 && "h-[68px] lg:h-[95px] duration-0"}
 			${scroll > 50 && scroll < 100 && "h-0 -top-20"}
-			${scroll > 100 && "h-[60px] top-0 bg-[rgba(255,255,255,0.5)] opacity-100"}
+			${scroll > 100 && "h-[68px] top-0 bg-[rgba(255,255,255,0.5)] opacity-100"}
 			sticky hover:bg-white ease-in duration-500 z-30 w-full`}
 			>
 				<nav className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] max-[1000px]:h-[68px] h-full text-[14px] flex justify-between items-center shadow">

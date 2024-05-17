@@ -13,7 +13,7 @@ const Checkout = (props: Props) => {
 				<Link to={"/"}>
 					<p className="text-[21px] font-semibold">Susan Bookstore</p>
 				</Link>
-				<Link to={"/cart"}>
+				<Link to={"/cart"} state={{from: location.pathname}}>
 					<img className="w-[25px]" src={icon.cartCheckout} alt="" />
 				</Link>
 			</nav>

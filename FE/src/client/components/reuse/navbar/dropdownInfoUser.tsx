@@ -14,8 +14,8 @@ const DropdownInfoUser = (props: Props) => {
 			inline
 			placement="bottom-end"
 			label={
-				<span className="max-[1000px]:hidden" id="infoUserButton" data-dropdown-togsgle="dropdown_infoUser">
-					<img width={60} src={icon.infoUser} alt="" />
+				<span className="max-[1000px]:hidden border-2 border-zinc-300 p-1" id="infoUserButton" data-dropdown-togsgle="dropdown_infoUser">
+					<img width={45} src={icon.infoUser} alt="" />
 				</span>
 			}
 		>
