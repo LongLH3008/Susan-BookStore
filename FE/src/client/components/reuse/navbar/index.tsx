@@ -4,7 +4,7 @@ import DropdownInfoUser from "./dropdownInfoUser";
 import DropdownMiniCart from "./dropdownMiniCart";
 import DropdownSearch from "./dropdownSearch";
 import ResponsiveSidebar from "./responsiveSidebar";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ScrollToTop from "../scrolltotop/scrolltoptop";
 
 type Props = {};
@@ -21,8 +21,6 @@ const Navbar = (props: Props) => {
 			window.removeEventListener("scroll", handleScroll);
 		};
 	}, []);
-
-	console.log(scroll);
 
 	return (
 		<>
@@ -47,13 +45,13 @@ const Navbar = (props: Props) => {
 							HOME
 						</Link>
 						<DropdownShop />
-						<Link className="hover:text-[#00BFC5] h-full grid place-items-center" to="/blog">
+						<Link className="hover:text-[#00BFC5] h-full grid place-items-center" to="/blog" state={{ from: location.pathname }}>
 							BLOG
 						</Link>
-						<Link className="hover:text-[#00BFC5] h-full grid place-items-center" to="/about">
+						<Link className="hover:text-[#00BFC5] h-full grid place-items-center" to="/about" state={{ from: location.pathname }}>
 							ABOUT
 						</Link>
-						<Link className="hover:text-[#00BFC5] h-full grid place-items-center" to="/contact">
+						<Link className="hover:text-[#00BFC5] h-full grid place-items-center" to="/contact" state={{ from: location.pathname }}>
 							CONTACT
 						</Link>
 					</div>

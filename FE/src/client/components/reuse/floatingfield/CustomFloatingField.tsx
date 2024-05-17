@@ -15,6 +15,7 @@ const CustomFloatingField = ({ id , type, label, isValidated, message, rounded ,
 			<input
 				type={type ?? 'text'}
 				id={id}
+				name={id}
 				className={`
 				${rounded && 'rounded-md'}
                 ${isValidated ? "border-zinc-300 focus:ring-[0.8px] ring-black" : "border-red-500 ring-0"} 

@@ -11,7 +11,7 @@ import AuthorCta from "./AuthorCTA.png";
 import Logo from "./Logo.png";
 import demo from "./img_demo_product.png";
 import demoBlog from "./img_demo_blog.png";
-import Banner_blog from "./headerBlog.webp";
+import bannerBreadcrumb from "./headerBlog.webp";
 
 export {
 	Logo,
@@ -27,5 +27,5 @@ export {
 	CTA_Banner,
 	AuthorCta,
 	demoBlog ,
-	Banner_blog
+	bannerBreadcrumb
 };

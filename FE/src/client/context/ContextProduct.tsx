@@ -51,8 +51,6 @@ export const ProdContextProvider = ({ children }: ProdContextProps) => {
       setFeature(false);
     },
   };
-  console.log('activating');
-  
 
   return (
     <ProductContext.Provider value={{ compare, feature, detail, compareModal, detailModal, featuresProduct }}>
