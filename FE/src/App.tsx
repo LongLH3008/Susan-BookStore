@@ -11,6 +11,7 @@ import Login from "./client/pages/login";
 import Register from "./client/pages/register";
 import Shop from "./client/pages/Shop";
 import Contact from "./client/pages/Contact";
+import About from "./client/pages/About";
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/about" element={<About />} />
       </Route>
       <Route path="/checkout" element={<Checkout />} />
     </Routes>
