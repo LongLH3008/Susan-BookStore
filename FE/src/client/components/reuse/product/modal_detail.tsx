@@ -1,7 +1,7 @@
 import * as img from "@/assets/img";
 import { CustomModalDetail } from "@/client/themes/CustomModalDetail";
 import { Modal } from "flowbite-react";
-import useProductContext from "../../../context/product/ContextProduct";
+import useProductContext from "../../../context/ContextProduct";
 
 type Props = {};
 

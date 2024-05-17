@@ -1,4 +1,4 @@
-import Product from "../reuse/product/product";
+import Product from "../../reuse/product/product";
 
 type Props = {};
 

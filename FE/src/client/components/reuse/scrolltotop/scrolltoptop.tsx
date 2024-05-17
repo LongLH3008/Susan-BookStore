@@ -7,7 +7,7 @@ const ScrollToTop = () => {
 			} else {
 				clearInterval(scrollInterval);
 			}
-		}, 15);
+		}, 25);
     };
     
 	return (

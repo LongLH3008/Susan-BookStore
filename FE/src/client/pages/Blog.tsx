@@ -1,5 +1,5 @@
-import BannerBlog from "../components/blog/BannerBlog.tsx";
-import BlogItem from "../components/blog/BlogItem.tsx";
+import BannerBlog from "../components/page/blog/BannerBlog.tsx";
+import BlogItem from "../components/page/blog/BlogItem.tsx";
 import BlogService from "../components/reuse/blog/BlogService.tsx";
 
 const Blog = () => {

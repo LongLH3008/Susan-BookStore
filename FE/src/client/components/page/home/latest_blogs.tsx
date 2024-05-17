@@ -1,4 +1,4 @@
-import Blog from "../reuse/blog/blog";
+import Blog from "../../reuse/blog/blog";
 
 
 type Props = {};

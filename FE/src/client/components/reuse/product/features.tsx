@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ModalCompare from "./modal_compare";
 import ModalDetail from "./modal_detail";
-import useProductContext from "../../../context/product/ContextProduct";
+import useProductContext from "../../../context/ContextProduct";
 
 const ProductFeatures = () => {
 	const { feature } = useProductContext();
