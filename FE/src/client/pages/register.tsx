@@ -7,7 +7,7 @@ type Props = {};
 const Register = (props: Props) => {
 	return (
 		<>
-			<Breadcrumb current="Register" from="Home" />
+			<Breadcrumb title="Register" />
 			<div className="xl:px-[11.5%] 2xl:px-[17.5%] h-fit flex justify-center *:h-full py-[100px]">
 				<div className="w-[540px] h-fit bg-[#f3f3f3] flex flex-col justify-start gap-2 items-center px-[40px] py-[37px]">
 					<p className="text-[30px] leading-[36px] font-medium text-[#333] poppins">Create Account</p>
@@ -28,7 +28,7 @@ const Register = (props: Props) => {
 								Register
 							</button>
 						</div>
-						<Link to="/login" className="max-[500px]:text-center">
+						<Link to="/login" state={{from: location.pathname}} className="max-[500px]:text-center">
 							Login
 						</Link>
 					</form>

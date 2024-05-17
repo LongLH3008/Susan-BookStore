@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import * as icon from "@/assets/icon";
 import { CustomDropDownInfoUser } from "@/client/themes/CustomDropDownNavbar";
 import { Dropdown, DropdownHeader } from "flowbite-react";
@@ -6,6 +6,8 @@ import { Dropdown, DropdownHeader } from "flowbite-react";
 type Props = {};
 
 const DropdownInfoUser = (props: Props) => {
+	const location = useLocation();
+
 	return (
 		<Dropdown
 			theme={CustomDropDownInfoUser}
@@ -20,10 +22,10 @@ const DropdownInfoUser = (props: Props) => {
 			<DropdownHeader className="font-semibold uppercase text-[12px] pb-3 border-b border-zinc-400 text-zinc-800">
 				My account
 			</DropdownHeader>
-			<Dropdown.Item as={Link} to="/login" className="text-[12px]">
+			<Dropdown.Item as={Link} to="/login" state={{ from: location.pathname }} className="text-[12px]">
 				Login
 			</Dropdown.Item>
-			<Dropdown.Item as={Link} to="/register" className="text-[12px]">
+			<Dropdown.Item as={Link} to="/register" state={{ from: location.pathname }} className="text-[12px]">
 				Create account
 			</Dropdown.Item>
 		</Dropdown>

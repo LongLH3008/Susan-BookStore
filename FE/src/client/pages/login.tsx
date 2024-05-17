@@ -7,7 +7,7 @@ type Props = {};
 const Login = (props: Props) => {
 	return (
 		<>
-			<Breadcrumb current="Login" from="Home" />
+			<Breadcrumb title="Login" />
 			<div className="xl:px-[11.5%] 2xl:px-[17.5%] h-[635px] flex justify-center *:h-full py-[100px]">
 				<div className="w-[540px] h-full bg-[#f3f3f3] flex flex-col justify-between items-center px-[40px] py-[37px]">
 					<p className="text-[30px] leading-[36px]  text-[#333] poppins">Login</p>
@@ -26,7 +26,7 @@ const Login = (props: Props) => {
 								Forgot your password
 							</Link>
 						</div>
-						<Link to="/register" className="max-[500px]:text-center">
+						<Link to="/register" state={{from: location.pathname}} className="max-[500px]:text-center">
 							Create account
 						</Link>
 					</form>

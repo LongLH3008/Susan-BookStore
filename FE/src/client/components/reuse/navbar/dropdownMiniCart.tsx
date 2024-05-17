@@ -11,7 +11,7 @@ const ItemMiniCart = () => {
 				<img className="" src={img.bannerDropdownShop} alt="" />
 			</span>
 			<div className="ps-[15px] col-span-5 flex flex-col justify-center overflow-hidden relative">
-				<Link to={"/"} className="text-[12px] text-wrap hover:text-[#00BFC5]">
+				<Link to={"/"} state={{from: location.pathname}} className="text-[12px] text-wrap hover:text-[#00BFC5]">
 					Name
 				</Link>
 				<span className="absolute right-0 top-1/4 hover:text-[#00BFC5]">
@@ -28,7 +28,7 @@ const ItemMiniCart = () => {
 const DropdownMiniCart = () => {
 	return (
 		<>
-			<Link to={"/cart"} className="min-[1000px]:hidden relative ">
+			<Link to={"/cart"} state={{from: location.pathname}} className="min-[1000px]:hidden relative ">
 				<img className="w-[20px]" src={icon.miniCart} alt="" />
 				<p id="amount_books_in_miniCart" className="text-[#00BFC5] absolute -top-3 -right-2">
 					0
@@ -64,7 +64,7 @@ const DropdownMiniCart = () => {
 						<span className="font-semibold">$ total</span>
 					</li>
 				</ul>
-				<Link to={"/cart"}>
+				<Link to={"/cart"} state={{ from: location.pathname}}>
 					<button className="mt-5 border-2 text-[13px] font-semibold border-zinc-900 w-full uppercase h-[55px] hover:bg-zinc-900 hover:text-white">
 						view cart
 					</button>
@@ -73,7 +73,7 @@ const DropdownMiniCart = () => {
 					<button className="mt-5 border-2 text-[13px] font-semibold border-zinc-900 w-full uppercase h-[55px] hover:bg-zinc-900 hover:text-white">
 						checkout
 					</button>
-				</Link>{" "}
+				</Link>
 			</Dropdown>
 		</>
 	);

@@ -5,7 +5,7 @@ type Props = {
 	id: string;
 	name: string;
 	content1: string | ReactNode ;
-	content2: string | ReactNode;
+	content2?: string | ReactNode;
 };
 
 const CustomRadioField = ({ id, name, content1, content2 }: Props) => {
