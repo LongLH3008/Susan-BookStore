@@ -14,7 +14,7 @@ const Breadcrumb = ({ title }: { title: string }) => {
 				<h1 className="text-center text-[35px] font-semibold mb-1">{title}</h1>
 				{from && (
 					<div className="flex justify-center items-center gap-2 text-[14px]">
-						<Link to={`${from}`} state={{ from: location.pathname }} className="underline">
+						<Link to={`${from}`} state={{ from: location.pathname }} className="">
 							{from == "/" ? "Home" : from.split("/")[1].charAt(0).toUpperCase() + from.slice(2)}
 						</Link>
 						<i className="fa-solid fa-angle-right text-zinc-500 text-[12px]"></i>
