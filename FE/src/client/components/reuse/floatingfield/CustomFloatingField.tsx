@@ -1,21 +1,24 @@
 
 type Props = {
 	id: string;
+	type?: string;
 	label: string;
 	isValidated?: boolean;
 	message: string;
 	required?: boolean;
+	rounded?: boolean;
 };
 
-const CustomFloatingField = ({ id, label, isValidated, message , required }: Props) => {
+const CustomFloatingField = ({ id , type, label, isValidated, message, rounded , required }: Props) => {
 	return (
 		<div className="relative mb-1">
 			<input
-				type="text"
+				type={type ?? 'text'}
 				id={id}
 				className={`
-                ${isValidated ? "border-zinc-300 focus:ring-[1.3px] ring-black" : "border-red-500 ring-0"} 
-                text-zinc-900 block rounded-md px-2.5 pb-2.5 pt-5 w-full text-sm outline-none  peer`}
+				${rounded && 'rounded-md'}
+                ${isValidated ? "border-zinc-300 focus:ring-[0.8px] ring-black" : "border-red-500 ring-0"} 
+                text-zinc-900 block px-2.5 pb-2.5 pt-5 w-full text-sm outline-none  peer`}
 				placeholder=" "
 			/>
 			<label

@@ -1,4 +1,3 @@
-import * as img from "@/assets/img";
 import { useEffect, useState } from "react";
 import ItemInCheckout from "./ItemInCheckout";
 
