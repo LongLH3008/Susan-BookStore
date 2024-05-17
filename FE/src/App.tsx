@@ -10,6 +10,7 @@ import Home from "./client/pages/home";
 import Login from "./client/pages/login";
 import Register from "./client/pages/register";
 import Shop from "./client/pages/Shop";
+import Contact from "./client/pages/Contact";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/blog_detail" element={<BlogDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/shop" element={<Shop />} />
+        <Route path="/contact" element={<Contact />} />
       </Route>
       <Route path="/checkout" element={<Checkout />} />
     </Routes>
