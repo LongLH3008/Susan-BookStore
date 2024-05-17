@@ -4,6 +4,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import SlideNavButtons from "./SlideNavButtons";
 
 const Banner = () => {
   const prevRef = useRef(null);
@@ -17,10 +18,6 @@ const Banner = () => {
         loop={true}
         pagination={{
           clickable: true,
-        }}
-        navigation={{
-          prevEl: prevRef.current,
-          nextEl: nextRef.current,
         }}
         // autoplay={{
         //   delay: 2000,
@@ -97,14 +94,7 @@ const Banner = () => {
             </div>
           </div>
         </SwiperSlide>
-        <div
-          ref={prevRef}
-          className="swiper-button-prev hover:bg-[#000] ml-20	 py-3 px-10 rounded-full border border-gray-400 bg-transparent hover:border-0 h-[80px] "
-        ></div>
-        <div
-          ref={nextRef}
-          className="swiper-button-next hover:bg-[#000]  mr-20 py-3 px-10 rounded-full border border-gray-400 bg-transparent hover:border-0 h-[80px] "
-        ></div>
+        <SlideNavButtons />
       </Swiper>
     </>
   );

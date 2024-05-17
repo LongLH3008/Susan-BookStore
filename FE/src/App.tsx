@@ -5,6 +5,7 @@ import Blog from "./client/pages/Blog";
 import BlogDetail from "./client/pages/BlogDetail";
 import Login from "./client/pages/login";
 import Register from "./client/pages/register";
+import BookDetail from "./client/pages/BookDetail";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog_detail" element={<BlogDetail />} />
+        <Route path="/book_detail" element={<BookDetail />} />
       </Route>
     </Routes>
   );
