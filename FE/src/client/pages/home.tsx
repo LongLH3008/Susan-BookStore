@@ -1,10 +1,10 @@
-import Banner from "../components/home/banner";
+import Banner from "../components/page/home/banner";
 import * as img from "@/assets/img";
 import * as icon from "@/assets/icon";
-import HomeProducts from "../components/home/home_products";
+import HomeProducts from "../components/page/home/home_products";
 import { Link } from "react-router-dom";
-import LatestProducts from "../components/home/latest_products";
-import LatestBlogs from "../components/home/latest_blogs";
+import LatestProducts from "../components/page/home/latest_products";
+import LatestBlogs from "../components/page/home/latest_blogs";
 import Subcribe from "../components/reuse/subcribe/subcribe";
 
 type Props = {};

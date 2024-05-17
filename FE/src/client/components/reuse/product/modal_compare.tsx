@@ -2,7 +2,7 @@ import * as img from "@/assets/img";
 import { Link } from "react-router-dom";
 import { Modal } from "flowbite-react";
 import { CustomModalCompare } from "@/client/themes/CustomModalCompare";
-import useProductContext from "../../../context/product/ContextProduct";
+import useProductContext from "../../../context/ContextProduct";
 
 type Props = {};
 

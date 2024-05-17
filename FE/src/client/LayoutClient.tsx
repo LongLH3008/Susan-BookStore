@@ -8,7 +8,7 @@ const LayoutClient = (props: Props) => {
 	return (
 		<>
 			{/* min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] => Responsive */}
-			<div className="relative h-fit">
+			<div className="relative h-fit scroll-smooth">
 				<Navbar />
 				<Outlet />
 				<Footer />

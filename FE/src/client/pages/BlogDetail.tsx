@@ -1,7 +1,7 @@
 import React from "react";
-import BannerBlogDetail from "../components/blogDetail/BannerBlogDetail";
+import BannerBlogDetail from "../components/page/blogDetail/BannerBlogDetail";
 import BlogService from "../components/reuse/blog/BlogService";
-import BlogPost from "../components/blogDetail/BlogPost";
+import BlogPost from "../components/page/blogDetail/BlogPost";
 
 const BlogDetail = () => {
   return (
