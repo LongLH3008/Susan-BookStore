@@ -6,7 +6,7 @@ import useProductContext from "../../../context/ContextProduct";
 type Props = {};
 
 const ModalDetail = (props: Props) => {
-	const { detail, detailModal, featuresProduct } = useProductContext()
+	const { detailModal, featuresProduct } = useProductContext()
 
 	const openDetail = () => {
 		detailModal.open()
@@ -18,7 +18,7 @@ const ModalDetail = (props: Props) => {
 			<span onClick={openDetail}>
 				<i className="hover:text-[#00BFC5] fa-solid fa-arrow-up-right-from-square"></i>
 			</span>
-			<Modal theme={CustomModalDetail} show={detail} onClose={() => detailModal.close()}>
+			<Modal theme={CustomModalDetail} show={detailModal.isOpen} onClose={() => detailModal.close()}>
 				<Modal.Header />
 				<Modal.Body>
 				<div className="grid max sm:grid-cols-2 p-5">
