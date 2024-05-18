@@ -1,24 +1,26 @@
 import { useSwiper } from "swiper/react";
 
-const SlideNavButtons = () => {
+export const SlideNavNext = () => {
   const swiper = useSwiper();
 
   return (
-    <div className="border-2 border-gray-200 w-fit px-2 py-1 rounded-xl mt-4 space-x-4">
-      <button
-        className="bg-blue-300 p-1 rounded-md"
-        onClick={() => swiper.slidePrev()}
-      >
-        Prev
-      </button>
-      <button
-        className="bg-blue-300 p-1 rounded-md"
-        onClick={() => swiper.slideNext()}
-      >
-        Next
-      </button>
-    </div>
+    <button
+      className="bg-blue-300 px-8 py-6 *:text-[#797979] bg-white border-4 border-gray-200 hover:bg-[#000] hover:border-[#000] *:hover:text-[#fff] rounded-full absolute top-1/2 right-14 z-20 "
+      onClick={() => swiper.slideNext()}
+    >
+      <i className="fa-solid fa-chevron-right"></i>
+    </button>
   );
 };
+export const SlideNavPrev = () => {
+  const swiper = useSwiper();
 
-export default SlideNavButtons;
+  return (
+    <button
+      className="bg-blue-300 px-8 py-6 *:text-[#797979] bg-white border-4 border-gray-200 hover:bg-[#000] hover:border-[#000] *:hover:text-[#fff] rounded-full absolute top-1/2 left-14 z-20 "
+      onClick={() => swiper.slidePrev()}
+    >
+      <i className="fa-solid fa-chevron-left"></i>
+    </button>
+  );
+};
