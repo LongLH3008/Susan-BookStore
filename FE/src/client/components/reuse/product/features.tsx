@@ -4,7 +4,7 @@ import ModalDetail from "./modal_detail";
 import useProductContext from "../../../context/ContextProduct";
 
 const ProductFeatures = () => {
-	const { feature } = useProductContext();
+	const { featuresProduct } = useProductContext();
 
 	const [loading, setLoading] = useState<Boolean>(false);
 	const [like, setLike] = useState<Boolean>(false);
@@ -26,7 +26,7 @@ const ProductFeatures = () => {
 	return (
 		<div
 			className={`${
-				feature ? "bottom-[30%] opacity-1" : "bottom-[20%] opacity-0"
+				featuresProduct.isOpen ? "bottom-[30%] opacity-1" : "bottom-[20%] opacity-0"
 			} absolute ease-in duration-200 h-[58px] left-[10%] bg-white shadow-md rounded-sm w-[80%] py-[15px]`}
 		>
 			<div className="grid grid-cols-4 w-full h-full *:border-r *:grid *:place-items-center *:cursor-pointer *:text-zinc-700">
