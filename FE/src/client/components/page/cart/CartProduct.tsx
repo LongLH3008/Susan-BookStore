@@ -1,5 +1,6 @@
 type Props = {};
 import * as img from "@/assets/img";
+import { Link } from "react-router-dom";
 
 const ItemCart = () => {
 	return (
@@ -42,8 +43,8 @@ const CartProducts = (props: Props) => {
 			<div className="grid grid-cols-2 min-[1000px]:flex min-[1000px]:flex-wrap min-[1000px]:justify-start min-[1000px]:items-center gap-3 *:bg-black *:text-white *:px-[25px] *:py-[10px] *:text-[14px]">
 				<button className="hover:bg-zinc-700">Clear</button>
 				<button className="hover:bg-zinc-700">Select All</button>
-				<button className="hover:bg-zinc-700">Continue Shopping</button>
-				<button className="hover:bg-zinc-700">Continue Checkout</button>
+				<Link to={'/shop'} state={{from: location.pathname}} className="hover:bg-zinc-700">Continue Shopping</Link>
+				<Link to={'/checkout'} state={{from: location.pathname}} className="hover:bg-zinc-700">Continue Checkout</Link>
 			</div>
 		</div>
 	);

@@ -1,28 +1,57 @@
 import { Link, useLocation } from "react-router-dom";
-import * as img from "@/assets/img";
 
 const Breadcrumb = ({ title }: { title: string }) => {
 	const location = useLocation();
 	const from = location.state?.from;
 
 	return (
-		<div
-			style={{ backgroundImage: `url(${img.bannerBreadcrumb}` }}
-			className={`bg-center bg-no-repeat bg-cover h-[336px] py-[130px] min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] w-full *:text-[#333333]`}
+		<nav
+			className="flex min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] bg-zinc-100 border-b poppins py-8"
+			aria-label="Breadcrumb"
 		>
-			<div className="h-[75px] flex flex-col justify-center items-center">
-				<h1 className="text-center text-[35px] font-semibold mb-1">{title}</h1>
-				{from && (
-					<div className="flex justify-center items-center gap-2 text-[14px]">
-						<Link to={`${from}`} state={{ from: location.pathname }} className="">
-							{from == "/" ? "Home" : from.split("/")[1].charAt(0).toUpperCase() + from.slice(2)}
+			<ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+				<li className="inline-flex items-center">
+					<Link
+						to={"/"}
+						state={{ from: location.pathname }}
+						className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-[#00BFC5] dark:text-gray-400 dark:hover:text-white"
+					>
+						<svg
+							className="w-3 h-3 me-2.5"
+							aria-hidden="true"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="currentColor"
+							viewBox="0 0 20 20"
+						>
+							<path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+						</svg>
+						Home
+					</Link>
+				</li>
+				{from && from !== '/' && from !== location.pathname && (
+				<li>
+					<div className="flex items-center">
+						<i className="mx-2 text-[13px] text-zinc-500 fa-solid fa-angle-right"></i>
+						<Link
+							to={`${from}`}
+							state={{ from: location.pathname }}
+							className="ms-1 text-sm font-medium text-gray-700 hover:text-[#00BFC5] md:ms-2 dark:text-gray-400 dark:hover:text-white"
+						>
+							{from.split("/")[1].charAt(0).toUpperCase() + from.slice(2)}
 						</Link>
-						<i className="fa-solid fa-angle-right text-zinc-500 text-[12px]"></i>
-						<span className="text-[#00BFC5]">{title}</span>
 					</div>
+				</li>
 				)}
-			</div>
-		</div>
+				<li aria-current="page">
+					<div className="flex items-center">
+						<i className="mx-2 text-[13px] text-zinc-500 fa-solid fa-angle-right"></i>
+						<span className="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">
+							{title}
+						</span>
+					</div>
+				</li>
+			</ol>
+		</nav>
 	);
 };
 
