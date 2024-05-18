@@ -1,14 +1,23 @@
 import React from "react";
+import Pagination from "./pagination";
 
-type Props = {};
-
-const Nav = (props: Props) => {
+const Nav = ({
+  viewMode,
+  handleViewChange,
+  itemsToShow,
+  handleItemsToShowChange,
+  sortBy,
+  handleSortByChange,
+  totalItems,
+  currentPage,
+  onPageChange,
+}: any) => {
   return (
-    <div>
+    <div className="border-t border-b border-gray-100 py-2 my-10">
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <div className="grid-icons flex">
-            <button className="active three-column">
+            <button onClick={() => handleViewChange(" md:w-1/3 sm:w-1/2")}>
               <svg
                 width={20}
                 height={46}
@@ -44,7 +53,7 @@ const Nav = (props: Props) => {
                 </defs>
               </svg>
             </button>
-            <button className="four-column hidden lg:block">
+            <button onClick={() => handleViewChange("md:w-1/4 sm:w-1/2 ")}>
               <svg
                 width={35}
                 height={46}
@@ -80,7 +89,7 @@ const Nav = (props: Props) => {
                 </defs>
               </svg>
             </button>
-            <button className="list-view">
+            <button onClick={() => handleViewChange("md:w-1/2 sm:w-1/2 ")}>
               <svg
                 width={26}
                 height={46}
@@ -117,37 +126,38 @@ const Nav = (props: Props) => {
               </svg>
             </button>
           </div>
-          <div className="text-[#707070]">Showing 1 - 4 of 37 result</div>
+          <div className="text-[#707070]">
+            Showing {(currentPage - 1) * itemsToShow + 1} -{" "}
+            {Math.min(currentPage * itemsToShow, totalItems)} of {totalItems}{" "}
+            results
+          </div>
         </div>
-        <div className="flex items-center *:text-[#707070] ">
+        <div className="flex items-center text-[#707070]">
           <div className="single-select-block">
-            <span className="select-title ">Show:</span>
-            <select className=" border-none">
-              <option value={3}>3</option>
-              <option value={4}>4</option>
-              <option value={5}>5</option>
-              <option value={6}>6</option>
-              <option value={7}>7</option>
-              <option value={8}>8</option>
-              <option value={9}>9</option>
-              <option value={10}>10</option>
-              <option value={11}>11</option>
-              <option value={12}>12</option>
-              <option value={13}>13</option>
-              <option value={14}>14</option>
-              <option value={15}>15</option>
-              <option value={16}>16</option>
-              <option value={17}>17</option>
-              <option value={18}>18</option>
-              <option value={19}>19</option>
-              <option value={20}>20</option>
+            <span className="select-title">Show:</span>
+            <select
+              className="border-none"
+              value={itemsToShow}
+              onChange={handleItemsToShowChange}
+            >
+              {Array.from({ length: 18 }, (_, i) => i + 3).map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
             </select>
           </div>
           <div className="short-list ml-2">
             <label className="select-title" htmlFor="SortBy">
               Sort by
             </label>
-            <select className="pr-0 border-none" name="SortBy" id="SortBy">
+            <select
+              className="pr-0 border-none"
+              name="SortBy"
+              id="SortBy"
+              value={sortBy}
+              onChange={handleSortByChange}
+            >
               <option value="manual">Featured</option>
               <option value="best-selling">Best Selling</option>
               <option value="title-ascending">Alphabetically, A-Z</option>
