@@ -25,7 +25,7 @@ const ProdContent = (props: Props) => {
         className="relative border cursor-pointer"
       >
         <div className="relative flex items-center justify-center h-[337px] overflow-hidden cursor-pointer *:text-white *:text-[14px] *:grid *:place-items-center">
-          <Link to="/book_detail">
+          <Link to="/book_detail" state={{ from: location.pathname}}>
             <img className="w-full h-full" src={img.demo} alt="" />
           </Link>
           {/* Status */}
@@ -45,7 +45,7 @@ const ProdContent = (props: Props) => {
           data-dropdown-trigger="hover"
         >
           <Link
-            to="/book_detail"
+            to="/book_detail" state={{ from: location.pathname}}
             className="text-zinc-700 text-[15px] font-semibold"
           >
             Name

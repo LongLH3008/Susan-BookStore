@@ -28,8 +28,8 @@ const ResponsiveSidebar = (props: Props) => {
 							<i className="fa-solid fa-xmark"></i>
 						</button>
 						<div className="w-[85%] flex justify-between items-center h-full bg-[#e6e6e6] text-[#707070] p-5 *:bg-transparent ">
-							<input type="text" className="outline-none border-none" placeholder="Search our store" />
-							<button className="hover:bg-zinc-700 hover:text-white  p-2 rounded-md">
+							<input type="text" className="outline-none ring-0 border-none" placeholder="Search our store" />
+							<button className="hover:bg-zinc-700 hover:text-white px-3 py-2 rounded-full">
 								<i className="fa-solid fa-magnifying-glass"></i>
 							</button>
 						</div>

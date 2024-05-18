@@ -13,13 +13,9 @@ const Navbar = (props: Props) => {
 	const [scroll, setScroll] = useState(0);
 
 	useEffect(() => {
-		const handleScroll = () => {
-			setScroll(window.scrollY);
-		};
+		const handleScroll = () => setScroll(window.scrollY);
 		window.addEventListener("scroll", handleScroll);
-		return () => {
-			window.removeEventListener("scroll", handleScroll);
-		};
+		return () => window.removeEventListener("scroll", handleScroll);
 	}, []);
 
 	return (
@@ -28,10 +24,10 @@ const Navbar = (props: Props) => {
 				className={`
 			${scroll < 5 && "h-[68px] lg:h-[95px] duration-0"}
 			${scroll > 50 && scroll < 100 && "h-0 -top-20"}
-			${scroll > 100 && "h-[68px] top-0 bg-[rgba(255,255,255,0.5)] opacity-100"}
+			${scroll > 100 && "h-[68px] shadow-sm border-0 top-0 bg-[rgba(255,255,255,0.5)] opacity-100"}
 			sticky hover:bg-white ease-in duration-500 z-30 w-full`}
 			>
-				<nav className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] max-[1000px]:h-[68px] h-full text-[14px] flex justify-between items-center shadow">
+				<nav className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] max-[1000px]:h-[68px] h-full text-[14px] flex justify-between items-center border-b">
 					<Link id="logo_header" to={"/"}>
 						<img
 							width={100}

@@ -11,6 +11,7 @@ import Shop from "./client/pages/Shop";
 import Contact from "./client/pages/Contact";
 import About from "./client/pages/About";
 import BookDetail from "./client/pages/BookDetail";
+import NotFound404 from "./client/pages/404NotFound";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
       </Route>
       <Route path="/checkout" element={<Checkout />} />
+      <Route path="*" element={<NotFound404 />} />
     </Routes>
   );
 }
