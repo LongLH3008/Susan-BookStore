@@ -12,7 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const User_1 = __importDefault(require("../../models/User"));
+const User_model_1 = __importDefault(require("../../models/User.model"));
+const schemas_1 = __importDefault(require("../../schemas"));
 class UserApiController {
     // public static async index (req : Request, res : Response, next : NextFunction){
     //     return res.json();
@@ -20,7 +21,8 @@ class UserApiController {
     static getAllUsers(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const allUsers = yield User_1.default.find({});
+                const allUsers = yield User_model_1.default.find({});
+                console.log("get success");
                 if (allUsers.length == 0) {
                     return res.json({ mes: "No one avaiable" });
                 }
@@ -34,7 +36,7 @@ class UserApiController {
     static getUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield User_1.default.find({ _id: req.params.id });
+                const user = yield User_model_1.default.find({ _id: req.params.id });
                 if (!user) {
                     return res.json({ mes: "User not found" });
                 }
@@ -48,10 +50,16 @@ class UserApiController {
     static storeUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield User_1.default.create(req.body);
+                const { error } = schemas_1.default.validate(schemas_1.default.userSchema, req.body);
+                if (error) {
+                    const errors = error.details.map((item) => item.message);
+                    return res.status(400).json({ error: errors });
+                }
+                const user = yield User_model_1.default.create(req.body);
                 return res.status(200).json(user);
             }
             catch (error) {
+                console.log(req.body);
                 return res.status(404).json({ mes: error });
             }
         });
@@ -59,7 +67,7 @@ class UserApiController {
     static editUser(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const user = yield User_1.default.create(req.body);
+                const user = yield User_model_1.default.create(req.body);
                 return res.status(200).json(user);
             }
             catch (error) {

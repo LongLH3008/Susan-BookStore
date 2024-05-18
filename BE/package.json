@@ -40,6 +40,7 @@
     "ejs": "^3.1.9",
     "express-session": "^1.18.0",
     "helmet": "^7.1.0",
+    "joi": "^17.13.1",
     "lusca": "^1.7.0",
     "memory-cache": "^0.2.0",
     "mongodb": "^6.4.0",
@@ -47,6 +48,7 @@
     "morgan": "^1.10.0",
     "nodemon": "^3.1.0",
     "passport": "^0.7.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "slugify": "^1.6.6"
   }
 }
