@@ -19,7 +19,11 @@ class Http {
             resave: false,
             secret: Locals_1.default.config().secretKey,
             saveUninitialized: false,
-            cookie: { secure: true },
+            // em đặt cái này thành false để cho google nó có thể chả phiên đăng nhập vào đây 
+            // vì môi trường local của mình nó là http nên em bật secure = true nó éo cho phép động vào
+            // cookie nên em để tạm false , bao h deploy nó thành https thì bật lại là true nhé 
+            // em đông auth =_=
+            cookie: { secure: false },
             // store : new (MongoDBStore as any)({
             //     uri: process.env.MONGOOSE_URL,
             //     collection: 'sessions', 
