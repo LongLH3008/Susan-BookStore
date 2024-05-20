@@ -3,6 +3,9 @@ import express, { Application } from "express";
 import Kernel from "../middlewares/Kernel";
 import Routes from "./Routes";
 import Locals from "./Locals";
+import Passport from "./Passport";
+import { NextFunction, Request, Response } from 'express';
+import { exceptionHandler } from "../middlewares/ExceptionHandler";
 
 class Express {
   public express: Application;
@@ -19,12 +22,24 @@ class Express {
 
     // Mount Middlewares
     this.express = Kernel.init(this.express);
+    
+    //Mout passport 
+    this.express = Passport.init(this.express)
 
     // Mount Web
     this.express = Routes.mountWeb(this.express);
 
     // Mount API
     this.express = Routes.mountApi(this.express);
+
+    //handleError
+
+    this.express.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+      exceptionHandler.handleError(error, req, res, next)
+    })
+
+
+
   }
 
   public init() {

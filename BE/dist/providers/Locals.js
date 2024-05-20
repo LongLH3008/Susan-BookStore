@@ -22,9 +22,13 @@ class Locals {
         const jwtRefreshKey = process.env.JWT_REFRESH_KEY;
         const emailUser = process.env.EMAIL_USER;
         const emailPass = process.env.EMAIL_PASS;
+            
+        // đống này em thêm để cấu hình passport 
+        const google_client_id = process.env.GOOGLE_CLIENT_ID;
+        const google_client_secret = process.env.GOOGLE_CLIENT_SECRET;
+        const session_secret_key = process.env.SESSION_SECRET_KEY;
+        const google_url_callback = process.env.CALL_BACK_URL;
         return {
-            emailUser,
-            emailPass,
             isCorsEnabled,
             apiPrefix,
             appUrl,
@@ -37,6 +41,12 @@ class Locals {
             appSecret,
             jwtAccessKey,
             jwtRefreshKey
+            emailUser,
+            emailPass,
+            session_secret_key,
+            google_url_callback,
+            google_client_id,
+            google_client_secret
         };
     }
     static init(_express) {

@@ -17,9 +17,9 @@ const commentSchema = joi_1.default.object({
         "string.empty": "Nội dung bình luận là bắt buộc",
         "any.required": "Trường 'Nội dung bình luận' là bắt buộc",
     }),
-    comment_like_number: joi_1.default.number().min(0).default(0).messages({
-        "number.base": "Số lượt thích phải là một số",
-        "number.min": "Số lượt thích phải lớn hơn hoặc bằng 0",
+    comment_rating: joi_1.default.number().required().messages({
+        "string.empty": "Số điểm đánh giá là bắt buộc",
+        "any.required": "Trường 'Số điểm đánh giá' là bắt buộc",
     }),
 });
 exports.default = commentSchema;

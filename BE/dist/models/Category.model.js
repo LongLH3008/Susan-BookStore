@@ -13,7 +13,7 @@ const CategorySchema = new mongoose_1.default.Schema({
     },
     category_thumb: {
         type: String,
-        required: true,
+        default: "",
     },
     is_active: {
         type: Boolean,

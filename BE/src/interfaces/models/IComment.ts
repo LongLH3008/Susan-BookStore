@@ -6,6 +6,7 @@ export interface IComment {
     comment_parent_id: mongoose.Schema.Types.ObjectId | null
     comment_content: string
     comment_like_number: number
+    comment_rating: number
     createAt: Date | string
     updateAt: Date | string
 

@@ -11,7 +11,12 @@ class CORS {
         _express.use((0, cors_1.default)({
             origin: Locals_1.default.config().appUrl,
             // origin: process.env.APP_URL
+            //credentials : true
         }));
+        // em tạo thêm credential này để client nó còn được phép lấy
+        // cookies, HTTP authentication, sau khi auth xong nó trả phiên về 
+        // không bật thì mỗi origin mới dc truy cập
+        // em đông 
         return _express;
     }
 }
