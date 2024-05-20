@@ -28,7 +28,5 @@ router.post('/products', asyncHandler(ProductController.create));
 router.get('/products', asyncHandler(ProductController.getByQuery));
 
 
-
-
-
 export default router;
+
