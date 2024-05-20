@@ -12,8 +12,12 @@ import Logo from "./Logo.png";
 import demo from "./img_demo_product.png";
 import demoBlog from "./img_demo_blog.png";
 import bannerBreadcrumb from "./headerBlog.webp";
+import favicon from "./favicon.png";
+import notfound from "./404-error.png";
 
 export {
+	notfound,
+	favicon,
 	Logo,
 	bannerDropdownShop,
 	HeaderBanner1,

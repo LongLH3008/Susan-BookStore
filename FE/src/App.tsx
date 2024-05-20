@@ -4,13 +4,20 @@ import Blog from "./client/pages/Blog";
 import BlogDetail from "./client/pages/BlogDetail";
 import Checkout from "./client/pages/Checkout";
 import Cart from "./client/pages/Cart";
-import Home from "./client/pages/Home";
+import Home from "./client/pages/home";
 import Login from "./client/pages/login";
 import Register from "./client/pages/register";
 import Shop from "./client/pages/Shop";
 import Contact from "./client/pages/Contact";
 import About from "./client/pages/About";
 import BookDetail from "./client/pages/BookDetail";
+import NotFound404 from "./client/pages/404NotFound";
+
+import MainPage from "./admin/pages/MainPage";
+import CategoriesPage from "./admin/pages/Categories/CategoriesPage";
+import ProductsPage from "./admin/pages/Products/ProductsPage";
+import OrdersPage from "./admin/pages/Orders/OrdersPage";
+import UsersPage from "./admin/pages/Users/UsersPage";
 
 export default function App() {
   return (
@@ -28,6 +35,12 @@ export default function App() {
         <Route path="/about" element={<About />} />
       </Route>
       <Route path="/checkout" element={<Checkout />} />
+
+      <Route path="/admin/users" element={<UsersPage />}/>
+      <Route path="/admin/categories" element={<CategoriesPage />}/>
+      <Route path="/admin/products" element={<ProductsPage />}/>
+
+      <Route path="*" element={<NotFound404 />} />
     </Routes>
   );
 }

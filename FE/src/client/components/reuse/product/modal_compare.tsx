@@ -27,7 +27,7 @@ const DetailCompareImg = () => {
 };
 
 const ModalCompare = (props: Props) => {
-	const { compare, compareModal, featuresProduct } = useProductContext();
+	const { compareModal, featuresProduct } = useProductContext();
 
 	const openCompare = () => {
 		compareModal.open();
@@ -39,7 +39,7 @@ const ModalCompare = (props: Props) => {
 			<button className="max-[500px]:hidden" onClick={openCompare}>
 				<i className="hover:text-[#00BFC5] fa-solid fa-sliders"></i>
 			</button>
-			<Modal theme={CustomModalCompare} show={compare} onClose={() => compareModal.close()}>
+			<Modal theme={CustomModalCompare} show={compareModal.isOpen} onClose={() => compareModal.close()}>
 				<Modal.Header />
 				<Modal.Body>
 					<table className="w-full mt-5 text-[14px] text-zinc-700 text-center">
