@@ -16,6 +16,7 @@ const Userchema = new mongoose.Schema<IUserModel>(
         user_email: {
             type: String,
             required: true,
+            unique: true,
         },
         user_phone_number: {
             type: String,
