@@ -15,6 +15,7 @@ const Userchema = new mongoose_1.default.Schema({
     user_email: {
         type: String,
         required: true,
+        unique: true,
     },
     user_phone_number: {
         type: String,

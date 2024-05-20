@@ -13,12 +13,26 @@ export interface IUser {
     user_phone_number: string
     user_password: string
     user_status: UserStatus
-
     user_address: string
     user_role: UserRole
     user_avatar: string
     user_gender: string
     createAt: Date | string
     updateAt: Date | string
-
 }
+export interface IAuthUser {
+    id: string,
+    user_name: string
+    user_email: string
+    user_phone_number: string
+    user_password: string
+    user_status: UserStatus
+    user_address: string
+    user_role: UserRole
+    user_avatar: string
+    user_gender: string
+    createAt: Date | string
+    updateAt: Date | string
+}
+
+

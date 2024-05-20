@@ -8,7 +8,6 @@ export class CORS {
             origin: Locals.config().appUrl,
             // origin: process.env.APP_URL
         }));
-
         return _express;
     }
 }
