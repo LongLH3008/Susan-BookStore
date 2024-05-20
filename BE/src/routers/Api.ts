@@ -8,12 +8,6 @@ import { asyncHandler } from "../utils";
 const router = Router();
 
 
-<<<<<<< HEAD
-router.get('/users', UserApiController.getAllUsers);
-router.get('/users/:id', UserApiController.getUser);
-router.post('/users', UserApiController.storeUser);
-=======
-
 //category 
 
 router.get('/categories', asyncHandler(CategoryController.getAll));
@@ -35,6 +29,6 @@ router.get('/products', asyncHandler(ProductController.getByQuery));
 
 
 
->>>>>>> e957482d97ed3b0cd87cb5c3be054c25f111848a
+
 
 export default router;
