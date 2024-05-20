@@ -30,6 +30,10 @@ const CommentSchema = new mongoose_1.default.Schema({
         type: Number,
         default: 0,
     },
+    comment_rating: {
+        type: Number,
+        default: 5,
+    }
 }, {
     timestamps: true,
     collection: COLLECTION_NAME,

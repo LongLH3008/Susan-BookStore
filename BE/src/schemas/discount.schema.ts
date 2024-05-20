@@ -35,7 +35,6 @@ const discountSchema = joi.object({
         "number.base": "Số lần sử dụng tối đa phải là một số",
         "any.required": "Trường 'Số lần sử dụng tối đa' là bắt buộc",
     }),
-    discount_user_used: joi.array().items(joi.string()).default([]),
     discount_is_active: joi.boolean(),
     discount_start_date: joi.date().required().messages({
         "any.required": "Ngày bắt đầu là bắt buộc",

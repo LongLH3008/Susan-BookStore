@@ -1,4 +1,5 @@
 BE/node_modules
-BE/.env
+BE/dist
 FE/node_modules
 FE/.env
+BE/.env

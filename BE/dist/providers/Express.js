@@ -7,7 +7,11 @@ const express_1 = __importDefault(require("express"));
 const Kernel_1 = __importDefault(require("../middlewares/Kernel"));
 const Routes_1 = __importDefault(require("./Routes"));
 const Locals_1 = __importDefault(require("./Locals"));
+<<<<<<< HEAD
 const Passport_1 = __importDefault(require("./Passport"));
+=======
+const ExceptionHandler_1 = require("../middlewares/ExceptionHandler");
+>>>>>>> e957482d97ed3b0cd87cb5c3be054c25f111848a
 class Express {
     constructor() {
         this.express = (0, express_1.default)();
@@ -24,6 +28,10 @@ class Express {
         this.express = Routes_1.default.mountWeb(this.express);
         // Mount API
         this.express = Routes_1.default.mountApi(this.express);
+        //handleError
+        this.express.use((error, req, res, next) => {
+            ExceptionHandler_1.exceptionHandler.handleError(error, req, res, next);
+        });
     }
     init() {
         const port = Locals_1.default.config().port;

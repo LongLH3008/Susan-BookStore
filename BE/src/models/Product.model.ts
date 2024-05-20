@@ -1,11 +1,9 @@
-import mongoose from "mongoose"
-import slugify from "slugify"
+import mongoose from "mongoose";
+import slugify from "slugify";
 import { IProduct } from "../interfaces/models/IProduct";
 
 const COLLECTION_NAME = "Product";
 const DOCUMENT_NAME = "Products";
-
-
 
 export interface IProductModel extends IProduct, mongoose.Document { }
 
@@ -26,39 +24,41 @@ const productSchema = new mongoose.Schema<IProductModel>(
             type: String,
             required: true,
         },
-        product_quantity: {
-            type: Number,
-            required: true,
-        },
         product_price: {
             type: Number,
             required: true,
         },
-
+        product_variations: {
+            type: [{
+                product_variant_id: String,
+                product_quantity: Number,
+                product_price: Number,
+                is_default: {
+                    type: Boolean,
+                    default: false
+                }
+            }],
+            required: true,
+        },
         product_rating_average: {
             type: Number,
             default: 4.5,
             min: 1,
             max: 5,
-            set: (val: number) => {
-                Math.round(val * 10) / 10;
-            },
+            set: (val: number) => Math.round(val * 10) / 10,
         },
-        product_type: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Categories",
-            required: true,
+        product_categories: {
+            type: [String],
+            default: []
         },
-        product_image: [{
+        product_images: [{
             image_id: String,
             image_url: String
-        }]
-        ,
+        }],
         product_attributes: {
             type: mongoose.Schema.Types.Mixed,
             required: true,
         },
-
     },
     {
         timestamps: true,
@@ -73,4 +73,4 @@ productSchema.pre("save", function (next) {
 });
 
 const Product = mongoose.model<IProductModel>(DOCUMENT_NAME, productSchema);
-export default Product
+export default Product;

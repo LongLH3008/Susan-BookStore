@@ -9,10 +9,5 @@ const categorySchema = joi_1.default.object({
         "string.empty": "Tên danh mục là bắt buộc",
         "any.required": "Trường 'Tên danh mục' là bắt buộc",
     }),
-    category_thumb: joi_1.default.string().required().messages({
-        "string.empty": "Ảnh đại diện danh mục là bắt buộc",
-        "any.required": "Trường 'Ảnh đại diện danh mục' là bắt buộc",
-    }),
-    is_active: joi_1.default.boolean(),
 });
 exports.default = categorySchema;

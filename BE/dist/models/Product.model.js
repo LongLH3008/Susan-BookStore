@@ -23,12 +23,20 @@ const productSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
-    product_quantity: {
+    product_price: {
         type: Number,
         required: true,
     },
-    product_price: {
-        type: Number,
+    product_variations: {
+        type: [{
+                product_variant_id: String,
+                product_quantity: Number,
+                product_price: Number,
+                is_default: {
+                    type: Boolean,
+                    default: false
+                }
+            }],
         required: true,
     },
     product_rating_average: {
@@ -36,16 +44,13 @@ const productSchema = new mongoose_1.default.Schema({
         default: 4.5,
         min: 1,
         max: 5,
-        set: (val) => {
-            Math.round(val * 10) / 10;
-        },
+        set: (val) => Math.round(val * 10) / 10,
     },
-    product_type: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: "Categories",
-        required: true,
+    product_categories: {
+        type: [String],
+        default: []
     },
-    product_image: [{
+    product_images: [{
             image_id: String,
             image_url: String
         }],

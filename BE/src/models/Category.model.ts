@@ -16,7 +16,7 @@ const CategorySchema = new mongoose.Schema<ICategoryModel>(
         },
         category_thumb: {
             type: String,
-            required: true,
+            default: "",
         },
         is_active: {
             type: Boolean,

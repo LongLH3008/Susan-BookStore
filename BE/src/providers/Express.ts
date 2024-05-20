@@ -3,8 +3,13 @@ import express, { Application } from "express";
 import Kernel from "../middlewares/Kernel";
 import Routes from "./Routes";
 import Locals from "./Locals";
+<<<<<<< HEAD
 import Passport from "./Passport";
 
+=======
+import { NextFunction, Request, Response } from 'express';
+import { exceptionHandler } from "../middlewares/ExceptionHandler";
+>>>>>>> e957482d97ed3b0cd87cb5c3be054c25f111848a
 class Express {
   public express: Application;
 
@@ -30,7 +35,17 @@ class Express {
     // Mount API
     this.express = Routes.mountApi(this.express);
 
+<<<<<<< HEAD
     
+=======
+    //handleError
+
+    this.express.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+      exceptionHandler.handleError(error, req, res, next)
+    })
+
+
+>>>>>>> e957482d97ed3b0cd87cb5c3be054c25f111848a
   }
 
   public init() {
