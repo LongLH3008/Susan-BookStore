@@ -2,19 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .poppins {
-	font-family: Poppins;
+    font-family: Poppins;
 }
 
 .lato {
-	font-family: Lato;
+    font-family: Lato;
 }
 
 /* Ẩn thanh cuộn*/
 .overscrollHidden::-webkit-scrollbar {
-	width: 0;
+    width: 0;
 }
 
 .overscrollHidden::-webkit-scrollbar-thumb {
-	background-color: transparent;
+    background-color: transparent;
+}
+
+.sliderbanner:hover .btn_banner_home {
+    display: block !important;
 }
