@@ -1,15 +1,15 @@
-import blogSchema from "./blog.schema";
-import categorySchema from "./category.schema";
-import commentSchema from "./comment.schema";
-import discountSchema from "./discount.schema";
-import productSchema from "./product.schema";
-import userSchema from "./user.schema";
+import { ApiError, ConflictError } from "../cores/error.response";
 
-const validate = (schema: any, objectValidate: any) => {
 
-    return schema.validate(objectValidate, { abortEarly: false });
+export const validate = (schema: any, objectValidate: any) => {
+    const { error } = schema.validate(objectValidate, { abortEarly: false });
+
+    if (error) {
+        const errors = error.details.map((item: any) => item.message);
+
+        throw new ConflictError(errors);
+    }
+
+    return true;
 };
 
-export default {
-    blogSchema, categorySchema, commentSchema, discountSchema, productSchema, userSchema, validate
-}

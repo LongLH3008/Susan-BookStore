@@ -1,17 +1,13 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const blog_schema_1 = __importDefault(require("./blog.schema"));
-const category_schema_1 = __importDefault(require("./category.schema"));
-const comment_schema_1 = __importDefault(require("./comment.schema"));
-const discount_schema_1 = __importDefault(require("./discount.schema"));
-const product_schema_1 = __importDefault(require("./product.schema"));
-const user_schema_1 = __importDefault(require("./user.schema"));
+exports.validate = void 0;
+const error_response_1 = require("../cores/error.response");
 const validate = (schema, objectValidate) => {
-    return schema.validate(objectValidate, { abortEarly: false });
+    const { error } = schema.validate(objectValidate, { abortEarly: false });
+    if (error) {
+        const errors = error.details.map((item) => item.message);
+        throw new error_response_1.ConflictError(errors);
+    }
+    return true;
 };
-exports.default = {
-    blogSchema: blog_schema_1.default, categorySchema: category_schema_1.default, commentSchema: comment_schema_1.default, discountSchema: discount_schema_1.default, productSchema: product_schema_1.default, userSchema: user_schema_1.default, validate
-};
+exports.validate = validate;

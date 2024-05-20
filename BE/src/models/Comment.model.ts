@@ -31,6 +31,10 @@ const CommentSchema = new mongoose.Schema<ICommentModel>(
             type: Number,
             default: 0,
         },
+        comment_rating: {
+            type: Number,
+            default: 5,
+        }
 
     },
     {
