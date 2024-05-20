@@ -18,11 +18,11 @@ const Userchema = new mongoose_1.default.Schema({
     },
     user_phone_number: {
         type: String,
-        required: true,
+        required: false,
     },
     user_password: {
         type: String,
-        required: true,
+        required: false,
     },
     user_status: {
         type: String,
@@ -31,7 +31,7 @@ const Userchema = new mongoose_1.default.Schema({
     },
     user_address: {
         type: String,
-        required: true,
+        required: false,
     },
     user_role: {
         type: String,
