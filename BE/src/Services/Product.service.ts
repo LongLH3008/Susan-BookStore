@@ -6,7 +6,6 @@ import productSchema from "../schemas/product.schema";
 import { deleteNullObject } from "../utils";
 
 interface Filter {
-
     product_categories?: object
     product_price?: object
     product_rating?: object
@@ -47,7 +46,6 @@ class ProductService {
         }
         
         const newProduct = await Product.create({ product_name, product_thumb, product_description, product_price, product_images, product_variations, product_categories, product_attributes })
-
         return newProduct
     }
     static async getAllProducts({ page, limit }: { page: number, limit: number }) {
@@ -123,8 +121,8 @@ class ProductService {
         if (!foundProduct) throw new ResourceNotFoundError("this product not found")
         return foundProduct
     }
-    static async updateProduct(id: string, data: any) {
 
+    static async updateProduct(id: string, data: any) {
         const updateObject = deleteNullObject(data)
         const foundProduct = await Product.findOne({ _id: id })
         if (!foundProduct) throw new ResourceNotFoundError("this product not found")

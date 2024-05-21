@@ -4,12 +4,9 @@ import { IOrder, OrderState, PaymentMethod, PaymentStatus } from "../interfaces/
 const COLLECTION_NAME = "Order";
 const DOCUMENT_NAME = "Orders";
 
-
 export interface IOrderModel extends IOrder, mongoose.Document { }
-
 const OrderSchema = new mongoose.Schema<IOrderModel>(
     {
-
         order_user_id:
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -44,6 +41,7 @@ const OrderSchema = new mongoose.Schema<IOrderModel>(
 
 
         ],
+
         order_tracking_number: {
             type: String,
             default: "",

@@ -4,12 +4,10 @@ import { ApiError } from "../cores/error.response";
 class ExceptionHandler {
     public handleError(error: Error, req: Request, res: Response, next: NextFunction): void {
         console.error(error.stack);
-
         if (error instanceof ApiError) {
             this.handleApiError(error, res);
             return;
         }
-
         this.handleGenericError(res);
     }
 
