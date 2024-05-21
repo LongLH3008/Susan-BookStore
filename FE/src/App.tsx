@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import LayoutClient from "@/client/LayoutClient";
 import Blog from "./client/pages/Blog";
 import BlogDetail from "./client/pages/BlogDetail";
@@ -18,8 +18,25 @@ import CategoriesPage from "./admin/pages/Categories/CategoriesPage";
 import ProductsPage from "./admin/pages/Products/ProductsPage";
 import OrdersPage from "./admin/pages/Orders/OrdersPage";
 import UsersPage from "./admin/pages/Users/UsersPage";
+import { useEffect, useState } from "react";
+import { Loader } from "./client/pages";
 
 export default function App() {
+	const [loading, setLoading] = useState(false);
+	const location = useLocation();
+	useEffect(() => {
+		setLoading(true);
+		const timeLoad = setTimeout(() => {
+			setLoading(false);
+		}, 1500)
+		return () => {
+			clearTimeout(timeLoad);
+		}
+	}, [location.pathname])
+
+	if (loading) {
+		return <Loader />
+	}
   return (
     <Routes>
       <Route path="/" element={<LayoutClient />}>
