@@ -9,6 +9,10 @@ const ForgotPassword_1 = __importDefault(require("../controllers/Api/Auth/Forgot
 const ChangePassword_1 = __importDefault(require("../controllers/Api/Auth/ChangePassword"));
 const Register_1 = __importDefault(require("../controllers/Api/Auth/Register"));
 const UserApiController_1 = __importDefault(require("../controllers/Api/Users/UserApiController"));
+const Category_controller_1 = __importDefault(require("../controllers/Api/Category.controller"));
+const Comment_controller_1 = __importDefault(require("../controllers/Api/Comment.controller"));
+const Product_controller_1 = __importDefault(require("../controllers/Api/Product.controller"));
+const utils_1 = require("../utils");
 const router = (0, express_1.Router)();
 //--------------USER ROUTES-------------------
 //AUTH
@@ -21,11 +25,6 @@ router.get("/users", UserApiController_1.default.getAllUsers);
 router.get("/users/:id", UserApiController_1.default.getUser);
 router.delete("users/:id", UserApiController_1.default.DeleteUser);
 //--------------KHÁC ROUTES-------------------
-const Category_controller_1 = __importDefault(require("../controllers/Api/Category.controller"));
-const Comment_controller_1 = __importDefault(require("../controllers/Api/Comment.controller"));
-const Product_controller_1 = __importDefault(require("../controllers/Api/Product.controller"));
-const utils_1 = require("../utils");
-const router = (0, express_1.Router)();
 //category 
 router.get('/categories', (0, utils_1.asyncHandler)(Category_controller_1.default.getAll));
 router.get('/categories/:id', (0, utils_1.asyncHandler)(Category_controller_1.default.getOne));

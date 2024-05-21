@@ -51,7 +51,7 @@ class UserApiController {
                 }
                 return res
                     .status(200)
-                    .json({ message: "User deleted successfully", user });
+                    .json({ message: "User delete successfully", user });
             }
             catch (error) {
                 return res

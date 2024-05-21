@@ -17,8 +17,6 @@ class Login {
     }
 
     const accessToken = AccessToken.generateAccessToken(user);
-
-
     return res.status(200).json({
       message: "Login successfully",
       user,

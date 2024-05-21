@@ -4,6 +4,10 @@ import AuthForgotfwApiController from "../controllers/Api/Auth/ForgotPassword";
 import AuthChangeFwApiController from "../controllers/Api/Auth/ChangePassword";
 import AuthRegisterApiController from "../controllers/Api/Auth/Register";
 import UserApiController from "../controllers/Api/Users/UserApiController";
+import CategoryController from "../controllers/Api/Category.controller";
+import CommentController from "../controllers/Api/Comment.controller";
+import ProductController from "../controllers/Api/Product.controller";
+import { asyncHandler } from "../utils";
 const router = Router();
 
 //--------------USER ROUTES-------------------
@@ -22,16 +26,6 @@ router.get("/users", UserApiController.getAllUsers);
 router.get("/users/:id", UserApiController.getUser);
 router.delete("users/:id", UserApiController.DeleteUser);
 //--------------KHÁC ROUTES-------------------
-
-export default router;
-import CategoryController from "../controllers/Api/Category.controller";
-import CommentController from "../controllers/Api/Comment.controller";
-import ProductController from "../controllers/Api/Product.controller";
-import { asyncHandler } from "../utils";
-
-
-const router = Router();
-
 
 //category 
 
