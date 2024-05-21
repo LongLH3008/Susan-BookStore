@@ -12,6 +12,7 @@ const UserApiController_1 = __importDefault(require("../controllers/Api/Users/Us
 const Category_controller_1 = __importDefault(require("../controllers/Api/Category.controller"));
 const Comment_controller_1 = __importDefault(require("../controllers/Api/Comment.controller"));
 const Product_controller_1 = __importDefault(require("../controllers/Api/Product.controller"));
+const blog_controller_1 = __importDefault(require("../controllers/Api/blog.controller"));
 const utils_1 = require("../utils");
 const router = (0, express_1.Router)();
 //--------------USER ROUTES-------------------
@@ -40,4 +41,10 @@ router.delete('/comments', (0, utils_1.asyncHandler)(Comment_controller_1.defaul
 //product 
 router.post('/products', (0, utils_1.asyncHandler)(Product_controller_1.default.create));
 router.get('/products', (0, utils_1.asyncHandler)(Product_controller_1.default.getByQuery));
+//blog
+router.post('/blog/add', (0, utils_1.asyncHandler)(blog_controller_1.default.create));
+router.get('/blog', (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlog));
+router.get("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.getOneBlog));
+router.delete("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.deleteBlog));
+router.put("/blog/update/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.updateBlog));
 exports.default = router;

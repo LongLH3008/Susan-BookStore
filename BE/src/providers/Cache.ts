@@ -20,7 +20,6 @@ class Cache {
 
     public infoCache(): void{
         console.log(`Cache size: ${cache.size()}\nCache memory size: ${cache.memsize()}`);
-        
     }
 }
 
