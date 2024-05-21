@@ -18,8 +18,13 @@ import CategoriesPage from "./admin/pages/Categories/CategoriesPage";
 import ProductsPage from "./admin/pages/Products/ProductsPage";
 import OrdersPage from "./admin/pages/Orders/OrdersPage";
 import UsersPage from "./admin/pages/Users/UsersPage";
+<<<<<<< HEAD
 import { useEffect, useState } from "react";
 import { Loader } from "./client/pages";
+=======
+import CommentsPage from "./admin/pages/Comments/CommentsPage";
+import BlogPage from "./admin/pages/Blogs/BlogPage";
+>>>>>>> dcd9001bcb8e960f901289af59e4b170e0a9c600
 
 export default function App() {
 	const [loading, setLoading] = useState(false);
@@ -59,6 +64,10 @@ export default function App() {
       <Route path="/admin/users" element={<UsersPage />}/>
       <Route path="/admin/categories" element={<CategoriesPage />}/>
       <Route path="/admin/products" element={<ProductsPage />}/>
+      <Route path="/admin/comments" element={<CommentsPage/>} />
+      <Route path="/admin/blogs" element={<BlogPage/>} />
+
+      
 
       <Route path="*" element={<NotFound404 />} />
     </Routes>

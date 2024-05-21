@@ -12,12 +12,21 @@ const UsersPage = () => {
         path: "categories"
     };
     const { register, handleSubmit, reset } = useForm(); 
+
+    const data = {
+        categories: [],
+        total: 1,
+        total_pages: 1,
+        
+    }
+    
+
     // const client = useQueryClient();
-    // const location = useLocation();
+    const location = useLocation();
 
 
-    // const queryParams = new URLSearchParams(location.search);
-    // const page = queryParams.get('page');
+    const queryParams = new URLSearchParams(location.search);
+    const page = queryParams.get('page');
     // console.log(page);
     
     return (
@@ -38,6 +47,8 @@ const UsersPage = () => {
                     <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
                 </form>
                 {/* {isLoading ? <h1>Loading data table...</h1> : (<Table header={header} data={data?.categories} onDelete={onDelete} total={data?.total} total_pages={data?.total_pages} current_page={page}/>)} */}
+
+                <Table header={header} data={data?.categories} onDelete={ () => {}} total={data?.total} total_pages={data?.total_pages} current_page={page}/>
                 
             </div>
         </PageLayout>
