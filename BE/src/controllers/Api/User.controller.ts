@@ -13,10 +13,10 @@ class UserController {
     }
 
     // common 
-    static async getAll(req: Request, res: Response): Promise<any> {
+    static async getAll(req: Request | any, res: Response): Promise<any> {
         return new SuccessResponse({
             message: "Get all users successfully !",
-            metadata: await UserService.getAll()
+            metadata: await UserService.getAll(req.query)
         })
             .send(res)
     }
@@ -38,6 +38,15 @@ class UserController {
         })
             .send(res)
     }
+
+    static async updateUser(req: Request | any, res: Response) {
+        return new SuccessResponse({
+            message: "Upadate user successFully !",
+            metadata: await UserService.updateUser(req.params.id, req.body) as any
+        })
+            .send(res)
+    }
+
 
 }
 

@@ -1,15 +1,15 @@
 import { Router } from "express";
-import AuthLoginApiController from "../controllers/Api/Auth/Login";
-import AuthForgotfwApiController from "../controllers/Api/Auth/ForgotPassword";
 import AuthChangeFwApiController from "../controllers/Api/Auth/ChangePassword";
+import AuthForgotfwApiController from "../controllers/Api/Auth/ForgotPassword";
+import AuthLoginApiController from "../controllers/Api/Auth/Login";
 import AuthRegisterApiController from "../controllers/Api/Auth/Register";
-import UserApiController from "../controllers/Api/Users/UserApiController";
 import CategoryController from "../controllers/Api/Category.controller";
 import CommentController from "../controllers/Api/Comment.controller";
 import ProductController from "../controllers/Api/Product.controller";
+import UserController from "../controllers/Api/User.controller";
 import BlogController from "../controllers/Api/blog.controller";
 import { asyncHandler } from "../utils";
-import UserController from "../controllers/Api/User.controller";
+import CartController from "../controllers/Api/Cart.controller";
 
 
 const router = Router();
@@ -21,7 +21,7 @@ router.post('/user-google', asyncHandler(UserController.createUserFromGoogle)) /
 router.get('/user', asyncHandler(UserController.getAll)) // get all
 router.get('/user/:id', asyncHandler(UserController.getByUserId)) // get by id
 router.get('/user/type-auth/:type', asyncHandler(UserController.getAllUserByTypeAuth)) // get by type auth
-
+router.put('/user/:id', asyncHandler(UserController.updateUser))
 
 
 //--------------USER ROUTES-------------------
@@ -34,13 +34,6 @@ router.post(
   AuthForgotfwApiController.ForgotPassword
 );
 router.post("/changepassword", AuthChangeFwApiController.changePassword);
-
-//USER
-router.get("/users", UserApiController.getAllUsers);
-router.get("/users/:id", UserApiController.getUser);
-router.delete("users/:id", UserApiController.DeleteUser);
-//--------------KHÁC ROUTES-------------------
-
 
 //category 
 router.get('/categories', asyncHandler(CategoryController.getAll));
@@ -63,5 +56,10 @@ router.get('/blog', asyncHandler(BlogController.getAllBlog));
 router.get("/blog/:id", asyncHandler(BlogController.getOneBlog));
 router.delete("/blog/:id", asyncHandler(BlogController.deleteBlog));
 router.put("/blog/update/:id", asyncHandler(BlogController.updateBlog));
+
+// cart 
+router.post('/cart', asyncHandler(CartController.create)) // create cart
+
+
 export default router;
 
