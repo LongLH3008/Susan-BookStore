@@ -45,7 +45,7 @@ class ProductService {
             const foundCategory = await Category.findOne({ _id: category })
             if (!foundCategory) throw new ResourceNotFoundError(`categoriy: ${category} not found`)
         }
-
+        
         const newProduct = await Product.create({ product_name, product_thumb, product_description, product_price, product_images, product_variations, product_categories, product_attributes })
 
         return newProduct

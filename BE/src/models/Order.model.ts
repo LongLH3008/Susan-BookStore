@@ -29,19 +29,21 @@ const OrderSchema = new mongoose.Schema<IOrderModel>(
             payment_status: { type: String, required: true, enum: PaymentStatus },
             payment_date: { type: Date, required: true },
         },
-        order_products: {
+        order_products: [
 
-            order_item_id: { type: String, required: true },
-            product_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Products" },
-            product_name: { type: String, required: true },
-            product_quantity: { type: Number, required: true, min: 1 },
-            product_price: { type: Number, required: true, min: 0 },
-            product_subtotal: { type: Number, required: true, computed: true },
-            product_discount: { type: Number, min: 0 },
-            product_total: { type: Number, required: true, computed: true }
+            {
+                order_item_id: { type: String, required: true },
+                product_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Products" },
+                product_name: { type: String, required: true },
+                product_quantity: { type: Number, required: true, min: 1 },
+                product_price: { type: Number, required: true, min: 0 },
+                product_subtotal: { type: Number, required: true, computed: true },
+                product_discount: { type: Number, min: 0 },
+                product_total: { type: Number, required: true, computed: true }
+            }
 
 
-        },
+        ],
         order_tracking_number: {
             type: String,
             default: "",

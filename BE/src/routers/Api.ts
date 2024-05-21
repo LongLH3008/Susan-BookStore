@@ -3,10 +3,18 @@ import CategoryController from "../controllers/Api/Category.controller";
 import CommentController from "../controllers/Api/Comment.controller";
 import ProductController from "../controllers/Api/Product.controller";
 import { asyncHandler } from "../utils";
+import UserController from "../controllers/Api/User.controller";
 
 
 const router = Router();
 
+// user-google
+router.post('/user-google', asyncHandler(UserController.createUserFromGoogle))
+
+// user
+router.get('/user', asyncHandler(UserController.getAll))
+router.get('/user/:id', asyncHandler(UserController.getByUserId))
+router.get('/user/type-auth/:type', asyncHandler(UserController.getAllUserByTypeAuth))
 
 //category 
 

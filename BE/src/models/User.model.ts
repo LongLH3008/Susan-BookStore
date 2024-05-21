@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import { IUser, UserRole, UserStatus } from "../interfaces/models/IUser";
+import { IUser, UserRole, UserStatus, UserTypeAuth } from "../interfaces/models/IUser";
 
 const COLLECTION_NAME = "User";
 const DOCUMENT_NAME = "Users";
@@ -11,7 +11,7 @@ const Userchema = new mongoose.Schema<IUserModel>(
     {
         user_name: {
             type: String,
-            required: true,
+            required: false,
         },
         user_email: {
             type: String,
@@ -48,6 +48,12 @@ const Userchema = new mongoose.Schema<IUserModel>(
             type: String,
             default: "",
         },
+        user_auth_type: {
+            type: String,
+            required: true,
+            enum: UserTypeAuth,
+            default: UserTypeAuth.local
+        }
     },
     {
         timestamps: true,

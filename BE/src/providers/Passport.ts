@@ -3,6 +3,8 @@ import passport from "passport"
 import session from "express-session";
 import Locals from "./Locals";
 import GoogleAuth20 from 'passport-google-oauth20'
+import User from "../models/User.model";
+import { UserTypeAuth } from "../interfaces/models/IUser";
 
 const GoogleStrategy = GoogleAuth20.Strategy
 
@@ -31,11 +33,27 @@ class Passport {
             clientSecret: Locals.config().google_client_secret,
             callbackURL: Locals.config().google_url_callback
         },
-            async (accessToken, refreshToken, profile, done) => {
+            async (accessToken, refreshToken, profile: any, done) => {
                 console.log(profile);
 
-                // tạo người dùng , check người dùng , nhả token oqr đây 
-                return done(null, profile)
+                //check người dùng tồn tại hay chưa 
+                const checkUser = await User.findOne({
+                    user_email: profile.emails[0].value,
+                    user_auth_type: UserTypeAuth.google
+                })
+                if (!checkUser) {
+                    const newUser = await User.create({
+                        user_email: profile.emails[0].value,
+                        user_name: profile.displayName,
+                        user_auth_type: UserTypeAuth.google,
+                        user_avatar: profile.photos[0].value
+                    })
+
+                    return done(null, newUser)
+                }
+
+                
+                return done(null, checkUser)
             }
         ))
 

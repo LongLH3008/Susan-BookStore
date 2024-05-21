@@ -10,7 +10,7 @@ const DOCUMENT_NAME = "Users";
 const Userchema = new mongoose_1.default.Schema({
     user_name: {
         type: String,
-        required: true,
+        required: false,
     },
     user_email: {
         type: String,
@@ -46,6 +46,12 @@ const Userchema = new mongoose_1.default.Schema({
         type: String,
         default: "",
     },
+    user_auth_type: {
+        type: String,
+        required: true,
+        enum: IUser_1.UserTypeAuth,
+        default: IUser_1.UserTypeAuth.local
+    }
 }, {
     timestamps: true,
     collection: COLLECTION_NAME,

@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const Locals_1 = __importDefault(require("./Locals"));
 const passport_google_oauth20_1 = __importDefault(require("passport-google-oauth20"));
+const User_model_1 = __importDefault(require("../models/User.model"));
+const IUser_1 = require("../interfaces/models/IUser");
 const GoogleStrategy = passport_google_oauth20_1.default.Strategy;
 class Passport {
     init(_express) {
@@ -37,8 +39,21 @@ class Passport {
             callbackURL: Locals_1.default.config().google_url_callback
         }, (accessToken, refreshToken, profile, done) => __awaiter(this, void 0, void 0, function* () {
             console.log(profile);
-            // tạo người dùng , check người dùng , nhả token oqr đây 
-            return done(null, profile);
+            //check người dùng tồn tại hay chưa 
+            const checkUser = yield User_model_1.default.findOne({
+                user_email: profile.emails[0].value,
+                user_auth_type: IUser_1.UserTypeAuth.google
+            });
+            if (!checkUser) {
+                const newUser = yield User_model_1.default.create({
+                    user_email: profile.emails[0].value,
+                    user_name: profile.displayName,
+                    user_auth_type: IUser_1.UserTypeAuth.google,
+                    user_avatar: profile.photos[0].value
+                });
+                return done(null, newUser);
+            }
+            return done(null, checkUser);
         })));
         return _express;
     }

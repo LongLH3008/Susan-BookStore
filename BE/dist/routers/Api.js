@@ -8,7 +8,14 @@ const Category_controller_1 = __importDefault(require("../controllers/Api/Catego
 const Comment_controller_1 = __importDefault(require("../controllers/Api/Comment.controller"));
 const Product_controller_1 = __importDefault(require("../controllers/Api/Product.controller"));
 const utils_1 = require("../utils");
+const User_controller_1 = __importDefault(require("../controllers/Api/User.controller"));
 const router = (0, express_1.Router)();
+// user-google
+router.post('/user-google', (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle));
+// user
+router.get('/user', (0, utils_1.asyncHandler)(User_controller_1.default.getAll));
+router.get('/user/:id', (0, utils_1.asyncHandler)(User_controller_1.default.getByUserId));
+router.get('/user/type-auth/:type', (0, utils_1.asyncHandler)(User_controller_1.default.getAllUserByTypeAuth));
 //category 
 router.get('/categories', (0, utils_1.asyncHandler)(Category_controller_1.default.getAll));
 router.get('/categories/:id', (0, utils_1.asyncHandler)(Category_controller_1.default.getOne));
