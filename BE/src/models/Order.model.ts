@@ -4,12 +4,9 @@ import { IOrder, OrderState, PaymentMethod, PaymentStatus } from "../interfaces/
 const COLLECTION_NAME = "Order";
 const DOCUMENT_NAME = "Orders";
 
-
 export interface IOrderModel extends IOrder, mongoose.Document { }
-
 const OrderSchema = new mongoose.Schema<IOrderModel>(
     {
-
         order_user_id:
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -30,7 +27,6 @@ const OrderSchema = new mongoose.Schema<IOrderModel>(
             payment_date: { type: Date, required: true },
         },
         order_products: {
-
             order_item_id: { type: String, required: true },
             product_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Products" },
             product_name: { type: String, required: true },
@@ -39,8 +35,6 @@ const OrderSchema = new mongoose.Schema<IOrderModel>(
             product_subtotal: { type: Number, required: true, computed: true },
             product_discount: { type: Number, min: 0 },
             product_total: { type: Number, required: true, computed: true }
-
-
         },
         order_tracking_number: {
             type: String,

@@ -1,14 +1,8 @@
 import mongoose from "mongoose";
 import { CartState, ICart } from "../interfaces/models/ICart";
 
-
-
 const COLLECTION_NAME = "Cart";
 const DOCUMENT_NAME = "Carts";
-
-
-
-
 export interface ICartModel extends ICart, mongoose.Document { }
 
 const CartSchema = new mongoose.Schema<ICartModel>(
@@ -35,7 +29,6 @@ const CartSchema = new mongoose.Schema<ICartModel>(
                 },
                 product_quantity: {
                     type: Number,
-
                 }
             }
         ],

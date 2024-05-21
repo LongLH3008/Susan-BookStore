@@ -43,11 +43,8 @@ class CommentService {
     }
     static async updateComment({ id, comment_content, comment_rating }:
         { id: string, comment_content: string, comment_rating: number }) {
-
         const foundComment = await Comment.findOne({ _id: id })
         if (!foundComment) throw new ResourceNotFoundError("this comment not found")
-
-
         if (comment_content) foundComment.comment_content = comment_content
         if (comment_rating) foundComment.comment_rating = comment_rating
         await foundComment.save()
