@@ -26,7 +26,7 @@ class Register {
         });
       }
       // Mã hóa mật khẩu
-      const saltRounds =10;
+      const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(user_password, saltRounds);
 
       // Tạo người dùng mới

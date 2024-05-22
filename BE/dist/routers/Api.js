@@ -14,6 +14,7 @@ const Product_controller_1 = __importDefault(require("../controllers/Api/Product
 const User_controller_1 = __importDefault(require("../controllers/Api/User.controller"));
 const blog_controller_1 = __importDefault(require("../controllers/Api/blog.controller"));
 const utils_1 = require("../utils");
+const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
 const Cart_controller_1 = __importDefault(require("../controllers/Api/Cart.controller"));
 const router = (0, express_1.Router)();
 // user-google
@@ -29,11 +30,10 @@ router.post("/auth/login", Login_1.default.Login);
 router.post("/auth/register", Register_1.default.Register);
 router.post("/forgotpassword", ForgotPassword_1.default.resetPasswordRequest, ForgotPassword_1.default.ForgotPassword);
 router.post("/changepassword", ChangePassword_1.default.changePassword);
-//category 
 router.get('/categories', (0, utils_1.asyncHandler)(Category_controller_1.default.getAll));
 router.get('/categories/:id', (0, utils_1.asyncHandler)(Category_controller_1.default.getOne));
 router.post('/categories', (0, utils_1.asyncHandler)(Category_controller_1.default.create));
-router.patch('/categories/:id', (0, utils_1.asyncHandler)(Category_controller_1.default.update));
+router.patch('/categorcategoriesies/:id', (0, utils_1.asyncHandler)(Category_controller_1.default.update));
 router.delete('/categories', (0, utils_1.asyncHandler)(Category_controller_1.default.delete));
 //comment
 router.get('/comments', (0, utils_1.asyncHandler)(Comment_controller_1.default.getCommentsByProductId));
@@ -50,6 +50,12 @@ router.get('/blog', (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBl
 router.get("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.getOneBlog));
 router.delete("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.deleteBlog));
 router.put("/blog/update/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.updateBlog));
+//order 
+router.post('/orders', (0, utils_1.asyncHandler)(Order_Controller_1.default.create));
+router.get('/orders/:id', (0, utils_1.asyncHandler)(Order_Controller_1.default.getOrderById));
+router.get('/orders', (0, utils_1.asyncHandler)(Order_Controller_1.default.getAllOrder));
+router.put('/orders/:id', (0, utils_1.asyncHandler)(Order_Controller_1.default.updateOrder));
+router.delete('/orders/:id', (0, utils_1.asyncHandler)(Order_Controller_1.default.deleteOrder));
 // cart 
 router.post('/cart', (0, utils_1.asyncHandler)(Cart_controller_1.default.create)); // create cart
 router.get('/cart/:user_id', (0, utils_1.asyncHandler)(Cart_controller_1.default.getCartByOneUser)); // get cart one user
