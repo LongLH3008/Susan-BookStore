@@ -49,6 +49,20 @@ const Aside = (props) => {
                         </Link>
                     </li>
                     <li>
+                        <Link to={'/admin/blogs'} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <i className="fa-solid fa-blog"></i>
+                            <span className="flex-1 ms-3 whitespace-nowrap">Blogs</span>
+                            <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to={'/admin/comments'} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <i className="fa-solid fa-comment"></i>
+                            <span className="flex-1 ms-3 whitespace-nowrap">Comments</span>
+                            <span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">3</span>
+                        </Link>
+                    </li>
+                    <li>
                         <button onClick={onLogout} className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <i className="w-5 fa-solid fa-right-from-bracket"></i>
                             <span className="flex-1 ms-3 whitespace-nowrap">Logout</span>
