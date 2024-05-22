@@ -19,7 +19,6 @@ class CartService {
         // check user có giỏ hàng hay chưa 
         const checkCartExist = await this.checkCart(cart_user_id)
         if (checkCartExist) throw new ConflictError("This user already has a shopping cart")
-
         const newCart = await Cart.create({ cart_user_id: cart_user_id })
         return newCart
     }

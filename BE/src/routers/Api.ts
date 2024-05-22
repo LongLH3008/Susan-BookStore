@@ -50,13 +50,14 @@ router.delete('/comments', asyncHandler(CommentController.delete));
 router.post('/products', asyncHandler(ProductController.create));
 router.get('/products', asyncHandler(ProductController.getByQuery));
 //blog
+
 router.post('/blog/add', asyncHandler(BlogController.create));
 router.get('/blog', asyncHandler(BlogController.getAllBlog));
 router.get("/blog/:id", asyncHandler(BlogController.getOneBlog));
 router.delete("/blog/:id", asyncHandler(BlogController.deleteBlog));
 router.put("/blog/update/:id", asyncHandler(BlogController.updateBlog));
 
-//order 
+//order
 router.post('/orders', asyncHandler(OrderController.create));
 router.get('/orders/:id', asyncHandler(OrderController.getOrderById));
 router.get('/orders', asyncHandler(OrderController.getAllOrder));
