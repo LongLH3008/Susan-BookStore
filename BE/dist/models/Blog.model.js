@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const COLLECTION_NAME = "Cart";
-const DOCUMENT_NAME = "Carts";
+const COLLECTION_NAME = "Blog";
+const DOCUMENT_NAME = "Blogs";
 const blogSchema = new mongoose_1.default.Schema({
     blog_title: { type: String, required: true },
     blog_content: { type: String, required: true },

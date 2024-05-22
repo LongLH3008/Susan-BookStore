@@ -1,16 +1,27 @@
 import { Router } from "express";
-import AuthLoginApiController from "../controllers/Api/Auth/Login";
-import AuthForgotfwApiController from "../controllers/Api/Auth/ForgotPassword";
 import AuthChangeFwApiController from "../controllers/Api/Auth/ChangePassword";
+import AuthForgotfwApiController from "../controllers/Api/Auth/ForgotPassword";
+import AuthLoginApiController from "../controllers/Api/Auth/Login";
 import AuthRegisterApiController from "../controllers/Api/Auth/Register";
-import UserApiController from "../controllers/Api/Users/UserApiController";
 import CategoryController from "../controllers/Api/Category.controller";
 import CommentController from "../controllers/Api/Comment.controller";
 import ProductController from "../controllers/Api/Product.controller";
+import UserController from "../controllers/Api/User.controller";
 import BlogController from "../controllers/Api/blog.controller";
 import { asyncHandler } from "../utils";
 import OrderController from "../controllers/Api/Order.Controller";
+import CartController from "../controllers/Api/Cart.controller";
 const router = Router();
+
+// user-google
+router.post('/user-google', asyncHandler(UserController.createUserFromGoogle)) // create user from google
+
+// user-service-common
+router.get('/user', asyncHandler(UserController.getAll)) // get all
+router.get('/user/:id', asyncHandler(UserController.getByUserId)) // get by id
+router.get('/user/type-auth/:type', asyncHandler(UserController.getAllUserByTypeAuth)) // get by type auth
+router.put('/user/:id', asyncHandler(UserController.updateUser))
+
 
 //--------------USER ROUTES-------------------
 //AUTH
@@ -23,13 +34,7 @@ router.post(
 );
 router.post("/changepassword", AuthChangeFwApiController.changePassword);
 
-//USER
-router.get("/users", UserApiController.getAllUsers);
-router.get("/users/:id", UserApiController.getUser);
-router.delete("users/:id", UserApiController.DeleteUser);
-//--------------KHÁC ROUTES-------------------
 
-//category
 router.get('/categories', asyncHandler(CategoryController.getAll));
 router.get('/categories/:id', asyncHandler(CategoryController.getOne));
 router.post('/categories', asyncHandler(CategoryController.create));
@@ -57,5 +62,10 @@ router.get('/orders/:id', asyncHandler(OrderController.getOrderById));
 router.get('/orders', asyncHandler(OrderController.getAllOrder));
 router.put('/orders/:id', asyncHandler(OrderController.updateOrder));
 router.delete('/orders/:id', asyncHandler(OrderController.deleteOrder));
+// cart 
+router.post('/cart', asyncHandler(CartController.create)) // create cart
+router.get('/cart/:user_id', asyncHandler(CartController.getCartByOneUser)) // get cart one user
+
+
 export default router;
 

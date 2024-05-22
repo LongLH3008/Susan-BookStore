@@ -38,4 +38,16 @@ const userSchema = joi.object({
     }),
 });
 
+export const userGoogleSchema = joi.object({
+    user_name : joi.string().required().messages({
+        "string.empty" : "Tên không được để trống",
+        "any.required" : "trường này là bắt buộc"
+    }),
+    user_email : joi.string().required().email().messages({
+        "string.empty" : "Email không được để trống",
+        "any.required" : "trường này là bắt buộc",
+        "string.email" : "Email không hợp lệ "
+    }),
+})
+
 export default userSchema

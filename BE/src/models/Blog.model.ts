@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import { IBlog } from "../interfaces/models/IBlog";
 
-const COLLECTION_NAME = "Cart";
-const DOCUMENT_NAME = "Carts";
+const COLLECTION_NAME = "Blog";
+const DOCUMENT_NAME = "Blogs";
 
 export interface IBlogModel extends IBlog, mongoose.Document {}
 
