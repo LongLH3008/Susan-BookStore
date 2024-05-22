@@ -35,7 +35,6 @@ class Passport {
         },
             async (accessToken, refreshToken, profile: any, done) => {
                 console.log(profile);
-
                 //check người dùng tồn tại hay chưa 
                 const checkUser = await User.findOne({
                     user_email: profile.emails[0].value,
@@ -48,11 +47,9 @@ class Passport {
                         user_auth_type: UserTypeAuth.google,
                         user_avatar: profile.photos[0].value
                     })
-
                     return done(null, newUser)
                 }
 
-                
                 return done(null, checkUser)
             }
         ))
