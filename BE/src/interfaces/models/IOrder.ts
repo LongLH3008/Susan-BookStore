@@ -5,10 +5,14 @@ export enum OrderState {
 }
 
 export interface IOrderProduct {
+    order_item_id: string;
     product_id: mongoose.Types.ObjectId | string;
-    quantity: number;
-    price: number;
-    total: number;
+    product_name: string;
+    product_quantity: number;
+    product_price: number;
+    product_subtotal: number;
+    product_discount?: number;
+    product_total: number;
 }
 
 export enum PaymentMethod {
@@ -16,6 +20,7 @@ export enum PaymentMethod {
     PayPal = "paypal",
     Other = "other",
 }
+
 export enum PaymentStatus {
     Authorized = "authorized",
     Processed = "processed",
