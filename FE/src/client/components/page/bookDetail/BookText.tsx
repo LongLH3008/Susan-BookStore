@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const BookText = () => {
   return (
@@ -85,6 +86,94 @@ const BookText = () => {
                   alt=""
                 />
               </button>
+            </div>
+          </div>
+          <div className="flex items-center sm:flex-wrap *:sm:my-4 justify-between  my-8  mr-0 w-full">
+            <p>Qty :</p>
+
+            <div className="relative flex items-center max-w-[8rem]  ">
+              <button
+                type="button"
+                id="decrement-button"
+                data-input-counter-decrement="quantity-input"
+                className="bg-gray-100 hover:bg-gray-200 border border-gray-300  p-3 h-16 focus:ring-gray-100  focus:ring-2 focus:outline-none"
+              >
+                <svg
+                  className="w-3 h-3 text-gray-900 "
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 18 2"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M1 1h16"
+                  />
+                </svg>
+              </button>
+              <input
+                type="text"
+                id="quantity-input"
+                data-input-counter
+                aria-describedby="helper-text-explanation"
+                className="bg-gray-50 border-x-0 border-gray-300 h-16 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 "
+                placeholder="0"
+                required
+              />
+              <button
+                type="button"
+                id="increment-button"
+                data-input-counter-increment="quantity-input"
+                className="bg-gray-100  hover:bg-gray-200 border border-gray-300  p-3 h-16 focus:ring-gray-100  focus:ring-2 focus:outline-none"
+              >
+                <svg
+                  className="w-3 h-3 text-gray-900 dark:text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 18 18"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 1v16M1 9h16"
+                  />
+                </svg>
+              </button>
+            </div>
+            <div className="flex items-center  border-[3px] border-[#00BFC5] hover:border-[#000] px-9 h-16 ">
+              <Link to="/" className=" ">
+                Add to cart
+              </Link>
+            </div>
+            <div className="flex *:px-6 h-16 items-center border-[3px] *:text-[#000] hover:text-[#00BFC5] *:text-xl">
+              <Link to="/" className="border-r-2 hover:text-[#00BFC5]">
+                <i className="fa-solid fa-heart"></i>
+              </Link>
+              <Link to="/" className="hover:text-[#00BFC5]">
+                <i className="fa-solid fa-sliders"></i>
+              </Link>
+            </div>
+          </div>
+          <div className="w-full">
+            <Link to="/">
+              <button className="w-full py-4  bg-black border border-black text-white font-bold hover:border-[#00BFC5] hover:text-[#00BFC5] hover:bg-white">
+                Buy it now
+              </button>
+            </Link>
+          </div>
+          <div className="my-10">
+            <h3 className="font-bold text-black">SHARE THIS PRODUCT</h3>
+            <div className="flex justify-start my-5  *:mr-4 ">
+              <i className="hover:text-white text-[#1de1f2] fa-brands fa-twitter border hover:bg-[#1de1f2] p-3 "></i>
+              <i className="hover:text-white text-[#526faf] fa-brands fa-facebook-f border hover:bg-[#526faf] py-3 px-4  "></i>
+              <i className="hover:text-white text-[#dd5245] fa-brands fa-google border hover:bg-[#dd5245] p-3 "></i>
+              <i className="hover:text-white text-[#bd081b] fa-brands fa-pinterest border hover:bg-[#bd081b] p-3 "></i>
             </div>
           </div>
         </div>
