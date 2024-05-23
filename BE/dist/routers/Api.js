@@ -53,4 +53,6 @@ router.put("/blog/update/:id", (0, utils_1.asyncHandler)(blog_controller_1.defau
 // cart 
 router.post('/cart', (0, utils_1.asyncHandler)(Cart_controller_1.default.create)); // create cart
 router.get('/cart/:user_id', (0, utils_1.asyncHandler)(Cart_controller_1.default.getCartByOneUser)); // get cart one user
+router.post('/cart/addproduct/:user_id', (0, utils_1.asyncHandler)(Cart_controller_1.default.addProductToCart));
+router.delete('/cart/:user_id/:product_id', (0, utils_1.asyncHandler)(Cart_controller_1.default.deleteProductInCart));
 exports.default = router;

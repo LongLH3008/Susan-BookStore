@@ -60,7 +60,8 @@ router.put("/blog/update/:id", asyncHandler(BlogController.updateBlog));
 // cart 
 router.post('/cart', asyncHandler(CartController.create)) // create cart
 router.get('/cart/:user_id', asyncHandler(CartController.getCartByOneUser)) // get cart one user
-
+router.post('/cart/addproduct/:user_id', asyncHandler(CartController.addProductToCart))
+router.delete('/cart/:user_id/:product_id', asyncHandler(CartController.deleteProductInCart))
 
 export default router;
 
