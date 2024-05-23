@@ -34,7 +34,7 @@ const CartSchema = new mongoose_1.default.Schema({
     ],
 }, {
     timestamps: true,
-    collection: "Carts",
+    collection: COLLECTION_NAME,
 });
-const Cart = mongoose_1.default.model("Carts", CartSchema);
+const Cart = mongoose_1.default.models.Carts || mongoose_1.default.model(DOCUMENT_NAME, CartSchema);
 exports.default = Cart;

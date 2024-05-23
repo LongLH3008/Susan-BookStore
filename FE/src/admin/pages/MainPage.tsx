@@ -22,6 +22,9 @@ const MainPage = () => {
                         <CardBoard icon={"fa-solid fa-boxes-stacked"} title={"Products"} amount={100} color={'bg-yellow-600'} />
                     </li>
                     <li className="flex justify-center">
+                        <CardBoard icon={"fa-solid fa-boxes-stacked"} title={"Products"} amount={100} color={'bg-yellow-600'} />
+                    </li>
+                    <li className="flex justify-center">
                         <CardBoard icon={"fa-solid fa-cart-shopping"} title={"Orders"} amount={100} color={'bg-blue-600'} />
                     </li>
                 </ul>

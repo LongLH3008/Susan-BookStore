@@ -3,10 +3,16 @@ import { UserTypeAuth } from "../interfaces/models/IUser"
 import { userGoogleSchema } from "../schemas/user.schema"
 import { ConflictError, InternalServerError, ResourceNotFoundError } from "../cores/error.response"
 import { validate } from "../schemas"
+import { deleteNullObject } from "../utils"
+
 
 class UserService {
 
-    // auth google
+    /**
+     * google user
+     */
+
+    // create
     static async createUserFromGoogle(
         { user_name,
             user_email,
@@ -34,18 +40,20 @@ class UserService {
         return newUser
     }
 
-    static async updateUserAuthTypeGoogle() {
+    /**
+     * common user
+    */
 
-    }
-
-
-    // common user
-    static async getAll() {
-        const allUsers = await User.find()
+    // get all 
+    static async getAll({ page, limit }: { page: number, limit: number }) {
+        const skip = (page - 1) * limit
+        const allUsers = await User.find({}).skip(skip).limit(limit).lean()
+        const totalNumberOfUser = await User.countDocuments();
         if (!allUsers) throw new InternalServerError("server error, try agian in 5 minnutes !")
-        return allUsers
+        return { totalNumberOfUser, page, limit, allUsers }
     }
 
+    // get by id 
     static async getUserById({ id }: { id: string }) {
         const userById = await User.findById(id)
         if (!userById) throw new ResourceNotFoundError("this user does not exist !")
@@ -53,7 +61,7 @@ class UserService {
 
     }
 
-    // lấy user theo phương thức đăng ký local | google
+    // get by auth_type : local | google
     static async getAllUsersByTypeAuth({ type }: { type: UserTypeAuth }) {
         const userByTypeAuth = await User.findOne({
             user_auth_type: type
@@ -61,9 +69,38 @@ class UserService {
         return userByTypeAuth
     }
 
+    // update user 
+    static async updateUser(id: string, data: any) {
+        const updateObject = deleteNullObject(data)
+        const chechUser = await User.findById(id)
+        if (!chechUser) throw new ResourceNotFoundError("User does not exist !")
 
-    
+        const updateProduct = await User.findByIdAndUpdate(id, updateObject, { new: true })
+        if (!updateObject) throw new InternalServerError("Server error, try agian in 5 munites!")
+
+        return updateProduct
+    }
+
+    // delete user 
+    static async deleteUser(id: string) {
+        const chechUser = await User.findById(id)
+        if (!chechUser) throw new ResourceNotFoundError("User does not exist !")
+
+        await User.findByIdAndDelete(id)
+        return {
+            message: `User with id: ${id} has been deleted ! `
+        }
+
+    }
+
+
+
+
+
+
 
 }
+
+
 
 export default UserService

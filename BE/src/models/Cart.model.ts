@@ -9,7 +9,7 @@ const CartSchema = new mongoose.Schema<ICartModel>(
     {
         cart_user_id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Users", 
+            ref: "Users",
         },
 
         cart_state: {
@@ -34,11 +34,11 @@ const CartSchema = new mongoose.Schema<ICartModel>(
         ],
     },
     {
-        timestamps: true, 
-        collection: "Carts", 
+        timestamps: true,
+        collection: COLLECTION_NAME,
     }
 );
 
-const Cart = mongoose.model<ICartModel>("Carts", CartSchema); 
+const Cart = mongoose.models.Carts || mongoose.model<ICartModel>(DOCUMENT_NAME, CartSchema);
 
 export default Cart; 
