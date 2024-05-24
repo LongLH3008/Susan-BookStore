@@ -9,9 +9,8 @@ import ProductController from "../controllers/Api/Product.controller";
 import UserController from "../controllers/Api/User.controller";
 import BlogController from "../controllers/Api/blog.controller";
 import { asyncHandler } from "../utils";
+import OrderController from "../controllers/Api/Order.Controller";
 import CartController from "../controllers/Api/Cart.controller";
-
-
 const router = Router();
 
 // user-google
@@ -35,11 +34,11 @@ router.post(
 );
 router.post("/changepassword", AuthChangeFwApiController.changePassword);
 
-//category 
+
 router.get('/categories', asyncHandler(CategoryController.getAll));
 router.get('/categories/:id', asyncHandler(CategoryController.getOne));
 router.post('/categories', asyncHandler(CategoryController.create));
-router.patch('/categories/:id', asyncHandler(CategoryController.update));
+router.patch('/categorcategoriesies/:id', asyncHandler(CategoryController.update));
 router.delete('/categories', asyncHandler(CategoryController.delete));
 //comment
 router.get('/comments', asyncHandler(CommentController.getCommentsByProductId));
@@ -51,12 +50,19 @@ router.delete('/comments', asyncHandler(CommentController.delete));
 router.post('/products', asyncHandler(ProductController.create));
 router.get('/products', asyncHandler(ProductController.getByQuery));
 //blog
+
 router.post('/blog/add', asyncHandler(BlogController.create));
 router.get('/blog', asyncHandler(BlogController.getAllBlog));
 router.get("/blog/:id", asyncHandler(BlogController.getOneBlog));
 router.delete("/blog/:id", asyncHandler(BlogController.deleteBlog));
 router.put("/blog/update/:id", asyncHandler(BlogController.updateBlog));
 
+//order
+router.post('/orders', asyncHandler(OrderController.create));
+router.get('/orders/:id', asyncHandler(OrderController.getOrderById));
+router.get('/orders', asyncHandler(OrderController.getAllOrder));
+router.put('/orders/:id', asyncHandler(OrderController.updateOrder));
+router.delete('/orders/:id', asyncHandler(OrderController.deleteOrder));
 // cart 
 router.post('/cart', asyncHandler(CartController.create)) // create cart
 router.get('/cart/:user_id', asyncHandler(CartController.getCartByOneUser)) // get cart one user

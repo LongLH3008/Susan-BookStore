@@ -7,14 +7,11 @@ export class CORS {
         _express.use(cors({
             origin: Locals.config().appUrl,
             // origin: process.env.APP_URL
-            //credentials : true
+            // credentials : true
         }));
-
         // em tạo thêm credential này để client nó còn được phép lấy
         // cookies, HTTP authentication, sau khi auth xong nó trả phiên về 
         // không bật thì mỗi origin mới dc truy cập
-
-        // em đông 
 
         return _express;
     }

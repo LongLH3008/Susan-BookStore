@@ -36,7 +36,6 @@ class ProductService {
         product_categories,
         product_attributes = {} }: any) {
         validate(productSchema, { product_name, product_description, product_price, product_categories, product_images, product_variations, product_thumb, product_attributes })
-
         const foundProduct = await Product.findOne({ product_name })
         if (foundProduct) throw new ConflictError("this product already exists")
 

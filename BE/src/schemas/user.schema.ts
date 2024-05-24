@@ -23,19 +23,24 @@ const userSchema = joi.object({
         "any.required": "Trường mật khẩu là bắt buộc",
         "string.min": "Mật khẩu phải có ít nhất {#limit} ký tự",
     }),
-    confirmPassword: joi
-        .string()
-        .valid(joi.ref("user_password"))
-        .required()
-        .messages({
-            "any.only": "Mật khẩu không khớp",
-            "string.empty": "Mật khẩu không được để trống",
-            "any.required": "Trường repassword là bắt buộc",
-        }),
+   
     user_address: joi.string().required().messages({
         "string.empty": "Dia chi không được để trống",
         "any.required": 'Trường "Dia chi" là bắt buộc',
     }),
+});
+
+export const loginSchema = joi.object({
+    user_email: joi.string().email().required().messages({
+        "string.empty": "Email không được để trống",
+        "any.required": 'Trường "Email" là bắt buộc',
+        "string.email": "Email không đúng định dạng",
+    }),
+    user_password: joi.string().min(6).required().messages({
+        "string.empty": "Mật khẩu không được để trống",
+        "any.required": "Trường mật khẩu là bắt buộc",
+        "string.min": "Mật khẩu phải có ít nhất {#limit} ký tự",
+    })
 });
 
 export const userGoogleSchema = joi.object({
