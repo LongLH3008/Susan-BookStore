@@ -145,5 +145,7 @@ class ProductService {
 
         return updateProduct
     }
+
+    
 }
 export default ProductService

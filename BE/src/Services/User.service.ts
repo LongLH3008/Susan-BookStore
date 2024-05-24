@@ -94,7 +94,7 @@ class UserService {
     }
 
     // check user from user_type_auth
-    static async checkUserFromTypeAuth(id: string, res: any) {
+    static async checkUserFromTypeAuth(id: string) {
         const chechUser: any = await User.findById(id)
         if (chechUser.user_auth_type !== "local") {
             return false

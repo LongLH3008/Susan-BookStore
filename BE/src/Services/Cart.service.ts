@@ -2,6 +2,7 @@ import { ConflictError, InternalServerError, ResourceNotFoundError } from "../co
 import { ICart } from "../interfaces/models/ICart"
 import mongoose from "mongoose"
 import Cart from "../models/Cart.model"
+import Product from "../models/Product.model"
 
 
 class CartService {
@@ -33,6 +34,10 @@ class CartService {
         ])
         if (check[0].cart_products.length === 0) return null
         return check
+    }
+
+    private static checkQuantityProductVariant() {
+        // code here ...
     }
 
     static async create({ cart_user_id }: { cart_user_id: string }) {
@@ -74,7 +79,7 @@ class CartService {
         const checkProductInCart: any = await this.checkProductInCart(cart_user_id, product_id)
         console.log(checkProductInCart);
         if (checkProductInCart) {
-            // tăng quantity lên 1 đơn vị 
+            // tăng quantity lên quantity đơn vị 
             const newCart = await Cart.findOneAndUpdate(
                 {
                     cart_user_id: cart_user_id,
@@ -140,24 +145,30 @@ class CartService {
 
     static async incrementOrDecrementQuantityProductInCart(type: "INCREMENT" | "DECREMENT", cart_user_id: string, product_id: string) {
         const checkCartExist = await this.checkCart(cart_user_id)
-        if(!checkCartExist) throw new ResourceNotFoundError("Cant not find cart by user_id")
+        if (!checkCartExist) throw new ResourceNotFoundError("Cant not find cart by user_id")
         const checkProductInCart = await this.checkProductInCart(cart_user_id, product_id)
-        if(!checkProductInCart) throw new ResourceNotFoundError("This product does not exist in Cart !")
+        if (!checkProductInCart) throw new ResourceNotFoundError("This product does not exist in Cart !")
         switch (type) {
             case "INCREMENT":
-                
+                // check quantity product 
+                const productVariant = await Product.findOne({
+                    "product_variations.product_variant_id": product_id
+                })
+                return productVariant
+                // chưa xong
                 break;
             case "DECREMENT":
+                const productVariant1 = await Product.findOne({
+                    "product_variations.product_variant_id": product_id
+                })
+                return productVariant1
 
+                // chưa xong 
                 break;
             default:
                 break;
         }
-
-        
     }
-
-
 
 }
 

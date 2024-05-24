@@ -55,4 +55,6 @@ router.post('/cart', (0, utils_1.asyncHandler)(Cart_controller_1.default.create)
 router.get('/cart/:user_id', (0, utils_1.asyncHandler)(Cart_controller_1.default.getCartByOneUser)); // get cart one user
 router.post('/cart/addproduct/:user_id', (0, utils_1.asyncHandler)(Cart_controller_1.default.addProductToCart));
 router.delete('/cart/:user_id/:product_id', (0, utils_1.asyncHandler)(Cart_controller_1.default.deleteProductInCart));
+router.get('/cart/increment-quantity/:user_id/:product_id', (0, utils_1.asyncHandler)(Cart_controller_1.default.incrementQuantityProductInCart));
+router.get('/cart/decrement-quantity/:user_id/:product_id', (0, utils_1.asyncHandler)(Cart_controller_1.default.decrementQuantityProductInCart));
 exports.default = router;
