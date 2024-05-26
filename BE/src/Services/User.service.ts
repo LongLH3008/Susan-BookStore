@@ -57,8 +57,7 @@ class UserService {
     static async getUserById({ id }: { id: string }) {
         const userById = await User.findById(id)
         if (!userById) throw new ResourceNotFoundError("this user does not exist !")
-        return userById
-
+        return userById;
     }
 
     // get by auth_type : local | google
