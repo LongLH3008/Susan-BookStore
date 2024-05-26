@@ -57,8 +57,7 @@ class UserService {
     static async getUserById({ id }: { id: string }) {
         const userById = await User.findById(id)
         if (!userById) throw new ResourceNotFoundError("this user does not exist !")
-        return userById
-
+        return userById;
     }
 
     // get by auth_type : local | google
@@ -91,6 +90,15 @@ class UserService {
             message: `User with id: ${id} has been deleted ! `
         }
 
+    }
+
+    // check user from user_type_auth
+    static async checkUserFromTypeAuth(id: string) {
+        const chechUser: any = await User.findById(id)
+        if (chechUser.user_auth_type !== "local") {
+            return false
+        }
+        return true
     }
 
 

@@ -20,7 +20,6 @@ router.get('/login/success', (req: any, res) => {
         success: false,
         message: "User Not Authenticated",
     })
-
 })
 
 // log out 
@@ -30,7 +29,6 @@ router.get('/log-out', (req: any, res: any) => {
             console.error(err);
             return res.status(500).send('Internal Server Error');
         }
-
         return res.status(200).json({
             success: true,
             message: "logout successFully!"

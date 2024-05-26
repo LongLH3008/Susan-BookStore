@@ -4,7 +4,6 @@ import { ICategory } from "../interfaces/models/ICategory";
 const COLLECTION_NAME = "Category";
 const DOCUMENT_NAME = "Categories";
 
-
 export interface ICategoryModel extends ICategory, mongoose.Document { }
 
 

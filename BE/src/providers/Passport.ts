@@ -46,14 +46,12 @@ class Passport {
                         user_name: profile.displayName,
                         user_auth_type: UserTypeAuth.google,
                         user_avatar: profile.photos[0].value
-                    })
+                    });
                     return done(null, newUser)
                 }
-
                 return done(null, checkUser)
             }
         ))
-
         return _express
     }
 }
