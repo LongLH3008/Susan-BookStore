@@ -66,7 +66,10 @@ router.delete('/orders/:id', asyncHandler(OrderController.deleteOrder));
 // cart 
 router.post('/cart', asyncHandler(CartController.create)) // create cart
 router.get('/cart/:user_id', asyncHandler(CartController.getCartByOneUser)) // get cart one user
-
+router.post('/cart/addproduct/:user_id', asyncHandler(CartController.addProductToCart))
+router.delete('/cart/:user_id/:product_id', asyncHandler(CartController.deleteProductInCart))
+router.get('/cart/increment-quantity/:user_id/:product_id', asyncHandler(CartController.incrementQuantityProductInCart))
+router.get('/cart/decrement-quantity/:user_id/:product_id', asyncHandler(CartController.decrementQuantityProductInCart))
 
 export default router;
 

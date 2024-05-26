@@ -27,12 +27,26 @@ class CartController {
             .send(res)
     }
 
-    static async deleteProductInCart(req: Request | any, res: Response) {
+    static async deleteProductInCart(req: Request | any, res: Response): Promise<any> {
         return new SuccessResponse({
             message: "Delete product in cart successFully !",
-            metadata: await CartService.deleteProductInCart(req.params.user_id, req.body.product_id)
+            metadata: await CartService.deleteProductInCart(req.params.user_id, req.params.product_id)
         })
             .send(res)
+    }
+
+    static async incrementQuantityProductInCart(req: Request | any, res: Response): Promise<any> {
+        return new SuccessResponse({
+            message: "Increment quantity product successFully!",
+            metadata: await CartService.incrementOrDecrementQuantityProductInCart("INCREMENT", req.params.user_id, req.params.product_id) as any
+        })
+    }
+
+    static async decrementQuantityProductInCart(req: Request | any, res: Response): Promise<any> {
+        return new SuccessResponse({
+            message: "Decrement quantity product successFully!",
+            metadata: await CartService.incrementOrDecrementQuantityProductInCart("DECREMENT", req.params.user_id, req.params.product_id) as any
+        })
     }
 }
 

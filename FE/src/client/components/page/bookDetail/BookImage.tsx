@@ -28,7 +28,7 @@ const BookImage = () => {
         <div className="w-full border border-gray-200">
           <img src={mainImage} alt="" />
         </div>
-        <div className="my-5">
+        <div className=" my-5 lg:w-full sm:w-[200px]">
           <Swiper
             slidesPerView={1}
             spaceBetween={10}
@@ -52,7 +52,7 @@ const BookImage = () => {
               },
             }}
             modules={[Pagination, Navigation]}
-            className="mySwiper sliderbanner relative"
+            className="mySwiper sliderbanner relative "
           >
             <SwiperSlide>
               <div
@@ -119,12 +119,12 @@ const BookImage = () => {
                 className="border border-gray-200"
                 onClick={() =>
                   handleImageClick(
-                    "https://susan-demo.myshopify.com/cdn/shop/products/10_913061f8-a25d-4ca1-9878-5ef8fd61bc6e_600x800.jpg?v=1569231186"
+                    "https://susan-demo.myshopify.com/cdn/shop/products/20_03cabe0d-7803-469e-b5f3-490646f396f8_600x800.png?v=1573978154"
                   )
                 }
               >
                 <img
-                  src="https://susan-demo.myshopify.com/cdn/shop/products/10_913061f8-a25d-4ca1-9878-5ef8fd61bc6e_600x800.jpg?v=1569231186"
+                  src="https://susan-demo.myshopify.com/cdn/shop/products/20_03cabe0d-7803-469e-b5f3-490646f396f8_600x800.png?v=1573978154"
                   alt=""
                 />
               </div>
