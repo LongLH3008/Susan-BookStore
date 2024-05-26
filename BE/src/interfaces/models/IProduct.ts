@@ -19,7 +19,7 @@ export interface IProduct {
 }
 
 interface IProductVariation {
-    product_vatiant_id: string
+    product_variant_id: string
     product_quantity: number;
     product_price: number;
     is_default: boolean

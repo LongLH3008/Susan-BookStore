@@ -37,7 +37,7 @@ const productSchema = new mongoose.Schema<IProductModel>(
                     type: Boolean,
                     default: false
                 }
-            }],
+            }],     
             required: true,
         },
         product_rating_average: {

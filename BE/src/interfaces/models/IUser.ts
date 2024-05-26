@@ -3,9 +3,11 @@ export enum UserStatus {
     block = "block",
     pending = "pending"
 }
+
 export enum UserRole {
     admin = "admin", user = "user", root = "root"
 }
+
 export enum UserTypeAuth {
     local = "local",
     google = "google"
