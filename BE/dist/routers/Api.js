@@ -50,7 +50,7 @@ router.get('/blog', (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBl
 router.get("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.getOneBlog));
 router.delete("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.deleteBlog));
 router.put("/blog/update/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.updateBlog));
-//order 
+//order
 router.post('/orders', (0, utils_1.asyncHandler)(Order_Controller_1.default.create));
 router.get('/orders/:id', (0, utils_1.asyncHandler)(Order_Controller_1.default.getOrderById));
 router.get('/orders', (0, utils_1.asyncHandler)(Order_Controller_1.default.getAllOrder));
