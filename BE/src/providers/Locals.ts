@@ -23,6 +23,7 @@ class Locals {
         const emailUser = process.env.EMAIL_USER
         const emailPass = process.env.EMAIL_PASS
         const jwtAccessKey = process.env.JWT_ACCESS_KEY
+        const jwtRefreshKey = process.env.JWT_REFRESH_KEY
         return {
             isCorsEnabled,
             apiPrefix,
@@ -36,6 +37,7 @@ class Locals {
             emailUser,
             salt,
             jwtAccessKey,
+            jwtRefreshKey,
             session_secret_key,
             google_url_callback,
             google_client_id,

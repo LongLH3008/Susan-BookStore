@@ -5,9 +5,8 @@ import Locals from "../../../providers/Locals";
 class AccessToken {
     public static generateAccessToken(user: IAuthUser) {
         const accesstoken = Locals.config().jwtAccessKey;
-        // console.log(accesstoken)
         if(!accesstoken) {
-            throw new Error("No token provided");
+            throw new Error("No token provided !");
         }
         return jwt.sign(
             {

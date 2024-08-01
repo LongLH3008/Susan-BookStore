@@ -15,6 +15,7 @@ export enum UserTypeAuth {
 
 export interface IUser {
     user_name: string
+    user_otp: string
     user_email: string
     user_phone_number: string
     user_password: string
@@ -26,6 +27,7 @@ export interface IUser {
     user_auth_type : UserTypeAuth
     createAt: Date | string
     updateAt: Date | string
+    expiresAt: Date | string
 }
 export interface IAuthUser {
     id: string,

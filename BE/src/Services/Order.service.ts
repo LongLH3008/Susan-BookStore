@@ -12,7 +12,7 @@ class OrderService {
         orderData.order_products.map(async (product: IOrderProduct) => {
           // Lấy sản phẩm từ cơ sở dữ liệu
           const productFromDb = await Product.findById(product.product_id);
-          console.log("idproduct", productFromDb);
+          // console.log("idproduct", productFromDb);
           if (!productFromDb)
             throw new ResourceNotFoundError(
               `Không tìm thấy sản phẩm với id ${product.product_id}`
@@ -100,7 +100,6 @@ class OrderService {
         // Cam kết giao dịch
         await session.commitTransaction();
         session.endSession();
-
         return savedOrder;
       } catch (error) {
         // Hủy giao dịch trong trường hợp lỗi
