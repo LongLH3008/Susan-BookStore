@@ -1,4 +1,4 @@
-import { send } from "process"
+
 import CartService from "../../Services/Cart.service"
 import { CreatedResponse, SuccessResponse } from "../../cores/succes.response"
 
@@ -39,14 +39,14 @@ class CartController {
         return new SuccessResponse({
             message: "Increment quantity product successFully!",
             metadata: await CartService.incrementOrDecrementQuantityProductInCart("INCREMENT", req.params.user_id, req.params.product_id) as any
-        })
+        }).send(res)
     }
 
     static async decrementQuantityProductInCart(req: Request | any, res: Response): Promise<any> {
         return new SuccessResponse({
             message: "Decrement quantity product successFully!",
             metadata: await CartService.incrementOrDecrementQuantityProductInCart("DECREMENT", req.params.user_id, req.params.product_id) as any
-        })
+        }).send(res)
     }
 }
 

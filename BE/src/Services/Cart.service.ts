@@ -1,6 +1,6 @@
 import { ConflictError, InternalServerError, ResourceNotFoundError } from "../cores/error.response"
 import { ICart } from "../interfaces/models/ICart"
-import mongoose from "mongoose"
+import mongoose, { trusted } from "mongoose"
 import Cart from "../models/Cart.model"
 import Product from "../models/Product.model"
 
@@ -78,22 +78,15 @@ class CartService {
         const checkProductInCart: any = await this.checkProductInCart(cart_user_id, product_id)
         console.log(checkProductInCart);
         if (checkProductInCart) {
-            // tăng quantity lên quantity đơn vị 
-            const newCart = await Cart.findOneAndUpdate(
+            // tăng quantity lên số đơn vị mà người ấy muốn vào  
+            const NewCart = await Cart.findOneAndUpdate(
+                { cart_user_id: cart_user_id, "cart_products.product_id": product_id },
                 {
-                    cart_user_id: cart_user_id,
-                    "cart_products.product_id": product_id
-                },
-                {
-                    $set: {
-                        "cart_products.$.product_quantity": checkProductInCart[0].cart_products[0].product_quantity + product_quantity
-                    }
+                    $inc: { "cart_products.$.product_quantity": product_quantity }
                 },
                 { new: true }
             )
-
-            if (!newCart) throw new InternalServerError("Error increment product quantity in cart , please try agian !")
-            return newCart
+            return NewCart;
         }
 
 
@@ -104,7 +97,7 @@ class CartService {
                 $push: {
                     cart_products: {
                         product_id: product_id,
-                        product_quantity: 1
+                        product_quantity: product_quantity
                     }
                 },
                 $inc: { cart_count_products: 1 }
@@ -147,26 +140,47 @@ class CartService {
         if (!checkCartExist) throw new ResourceNotFoundError("Cant not find cart by user_id")
         const checkProductInCart = await this.checkProductInCart(cart_user_id, product_id)
         if (!checkProductInCart) throw new ResourceNotFoundError("This product does not exist in Cart !")
-        switch (type) {
-            case "INCREMENT":
-                // check quantity product 
-                const productVariant = await Product.findOne({
-                    "product_variations.product_variant_id": product_id
-                })
-                return productVariant
-                // chưa xong
-                break;
-            case "DECREMENT":
-                const productVariant1 = await Product.findOne({
-                    "product_variations.product_variant_id": product_id
-                })
-                return productVariant1
 
-                // chưa xong 
-                break;
-            default:
-                break;
+        if (type == "INCREMENT") {
+            // tăng số lượng của product id trong cart lên 1
+
+            const NewCart = await Cart.findOneAndUpdate(
+                { cart_user_id: cart_user_id, "cart_products.product_id": product_id },
+                {
+                    $inc: { "cart_products.$.product_quantity": 1 }
+                },
+                {
+                    new: true
+                }
+            )
+
+            return NewCart;
+
         }
+
+        if (type == "DECREMENT") {
+            // gi số lượng của product id trong cart lên 1
+            // const CurrentQuantity = await Cart.findOne(
+            //     { cart_user_id: cart_user_id, "cart_products.product_id": product_id }
+            // );
+
+            // const checkQuantityEqual1 = CurrentQuantity.cart_products.filter((e: any) => e.product_id != product_id)
+            // if (checkQuantityEqual1.product_quantity == 1)
+            //     return "Anh bạn à , không thể Giảm số lượng giỏ hàng xuống 0 được"
+
+            const NewCart = await Cart.findOneAndUpdate(
+                { cart_user_id: cart_user_id, "cart_products.product_id": product_id },
+                {
+                    $inc: { "cart_products.$.product_quantity": -1 }
+                },
+                {
+                    new: true
+                }
+            )
+
+            return NewCart;
+        }
+        return;
     }
 
 }
