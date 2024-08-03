@@ -69,6 +69,8 @@ router.get("/orders/:id", asyncHandler(OrderController.getOrderById));
 router.get("/orders", asyncHandler(OrderController.getAllOrder));
 router.put("/orders/:id", asyncHandler(OrderController.updateOrder));
 router.delete("/orders/:id", asyncHandler(OrderController.deleteOrder));
+
+
 // cart
 router.post("/cart", asyncHandler(CartController.create)); // create cart
 router.get("/cart/:user_id", asyncHandler(CartController.getCartByOneUser)); // get cart one user
