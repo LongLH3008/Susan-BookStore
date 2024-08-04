@@ -34,8 +34,8 @@ const Shop = (props: Props) => {
 
 	return (
 		<>
+			<Breadcrumb title="Shop" />
 			<div className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%]">
-				<Breadcrumb title="Shop" />
 				<Nav
 					viewMode={viewMode}
 					handleViewChange={handleViewChange}

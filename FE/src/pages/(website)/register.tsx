@@ -1,11 +1,33 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/(website)/breadcrumb/breadcrumb";
-import CustomFloatingField from "../../components/(website)/floatingfield/CustomFloatingField";
-import * as icon from "@/common/assets/icon";
+import { useToast } from "@/common/hooks/useToast";
+import { useAuth } from "@/common/hooks/useAuth";
+import { useForm } from "react-hook-form";
+import { joiResolver } from "@hookform/resolvers/joi";
+import { registerValidate } from "@/schemas/auth";
 
 type Props = {};
 
 const Register = (props: Props) => {
+	const { toast } = useToast();
+	const nav = useNavigate();
+	const {
+		handleSubmit,
+		formState: { errors },
+		register,
+	} = useForm<IRegister>({ resolver: joiResolver(registerValidate) });
+
+	const { onSubmit } = useAuth({
+		action: "REGISTER",
+		onSuccess: (data: any) => {
+			toast(data.status, `Register Successfully`);
+			nav("/login");
+		},
+		onError: (err: any) => {
+			toast(err.status, err.message);
+		},
+	});
+
 	return (
 		<>
 			<Breadcrumb title="Register" />
@@ -18,61 +40,157 @@ const Register = (props: Props) => {
 						Please Register using account detail bellow.
 					</p>
 					<form
-						action=""
+						onSubmit={handleSubmit(onSubmit)}
 						className="w-full flex flex-col gap-3 justify-between mt-5 h-full *:text-[14px] *:text-zinc-900 bg-white p-[30px]"
 					>
-						<CustomFloatingField
-							id="firstname_register"
-							label="First Name"
-							isValidated
-							message="Invalid Character"
-						/>
-						<CustomFloatingField
-							id="lastname_register"
-							label="Last Name"
-							isValidated
-							message="Invalid Character"
-						/>
-						<CustomFloatingField
-							id="email_register"
-							label="Email Name"
-							isValidated
-							message="Invalid Email"
-						/>
-						<CustomFloatingField
-							id="password_register"
-							type="password"
-							label="Password"
-							isValidated
-							message="Password must have ..."
-						/>
-						<CustomFloatingField
-							id="confirmpassword_register"
-							type="password"
-							label="Confirm Password"
-							isValidated
-							message="Password not match"
-						/>
-						<div className="my-3 grid gap-2 sm:flex sm:justify-between">
+						<div
+							className={`relative ${
+								errors.user_name ? "mb-4" : "mb-1"
+							} transition-all ease-in-out duration-150`}
+						>
+							<input
+								type="text"
+								className={`${
+									!errors.user_name
+										? "border-zinc-300 focus:ring-[0.8px] ring-black"
+										: "border-red-500 ring-0"
+								} 
+                text-zinc-900 block px-2.5 pb-2.5 pt-5 w-full text-sm outline-none  peer`}
+								placeholder=" "
+								{...register("user_name")}
+							/>
+							<label
+								className={`${!errors.user_name ? "text-zinc-500" : "text-red-500"} 
+                absolute text-sm duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-[0.92] peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto`}
+							>
+								{errors.user_name && (
+									<span className="text-red-500 mr-2 tracking-widest">(*)</span>
+								)}
+								Name
+							</label>
+							<p
+								className={`${
+									errors.user_name ? "block" : "hidden"
+								} text-red-500 -bottom-[18px] absolute left-0 text-[13px]`}
+							>
+								{errors.user_name?.message}
+							</p>
+						</div>
+						<div
+							className={`relative ${
+								errors.user_email ? "mb-4" : "mb-1"
+							} transition-all ease-in-out duration-150`}
+						>
+							<input
+								type="text"
+								className={`${
+									!errors.user_email
+										? "border-zinc-300 focus:ring-[0.8px] ring-black"
+										: "border-red-500 ring-0"
+								} 
+                text-zinc-900 block px-2.5 pb-2.5 pt-5 w-full text-sm outline-none  peer`}
+								placeholder=" "
+								{...register("user_email")}
+							/>
+							<label
+								className={`${!errors.user_email ? "text-zinc-500" : "text-red-500"} 
+                absolute text-sm duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-[0.92] peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto`}
+							>
+								{errors.user_email && (
+									<span className="text-red-500 mr-2 tracking-widest">(*)</span>
+								)}
+								Email
+							</label>
+							<p
+								className={`${
+									errors.user_email ? "block" : "hidden"
+								} text-red-500 -bottom-[18px] absolute left-0 text-[13px]`}
+							>
+								{errors.user_email?.message}
+							</p>
+						</div>
+						<div
+							className={`relative ${
+								errors.user_password ? "mb-4" : "mb-1"
+							} transition-all ease-in-out duration-150`}
+						>
+							<input
+								type="password"
+								className={`${
+									!errors.user_password
+										? "border-zinc-300 focus:ring-[0.8px] ring-black"
+										: "border-red-500 ring-0"
+								} 
+                text-zinc-900 block px-2.5 pb-2.5 pt-5 w-full text-sm outline-none  peer`}
+								placeholder=" "
+								{...register("user_password")}
+							/>
+							<label
+								className={`${!errors.user_password ? "text-zinc-500" : "text-red-500"} 
+                absolute text-sm duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-[0.92] peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto`}
+							>
+								{errors.user_password && (
+									<span className="text-red-500 mr-2 tracking-widest">(*)</span>
+								)}
+								Password
+							</label>
+							<p
+								className={`${
+									errors.user_password ? "block" : "hidden"
+								} text-red-500 -bottom-[18px] absolute left-0 text-[13px]`}
+							>
+								{errors.user_password?.message}
+							</p>
+						</div>
+						<div
+							className={`relative ${
+								errors.user_password ? "mb-4" : "mb-1"
+							} transition-all ease-in-out duration-150`}
+						>
+							<input
+								type="password"
+								className={`${
+									!errors.user_confirmpassword
+										? "border-zinc-300 focus:ring-[0.8px] ring-black"
+										: "border-red-500 ring-0"
+								} 
+                text-zinc-900 block px-2.5 pb-2.5 pt-5 w-full text-sm outline-none  peer`}
+								placeholder=" "
+								{...register("user_confirmpassword")}
+							/>
+							<label
+								className={`${
+									!errors.user_confirmpassword ? "text-zinc-500" : "text-red-500"
+								} 
+                absolute text-sm duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-[0.92] peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto`}
+							>
+								{errors.user_confirmpassword && (
+									<span className="text-red-500 mr-2 tracking-widest">(*)</span>
+								)}
+								RePassword
+							</label>
+							<p
+								className={`${
+									errors.user_confirmpassword ? "block" : "hidden"
+								} text-red-500 -bottom-[18px] absolute left-0 text-[13px]`}
+							>
+								{errors.user_confirmpassword?.message}
+							</p>
+						</div>
+						<div>
 							<button
 								type="submit"
-								className="max-[500px]:w-full bg-black text-white py-[10px] px-[25px]"
+								className="w-full mt-2 bg-black text-white py-[10px] px-[25px]"
 							>
 								Register
-							</button>
-							<button
-								type="submit"
-								className="max-[500px]:w-full text-black border border-zinc-400 duration-200 hover:bg-black hover:text-white bg-white py-[10px] px-[25px] flex justify-center gap-2"
-							>
-								<img src={icon.ggIcon} width={20} alt="" /> Register with Google
 							</button>
 						</div>
 						<Link
 							to="/login"
 							state={{ from: location.pathname }}
-							className="max-[500px]:text-center"
+							className="w-full hover:bg-black text-center hover:text-white bg-white border border-zinc-500 py-[10px] px-[25px]"
 						>
-							Login
+							Back to Login
 						</Link>
 					</form>
 				</div>

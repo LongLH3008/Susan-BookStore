@@ -1,44 +1,29 @@
-import useSWRMutation from "swr/mutation";
-import { useToast } from "../common/hooks/useToast";
-import { useNavigate } from "react-router-dom";
-import { API, useSWRRequest } from "../config";
+import { API } from "../config";
 
-export const login = () => {
-	const { toast } = useToast();
-	const navigate = useNavigate();
+import { SendRequest } from "@/config";
 
-	return useSWRMutation("auth/login", useSWRRequest, {
-		onSuccess: (data) => {
-			navigate("/");
-			toast("default", data.message, 4000);
-		},
-		onError: (error: any) => {
-			if (error.code == "ERR_NETWORK") {
-				toast("lostconnect", "Lost connection. Please try again later !");
-			} else {
-				toast("error", error.response.data.error);
-			}
-		},
-	});
+export const login = async (args: ILogin) => {
+	return await SendRequest("POST", "auth/login", args);
 };
 
-export const register = () => {
-	const { toast } = useToast();
-	const navigate = useNavigate();
+export const register = async (args: IRegister) => {
+	return await SendRequest("POST", "auth/register", args);
+};
 
-	return useSWRMutation("auth/register", useSWRRequest, {
-		onSuccess: () => {
-			navigate("/login");
-			toast("success", "Register successfully", 4000);
-		},
-		onError: (error: any) => {
-			if (error.code == "ERR_NETWORK") {
-				toast("lostconnect", "Lost connection. Please try again later !");
-			} else {
-				toast("error", error.response.data.error);
-			}
-		},
-	});
+export const requestOTP = async (args: IForgotPassword["user_email"]) => {
+	return await SendRequest("POST", "auth/request-otp", args);
+};
+
+export const checkOTP = async (args: { user_name: string; user_otp: string }) => {
+	return await SendRequest("POST", "auth/check-otp", args);
+};
+
+export const confirmNewPassword = async (args: {
+	user_name: string;
+	newPassword: string;
+	confirmedPassword: string;
+}) => {
+	return await SendRequest("POST", "auth/forgot-pw", args);
 };
 
 const checkAuthentication = async () => {

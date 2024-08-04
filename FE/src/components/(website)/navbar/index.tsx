@@ -25,7 +25,7 @@ const Navbar = (props: Props) => {
 			${scroll < 5 && "h-[68px] lg:h-[95px] duration-0"}
 			${scroll > 50 && scroll < 100 && "h-0 -top-20"}
 			${scroll > 100 && "h-[68px] shadow-sm border-0 top-0 bg-[rgba(255,255,255,0.5)] opacity-100"}
-			sticky hover:bg-white ease-in duration-500 z-30 w-full`}
+			fixed hover:bg-white ease-in duration-500 z-30 w-full`}
 			>
 				<nav className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] max-[1000px]:h-[68px] h-full text-[14px] flex justify-between items-center border-b">
 					<Link id="logo_header" to={"/"}>
@@ -41,13 +41,25 @@ const Navbar = (props: Props) => {
 							HOME
 						</Link>
 						<DropdownShop />
-						<Link className="hover:text-[#00BFC5] h-full grid place-items-center" to="/blog" state={{ from: location.pathname }}>
+						<Link
+							className="hover:text-[#00BFC5] h-full grid place-items-center"
+							to="/blog"
+							state={{ from: location.pathname }}
+						>
 							BLOG
 						</Link>
-						<Link className="hover:text-[#00BFC5] h-full grid place-items-center" to="/about" state={{ from: location.pathname }}>
+						<Link
+							className="hover:text-[#00BFC5] h-full grid place-items-center"
+							to="/about"
+							state={{ from: location.pathname }}
+						>
 							ABOUT
 						</Link>
-						<Link className="hover:text-[#00BFC5] h-full grid place-items-center" to="/contact" state={{ from: location.pathname }}>
+						<Link
+							className="hover:text-[#00BFC5] h-full grid place-items-center"
+							to="/contact"
+							state={{ from: location.pathname }}
+						>
 							CONTACT
 						</Link>
 					</div>
