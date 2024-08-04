@@ -36,7 +36,7 @@ router.post("/auth/forgot-pw", ForgotPassword_1.default.resetPassword);
 router.get("/categories", (0, utils_1.asyncHandler)(Category_controller_1.default.getAll));
 router.get("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.getOne));
 router.post("/categories", (0, utils_1.asyncHandler)(Category_controller_1.default.create));
-router.patch("/categorcategoriesies/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.update));
+router.patch("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.update));
 router.delete("/categories", (0, utils_1.asyncHandler)(Category_controller_1.default.delete));
 //comment
 router.get("/comments", (0, utils_1.asyncHandler)(Comment_controller_1.default.getCommentsByProductId));

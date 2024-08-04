@@ -3,12 +3,12 @@ interface ILogin {
 	user_password: string;
 }
 
-interface IRegister {
-	user_firstname: string;
-	user_lastname: string;
-	user_email: string;
-	user_password: string;
-	user_repassword: string;
+interface IRegister extends ILogin {
+	user_confirmpassword: string;
+	user_name: string;
 }
 
-
+interface IForgotPassword {
+	user_email: string;
+	user_otp: string;
+}

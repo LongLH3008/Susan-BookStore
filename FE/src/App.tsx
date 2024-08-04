@@ -1,11 +1,10 @@
-import RouterDashboard from "./routers/router.dashboard";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import RouterWebsite from "./routers/router.website";
 
 export default function App() {
 	return (
-		<>
-			<RouterDashboard />
+		<QueryClientProvider client={new QueryClient()}>
 			<RouterWebsite />
-		</>
+		</QueryClientProvider>
 	);
 }

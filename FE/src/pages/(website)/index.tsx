@@ -9,5 +9,6 @@ export { default as Shop } from "./shop/Shop";
 export { default as Contact } from "./contact/Contact";
 export { default as About } from "./about/About";
 export { default as BookDetail } from "./book_detail/BookDetail";
+export { default as ForgotPassword } from "./forgotpassword/forgotpassword";
 export { default as NotFound404 } from "./404NotFound";
 export { default as Loader } from "../../components/(website)/Loader";
