@@ -1,5 +1,7 @@
 import { SendRequest } from "@/config";
+
 const base_URL = `http://localhost:5000/api/v1/`;
+
 export const fetchProducts = async (
   limit: number,
   page: number,
@@ -15,11 +17,21 @@ export const fetchProducts = async (
     throw error;
   }
 };
+
 export const fetchCategoryById = async (categoryId: string) => {
   try {
     return await SendRequest("GET", `${base_URL}categories/${categoryId}`);
   } catch (error) {
     console.error(`Error fetching category with id ${categoryId}:`, error);
+    throw error;
+  }
+};
+
+export const fetchComment = async () => {
+  try {
+    return await SendRequest("GET", `${base_URL}comments`);
+  } catch (error) {
+    console.error(`Error fetching comments:`, error);
     throw error;
   }
 };
