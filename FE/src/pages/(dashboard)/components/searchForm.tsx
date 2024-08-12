@@ -19,13 +19,22 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex items-center justify-end bg-gray-50 dark:bg-gray-800 ">
+      <div className="flex items-center justify-end dark:bg-gray-800">
         <TextField
           label="Nhập từ khóa"
           variant="outlined"
           fullWidth
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          InputProps={{
+            className: "dark:text-white  ",
+            classes: {
+              notchedOutline: "dark:border-white",
+            },
+          }}
+          InputLabelProps={{
+            className: "dark:text-white",
+          }}
           style={{
             margin: "16px 0",
             width: "200px",
@@ -35,7 +44,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           type="submit"
           variant="contained"
           color="primary"
-          style={{ marginLeft: "10px", height: "40px" }}
+          className="ml-2 h-10 dark:text-white"
         >
           Tìm kiếm
         </Button>
@@ -43,7 +52,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           type="submit"
           variant="contained"
           color="primary"
-          style={{ marginLeft: "10px", height: "40px" }}
+          className="ml-2 h-10 dark:text-white"
         >
           Thêm mới
         </Button>

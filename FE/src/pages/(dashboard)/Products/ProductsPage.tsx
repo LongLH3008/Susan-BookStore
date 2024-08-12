@@ -7,7 +7,10 @@ import MyTable2 from "../components/table";
 import { useToast } from "@/common/hooks/useToast";
 import SearchForm from "../components/searchForm";
 import { fetchCategoryById, fetchProducts } from "@/services/product";
-
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
 const ProductsPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
@@ -106,14 +109,19 @@ const ProductsPage: React.FC = () => {
       {
         headerName: "Thao tác",
         field: "actions",
+        width: "110px",
         cellRenderer: (row: any) => (
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => handleDelete(row._id)}
-          >
-            Delete
-          </Button>
+          <>
+            <Tooltip title="Chỉnh sửa">
+              <EditIcon />
+            </Tooltip>
+            <Tooltip title="Hiển thị chi tiết">
+              <InfoIcon />
+            </Tooltip>
+            <Tooltip title="Xóa">
+              <DeleteIcon onClick={() => handleDelete(row._id)} />
+            </Tooltip>
+          </>
         ),
       },
     ],
