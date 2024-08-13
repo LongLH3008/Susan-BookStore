@@ -6,7 +6,7 @@ export class CORS {
 	public static mount(_express: Application): Application {
 		_express.use(
 			cors({
-				origin: Locals.config().clientUrl,
+				origin: Locals.config().clientUrl || Locals.config().appUrl,
 				// origin: process.env.APP_URL
 				credentials: true,
 			})
