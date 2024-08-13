@@ -39,7 +39,7 @@ const CheckOTP = ({
 	return (
 		<div
 			className={`${
-				!open ? "-top-full" : "top-0"
+				!open ? "top-full" : "top-0"
 			} absolute border left-0 transition-all ease-in-out duration-300 w-full flex flex-col gap-3 h-full *:text-[14px] *:text-zinc-900 bg-white p-[30px]`}
 		>
 			<div className="relative">
