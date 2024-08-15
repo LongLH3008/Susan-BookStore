@@ -36,8 +36,12 @@ const productSchema = new mongoose.Schema<IProductModel>(
                 is_default: {
                     type: Boolean,
                     default: false
+                },
+                isActive: {
+                    type: Boolean,
+                    default: true
                 }
-            }],     
+            }],
             required: true,
         },
         product_rating_average: {
@@ -59,6 +63,10 @@ const productSchema = new mongoose.Schema<IProductModel>(
             type: mongoose.Schema.Types.Mixed,
             required: true,
         },
+        isActive: {
+            type: Boolean,
+            default: true
+        }
     },
     {
         timestamps: true,

@@ -1,16 +1,25 @@
 import mongoose from "mongoose";
-import { IUser, UserRole, UserStatus, UserTypeAuth } from "../interfaces/models/IUser";
+
+import {
+	IUser,
+	UserRole,
+	UserStatus,
+	UserTypeAuth,
+} from "../interfaces/models/IUser";
+import { array, string } from "joi";
+
 
 const COLLECTION_NAME = "User";
 const DOCUMENT_NAME = "Users";
 
-export interface IUserModel extends IUser, mongoose.Document {}
+export interface IUserModel extends IUser, mongoose.Document { }
 
 const Userchema = new mongoose.Schema<IUserModel>(
+
 	{
 		user_name: {
 			type: String,
-			required: false,
+			required: true,
 		},
 		user_otp: {
 			type: String,
@@ -34,6 +43,11 @@ const Userchema = new mongoose.Schema<IUserModel>(
 			enum: UserStatus,
 			default: UserStatus.active,
 		},
+		user_wishlist: {
+			type: [],
+			default: []
+		},
+
 
 		user_address: {
 			type: String,

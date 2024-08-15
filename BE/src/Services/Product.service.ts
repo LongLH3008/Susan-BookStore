@@ -165,7 +165,7 @@ class ProductService {
     return foundProduct;
   }
 
-  static async updateProduct(id: string, data: any) {
+  static async updateProduct(id: string, data: any): Promise<any> {
     const updateObject = deleteNullObject(data);
     const foundProduct = await Product.findOne({ _id: id });
     if (!foundProduct)
@@ -186,11 +186,13 @@ class ProductService {
     return await Product.deleteOne({ _id: id });
   }
   static async updateVariation(
-    product_id: string,
-    variant_id: string,
+    product_id: any,
+    variant_id: any,
     data: any
-  ) {
+  ):Promise<any> {
     const updateObject = deleteNullObject(data);
+    console.log(product_id, variant_id, updateObject);
+
     const foundProduct = await Product.findOne({ _id: product_id });
     if (!foundProduct)
       throw new ResourceNotFoundError("this product not found");
@@ -203,7 +205,19 @@ class ProductService {
 
     return updateProduct;
   }
+  static async unActiveProduct({ id }: { id: string }) {
+    const foundProduct = await Product.findOne({ _id: id });
+    if(!foundProduct) throw new ResourceNotFoundError("this product not found");
+    return await Product.updateOne({ _id: id }, { $set: { isActive: false } });
 
-    
+  }
+  static async activeProduct({ id }: { id: string }) {
+    const foundProduct = await Product.findOne({ _id: id });
+    if(!foundProduct) throw new ResourceNotFoundError("this product not found");
+    return await Product.updateOne({ _id: id }, { $set: { isActive: true } });
+
+  }
+
+
 }
 export default ProductService;

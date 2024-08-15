@@ -1,3 +1,6 @@
+import mongoose from "mongoose"
+import { IProduct } from "./IProduct"
+
 export enum UserStatus {
     active = "active",
     block = "block",
@@ -24,7 +27,8 @@ export interface IUser {
     user_role: UserRole
     user_avatar: string
     user_gender: string
-    user_auth_type : UserTypeAuth
+    user_wishlist: string[] | mongoose.Schema.Types.ObjectId[]
+    user_auth_type: UserTypeAuth
     createAt: Date | string
     updateAt: Date | string
     expiresAt: Date | string

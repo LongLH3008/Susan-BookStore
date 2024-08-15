@@ -33,20 +33,27 @@ router.post("/auth/change-pw", ChangePassword_1.default.changePassword);
 router.post("/auth/request-otp", ForgotPassword_1.default.requestReset);
 router.post("/auth/check-otp", ForgotPassword_1.default.verifyOTP);
 router.post("/auth/forgot-pw", ForgotPassword_1.default.resetPassword);
+//categories
 router.get("/categories", (0, utils_1.asyncHandler)(Category_controller_1.default.getAll));
 router.get("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.getOne));
 router.post("/categories", (0, utils_1.asyncHandler)(Category_controller_1.default.create));
 router.patch("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.update));
-router.delete("/categories", (0, utils_1.asyncHandler)(Category_controller_1.default.delete));
+
+router.delete("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.delete));
+
 //comment
-router.get("/comments", (0, utils_1.asyncHandler)(Comment_controller_1.default.getCommentsByProductId));
-router.get("/comments/:id", (0, utils_1.asyncHandler)(Comment_controller_1.default.getCommentsByUserId));
+router.get("/comments/products/:id", (0, utils_1.asyncHandler)(Comment_controller_1.default.getCommentsByProductId));
+router.get("/comments/users/:id", (0, utils_1.asyncHandler)(Comment_controller_1.default.getCommentsByUserId));
 router.post("/comments", (0, utils_1.asyncHandler)(Comment_controller_1.default.create));
 router.patch("/comments/:id", (0, utils_1.asyncHandler)(Comment_controller_1.default.update));
-router.delete("/comments", (0, utils_1.asyncHandler)(Comment_controller_1.default.delete));
+router.delete("/comments/:id", (0, utils_1.asyncHandler)(Comment_controller_1.default.delete));
 //product
 router.post("/products", (0, utils_1.asyncHandler)(Product_controller_1.default.create));
+router.patch("/products/variations/", (0, utils_1.asyncHandler)(Product_controller_1.default.updateVariation));
+router.patch("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.updateOne));
+router.get("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.getById));
 router.get("/products", (0, utils_1.asyncHandler)(Product_controller_1.default.getByQuery));
+router.delete("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.deleteOne));
 //blog
 router.post("/blog/add", (0, utils_1.asyncHandler)(blog_controller_1.default.create));
 router.get("/blog", (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlog));
