@@ -38,7 +38,7 @@ class DiscountService {
             //so lan su dung toi da cho moi user
             discount_max_use_per_user,
             //danh sach user da su dung
-            discount_user_used,
+            discount_users_used,
             //tinh trang ma giam gia
             discount_start_date,
             discount_end_date,
@@ -68,7 +68,7 @@ class DiscountService {
             discount_stock,
             discount_min_order_value,
             discount_max_use_per_user,
-            discount_user_used,
+            discount_users_used,
             discount_start_date,
             discount_end_date,
             discount_applies_to,
@@ -159,6 +159,9 @@ class DiscountService {
             discount_min_order_value,
             discount_max_use_per_user,
             discount_value,
+            discount_applies_to,
+            discount_category_ids,
+            discount_product_ids,
 
             discount_type,
             discount_stock
@@ -172,11 +175,13 @@ class DiscountService {
             new Date() > new Date(discount_end_date)
         )
             throw new BadRequestError("discount code has expired");
-        let total = 0;
+
+
+
+        let total = products.reduce((acc: number, cur: any) => {
+            return acc + cur.product_price * cur.quantity;
+        }, 0);
         if (discount_min_order_value > 0) {
-            total = products.reduce((acc: number, cur: any) => {
-                return acc + cur.product_price * cur.quantity;
-            }, 0);
             if (total < discount_min_order_value)
                 throw new BadRequestError("order value is not enough");
         }
@@ -189,16 +194,50 @@ class DiscountService {
                 throw new BadRequestError("you have already used this code");
         }
 
-        const amount =
-            discount_type === "fixed_amount"
-                ? discount_value
-                : (discount_value * total) / 100;
 
-        return {
-            total,
-            discount: amount,
-            totalPrice: total - amount,
-        };
+        if (discount_applies_to == "all") {
+            let amount =
+                discount_type === "fixed_amount"
+                    ? discount_value
+                    : (discount_value * total) / 100;
+
+            return {
+                total,
+                discount: amount,
+                totalPrice: total - amount,
+            };
+        } else if (discount_applies_to == "specific" && discount_product_ids.length > 0) {
+            let amount = 0
+            products.filter((product: any) => {
+                if (discount_product_ids.includes(product.product_id.toString())) {
+                    amount += discount_type === "fixed_amount" ? discount_value : (discount_value * product.product_price) / 100;
+                }
+            })
+            return {
+                total,
+                discount: amount,
+                totalPrice: total - amount,
+            };
+        } else {
+
+            let amount = 0;
+            products.forEach((product: any) => {
+                if (product.categories.some((category: any) => discount_category_ids.includes(category.toString()))) {
+                    if (discount_type === "fixed_amount") {
+                        amount += discount_value;
+                    } else {
+                        amount += (discount_value * product.product_price) / 100;
+                    }
+                }
+            });
+
+            return {
+                total,
+                discount: amount,
+                totalPrice: total - amount,
+            };
+        }
+
     }
     static async deleteDiscount({ code }: any) {
         const deleteDiscount = await Discount.findOneAndDelete({

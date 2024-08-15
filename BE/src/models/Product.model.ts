@@ -58,7 +58,8 @@ const productSchema = new mongoose.Schema<IProductModel>(
         product_images: [{
             image_id: String,
             image_url: String
-        }],
+        }]
+        ,
         product_attributes: {
             type: mongoose.Schema.Types.Mixed,
             required: true,

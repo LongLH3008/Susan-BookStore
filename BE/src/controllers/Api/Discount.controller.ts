@@ -49,7 +49,7 @@ class DiscountController {
         }).send(res);
     }
     static async cancelDiscount(req: Request, res: Response): Promise<any> {
-        const Discount = await DiscountService.inActiveDiscount(req.body);
+        const Discount = await DiscountService.cancelDiscount(req.body);
         return new SuccessResponse({
             message: "cancel Discount successfully",
             metadata: Discount,

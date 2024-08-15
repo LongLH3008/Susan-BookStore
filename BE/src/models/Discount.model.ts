@@ -75,8 +75,8 @@ const DiscountSchema = new mongoose.Schema<IDiscountModel>(
             default: 1,
         },
         //danh sach user da su dung
-        discount_user_used: {
-            type: [String],
+        discount_users_used: {
+            type: [],
             default: []
         },
         //tinh trang ma giam gia
