@@ -12,6 +12,7 @@ export interface IProduct {
     product_variations: IProductVariation[]
     product_rating_average: number
     product_categories: [string]
+    isActive: boolean
     product_attributes: object
     createAt: Date | string
     updateAt: Date | string
@@ -23,4 +24,5 @@ interface IProductVariation {
     product_quantity: number;
     product_price: number;
     is_default: boolean
+    isActive: boolean
 }

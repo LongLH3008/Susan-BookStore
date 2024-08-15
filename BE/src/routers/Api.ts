@@ -11,6 +11,7 @@ import { asyncHandler } from "../utils";
 import OrderController from "../controllers/Api/Order.Controller";
 import CartController from "../controllers/Api/Cart.controller";
 import UserController from "../controllers/Api/User.controller";
+import DiscountController from "../controllers/Api/Discount.controller";
 const router = Router();
 
 // user-google
@@ -30,22 +31,37 @@ router.post("/auth/register", AuthRegisterApiController.Register);
 router.post("/auth/change-pw", AuthChangeFwApiController.changePassword);
 router.post("/auth/request-otp", AuthForgotfwApiController.requestReset);
 router.post("/auth/check-otp", AuthForgotfwApiController.verifyOTP);
-router.post("/auth/forgot-pw", AuthForgotfwApiController.resetPassword);
 
+router.post("/auth/forgot-pw", AuthForgotfwApiController.resetPassword)
+//categories
 router.get("/categories", asyncHandler(CategoryController.getAll));
 router.get("/categories/:id", asyncHandler(CategoryController.getOne));
 router.post("/categories", asyncHandler(CategoryController.create));
-router.patch("/categories/:id", asyncHandler(CategoryController.update));
-router.delete("/categories", asyncHandler(CategoryController.delete));
+router.patch(
+  "/categories/:id",
+  asyncHandler(CategoryController.update)
+);
+router.delete("/categories/:id", asyncHandler(CategoryController.delete));
 //comment
-router.get("/comments", asyncHandler(CommentController.getCommentsByProductId));
-router.get("/comments/:id", asyncHandler(CommentController.getCommentsByUserId));
+router.get("/comments/products/:id", asyncHandler(CommentController.getCommentsByProductId));
+router.get(
+  "/comments/users/:id",
+  asyncHandler(CommentController.getCommentsByUserId)
+);
+
 router.post("/comments", asyncHandler(CommentController.create));
 router.patch("/comments/:id", asyncHandler(CommentController.update));
-router.delete("/comments", asyncHandler(CommentController.delete));
+router.delete("/comments/:id", asyncHandler(CommentController.delete));
 //product
 router.post("/products", asyncHandler(ProductController.create));
+router.patch("/products/variations/", asyncHandler(ProductController.updateVariation));
+router.patch("/products/:id", asyncHandler(ProductController.updateOne));
+
+router.get("/products/:id", asyncHandler(ProductController.getById));
 router.get("/products", asyncHandler(ProductController.getByQuery));
+router.delete("/products/:id", asyncHandler(ProductController.deleteOne));
+router.patch("/products/:id", asyncHandler(ProductController.activeProduct));
+router.patch("/products/:id", asyncHandler(ProductController.unActiveProduct));
 //blog
 
 router.post("/blog/add", asyncHandler(BlogController.create));
@@ -73,6 +89,37 @@ router.get(
 router.get(
 	"/cart/decrement-quantity/:user_id/:product_id",
 	asyncHandler(CartController.decrementQuantityProductInCart)
+);
+
+
+//discount
+router.post(
+  "/discounts",
+  asyncHandler(DiscountController.create)
+);
+router.get(
+  "/discounts",
+  asyncHandler(DiscountController.getAll)
+);
+router.get(
+  "/discounts/product/:productId",
+  asyncHandler(DiscountController.getDiscountsByProductId)
+);
+router.get(
+  "/discounts/:code",
+  asyncHandler(DiscountController.getAllProductsWithDiscountCode)
+);
+router.post(
+  "/discounts/active",
+  asyncHandler(DiscountController.active)
+);
+router.post(
+  "/discounts/inactive",
+  asyncHandler(DiscountController.inActive)
+);
+router.get(
+  "/discounts/cancel/",
+  asyncHandler(DiscountController.cancelDiscount)
 );
 
 export default router;

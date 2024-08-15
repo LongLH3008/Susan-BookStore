@@ -63,6 +63,11 @@ const DiscountSchema = new mongoose.Schema<IDiscountModel>(
             type: Number,
             required: true,
         },
+        discount_description: {
+            type: String,
+            default: "",
+        },
+
         //so lan su dung toi da cho moi user
         discount_max_use_per_user: {
             type: Number,

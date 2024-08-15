@@ -1,5 +1,5 @@
 export enum DiscountType {
-    percentage = "percentage", fix_amount = "fix_amount"
+    percentage = "percentage", fix_amount = "fixed_amount"
 }
 export enum DiscountApplyTo {
     all = "all", specific = "specific", category = "category"
@@ -12,7 +12,8 @@ export interface IDiscount {
     //ma giam gia
     discount_code: string
     //loai ma giam gai
-    discount_type: DiscountType
+    discount_type: DiscountType,
+    discount_description: string
 
     //gia tri giam gia
     discount_value: number

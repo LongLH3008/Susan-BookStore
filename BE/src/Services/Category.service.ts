@@ -46,4 +46,18 @@ export class CategoryService {
         if (!foundCategory) throw new ResourceNotFoundError("this category not found")
         return await Category.deleteOne({ _id: id })
     }
+    static async active({ id }: { id: string }) {
+        const foundCategory = await Category.findOne({ _id: id })
+        if (!foundCategory) throw new ResourceNotFoundError("this category not found")
+        foundCategory.is_active = true
+        await foundCategory.save()
+        return foundCategory
+    }
+    static async inActive({ id }: { id: string }) {
+        const foundCategory = await Category.findOne({ _id: id })
+        if (!foundCategory) throw new ResourceNotFoundError("this category not found")
+        foundCategory.is_active = false
+        await foundCategory.save()
+        return foundCategory
+    }
 }

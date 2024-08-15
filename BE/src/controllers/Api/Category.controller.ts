@@ -40,5 +40,21 @@ class CategoryController {
             metadata: await CategoryService.delete({ id })
         }).send(res)
     }
+    static async active(req: Request, res: Response): Promise<any> {
+        const id = req.params.id
+
+        return new SuccessResponse({
+            message: "active category successfully",
+            metadata: await CategoryService.active({ id })
+        }).send(res)
+    }
+    static async inActive(req: Request, res: Response): Promise<any> {
+        const id = req.params.id
+
+        return new SuccessResponse({
+            message: "inActive category successfully",
+            metadata: await CategoryService.inActive({ id })
+        }).send(res)
+    }
 }
 export default CategoryController
