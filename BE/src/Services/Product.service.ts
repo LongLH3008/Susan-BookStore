@@ -226,13 +226,13 @@ class ProductService {
         product_categories: { $in: [category_id] },
         isActive: true
       },
-      { $set: { category_discount: discount } }
+      { $set: { product_discount: discount } }
     );
   }
   static async setDiscountToAll({ discount }: { discount: number }) {
     return await Product.updateMany(
       { isActive: true },
-      { $set: { category_discount: discount } }
+      { $set: { product_discount: discount } }
     );
   }
 
