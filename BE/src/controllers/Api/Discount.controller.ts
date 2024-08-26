@@ -20,7 +20,8 @@ class DiscountController {
         }).send(res);
     }
     static async getDiscountsByProductId(req: Request, res: Response): Promise<any> {
-        const Discount = await DiscountService.getDiscountByProduct(req.params);
+        const { productId } = req.params
+        const Discount = await DiscountService.getDiscountByProduct(productId);
         return new SuccessResponse({
             message: "get Discounts successfully",
             metadata: Discount,
@@ -55,6 +56,15 @@ class DiscountController {
             metadata: Discount,
         }).send(res);
     }
+
+    static async getAmount(req: Request, res: Response): Promise<any> {
+        const Discount = await DiscountService.getDiscountAmount2(req.body);
+        return new SuccessResponse({
+            message: "cancel Discount successfully",
+            metadata: Discount,
+        }).send(res);
+    }
+
 
 
 

@@ -28,6 +28,10 @@ const productSchema = new mongoose.Schema<IProductModel>(
             type: Number,
             required: true,
         },
+        product_discount: {
+            type: Number,
+            default: 0
+        },
         product_variations: {
             type: [{
                 product_variant_id: String,

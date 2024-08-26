@@ -44,12 +44,12 @@ const DiscountSchema = new mongoose.Schema<IDiscountModel>(
         },
         //ma san pha mduoc ap dung
         discount_product_ids: {
-            type: [String],
+            type: [],
             default: []
         },
         //ma danh muc duoc ap dung
         discount_category_ids: {
-            type: [String],
+            type: [],
             default: []
         },
         //so lan su dung cua ma giam gia

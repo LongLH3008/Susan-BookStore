@@ -159,7 +159,7 @@ class ProductService {
   }
 
   static async getProductById({ id }: { id: string }) {
-    const foundProduct = await Product.findOne({ _id: id });
+    const foundProduct = await Product.findOne({ _id: id, isActive: true });
     if (!foundProduct)
       throw new ResourceNotFoundError("this product not found");
     return foundProduct;
@@ -167,7 +167,7 @@ class ProductService {
 
   static async updateProduct(id: string, data: any): Promise<any> {
     const updateObject = deleteNullObject(data);
-    const foundProduct = await Product.findOne({ _id: id });
+    const foundProduct = await Product.findOne({ _id: id, isActive: true });
     if (!foundProduct)
       throw new ResourceNotFoundError("this product not found");
 
@@ -180,7 +180,7 @@ class ProductService {
     return updateProduct;
   }
   static async deleteProduct({ id }: { id: string }) {
-    const foundProduct = await Product.findOne({ _id: id });
+    const foundProduct = await Product.findOne({ _id: id, isActive: true });
     if (!foundProduct)
       throw new ResourceNotFoundError("this product not found");
     return await Product.deleteOne({ _id: id });
@@ -189,7 +189,7 @@ class ProductService {
     product_id: any,
     variant_id: any,
     data: any
-  ):Promise<any> {
+  ): Promise<any> {
     const updateObject = deleteNullObject(data);
     console.log(product_id, variant_id, updateObject);
 
@@ -206,16 +206,34 @@ class ProductService {
     return updateProduct;
   }
   static async unActiveProduct({ id }: { id: string }) {
-    const foundProduct = await Product.findOne({ _id: id });
-    if(!foundProduct) throw new ResourceNotFoundError("this product not found");
+    const foundProduct = await Product.findOne({ _id: id, isActive: true });
+    if (!foundProduct) throw new ResourceNotFoundError("this product not found");
     return await Product.updateOne({ _id: id }, { $set: { isActive: false } });
 
   }
   static async activeProduct({ id }: { id: string }) {
-    const foundProduct = await Product.findOne({ _id: id });
-    if(!foundProduct) throw new ResourceNotFoundError("this product not found");
+    const foundProduct = await Product.findOne({ _id: id, isActive: true });
+    if (!foundProduct) throw new ResourceNotFoundError("this product not found");
     return await Product.updateOne({ _id: id }, { $set: { isActive: true } });
 
+  }
+  static async setDiscountByCategoryId({ category_id, discount }: { category_id: string, discount: number }) {
+    const foundCategory = await Category.findOne({ _id: category_id });
+    if (!foundCategory) throw new ResourceNotFoundError("This category not found");
+
+    return await Product.updateMany(
+      {
+        product_categories: { $in: [category_id] },
+        isActive: true
+      },
+      { $set: { category_discount: discount } }
+    );
+  }
+  static async setDiscountToAll({ discount }: { discount: number }) {
+    return await Product.updateMany(
+      { isActive: true },
+      { $set: { category_discount: discount } }
+    );
   }
 
 

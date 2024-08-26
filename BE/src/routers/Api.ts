@@ -83,12 +83,12 @@ router.get("/cart/:user_id", asyncHandler(CartController.getCartByOneUser)); // 
 router.post("/cart/addproduct/:user_id", asyncHandler(CartController.addProductToCart));
 router.delete("/cart/:user_id/:product_id", asyncHandler(CartController.deleteProductInCart));
 router.get(
-	"/cart/increment-quantity/:user_id/:product_id",
-	asyncHandler(CartController.incrementQuantityProductInCart)
+  "/cart/increment-quantity/:user_id/:product_id",
+  asyncHandler(CartController.incrementQuantityProductInCart)
 );
 router.get(
-	"/cart/decrement-quantity/:user_id/:product_id",
-	asyncHandler(CartController.decrementQuantityProductInCart)
+  "/cart/decrement-quantity/:user_id/:product_id",
+  asyncHandler(CartController.decrementQuantityProductInCart)
 );
 
 
@@ -96,6 +96,10 @@ router.get(
 router.post(
   "/discounts",
   asyncHandler(DiscountController.create)
+);
+router.post(
+  "/discounts/get-amount",
+  asyncHandler(DiscountController.getAmount)
 );
 router.get(
   "/discounts",
