@@ -235,6 +235,18 @@ class ProductService {
       { $set: { product_discount: discount } }
     );
   }
+  static async setDiscountByProductId({ product_id, discount }: { product_id: string, discount: number }) {
+    const foundProduct = await Product.findOne({ _id: product_id });
+    if (!foundProduct) throw new ResourceNotFoundError("This Product not found");
+
+    return await Product.updateOne(
+      {
+        _id: product_id,
+        isActive: true
+      },
+      { $set: { product_discount: discount } }
+    );
+  }
 
 
 }
