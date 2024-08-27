@@ -1,3 +1,4 @@
+import { IProduct } from "@/common/interfaces/product";
 import { SendRequest } from "@/config";
 
 const base_URL = `http://localhost:5000/api/v1/`;
@@ -17,12 +18,26 @@ export const fetchProducts = async (
     throw error;
   }
 };
-
-export const fetchCategoryById = async (categoryId: string) => {
+export const deleteProduct = async (id: string) => {
   try {
-    return await SendRequest("GET", `${base_URL}categories/${categoryId}`);
+    console.log("Gọi API với ID:", id);
+    return await SendRequest("DELETE", `${base_URL}products`, null, id);
   } catch (error) {
-    console.error(`Error fetching category with id ${categoryId}:`, error);
+    console.error("Error delete products:", error);
+    throw error;
+  }
+};
+
+export const addProduct = async (data: IProduct) => {
+  try {
+    const response = await SendRequest("POST", `${base_URL}products`, data);
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Error adding product: ${errorMessage}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error adding product:", error);
     throw error;
   }
 };

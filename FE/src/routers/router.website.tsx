@@ -9,6 +9,9 @@ import UsersPage from "@/pages/(dashboard)/Users/UsersPage";
 import * as Website from "@/pages/(website)";
 import { useRoutes } from "react-router-dom";
 
+import FormAttr from "@/pages/(dashboard)/Products/FormAttr";
+import ProductForm from "@/pages/(dashboard)/Products/productForm";
+
 type Props = {};
 
 const RouterWebsite = (props: Props) => {
@@ -46,6 +49,7 @@ const RouterWebsite = (props: Props) => {
       ],
     },
     { path: "products", element: <ProductsPage /> },
+    { path: "product/add", element: <ProductForm /> },
   ]);
   return routers;
 };
