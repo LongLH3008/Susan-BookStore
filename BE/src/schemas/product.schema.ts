@@ -25,6 +25,10 @@ const productSchema = joi.object({
         "string.empty": "Giá sản phẩm là bắt buộc",
         "any.required": "Trường 'Giá sản phẩm' là bắt buộc",
     }),
+    product_discount: joi.number().required().messages({
+        "string.empty": "Giá sản phẩm là bắt buộc",
+        "any.required": "Trường 'Giá sản phẩm' là bắt buộc",
+    }),
     product_images: joi.array().items(
         joi.object({
             image_id: joi.string().allow(null, ""),
