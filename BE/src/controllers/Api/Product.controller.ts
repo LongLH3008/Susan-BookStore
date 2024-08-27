@@ -65,7 +65,7 @@ class ProductController {
             metadata: await ProductService.activeProduct({ id })
         }).send(res)
     }
-    
+
 
 }
 

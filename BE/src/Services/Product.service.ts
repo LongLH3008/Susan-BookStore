@@ -281,7 +281,7 @@ class ProductService {
     return updateProduct;
   }
   static async deleteProduct({ id }: { id: string }) {
-    const foundProduct = await Product.findOne({ _id: id, isActive: true });
+    const foundProduct = await Product.findOne({ _id: id });
     if (!foundProduct)
       throw new ResourceNotFoundError("this product not found");
     return await Product.deleteOne({ _id: id });
@@ -310,8 +310,13 @@ class ProductService {
     const foundProduct = await Product.findOne({ _id: id, isActive: true });
     if (!foundProduct) throw new ResourceNotFoundError("this product not found");
     return await Product.updateOne({ _id: id }, { $set: { isActive: false } });
-
   }
+  // static async unActiveProduct({ id }: { id: string }) {
+  //   const foundProduct = await Product.findOne({ _id: id });
+  //   if (!foundProduct) throw new ResourceNotFoundError("this product not found");
+  //   return await Product.updateOne({ _id: id }, { $set: { isActive: false } });
+
+  // }
   static async activeProduct({ id }: { id: string }) {
     const foundProduct = await Product.findOne({ _id: id, isActive: true });
     if (!foundProduct) throw new ResourceNotFoundError("this product not found");
