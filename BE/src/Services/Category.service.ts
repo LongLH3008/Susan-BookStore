@@ -62,13 +62,9 @@ export class CategoryService {
             product_categories: { $in: [id] }
         });
 
-        const updatePromises = allProductsByCategory.map((product) => {
-            if (product.product_categories.length > 1) {
-                return Product.updateOne({ _id: product._id }, { $pull: { product_categories: id } });
-            } else {
-                return Product.updateOne({ _id: product._id }, { $set: { product_categories: [], isActive: false } });
-            }
-        });
+        const updatePromises = allProductsByCategory.map((product) =>
+            Product.updateOne({ _id: product._id }, { $pull: { product_categories: id } })
+        );
 
         await Promise.all(updatePromises);
 
@@ -76,5 +72,6 @@ export class CategoryService {
         await foundCategory.save();
         return foundCategory;
     }
+
 
 }
