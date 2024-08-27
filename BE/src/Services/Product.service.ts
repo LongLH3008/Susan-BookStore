@@ -50,11 +50,10 @@ class ProductService {
     const foundProduct = await Product.findOne({ product_name });
     if (foundProduct) throw new ConflictError("this product already exists");
 
-    for (let category of product_categories) {
-      const foundCategory = await Category.findOne({ _id: category });
-      if (!foundCategory)
-        throw new ResourceNotFoundError(`categoriy: ${category} not found`);
-    }
+    await Promise.all(product_categories.map(async (category: any) => {
+      const foundCategory = await Category.findById(category);
+      if (!foundCategory) throw new ResourceNotFoundError(`Category: ${category} not found`);
+    }));
 
     const newProduct = await Product.create({
       product_name,
@@ -177,6 +176,7 @@ class ProductService {
       .lean();
     return products;
   }
+  
   // private static buildFilterAndSortQuery({
   //   category_ids,
   //   minPrice,
