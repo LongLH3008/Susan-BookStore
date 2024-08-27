@@ -1,5 +1,6 @@
 import { ConflictError, ResourceNotFoundError } from "../cores/error.response"
 import Category from "../models/Category.model"
+import Product from "../models/Product.model"
 import { validate } from "../schemas"
 import categorySchema from "../schemas/category.schema"
 
@@ -54,10 +55,26 @@ export class CategoryService {
         return foundCategory
     }
     static async inActive({ id }: { id: string }) {
-        const foundCategory = await Category.findOne({ _id: id })
-        if (!foundCategory) throw new ResourceNotFoundError("this category not found")
-        foundCategory.is_active = false
-        await foundCategory.save()
-        return foundCategory
+        const foundCategory = await Category.findOne({ _id: id });
+        if (!foundCategory) throw new ResourceNotFoundError("this category not found");
+
+        const allProductsByCategory = await Product.find({
+            product_categories: { $in: [id] }
+        });
+
+        const updatePromises = allProductsByCategory.map((product) => {
+            if (product.product_categories.length > 1) {
+                return Product.updateOne({ _id: product._id }, { $pull: { product_categories: id } });
+            } else {
+                return Product.updateOne({ _id: product._id }, { $set: { product_categories: [], isActive: false } });
+            }
+        });
+
+        await Promise.all(updatePromises);
+
+        foundCategory.is_active = false;
+        await foundCategory.save();
+        return foundCategory;
     }
+
 }

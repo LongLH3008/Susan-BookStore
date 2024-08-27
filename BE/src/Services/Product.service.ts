@@ -74,51 +74,109 @@ class ProductService {
     limit: number;
   }) {
     const skip = (page - 1) * limit;
-    const products = await Product.find({}).skip(skip).limit(limit).lean();
+    const products = await Product.find({
+      product_categories: { $not: { $size: 0 } }
+    })
+      .skip(skip)
+      .limit(limit)
+      .lean();
     return products;
   }
-  static async getProductByQuery(query: any) {
-    const {
-      category_ids,
-      page = 1,
-      limit = 10,
-      sort = "ascByName",
-      minPrice,
-      maxPrice,
-      minRating,
-      search,
-    }: {
-      category_ids: string;
-      page: number;
-      limit: number;
-      sort: string;
-      minPrice: number;
-      maxPrice: number;
-      minRating: string;
-      search: string;
-    } = query;
+  // static async getProductByQuery(query: any) {
+  //   const {
+  //     category_ids,
+  //     page = 1,
+  //     limit = 10,
+  //     sort = "ascByName",
+  //     minPrice,
+  //     maxPrice,
+  //     minRating,
+  //     search,
+  //   }: {
+  //     category_ids: string;
+  //     page: number;
+  //     limit: number;
+  //     sort: string;
+  //     minPrice: number;
+  //     maxPrice: number;
+  //     minRating: string;
+  //     search: string;
+  //   } = query;
 
-    let skip: number = 0;
-    let sortBy: SortBy = {};
+  //   let skip: number = 0;
+  //   let sortBy: SortBy = {};
+  //   let filter: Filter = {};
+
+
+  //   if (category_ids) {
+  //     const categoriesArray = category_ids.split(",");
+  //     filter.product_categories = { $in: categoriesArray, $not: { $size: 0 } };
+  //   }
+
+  //   if (minPrice) {
+  //     filter.product_price = { $gte: minPrice };
+  //   }
+  //   if (maxPrice) {
+  //     filter.product_price = { $lte: maxPrice };
+  //   }
+
+  //   if (minPrice && maxPrice) {
+  //     filter.product_price = { $gte: minPrice, $lte: maxPrice };
+  //   }
+
+  //   if (minRating) {
+  //     filter.product_rating = { $gte: parseFloat(minRating) };
+  //   }
+  //   if (search) {
+  //     filter.$text = { $search: search };
+  //   }
+
+  //   if (page > 0 && limit > 0) {
+  //     skip = (page - 1) * limit;
+  //   }
+
+  //   console.log(page, limit);
+  //   if (sort) {
+  //     if (sort == "ascByPrice") sortBy = { product_price: 1 };
+  //     if (sort == "descByPrice") sortBy = { product_price: -1 };
+  //     if (sort == "ascByRating") sortBy = { product_rating: 1 };
+  //     if (sort == "descByRating") sortBy = { product_rating: -1 };
+  //     if (sort == "ascByName") sortBy = { product_name: 1 };
+  //     if (sort == "descByName") sortBy = { product_name: -1 };
+  //   }
+  //   const products = await Product.find(filter)
+  //     .sort(sortBy)
+  //     .skip(skip)
+  //     .limit(limit)
+  //     .lean();
+  //   return products;
+  // }
+  private static buildFilterAndSortQuery({
+    category_ids,
+    minPrice,
+    maxPrice,
+    minRating,
+    search,
+    sort,
+    includeUncategorized = false,
+  }: {
+    category_ids?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    minRating?: string;
+    search?: string;
+    sort?: string;
+    includeUncategorized?: boolean;
+  }): { filter: Filter; sortBy: SortBy } {
     let filter: Filter = {};
+    let sortBy: SortBy = {};
 
     if (category_ids) {
-      filter.product_categories = { $all: category_ids.split(",") };
-      filter.$expr = {
-        $gte: [
-          {
-            $size: {
-              $setIntersection: [
-                "$product_categories",
-                category_ids.split(","),
-              ],
-            },
-          },
-          category_ids.split(",").length,
-        ],
-      };
+      const categoriesArray = category_ids.split(",");
+      filter.product_categories = includeUncategorized
+        ? { $in: categoriesArray }
+        : { $in: categoriesArray, $not: { $size: 0 } };
     }
-
     if (minPrice) {
       filter.product_price = { $gte: minPrice };
     }
@@ -137,26 +195,69 @@ class ProductService {
       filter.$text = { $search: search };
     }
 
-    if (page > 0 && limit > 0) {
-      skip = (page - 1) * limit;
+    if (sort) {
+      switch (sort) {
+        case "ascByPrice":
+          sortBy = { product_price: 1 };
+          break;
+        case "descByPrice":
+          sortBy = { product_price: -1 };
+          break;
+        case "ascByRating":
+          sortBy = { product_rating: 1 };
+          break;
+        case "descByRating":
+          sortBy = { product_rating: -1 };
+          break;
+        case "ascByName":
+          sortBy = { product_name: 1 };
+          break;
+        case "descByName":
+          sortBy = { product_name: -1 };
+          break;
+        default:
+          break;
+      }
     }
 
-    console.log(page, limit);
-    if (sort) {
-      if (sort == "ascByPrice") sortBy = { product_price: 1 };
-      if (sort == "descByPrice") sortBy = { product_price: -1 };
-      if (sort == "ascByRating") sortBy = { product_rating: 1 };
-      if (sort == "descByRating") sortBy = { product_rating: -1 };
-      if (sort == "ascByName") sortBy = { product_name: 1 };
-      if (sort == "descByName") sortBy = { product_name: -1 };
-    }
-    const products = await Product.find(filter)
-      .sort(sortBy)
-      .skip(skip)
-      .limit(limit)
-      .lean();
+    return { filter, sortBy };
+  }
+
+  static async getProductByQuery(query: any) {
+    const { category_ids, page = 1, limit = 10, sort = "ascByName", minPrice, maxPrice, minRating, search } = query;
+
+    const skip = (page - 1) * limit;
+    const { filter, sortBy } = this.buildFilterAndSortQuery({
+      category_ids,
+      minPrice,
+      maxPrice,
+      minRating,
+      search,
+      sort,
+    });
+
+    const products = await Product.find(filter).sort(sortBy).skip(skip).limit(limit).lean();
     return products;
   }
+
+  static async getProductByQueryAdmin(query: any) {
+    const { category_ids, page = 1, limit = 10, sort = "ascByName", minPrice, maxPrice, minRating, search } = query;
+
+    const skip = (page - 1) * limit;
+    const { filter, sortBy } = this.buildFilterAndSortQuery({
+      category_ids,
+      minPrice,
+      maxPrice,
+      minRating,
+      search,
+      sort,
+      includeUncategorized: true,
+    });
+
+    const products = await Product.find(filter).sort(sortBy).skip(skip).limit(limit).lean();
+    return products;
+  }
+
 
   static async getProductById({ id }: { id: string }) {
     const foundProduct = await Product.findOne({ _id: id, isActive: true });
