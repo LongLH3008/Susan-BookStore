@@ -48,6 +48,10 @@ const productSchema = new mongoose.Schema<IProductModel>(
             }],
             required: true,
         },
+        product_sold: {
+            type: Number,
+            default: 0
+        },
         product_rating_average: {
             type: Number,
             default: 4.5,
@@ -71,7 +75,7 @@ const productSchema = new mongoose.Schema<IProductModel>(
         isActive: {
             type: Boolean,
             default: true
-        }
+        },
     },
     {
         timestamps: true,

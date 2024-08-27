@@ -47,8 +47,10 @@ const Userchema = new mongoose.Schema<IUserModel>(
 			type: [],
 			default: []
 		},
-
-
+		user_reward_points: {
+			type: Number,
+			default: 0
+		},
 		user_address: {
 			type: String,
 			required: false,

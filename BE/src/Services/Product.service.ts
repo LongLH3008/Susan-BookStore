@@ -248,6 +248,18 @@ class ProductService {
     );
   }
 
+  static async updateSoldNumber({ product_id, quantity }: { product_id: string, quantity: number }) {
+    const foundProduct = await Product.findOne({ _id: product_id });
+    if (!foundProduct) throw new ResourceNotFoundError("This Product not found");
+
+    return await Product.updateOne(
+      {
+        _id: product_id
+      },
+      { $inc: { product_sold: quantity } }
+    );
+  }
+
 
 }
 export default ProductService;

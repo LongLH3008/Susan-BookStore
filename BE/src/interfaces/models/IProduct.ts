@@ -13,6 +13,7 @@ export interface IProduct {
     product_rating_average: number
     product_categories: string[]
     product_discount: number
+    product_sold: number
     isActive: boolean
     product_attributes: object
     createAt: Date | string
