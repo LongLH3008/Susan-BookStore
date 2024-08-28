@@ -31,7 +31,7 @@ export interface IDiscount {
     //so lan su dung toi da cho moi user
     discount_max_use_per_user: number
     //danh sach user da su dung
-    discount_user_used: string[]
+    discount_users_used: string[]
     //tinh trang ma giam gia
     discount_is_active: boolean
     discount_start_date: Date

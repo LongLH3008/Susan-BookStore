@@ -2,7 +2,7 @@
 export interface IProduct {
     product_name: string
     product_thumb: string
-    product_slug: string    
+    product_slug: string
     product_description: string
     product_price: number
     product_images: [{
@@ -11,7 +11,10 @@ export interface IProduct {
     }]
     product_variations: IProductVariation[]
     product_rating_average: number
-    product_categories: [string]
+    product_categories: string[]
+    product_discount: number
+    product_sold: number
+    product_ebook_demo: string
     isActive: boolean
     product_attributes: object
     createAt: Date | string

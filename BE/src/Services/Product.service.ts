@@ -32,8 +32,10 @@ class ProductService {
     product_price,
     product_images = [],
     product_variations,
+    product_ebook_demo,
     product_categories,
     product_attributes = {},
+    product_discount = 0
   }: any) {
     validate(productSchema, {
       product_name,
@@ -44,15 +46,16 @@ class ProductService {
       product_variations,
       product_thumb,
       product_attributes,
+      product_discount,
+      product_ebook_demo
     });
     const foundProduct = await Product.findOne({ product_name });
     if (foundProduct) throw new ConflictError("this product already exists");
 
-    for (let category of product_categories) {
-      const foundCategory = await Category.findOne({ _id: category });
-      if (!foundCategory)
-        throw new ResourceNotFoundError(`categoriy: ${category} not found`);
-    }
+    await Promise.all(product_categories.map(async (category: any) => {
+      const foundCategory = await Category.findById(category);
+      if (!foundCategory) throw new ResourceNotFoundError(`Category: ${category} not found`);
+    }));
 
     const newProduct = await Product.create({
       product_name,
@@ -63,6 +66,10 @@ class ProductService {
       product_variations,
       product_categories,
       product_attributes,
+      product_discount,
+      product_ebook_demo
+
+
     });
     return newProduct;
   }
@@ -74,7 +81,12 @@ class ProductService {
     limit: number;
   }) {
     const skip = (page - 1) * limit;
-    const products = await Product.find({}).skip(skip).limit(limit).lean();
+    const products = await Product.find({
+      product_categories: { $not: { $size: 0 } }
+    })
+      .skip(skip)
+      .limit(limit)
+      .lean();
     return products;
   }
   static async getProductByQuery(query: any) {
@@ -102,21 +114,15 @@ class ProductService {
     let sortBy: SortBy = {};
     let filter: Filter = {};
 
+
     if (category_ids) {
-      filter.product_categories = { $all: category_ids.split(",") };
-      filter.$expr = {
-        $gte: [
-          {
-            $size: {
-              $setIntersection: [
-                "$product_categories",
-                category_ids.split(","),
-              ],
-            },
-          },
-          category_ids.split(",").length,
-        ],
-      };
+      if (category_ids == "other") {
+        filter.product_categories = { $size: 0 };
+      } else {
+        const categoriesArray = category_ids.split(",");
+        filter.product_categories = { $in: categoriesArray };
+      }
+
     }
 
     if (minPrice) {
@@ -143,12 +149,28 @@ class ProductService {
 
     console.log(page, limit);
     if (sort) {
-      if (sort == "ascByPrice") sortBy = { product_price: 1 };
-      if (sort == "descByPrice") sortBy = { product_price: -1 };
-      if (sort == "ascByRating") sortBy = { product_rating: 1 };
-      if (sort == "descByRating") sortBy = { product_rating: -1 };
-      if (sort == "ascByName") sortBy = { product_name: 1 };
-      if (sort == "descByName") sortBy = { product_name: -1 };
+      switch (sort) {
+        case "ascByPrice":
+          sortBy = { product_price: 1 };
+          break;
+        case "descByPrice":
+          sortBy = { product_price: -1 };
+          break;
+        case "ascByRating":
+          sortBy = { product_rating: 1 };
+          break;
+        case "descByRating":
+          sortBy = { product_rating: -1 };
+          break;
+        case "ascByName":
+          sortBy = { product_name: 1 };
+          break;
+        case "descByName":
+          sortBy = { product_name: -1 };
+          break;
+        default:
+          break;
+      }
     }
     const products = await Product.find(filter)
       .sort(sortBy)
@@ -158,8 +180,116 @@ class ProductService {
     return products;
   }
 
+  // private static buildFilterAndSortQuery({
+  //   category_ids,
+  //   minPrice,
+  //   maxPrice,
+  //   minRating,
+  //   search,
+  //   sort,
+  //   includeUncategorized = false,
+  // }: {
+  //   category_ids?: string;
+  //   minPrice?: number;
+  //   maxPrice?: number;
+  //   minRating?: string;
+  //   search?: string;
+  //   sort?: string;
+  //   includeUncategorized?: boolean;
+  // }): { filter: Filter; sortBy: SortBy } {
+  //   let filter: Filter = {};
+  //   let sortBy: SortBy = {};
+
+  //   if (category_ids) {
+  //     const categoriesArray = category_ids.split(",");
+  //     filter.product_categories = includeUncategorized
+  //       ? { $in: categoriesArray }
+  //       : { $in: categoriesArray, $not: { $size: 0 } };
+  //   }
+  //   if (minPrice) {
+  //     filter.product_price = { $gte: minPrice };
+  //   }
+  //   if (maxPrice) {
+  //     filter.product_price = { $lte: maxPrice };
+  //   }
+
+  //   if (minPrice && maxPrice) {
+  //     filter.product_price = { $gte: minPrice, $lte: maxPrice };
+  //   }
+
+  //   if (minRating) {
+  //     filter.product_rating = { $gte: parseFloat(minRating) };
+  //   }
+  //   if (search) {
+  //     filter.$text = { $search: search };
+  //   }
+
+  //   if (sort) {
+  //     switch (sort) {
+  //       case "ascByPrice":
+  //         sortBy = { product_price: 1 };
+  //         break;
+  //       case "descByPrice":
+  //         sortBy = { product_price: -1 };
+  //         break;
+  //       case "ascByRating":
+  //         sortBy = { product_rating: 1 };
+  //         break;
+  //       case "descByRating":
+  //         sortBy = { product_rating: -1 };
+  //         break;
+  //       case "ascByName":
+  //         sortBy = { product_name: 1 };
+  //         break;
+  //       case "descByName":
+  //         sortBy = { product_name: -1 };
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   }
+
+  //   return { filter, sortBy };
+  // }
+
+  // static async getProductByQuery(query: any) {
+  //   const { category_ids, page = 1, limit = 10, sort = "ascByName", minPrice, maxPrice, minRating, search } = query;
+
+  //   const skip = (page - 1) * limit;
+  //   const { filter, sortBy } = this.buildFilterAndSortQuery({
+  //     category_ids,
+  //     minPrice,
+  //     maxPrice,
+  //     minRating,
+  //     search,
+  //     sort,
+  //   });
+
+  //   const products = await Product.find(filter).sort(sortBy).skip(skip).limit(limit).lean();
+  //   return products;
+  // }
+
+  // static async getProductByQueryAdmin(query: any) {
+  //   const { category_ids, page = 1, limit = 10, sort = "ascByName", minPrice, maxPrice, minRating, search } = query;
+
+  //   const skip = (page - 1) * limit;
+  //   const { filter, sortBy } = this.buildFilterAndSortQuery({
+  //     category_ids,
+  //     minPrice,
+  //     maxPrice,
+  //     minRating,
+  //     search,
+  //     sort,
+  //     includeUncategorized: true,
+  //   });
+
+  //   const products = await Product.find(filter).sort(sortBy).skip(skip).limit(limit).lean();
+  //   return products;
+  // }
+
+
   static async getProductById({ id }: { id: string }) {
-    const foundProduct = await Product.findOne({ _id: id });
+    const foundProduct = await Product.findOne({ _id: id, isActive: true });
     if (!foundProduct)
       throw new ResourceNotFoundError("this product not found");
     return foundProduct;
@@ -167,7 +297,7 @@ class ProductService {
 
   static async updateProduct(id: string, data: any): Promise<any> {
     const updateObject = deleteNullObject(data);
-    const foundProduct = await Product.findOne({ _id: id });
+    const foundProduct = await Product.findOne({ _id: id, isActive: true });
     if (!foundProduct)
       throw new ResourceNotFoundError("this product not found");
 
@@ -189,7 +319,7 @@ class ProductService {
     product_id: any,
     variant_id: any,
     data: any
-  ):Promise<any> {
+  ): Promise<any> {
     const updateObject = deleteNullObject(data);
     console.log(product_id, variant_id, updateObject);
 
@@ -206,16 +336,63 @@ class ProductService {
     return updateProduct;
   }
   static async unActiveProduct({ id }: { id: string }) {
-    const foundProduct = await Product.findOne({ _id: id });
-    if(!foundProduct) throw new ResourceNotFoundError("this product not found");
+    const foundProduct = await Product.findOne({ _id: id, isActive: true });
+    if (!foundProduct) throw new ResourceNotFoundError("this product not found");
     return await Product.updateOne({ _id: id }, { $set: { isActive: false } });
-
   }
+  // static async unActiveProduct({ id }: { id: string }) {
+  //   const foundProduct = await Product.findOne({ _id: id });
+  //   if (!foundProduct) throw new ResourceNotFoundError("this product not found");
+  //   return await Product.updateOne({ _id: id }, { $set: { isActive: false } });
+
+  // }
   static async activeProduct({ id }: { id: string }) {
-    const foundProduct = await Product.findOne({ _id: id });
-    if(!foundProduct) throw new ResourceNotFoundError("this product not found");
+    const foundProduct = await Product.findOne({ _id: id, isActive: true });
+    if (!foundProduct) throw new ResourceNotFoundError("this product not found");
     return await Product.updateOne({ _id: id }, { $set: { isActive: true } });
 
+  }
+  static async setDiscountByCategoryId({ category_id, discount }: { category_id: string, discount: number }) {
+    const foundCategory = await Category.findOne({ _id: category_id });
+    if (!foundCategory) throw new ResourceNotFoundError("This category not found");
+
+    return await Product.updateMany(
+      {
+        product_categories: { $in: [category_id] },
+        isActive: true
+      },
+      { $set: { product_discount: discount } }
+    );
+  }
+  static async setDiscountToAll({ discount }: { discount: number }) {
+    return await Product.updateMany(
+      { isActive: true },
+      { $set: { product_discount: discount } }
+    );
+  }
+  static async setDiscountByProductId({ product_id, discount }: { product_id: string, discount: number }) {
+    const foundProduct = await Product.findOne({ _id: product_id });
+    if (!foundProduct) throw new ResourceNotFoundError("This Product not found");
+
+    return await Product.updateOne(
+      {
+        _id: product_id,
+        isActive: true
+      },
+      { $set: { product_discount: discount } }
+    );
+  }
+
+  static async updateSoldNumber({ product_id, quantity }: { product_id: string, quantity: number }) {
+    const foundProduct = await Product.findOne({ _id: product_id });
+    if (!foundProduct) throw new ResourceNotFoundError("This Product not found");
+
+    return await Product.updateOne(
+      {
+        _id: product_id
+      },
+      { $inc: { product_sold: quantity } }
+    );
   }
 
 

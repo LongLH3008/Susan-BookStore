@@ -24,6 +24,7 @@ export interface IUser {
     user_password: string
     user_status: UserStatus
     user_address: string
+    user_reward_points: number
     user_role: UserRole
     user_avatar: string
     user_gender: string

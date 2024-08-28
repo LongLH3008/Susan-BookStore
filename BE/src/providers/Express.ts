@@ -7,6 +7,7 @@ import Passport from "./Passport";
 import { NextFunction, Request, Response } from 'express';
 import { exceptionHandler } from "../middlewares/ExceptionHandler";
 
+
 class Express {
   public express: Application;
 
@@ -22,7 +23,7 @@ class Express {
 
     // Mount Middlewares
     this.express = Kernel.init(this.express);
-    
+
     //Mout passport 
     this.express = Passport.init(this.express)
 

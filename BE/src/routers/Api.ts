@@ -12,6 +12,11 @@ import OrderController from "../controllers/Api/Order.Controller";
 import CartController from "../controllers/Api/Cart.controller";
 import UserController from "../controllers/Api/User.controller";
 import DiscountController from "../controllers/Api/Discount.controller";
+import { upload } from "../configs/multer.config";
+import UploadController from "../controllers/Api/Upload.controller";
+
+
+
 const router = Router();
 
 // user-google
@@ -83,12 +88,12 @@ router.get("/cart/:user_id", asyncHandler(CartController.getCartByOneUser)); // 
 router.post("/cart/addproduct/:user_id", asyncHandler(CartController.addProductToCart));
 router.delete("/cart/:user_id/:product_id", asyncHandler(CartController.deleteProductInCart));
 router.get(
-	"/cart/increment-quantity/:user_id/:product_id",
-	asyncHandler(CartController.incrementQuantityProductInCart)
+  "/cart/increment-quantity/:user_id/:product_id",
+  asyncHandler(CartController.incrementQuantityProductInCart)
 );
 router.get(
-	"/cart/decrement-quantity/:user_id/:product_id",
-	asyncHandler(CartController.decrementQuantityProductInCart)
+  "/cart/decrement-quantity/:user_id/:product_id",
+  asyncHandler(CartController.decrementQuantityProductInCart)
 );
 
 
@@ -96,6 +101,10 @@ router.get(
 router.post(
   "/discounts",
   asyncHandler(DiscountController.create)
+);
+router.post(
+  "/discounts/get-amount",
+  asyncHandler(DiscountController.getAmount)
 );
 router.get(
   "/discounts",
@@ -121,5 +130,12 @@ router.get(
   "/discounts/cancel/",
   asyncHandler(DiscountController.cancelDiscount)
 );
+
+
+
+//upload
+router.post('/upload', upload.array('files', 10), asyncHandler(UploadController.upload));
+router.post('/upload/delete', asyncHandler(UploadController.delete));
+
 
 export default router;

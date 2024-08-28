@@ -28,6 +28,10 @@ const productSchema = new mongoose.Schema<IProductModel>(
             type: Number,
             required: true,
         },
+        product_discount: {
+            type: Number,
+            default: 0
+        },
         product_variations: {
             type: [{
                 product_variant_id: String,
@@ -44,6 +48,14 @@ const productSchema = new mongoose.Schema<IProductModel>(
             }],
             required: true,
         },
+        product_sold: {
+            type: Number,
+            default: 0
+        },
+        product_ebook_demo: {
+            type: String,
+            default: ""
+        },
         product_rating_average: {
             type: Number,
             default: 4.5,
@@ -58,7 +70,8 @@ const productSchema = new mongoose.Schema<IProductModel>(
         product_images: [{
             image_id: String,
             image_url: String
-        }],
+        }]
+        ,
         product_attributes: {
             type: mongoose.Schema.Types.Mixed,
             required: true,
@@ -66,7 +79,7 @@ const productSchema = new mongoose.Schema<IProductModel>(
         isActive: {
             type: Boolean,
             default: true
-        }
+        },
     },
     {
         timestamps: true,

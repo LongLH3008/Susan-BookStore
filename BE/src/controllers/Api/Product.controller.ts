@@ -66,6 +66,7 @@ class ProductController {
         }).send(res)
     }
 
+
 }
 
 export default ProductController

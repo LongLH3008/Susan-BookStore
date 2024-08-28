@@ -16,6 +16,9 @@ const utils_1 = require("../utils");
 const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
 const Cart_controller_1 = __importDefault(require("../controllers/Api/Cart.controller"));
 const User_controller_1 = __importDefault(require("../controllers/Api/User.controller"));
+const Discount_controller_1 = __importDefault(require("../controllers/Api/Discount.controller"));
+const multer_config_1 = require("../configs/multer.config");
+const Upload_controller_1 = __importDefault(require("../controllers/Api/Upload.controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -38,9 +41,7 @@ router.get("/categories", (0, utils_1.asyncHandler)(Category_controller_1.defaul
 router.get("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.getOne));
 router.post("/categories", (0, utils_1.asyncHandler)(Category_controller_1.default.create));
 router.patch("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.update));
-
 router.delete("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.delete));
-
 //comment
 router.get("/comments/products/:id", (0, utils_1.asyncHandler)(Comment_controller_1.default.getCommentsByProductId));
 router.get("/comments/users/:id", (0, utils_1.asyncHandler)(Comment_controller_1.default.getCommentsByUserId));
@@ -54,6 +55,8 @@ router.patch("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.def
 router.get("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.getById));
 router.get("/products", (0, utils_1.asyncHandler)(Product_controller_1.default.getByQuery));
 router.delete("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.deleteOne));
+router.patch("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.activeProduct));
+router.patch("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.unActiveProduct));
 //blog
 router.post("/blog/add", (0, utils_1.asyncHandler)(blog_controller_1.default.create));
 router.get("/blog", (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlog));
@@ -73,4 +76,16 @@ router.post("/cart/addproduct/:user_id", (0, utils_1.asyncHandler)(Cart_controll
 router.delete("/cart/:user_id/:product_id", (0, utils_1.asyncHandler)(Cart_controller_1.default.deleteProductInCart));
 router.get("/cart/increment-quantity/:user_id/:product_id", (0, utils_1.asyncHandler)(Cart_controller_1.default.incrementQuantityProductInCart));
 router.get("/cart/decrement-quantity/:user_id/:product_id", (0, utils_1.asyncHandler)(Cart_controller_1.default.decrementQuantityProductInCart));
+//discount
+router.post("/discounts", (0, utils_1.asyncHandler)(Discount_controller_1.default.create));
+router.post("/discounts/get-amount", (0, utils_1.asyncHandler)(Discount_controller_1.default.getAmount));
+router.get("/discounts", (0, utils_1.asyncHandler)(Discount_controller_1.default.getAll));
+router.get("/discounts/product/:productId", (0, utils_1.asyncHandler)(Discount_controller_1.default.getDiscountsByProductId));
+router.get("/discounts/:code", (0, utils_1.asyncHandler)(Discount_controller_1.default.getAllProductsWithDiscountCode));
+router.post("/discounts/active", (0, utils_1.asyncHandler)(Discount_controller_1.default.active));
+router.post("/discounts/inactive", (0, utils_1.asyncHandler)(Discount_controller_1.default.inActive));
+router.get("/discounts/cancel/", (0, utils_1.asyncHandler)(Discount_controller_1.default.cancelDiscount));
+//upload
+router.post('/upload', multer_config_1.upload.array('files', 10), (0, utils_1.asyncHandler)(Upload_controller_1.default.upload));
+router.post('/upload/delete', (0, utils_1.asyncHandler)(Upload_controller_1.default.delete));
 exports.default = router;

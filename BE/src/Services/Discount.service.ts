@@ -1,6 +1,6 @@
 "use strict";
 
-import { BadRequestError } from "../cores/error.response";
+import { BadRequestError, InternalServerError, ResourceNotFoundError } from "../cores/error.response";
 import Discount from "../models/Discount.model";
 import Product from "../models/Product.model";
 import { validate } from "../schemas";
@@ -10,9 +10,20 @@ import { deleteNullObject } from "../utils";
 const { default: mongoose } = require("mongoose");
 
 
+interface Product {
+    productId: string
+    quantity: number
+    discountCode: string
+    price: number
+
+}
+
+
+
 
 class DiscountService {
-    static async createDiscount(payload: any) {
+    static async createDiscount(data: any) {
+        console.log(data)
         const {
             discount_name,
 
@@ -38,12 +49,26 @@ class DiscountService {
             //so lan su dung toi da cho moi user
             discount_max_use_per_user,
             //danh sach user da su dung
-            discount_user_used,
+            discount_users_used,
             //tinh trang ma giam gia
             discount_start_date,
             discount_end_date,
-        } = payload;
-        validate(discountSchema, payload)
+        } = data;
+
+        console.log(discount_name,
+            discount_code,
+            discount_type,
+            discount_description,
+            discount_value,
+            discount_category_ids,
+            discount_stock,
+            discount_min_order_value,
+            discount_max_use_per_user,
+            discount_users_used,
+            discount_start_date,
+            discount_end_date,
+            discount_applies_to,)
+        validate(discountSchema, data)
 
         if (new Date() > new Date(discount_end_date)) {
             throw new BadRequestError("discount code has expired");
@@ -68,7 +93,7 @@ class DiscountService {
             discount_stock,
             discount_min_order_value,
             discount_max_use_per_user,
-            discount_user_used,
+            discount_users_used,
             discount_start_date,
             discount_end_date,
             discount_applies_to,
@@ -159,6 +184,9 @@ class DiscountService {
             discount_min_order_value,
             discount_max_use_per_user,
             discount_value,
+            discount_applies_to,
+            discount_category_ids,
+            discount_product_ids,
 
             discount_type,
             discount_stock
@@ -172,11 +200,13 @@ class DiscountService {
             new Date() > new Date(discount_end_date)
         )
             throw new BadRequestError("discount code has expired");
-        let total = 0;
+
+
+
+        let total = products.reduce((acc: number, cur: any) => {
+            return acc + cur.product_price * cur.quantity;
+        }, 0);
         if (discount_min_order_value > 0) {
-            total = products.reduce((acc: number, cur: any) => {
-                return acc + cur.product_price * cur.quantity;
-            }, 0);
             if (total < discount_min_order_value)
                 throw new BadRequestError("order value is not enough");
         }
@@ -189,17 +219,50 @@ class DiscountService {
                 throw new BadRequestError("you have already used this code");
         }
 
-        const amount =
-            discount_type === "fixed_amount"
-                ? discount_value
-                : (discount_value * total) / 100;
+        if (discount_applies_to == "all") {
+            let amount =
+                discount_type === "fixed_amount"
+                    ? discount_value
+                    : (discount_value * total) / 100;
 
-        return {
-            total,
-            discount: amount,
-            totalPrice: total - amount,
-        };
+            return {
+                total,
+                discount: amount,
+                totalPrice: total - amount,
+            };
+        } else if (discount_applies_to == "specific" && discount_product_ids.length > 0) {
+            let amount = 0
+            products.filter((product: any) => {
+                if (discount_product_ids.includes(product.product_id.toString())) {
+                    amount += discount_type === "fixed_amount" ? discount_value : (discount_value * product.product_price) / 100;
+                }
+            })
+            return {
+                total,
+                discount: amount,
+                totalPrice: total - amount,
+            };
+        } else {
+            let amount = 0;
+            products.forEach((product: any) => {
+                if (product.categories.some((category: any) => discount_category_ids.includes(category.toString()))) {
+                    if (discount_type === "fixed_amount") {
+                        amount += discount_value;
+                    } else {
+                        amount += (discount_value * product.product_price) / 100;
+                    }
+                }
+            });
+
+            return {
+                total,
+                discount: amount,
+                totalPrice: total - amount,
+            };
+        }
+
     }
+
     static async deleteDiscount({ code }: any) {
         const deleteDiscount = await Discount.findOneAndDelete({
             discount_code: code,
@@ -251,18 +314,138 @@ class DiscountService {
         );
         return result;
     }
-    static async getDiscountByProduct({ productId }: any) {
-        const discountApplyToAll = await Discount.find({
-            discount_applies_to: "all",
-            discount_is_active: true
-        })
-        const foundDiscountWithProductId = await Discount.find({
-            discount_is_active: true,
-            discount_product_ids: productId,
+
+    static async getDiscountByProduct(productId: string): Promise<any> {
+        const foundProduct = await Product.findOne({
+            _id: productId
         });
 
-        return { ...discountApplyToAll, ...foundDiscountWithProductId };
+        if (!foundProduct) {
+            throw new ResourceNotFoundError("This product doesn't exist!");
+        }
+
+        const discounts = await Discount.find({
+            $or: [
+                { discount_applies_to: "all", discount_is_active: true },
+                { discount_is_active: true, discount_product_ids: productId },
+                { discount_is_active: true, discount_category_ids: { $in: foundProduct.product_categories } }
+            ]
+        });
+
+        return discounts;
     }
+
+    // {
+    //     "products": [
+    //         {
+    //             "product_id": "66c49ff8b394a1c9ab51a83c",
+    //             "quantity": 2,
+    //             "product_price": 10000,
+    //             "code":"SUMMER2024"
+    //         }
+    //     ],
+    //     "userId":"235234234234234"
+    // }
+    static async getDiscountAmount2(data: any) {
+        const { products, userId } = data;
+
+        let total = products.reduce((acc: number, cur: any) => {
+            return acc + cur.product_price * cur.quantity;
+        }, 0);
+
+        let amount = 0;
+
+        const discountCache: { [code: string]: any } = {};
+
+
+        for (let product of products) {
+            const { code } = product;
+            if (!code) continue;
+
+            let foundDiscount = discountCache[code];
+            if (!foundDiscount) {
+                foundDiscount = await Discount.findOne({ discount_code: code })
+                if (!foundDiscount) throw new BadRequestError("Discount code not found");
+                discountCache[code] = foundDiscount;
+            }
+
+            const {
+                discount_is_active,
+                discount_start_date,
+                discount_end_date,
+                discount_min_order_value,
+                discount_max_use_per_user,
+                discount_value,
+                discount_applies_to,
+                discount_category_ids,
+                discount_product_ids,
+                discount_type,
+                discount_stock,
+            } = foundDiscount;
+
+            if (!discount_is_active) throw new BadRequestError("Discount code is not active");
+            if (!discount_stock) throw new BadRequestError("Discount code is out of stock");
+            if (new Date() < new Date(discount_start_date) || new Date() > new Date(discount_end_date)) {
+                throw new BadRequestError("Discount code has expired");
+            }
+
+            if (discount_min_order_value > 0 && total < discount_min_order_value) {
+                throw new BadRequestError("Order value is not enough");
+            }
+
+            if (discount_max_use_per_user > 0) {
+                const foundUser = await Discount.countDocuments({
+                    discount_code: code,
+                    discount_users_used: userId,
+                })
+                if (foundUser >= discount_max_use_per_user) {
+                    throw new BadRequestError("You have already used this code");
+                }
+            }
+
+            if (discount_applies_to === "all") {
+                amount += discount_type === "fixed_amount"
+                    ? discount_value
+                    : (discount_value * product.product_price * product.quantity) / 100;
+            } else if (discount_applies_to === "specific" && discount_product_ids.includes(product.product_id)) {
+                amount += discount_type === "fixed_amount"
+                    ? discount_value
+                    : (discount_value * product.product_price) / 100;
+            } else if (product.categories.some((category: any) => discount_category_ids.includes(category))) {
+                amount += discount_type === "fixed_amount"
+                    ? discount_value
+                    : (discount_value * product.product_price) / 100;
+            }
+
+
+            discountCache[code].discount_users_used.push(userId);
+            discountCache[code].discount_stock = discount_stock - 1;
+            if (discountCache[code].discount_stock < 0) throw new BadRequestError("Discount code is out of stock");
+        }
+
+
+        await Discount.bulkWrite(Object.values(discountCache).map((discount: any) => ({
+            updateOne: {
+                filter: { _id: discount._id },
+                update: {
+                    $set: { discount_stock: discount.discount_stock },
+                    $push: { discount_users_used: userId },
+                },
+            },
+        })));
+
+
+        return {
+            total,
+            discount: amount,
+            totalPrice: total - amount,
+        };
+
+    }
+
 }
+
+
+
 
 export default DiscountService;
