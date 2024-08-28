@@ -32,6 +32,7 @@ class ProductService {
     product_price,
     product_images = [],
     product_variations,
+    product_ebook_demo,
     product_categories,
     product_attributes = {},
     product_discount = 0
@@ -45,7 +46,8 @@ class ProductService {
       product_variations,
       product_thumb,
       product_attributes,
-      product_discount
+      product_discount,
+      product_ebook_demo
     });
     const foundProduct = await Product.findOne({ product_name });
     if (foundProduct) throw new ConflictError("this product already exists");
@@ -64,7 +66,8 @@ class ProductService {
       product_variations,
       product_categories,
       product_attributes,
-      product_discount
+      product_discount,
+      product_ebook_demo
 
 
     });
@@ -176,7 +179,7 @@ class ProductService {
       .lean();
     return products;
   }
-  
+
   // private static buildFilterAndSortQuery({
   //   category_ids,
   //   minPrice,

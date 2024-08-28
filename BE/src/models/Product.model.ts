@@ -52,6 +52,10 @@ const productSchema = new mongoose.Schema<IProductModel>(
             type: Number,
             default: 0
         },
+        product_ebook_demo: {
+            type: String,
+            default: ""
+        },
         product_rating_average: {
             type: Number,
             default: 4.5,

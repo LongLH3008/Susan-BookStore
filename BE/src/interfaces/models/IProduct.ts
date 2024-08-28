@@ -14,6 +14,7 @@ export interface IProduct {
     product_categories: string[]
     product_discount: number
     product_sold: number
+    product_ebook_demo: string
     isActive: boolean
     product_attributes: object
     createAt: Date | string
