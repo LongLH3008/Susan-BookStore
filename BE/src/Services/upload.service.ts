@@ -1,104 +1,58 @@
-import cloudinary from "../configs/cloudinary.config";
+import path from "path";
+import appRootPath from "app-root-path";
+import { BadRequestError } from "../cores/error.response";
+import fs from "fs"
 
-interface UploadImageFromUrlParams {
-    url: string;
-}
+interface UploadedFile extends Express.Multer.File { }
 
-interface UploadImageFromLocalParams {
-    file: Express.Multer.File;
-    folderName?: string;
-}
-
-interface UploadImageResponse {
-    secure_url: string;
-    shopId?: number;
-    thumb_url?: string;
-}
-
-interface UploadImageParams {
-    files: Express.Multer.File[];
-    folderName?: string;
-}
-
-interface UploadImagesResponse {
-    secure_urls: string[];
-    shopId?: number;
-    thumb_urls?: string[];
-}
+class UploadService {
 
 
-export const uploadImageFromUrl = async ({
-    url,
-}: UploadImageFromUrlParams): Promise<string | undefined> => {
-    try {
-        const folderName = "/pictures/shop";
-        const fileName = "test";
-
-        const res = await cloudinary.uploader.upload(url, {
-            folder: folderName,
-            public_id: fileName,
-        });
-        const { secure_url } = res;
-        return secure_url;
-    } catch (error) {
-        console.log(error);
+    static uploadImagesToLocal = (req: any) => {
+        try {
+            const files = req.files as UploadedFile[];
+            const fileLinks = files.map((file: UploadedFile) => {
+                return `${req.protocol}://${req.get('host')}/${file.filename}`;
+            });
+            console.log(path.join(appRootPath.path, 'public'))
+            return {
+                fileLinks: fileLinks
+            }
+        } catch (error: any) {
+            throw new BadRequestError("co loi xay ra khi up date")
+        }
     }
-};
 
-export const uploadImageFromLocal = async ({
-    file,
-    folderName = "products",
-}: UploadImageFromLocalParams): Promise<UploadImageResponse | undefined> => {
-    try {
-        const res = await cloudinary.uploader.upload(file.path, {
-            folder: folderName,
-            public_id: file.filename,
+    static deleteFromLocalByUrl = ({ urls }: { urls: string[] }) => {
+
+
+        if (!urls || !Array.isArray(urls)) {
+            throw new BadRequestError('Danh sách URL không hợp lệ.');
+        }
+
+        const deletedFiles: string[] = [];
+        const failedFiles: string[] = [];
+
+        urls.forEach(url => {
+            const filename = path.basename(url);
+            console.log(filename)
+            const filepath = path.join(appRootPath.path, 'public', filename);
+            console.log(filepath)
+
+            try {
+                fs.unlinkSync(filepath);
+                deletedFiles.push(url);
+            } catch (error) {
+                failedFiles.push(url);
+            }
         });
 
         return {
-            secure_url: res.secure_url,
-            shopId: 8409,
-            thumb_url: await cloudinary.url(res.public_id, {
-                width: 150,
-                height: 150,
-                format: "jpg",
-            }),
-        };
-    } catch (error) {
-        console.log(error);
+            deletedFiles,
+            failedFiles
+        }
     }
-};
+}
 
-export const uploadImages = async ({
-    files,
-    folderName = "products",
-  }: UploadImageParams): Promise<UploadImagesResponse | undefined> => {
-    try {
-      const secureUrls: string[] = [];
-      const thumbUrls: string[] = [];
-  
-      for (const file of files) {
-        const res = await cloudinary.uploader.upload(file.path, {
-          folder: folderName,
-          public_id: file.filename,
-        });
-  
-        secureUrls.push(res.secure_url);
-  
-        const thumbUrl = await cloudinary.url(res.public_id, {
-          width: 150,
-          height: 150,
-          format: "jpg",
-        });
-        thumbUrls.push(thumbUrl);
-      }
-  
-      return {
-        secure_urls: secureUrls,
-        shopId: 8409,
-        thumb_urls: thumbUrls,
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
+export default UploadService

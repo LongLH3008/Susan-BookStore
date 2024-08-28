@@ -12,6 +12,11 @@ import OrderController from "../controllers/Api/Order.Controller";
 import CartController from "../controllers/Api/Cart.controller";
 import UserController from "../controllers/Api/User.controller";
 import DiscountController from "../controllers/Api/Discount.controller";
+import { upload } from "../configs/multer.config";
+import UploadController from "../controllers/Api/Upload.controller";
+
+
+
 const router = Router();
 
 // user-google
@@ -125,5 +130,12 @@ router.get(
   "/discounts/cancel/",
   asyncHandler(DiscountController.cancelDiscount)
 );
+
+
+
+//upload
+router.post('/upload', upload.array('files', 10), asyncHandler(UploadController.upload));
+router.post('/upload/delete', asyncHandler(UploadController.delete));
+
 
 export default router;

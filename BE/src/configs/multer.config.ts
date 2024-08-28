@@ -1,11 +1,12 @@
+import appRootPath from "app-root-path";
 import multer, { StorageEngine } from "multer";
 
 const uploadDisk: StorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./src/uploads/");
+    cb(null, appRootPath.path + "/public/");
   },
   filename: (req, file, cb) => {
-    cb(null, `${file.fieldname}-${file.originalname}`);
+    cb(null, `${Date.now()}-${file.fieldname}-${file.originalname}`);
   },
 });
 

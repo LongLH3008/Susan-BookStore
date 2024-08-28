@@ -6,6 +6,7 @@ import Locals from "./Locals";
 import Passport from "./Passport";
 import { NextFunction, Request, Response } from 'express';
 import { exceptionHandler } from "../middlewares/ExceptionHandler";
+import Statics from "../middlewares/Statics";
 
 class Express {
   public express: Application;
@@ -22,7 +23,7 @@ class Express {
 
     // Mount Middlewares
     this.express = Kernel.init(this.express);
-    
+
     //Mout passport 
     this.express = Passport.init(this.express)
 
@@ -31,6 +32,8 @@ class Express {
 
     // Mount API
     this.express = Routes.mountApi(this.express);
+
+    this.express = Statics.mount(this.express);
 
     //handleError
 

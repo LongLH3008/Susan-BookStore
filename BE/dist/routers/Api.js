@@ -17,6 +17,8 @@ const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Con
 const Cart_controller_1 = __importDefault(require("../controllers/Api/Cart.controller"));
 const User_controller_1 = __importDefault(require("../controllers/Api/User.controller"));
 const Discount_controller_1 = __importDefault(require("../controllers/Api/Discount.controller"));
+const multer_config_1 = require("../configs/multer.config");
+const Upload_controller_1 = __importDefault(require("../controllers/Api/Upload.controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -83,4 +85,7 @@ router.get("/discounts/:code", (0, utils_1.asyncHandler)(Discount_controller_1.d
 router.post("/discounts/active", (0, utils_1.asyncHandler)(Discount_controller_1.default.active));
 router.post("/discounts/inactive", (0, utils_1.asyncHandler)(Discount_controller_1.default.inActive));
 router.get("/discounts/cancel/", (0, utils_1.asyncHandler)(Discount_controller_1.default.cancelDiscount));
+//upload
+router.post('/upload', multer_config_1.upload.array('files', 10), (0, utils_1.asyncHandler)(Upload_controller_1.default.upload));
+router.post('/upload/delete', (0, utils_1.asyncHandler)(Upload_controller_1.default.delete));
 exports.default = router;
