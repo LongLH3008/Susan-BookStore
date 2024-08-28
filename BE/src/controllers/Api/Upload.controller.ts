@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { SuccessResponse } from "../../cores/succes.response";
-import { CategoryService } from "../../Services/Category.service";
-import UploadService from "../../Services/upload.service";
+import UploadService from "../../Services/Upload.service";
 
 class UploadController {
     static async upload(req: Request, res: Response): Promise<any> {
