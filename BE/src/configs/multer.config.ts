@@ -6,7 +6,7 @@ const uploadDisk: StorageEngine = multer.diskStorage({
     cb(null, appRootPath.path + "/public/");
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.fieldname}-${file.originalname}`);
+    cb(null, `${file.originalname}`);
   },
 });
 
