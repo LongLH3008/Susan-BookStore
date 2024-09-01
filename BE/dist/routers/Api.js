@@ -19,7 +19,7 @@ const multer_config_1 = require("../configs/multer.config");
 const Upload_controller_1 = __importDefault(require("../controllers/Api/Upload.controller"));
 const Book_controller_1 = __importDefault(require("../controllers/Api/Book.controller"));
 const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
-const Order_controller_1 = __importDefault(require("../controllers/Api/Order.controller"));
+const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -97,5 +97,5 @@ router.post("/discounts/amount", (0, utils_1.asyncHandler)(Discount_controller_1
 router.post('/upload', multer_config_1.upload.array('files', 10), (0, utils_1.asyncHandler)(Upload_controller_1.default.upload));
 router.post('/upload/delete', (0, utils_1.asyncHandler)(Upload_controller_1.default.delete));
 //checkoutAmount 
-router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_controller_1.default.checkoutReview));
+router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_Controller_1.default.checkoutReview));
 exports.default = router;

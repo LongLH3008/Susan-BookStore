@@ -15,7 +15,7 @@ import { upload } from "../configs/multer.config";
 import UploadController from "../controllers/Api/Upload.controller";
 import BookController from "../controllers/Api/Book.controller";
 import ReviewController from "../controllers/Api/Review.controller";
-import OrderController from "../controllers/Api/Order.controller";
+import OrderController from "../controllers/Api/Order.Controller";
 
 
 
