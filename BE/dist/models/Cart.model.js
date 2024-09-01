@@ -21,11 +21,15 @@ const CartSchema = new mongoose_1.default.Schema({
         type: Number,
         default: 0,
     },
+    cart_total_price: {
+        type: Number,
+        default: 0,
+    },
     cart_products: [
         {
             product_id: {
                 type: mongoose_1.default.Types.ObjectId,
-                ref: "Products"
+                ref: "Books"
             },
             product_quantity: {
                 type: Number,

@@ -1,94 +1,115 @@
 import Joi from 'joi';
 import { DiscountApplyTo, DiscountType } from '../interfaces/models/IDiscount';
 
-const discountSchema = Joi.object({
-  // Discount name
+const discountCreateSchema = Joi.object({
   discount_name: Joi.string().required().messages({
-    'string.base': 'Discount name must be a string',
-    'string.empty': 'Discount name is required',
+    'string.base': 'Tên mã giảm giá phải là một chuỗi',
+    'string.empty': 'Tên mã giảm giá không được để trống',
+    'any.required': 'Tên mã giảm giá là bắt buộc',
   }),
 
-  // Discount code
   discount_code: Joi.string().required().messages({
-    'string.base': 'Discount code must be a string',
-    'string.empty': 'Discount code is required',
+    'string.base': 'Mã giảm giá phải là một chuỗi',
+    'string.empty': 'Mã giảm giá không được để trống',
+    'any.required': 'Mã giảm giá là bắt buộc',
   }),
 
-  // Discount type
-  discount_type: Joi.string().valid(...Object.values(DiscountType)).default(DiscountType.percentage).messages({
-    'string.base': 'Discount type must be a string',
-    'any.only': 'Discount type must be one of: {#values}',
+  discount_type: Joi.string().valid(...Object.values(DiscountType)).required().messages({
+    'string.base': 'Loại giảm giá phải là một chuỗi',
+    'any.only': 'Loại giảm giá phải là một trong các giá trị: {#values}',
+    'any.required': 'Loại giảm giá là bắt buộc',
   }),
 
-  // Discount description
-  discount_description: Joi.string().default('').messages({
-    'string.base': 'Discount description must be a string',
+  discount_description: Joi.string().allow('').optional().messages({
+    'string.base': 'Mô tả giảm giá phải là một chuỗi',
   }),
 
-  // Discount value
   discount_value: Joi.number().required().messages({
-    'number.base': 'Discount value must be a number',
-    'any.required': 'Discount value is required',
+    'number.base': 'Giá trị giảm giá phải là một số',
+    'any.required': 'Giá trị giảm giá là bắt buộc',
   }),
 
-  // Discount applies to
-  discount_applies_to: Joi.string().valid(...Object.values(DiscountApplyTo)).default(DiscountApplyTo.all).messages({
-    'string.base': 'Discount applies to must be a string',
-    'any.only': 'Discount applies to must be one of: {#values}',
+  discount_applies_to: Joi.string().valid(...Object.values(DiscountApplyTo)).required().messages({
+    'string.base': 'Áp dụng cho phải là một chuỗi',
+    'any.only': 'Áp dụng cho phải là một trong các giá trị: {#values}',
+    'any.required': 'Áp dụng cho là bắt buộc',
   }),
 
-  // Discount product IDs
-  discount_product_ids: Joi.array().items(Joi.string()).default([]).messages({
-    'array.base': 'Discount product IDs must be an array',
-    'array.items': 'Discount product IDs must be strings',
+  discount_product_ids: Joi.array().items(Joi.string()).when('discount_applies_to', {
+    is: DiscountApplyTo.specific,
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }).messages({
+    'array.base': 'Danh sách ID sản phẩm phải là một mảng',
+    'array.items': 'ID sản phẩm phải là chuỗi',
+    'any.required': 'Danh sách ID sản phẩm là bắt buộc khi áp dụng cho sản phẩm cụ thể',
   }),
 
-  // Discount category IDs
-  discount_category_ids: Joi.array().items(Joi.string()).default([]).messages({
-    'array.base': 'Discount category IDs must be an array',
-    'array.items': 'Discount category IDs must be strings',
+  discount_category_ids: Joi.array().items(Joi.string()).when('discount_applies_to', {
+    is: DiscountApplyTo.category,
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }).messages({
+    'array.base': 'Danh sách ID danh mục phải là một mảng',
+    'array.items': 'ID danh mục phải là chuỗi',
+    'any.required': 'Danh sách ID danh mục là bắt buộc khi áp dụng cho danh mục',
   }),
 
-  // Discount stock
-  discount_stock: Joi.number().required().messages({
-    'number.base': 'Discount stock must be a number',
-    'any.required': 'Discount stock is required',
+  discount_stock: Joi.number().integer().min(0).required().messages({
+    'number.base': 'Số lượng mã giảm giá phải là một số',
+    'number.integer': 'Số lượng mã giảm giá phải là số nguyên',
+    'number.min': 'Số lượng mã giảm giá phải lớn hơn hoặc bằng 0',
+    'any.required': 'Số lượng mã giảm giá là bắt buộc',
   }),
 
-  // Minimum order value
-  discount_min_order_value: Joi.number().required().messages({
-    'number.base': 'Minimum order value must be a number',
-    'any.required': 'Minimum order value is required',
+  discount_min_order_value: Joi.number().min(0).required().messages({
+    'number.base': 'Giá trị đơn hàng tối thiểu phải là một số',
+    'number.min': 'Giá trị đơn hàng tối thiểu phải lớn hơn hoặc bằng 0',
+    'any.required': 'Giá trị đơn hàng tối thiểu là bắt buộc',
   }),
 
-  // Maximum usage per user
-  discount_max_use_per_user: Joi.number().required().default(1).messages({
-    'number.base': 'Maximum usage per user must be a number',
-    'any.required': 'Maximum usage per user is required',
+  discount_max_use_per_user: Joi.number().integer().min(1).required().messages({
+    'number.base': 'Số lần sử dụng tối đa cho mỗi người dùng phải là một số',
+    'number.integer': 'Số lần sử dụng tối đa cho mỗi người dùng phải là số nguyên',
+    'number.min': 'Số lần sử dụng tối đa cho mỗi người dùng phải lớn hơn hoặc bằng 1',
+    'any.required': 'Số lần sử dụng tối đa cho mỗi người dùng là bắt buộc',
   }),
 
-  // Users who have used the discount
-  discount_users_used: Joi.array().items(Joi.string()).default([]).messages({
-    'array.base': 'Discount users used must be an array',
-    'array.items': 'Discount users used must be strings',
-  }),
-
-  // Discount start date
   discount_start_date: Joi.date().required().messages({
-    'date.base': 'Discount start date must be a valid date',
-    'any.required': 'Discount start date is required',
+    'date.base': 'Ngày bắt đầu phải là một ngày hợp lệ',
+    'any.required': 'Ngày bắt đầu là bắt buộc',
   }),
 
-  // Discount end date
-  discount_end_date: Joi.date().required().messages({
-    'date.base': 'Discount end date must be a valid date',
-    'any.required': 'Discount end date is required',
+  discount_end_date: Joi.date().greater(Joi.ref('discount_start_date')).required().messages({
+    'date.base': 'Ngày kết thúc phải là một ngày hợp lệ',
+    'date.greater': 'Ngày kết thúc phải sau ngày bắt đầu',
+    'any.required': 'Ngày kết thúc là bắt buộc',
   }),
 
-  // Discount active status
   discount_is_active: Joi.boolean().default(true).messages({
-    'boolean.base': 'Discount active status must be a boolean',
+    'boolean.base': 'Trạng thái hoạt động phải là true hoặc false',
   }),
 });
 
-export default discountSchema;
+const discountUpdateSchema = discountCreateSchema.fork(
+  Object.keys(discountCreateSchema.describe().keys),
+  (schema) => schema.optional()
+);
+
+const discountQuerySchema = Joi.object({
+  page: Joi.number().integer().min(1).optional().messages({
+    'number.base': 'Số trang phải là một số',
+    'number.integer': 'Số trang phải là số nguyên',
+    'number.min': 'Số trang phải lớn hơn hoặc bằng 1',
+  }),
+  limit: Joi.number().integer().min(1).optional().messages({
+    'number.base': 'Giới hạn phải là một số',
+    'number.integer': 'Giới hạn phải là số nguyên',
+    'number.min': 'Giới hạn phải lớn hơn hoặc bằng 1',
+  }),
+  code: Joi.string().optional().messages({
+    'string.base': 'Mã giảm giá phải là một chuỗi',
+  }),
+});
+
+export { discountCreateSchema, discountUpdateSchema, discountQuerySchema };

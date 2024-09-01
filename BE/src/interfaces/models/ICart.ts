@@ -15,5 +15,5 @@ export interface ICart {
     cart_products: IProductCart[]
     createAt: Date | string
     updateAt: Date | string
-
+    cart_total_price: number
 }

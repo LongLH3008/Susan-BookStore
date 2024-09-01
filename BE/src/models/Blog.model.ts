@@ -16,9 +16,20 @@ const blogSchema = new mongoose.Schema<IBlogModel>(
       required: true,
     },
     blog_tags: { type: [String], required: true },
+    blog_slug: { type: String, required: true, unique: true }, 
+    blog_image: { type: String, required: true },
+    blog_views: { type: Number, default: 0 }, 
+    blog_likes: { type: Number, default: 0 }, 
+    blog_comments: [{ 
+      comment_author: { type: mongoose.Schema.Types.ObjectId, ref: "Users", required: true },
+      comment_content: { type: String, required: true },
+      comment_likes: { type: Number, default: 0 },
+      comment_createdAt: { type: Date, default: Date.now },
+      comment_updatedAt: { type: Date, default: Date.now },
+    }],
   },
   {
-    timestamps: { updatedAt: true },
+    timestamps: { createdAt: true, updatedAt: true },
     collection: COLLECTION_NAME,
   }
 );

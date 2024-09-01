@@ -9,16 +9,17 @@ const ForgotPassword_1 = __importDefault(require("../controllers/Api/Auth/Forgot
 const Login_1 = __importDefault(require("../controllers/Api/Auth/Login"));
 const Register_1 = __importDefault(require("../controllers/Api/Auth/Register"));
 const Category_controller_1 = __importDefault(require("../controllers/Api/Category.controller"));
-const Comment_controller_1 = __importDefault(require("../controllers/Api/Comment.controller"));
-const Product_controller_1 = __importDefault(require("../controllers/Api/Product.controller"));
 const blog_controller_1 = __importDefault(require("../controllers/Api/blog.controller"));
 const utils_1 = require("../utils");
-const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
+// import OrderController from "../controllers/Api/Order.Controller";
 const Cart_controller_1 = __importDefault(require("../controllers/Api/Cart.controller"));
 const User_controller_1 = __importDefault(require("../controllers/Api/User.controller"));
 const Discount_controller_1 = __importDefault(require("../controllers/Api/Discount.controller"));
 const multer_config_1 = require("../configs/multer.config");
 const Upload_controller_1 = __importDefault(require("../controllers/Api/Upload.controller"));
+const Book_controller_1 = __importDefault(require("../controllers/Api/Book.controller"));
+const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
+const Order_controller_1 = __importDefault(require("../controllers/Api/Order.controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -42,33 +43,39 @@ router.get("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.de
 router.post("/categories", (0, utils_1.asyncHandler)(Category_controller_1.default.create));
 router.patch("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.update));
 router.delete("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.delete));
-//comment
-router.get("/comments/products/:id", (0, utils_1.asyncHandler)(Comment_controller_1.default.getCommentsByProductId));
-router.get("/comments/users/:id", (0, utils_1.asyncHandler)(Comment_controller_1.default.getCommentsByUserId));
-router.post("/comments", (0, utils_1.asyncHandler)(Comment_controller_1.default.create));
-router.patch("/comments/:id", (0, utils_1.asyncHandler)(Comment_controller_1.default.update));
-router.delete("/comments/:id", (0, utils_1.asyncHandler)(Comment_controller_1.default.delete));
-//product
-router.post("/products", (0, utils_1.asyncHandler)(Product_controller_1.default.create));
-router.patch("/products/variations/", (0, utils_1.asyncHandler)(Product_controller_1.default.updateVariation));
-router.patch("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.updateOne));
-router.get("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.getById));
-router.get("/products", (0, utils_1.asyncHandler)(Product_controller_1.default.getByQuery));
-router.delete("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.deleteOne));
-router.patch("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.activeProduct));
-router.patch("/products/:id", (0, utils_1.asyncHandler)(Product_controller_1.default.unActiveProduct));
+//review
+router.post("/books/:bookId/reviews", (0, utils_1.asyncHandler)(Review_controller_1.default.addReview));
+router.put("/books/:bookId/reviews/:userId", (0, utils_1.asyncHandler)(Review_controller_1.default.updateReview));
+router.delete("/books/:bookId/reviews/:userId", (0, utils_1.asyncHandler)(Review_controller_1.default.deleteReview));
+router.get("/books/:bookId/reviews", (0, utils_1.asyncHandler)(Review_controller_1.default.getReviews));
+router.get("/books/:bookId/reviews/:userId", (0, utils_1.asyncHandler)(Review_controller_1.default.getReviewByUser));
+//book
+// Public routes
+router.get('/books', (0, utils_1.asyncHandler)(Book_controller_1.default.getAllBooks));
+router.get('/books/query', (0, utils_1.asyncHandler)(Book_controller_1.default.getByQuery));
+router.get('/books/:id', (0, utils_1.asyncHandler)(Book_controller_1.default.getById));
+// Protected routes
+router.post('/books', (0, utils_1.asyncHandler)(Book_controller_1.default.create));
+router.put('/books/:id', (0, utils_1.asyncHandler)(Book_controller_1.default.updateOne));
+router.delete('/books/:id', (0, utils_1.asyncHandler)(Book_controller_1.default.deleteOne));
+router.patch('/books/:id/unactive', (0, utils_1.asyncHandler)(Book_controller_1.default.unActiveBook));
+router.patch('/books/:id/active', (0, utils_1.asyncHandler)(Book_controller_1.default.activeBook));
+router.patch('/books/category/:category_id/discount', (0, utils_1.asyncHandler)(Book_controller_1.default.setDiscountByCategoryId));
+router.patch('/books/discount', (0, utils_1.asyncHandler)(Book_controller_1.default.setDiscountToAll));
+router.patch('/books/:id/discount', (0, utils_1.asyncHandler)(Book_controller_1.default.setDiscountByBookId));
+router.patch('/books/:id/sold', (0, utils_1.asyncHandler)(Book_controller_1.default.updateSoldNumber));
 //blog
 router.post("/blog/add", (0, utils_1.asyncHandler)(blog_controller_1.default.create));
-router.get("/blog", (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlog));
+router.get("/blog", (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlogs));
 router.get("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.getOneBlog));
 router.delete("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.deleteBlog));
 router.put("/blog/update/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.updateBlog));
 //order
-router.post("/orders", (0, utils_1.asyncHandler)(Order_Controller_1.default.create));
-router.get("/orders/:id", (0, utils_1.asyncHandler)(Order_Controller_1.default.getOrderById));
-router.get("/orders", (0, utils_1.asyncHandler)(Order_Controller_1.default.getAllOrder));
-router.put("/orders/:id", (0, utils_1.asyncHandler)(Order_Controller_1.default.updateOrder));
-router.delete("/orders/:id", (0, utils_1.asyncHandler)(Order_Controller_1.default.deleteOrder));
+// router.post("/orders", asyncHandler(OrderController.create));
+// router.get("/orders/:id", asyncHandler(OrderController.getOrderById));
+// router.get("/orders", asyncHandler(OrderController.getAllOrder));
+// router.put("/orders/:id", asyncHandler(OrderController.updateOrder));
+// router.delete("/orders/:id", asyncHandler(OrderController.deleteOrder));
 // cart
 router.post("/cart", (0, utils_1.asyncHandler)(Cart_controller_1.default.create)); // create cart
 router.get("/cart/:user_id", (0, utils_1.asyncHandler)(Cart_controller_1.default.getCartByOneUser)); // get cart one user
@@ -78,14 +85,17 @@ router.get("/cart/increment-quantity/:user_id/:product_id", (0, utils_1.asyncHan
 router.get("/cart/decrement-quantity/:user_id/:product_id", (0, utils_1.asyncHandler)(Cart_controller_1.default.decrementQuantityProductInCart));
 //discount
 router.post("/discounts", (0, utils_1.asyncHandler)(Discount_controller_1.default.create));
-router.post("/discounts/get-amount", (0, utils_1.asyncHandler)(Discount_controller_1.default.getAmount));
 router.get("/discounts", (0, utils_1.asyncHandler)(Discount_controller_1.default.getAll));
-router.get("/discounts/product/:productId", (0, utils_1.asyncHandler)(Discount_controller_1.default.getDiscountsByProductId));
-router.get("/discounts/:code", (0, utils_1.asyncHandler)(Discount_controller_1.default.getAllProductsWithDiscountCode));
-router.post("/discounts/active", (0, utils_1.asyncHandler)(Discount_controller_1.default.active));
-router.post("/discounts/inactive", (0, utils_1.asyncHandler)(Discount_controller_1.default.inActive));
-router.get("/discounts/cancel/", (0, utils_1.asyncHandler)(Discount_controller_1.default.cancelDiscount));
+router.put("/discounts/:id", (0, utils_1.asyncHandler)(Discount_controller_1.default.update));
+router.delete("/discounts/:code", (0, utils_1.asyncHandler)(Discount_controller_1.default.delete));
+router.get("/discounts/book/:bookId", (0, utils_1.asyncHandler)(Discount_controller_1.default.getDiscountsByBook));
+router.post("/discounts/activate", (0, utils_1.asyncHandler)(Discount_controller_1.default.activate));
+router.post("/discounts/deactivate", (0, utils_1.asyncHandler)(Discount_controller_1.default.deactivate));
+router.post("/discounts/cancel", (0, utils_1.asyncHandler)(Discount_controller_1.default.cancelDiscount));
+router.post("/discounts/amount", (0, utils_1.asyncHandler)(Discount_controller_1.default.getDiscountAmount));
 //upload
 router.post('/upload', multer_config_1.upload.array('files', 10), (0, utils_1.asyncHandler)(Upload_controller_1.default.upload));
 router.post('/upload/delete', (0, utils_1.asyncHandler)(Upload_controller_1.default.delete));
+//checkoutAmount 
+router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_controller_1.default.checkoutReview));
 exports.default = router;

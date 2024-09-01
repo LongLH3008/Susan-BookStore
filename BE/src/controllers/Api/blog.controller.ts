@@ -1,39 +1,39 @@
 import { Response } from "express";
 import { Request } from "express-jwt";
-import { SuccessResponse } from "../../cores/succes.response";
 import BlogService from "../../Services/blog.service";
+import { SuccessResponse } from "../../cores/succes.response";
 
-class blogController {
+class BlogController {
   static async create(req: Request, res: Response): Promise<any> {
     const blog = await BlogService.create(req.body);
     return new SuccessResponse({
-      message: "create blog successfully",
+      message: "Create blog successfully",
       metadata: blog,
     }).send(res);
   }
 
-  static async getAllBlog(req: Request, res: Response) {
-    const blog = await BlogService.getAllBlogs();
+  static async getAllBlogs(req: Request, res: Response): Promise<any> {
+    const blogs = await BlogService.getAllBlogs();
     return new SuccessResponse({
-      message: "get all blog successfully",
-      metadata: blog,
+      message: "Get all blogs successfully",
+      metadata: blogs,
     }).send(res);
   }
 
-  static async getOneBlog(req: Request, res: Response) {
+  static async getOneBlog(req: Request, res: Response): Promise<any> {
     const id = req.params.id;
     const blog = await BlogService.getBlogById({ id });
     return new SuccessResponse({
-      message: "get blog successfully",
+      message: "Get blog successfully",
       metadata: blog,
     }).send(res);
   }
 
-  static async deleteBlog(req: Request, res: Response) {
+  static async deleteBlog(req: Request, res: Response): Promise<any> {
     const id = req.params.id;
     const blog = await BlogService.deleteBlog({ id });
     return new SuccessResponse({
-      message: "delete blog successfully",
+      message: "Delete blog successfully",
       metadata: blog,
     }).send(res);
   }
@@ -48,4 +48,4 @@ class blogController {
   }
 }
 
-export default blogController;
+export default BlogController;

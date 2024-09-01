@@ -4,16 +4,18 @@ import AuthForgotfwApiController from "../controllers/Api/Auth/ForgotPassword";
 import AuthLoginApiController from "../controllers/Api/Auth/Login";
 import AuthRegisterApiController from "../controllers/Api/Auth/Register";
 import CategoryController from "../controllers/Api/Category.controller";
-import CommentController from "../controllers/Api/Comment.controller";
-import ProductController from "../controllers/Api/Product.controller";
+
 import BlogController from "../controllers/Api/blog.controller";
 import { asyncHandler } from "../utils";
-import OrderController from "../controllers/Api/Order.Controller";
+// import OrderController from "../controllers/Api/Order.Controller";
 import CartController from "../controllers/Api/Cart.controller";
 import UserController from "../controllers/Api/User.controller";
 import DiscountController from "../controllers/Api/Discount.controller";
 import { upload } from "../configs/multer.config";
 import UploadController from "../controllers/Api/Upload.controller";
+import BookController from "../controllers/Api/Book.controller";
+import ReviewController from "../controllers/Api/Review.controller";
+import OrderController from "../controllers/Api/Order.controller";
 
 
 
@@ -47,40 +49,42 @@ router.patch(
   asyncHandler(CategoryController.update)
 );
 router.delete("/categories/:id", asyncHandler(CategoryController.delete));
-//comment
-router.get("/comments/products/:id", asyncHandler(CommentController.getCommentsByProductId));
-router.get(
-  "/comments/users/:id",
-  asyncHandler(CommentController.getCommentsByUserId)
-);
+//review
+router.post("/books/:bookId/reviews", asyncHandler(ReviewController.addReview));
+router.put("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.updateReview));
+router.delete("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.deleteReview));
+router.get("/books/:bookId/reviews", asyncHandler(ReviewController.getReviews));
+router.get("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.getReviewByUser));
+//book
+// Public routes
+router.get('/books', asyncHandler(BookController.getAllBooks));
+router.get('/books/query', asyncHandler(BookController.getByQuery));
+router.get('/books/:id', asyncHandler(BookController.getById));
 
-router.post("/comments", asyncHandler(CommentController.create));
-router.patch("/comments/:id", asyncHandler(CommentController.update));
-router.delete("/comments/:id", asyncHandler(CommentController.delete));
-//product
-router.post("/products", asyncHandler(ProductController.create));
-router.patch("/products/variations/", asyncHandler(ProductController.updateVariation));
-router.patch("/products/:id", asyncHandler(ProductController.updateOne));
-
-router.get("/products/:id", asyncHandler(ProductController.getById));
-router.get("/products", asyncHandler(ProductController.getByQuery));
-router.delete("/products/:id", asyncHandler(ProductController.deleteOne));
-router.patch("/products/:id", asyncHandler(ProductController.activeProduct));
-router.patch("/products/:id", asyncHandler(ProductController.unActiveProduct));
+// Protected routes
+router.post('/books', asyncHandler(BookController.create));
+router.put('/books/:id', asyncHandler(BookController.updateOne));
+router.delete('/books/:id', asyncHandler(BookController.deleteOne));
+router.patch('/books/:id/unactive', asyncHandler(BookController.unActiveBook));
+router.patch('/books/:id/active', asyncHandler(BookController.activeBook));
+router.patch('/books/category/:category_id/discount', asyncHandler(BookController.setDiscountByCategoryId));
+router.patch('/books/discount', asyncHandler(BookController.setDiscountToAll));
+router.patch('/books/:id/discount', asyncHandler(BookController.setDiscountByBookId));
+router.patch('/books/:id/sold', asyncHandler(BookController.updateSoldNumber));
 //blog
 
 router.post("/blog/add", asyncHandler(BlogController.create));
-router.get("/blog", asyncHandler(BlogController.getAllBlog));
+router.get("/blog", asyncHandler(BlogController.getAllBlogs));
 router.get("/blog/:id", asyncHandler(BlogController.getOneBlog));
 router.delete("/blog/:id", asyncHandler(BlogController.deleteBlog));
 router.put("/blog/update/:id", asyncHandler(BlogController.updateBlog));
 
 //order
-router.post("/orders", asyncHandler(OrderController.create));
-router.get("/orders/:id", asyncHandler(OrderController.getOrderById));
-router.get("/orders", asyncHandler(OrderController.getAllOrder));
-router.put("/orders/:id", asyncHandler(OrderController.updateOrder));
-router.delete("/orders/:id", asyncHandler(OrderController.deleteOrder));
+// router.post("/orders", asyncHandler(OrderController.create));
+// router.get("/orders/:id", asyncHandler(OrderController.getOrderById));
+// router.get("/orders", asyncHandler(OrderController.getAllOrder));
+// router.put("/orders/:id", asyncHandler(OrderController.updateOrder));
+// router.delete("/orders/:id", asyncHandler(OrderController.deleteOrder));
 
 // cart
 router.post("/cart", asyncHandler(CartController.create)); // create cart
@@ -98,38 +102,15 @@ router.get(
 
 
 //discount
-router.post(
-  "/discounts",
-  asyncHandler(DiscountController.create)
-);
-router.post(
-  "/discounts/get-amount",
-  asyncHandler(DiscountController.getAmount)
-);
-router.get(
-  "/discounts",
-  asyncHandler(DiscountController.getAll)
-);
-router.get(
-  "/discounts/product/:productId",
-  asyncHandler(DiscountController.getDiscountsByProductId)
-);
-router.get(
-  "/discounts/:code",
-  asyncHandler(DiscountController.getAllProductsWithDiscountCode)
-);
-router.post(
-  "/discounts/active",
-  asyncHandler(DiscountController.active)
-);
-router.post(
-  "/discounts/inactive",
-  asyncHandler(DiscountController.inActive)
-);
-router.get(
-  "/discounts/cancel/",
-  asyncHandler(DiscountController.cancelDiscount)
-);
+router.post("/discounts", asyncHandler(DiscountController.create));
+router.get("/discounts", asyncHandler(DiscountController.getAll));
+router.put("/discounts/:id", asyncHandler(DiscountController.update));
+router.delete("/discounts/:code", asyncHandler(DiscountController.delete));
+router.get("/discounts/book/:bookId", asyncHandler(DiscountController.getDiscountsByBook));
+router.post("/discounts/activate", asyncHandler(DiscountController.activate));
+router.post("/discounts/deactivate", asyncHandler(DiscountController.deactivate));
+router.post("/discounts/cancel", asyncHandler(DiscountController.cancelDiscount));
+router.post("/discounts/amount", asyncHandler(DiscountController.getDiscountAmount));
 
 
 
@@ -137,5 +118,9 @@ router.get(
 router.post('/upload', upload.array('files', 10), asyncHandler(UploadController.upload));
 router.post('/upload/delete', asyncHandler(UploadController.delete));
 
+
+//checkoutAmount 
+
+router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview))
 
 export default router;

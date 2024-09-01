@@ -2,7 +2,7 @@ import { ConflictError, InternalServerError, ResourceNotFoundError } from "../co
 import { ICart } from "../interfaces/models/ICart"
 import mongoose, { trusted } from "mongoose"
 import Cart from "../models/Cart.model"
-import Product from "../models/Product.model"
+import Product from "../models/Book.model"
 
 
 class CartService {

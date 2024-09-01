@@ -5,16 +5,31 @@ export enum OrderState {
 }
 
 export interface IOrderProduct {
-    order_item_id: string;
-    product_id: mongoose.Types.ObjectId | string;
-    product_name: string;
-    product_quantity: number;
-    product_price: number;
-    product_subtotal: number;
-    product_discount?: number;
-    product_total: number;
+    bookId: mongoose.Types.ObjectId | string;
+    title: string;
+    quantity: number;
+    price: number;
+    subtotal: number;
+    discount?: number;
+    discountAmount?: number
+    total: number;
+    discount_code?: string;
+    discountAmountVoucher: number;
 }
-
+export interface IOrderShipping {
+    street: string;
+    city: string;
+    state: string;
+    zipcode: string;
+    country: string;
+    fee: number;
+}
+export interface IOrderPayment {
+    method: PaymentMethod;
+    amount: number;
+    status: PaymentStatus;
+    date: Date;
+}
 export enum PaymentMethod {
     CreditCard = "credit_card",
     PayPal = "paypal",
@@ -27,22 +42,13 @@ export enum PaymentStatus {
     Failed = "failed",
 }
 export interface IOrder {
-    order_user_id: mongoose.Types.ObjectId | string;
-    order_shipping: {
-        street: string;
-        city: string;
-        state: string;
-        zipcode: string;
-        country: string;
-    };
-    order_payment: {
-        payment_id: string;
-        payment_method: PaymentMethod;
-        payment_amount: number;
-        payment_status: PaymentStatus;
-        payment_date: Date;
-    };
-    order_products: IOrderProduct[];
-    order_tracking_number: string;
-    order_state: OrderState;
-}
+    userId: mongoose.Types.ObjectId | string;
+    shipping: IOrderShipping;
+    state: OrderState;
+    payment: IOrderPayment;
+    products: IOrderProduct[];
+    total: number;
+    trackingNumber: string;
+};
+
+

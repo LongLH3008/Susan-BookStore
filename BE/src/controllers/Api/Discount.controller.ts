@@ -3,72 +3,84 @@ import { Request } from "express-jwt";
 import { SuccessResponse } from "../../cores/succes.response";
 import DiscountService from "../../Services/Discount.service";
 
-
 class DiscountController {
     static async create(req: Request, res: Response): Promise<any> {
-        const Discount = await DiscountService.createDiscount(req.body);
+        const discount = await DiscountService.createDiscount(req.body);
         return new SuccessResponse({
-            message: "create Discount successfully",
-            metadata: Discount,
+            message: "Discount created successfully",
+            metadata: discount,
         }).send(res);
     }
+
     static async getAll(req: Request, res: Response): Promise<any> {
-        const Discount = await DiscountService.getAll(req.query);
+        const discounts = await DiscountService.getAllDiscounts(req.query);
         return new SuccessResponse({
-            message: "create Discount successfully",
-            metadata: Discount,
+            message: "Discounts retrieved successfully",
+            metadata: discounts,
         }).send(res);
     }
-    static async getDiscountsByProductId(req: Request, res: Response): Promise<any> {
-        const { productId } = req.params
-        const Discount = await DiscountService.getDiscountByProduct(productId);
+
+    static async update(req: Request, res: Response): Promise<any> {
+        const { id } = req.params;
+        const updatedDiscount = await DiscountService.updateDiscount(id, req.body);
         return new SuccessResponse({
-            message: "get Discounts successfully",
-            metadata: Discount,
+            message: "Discount updated successfully",
+            metadata: updatedDiscount,
         }).send(res);
     }
-    static async getAllProductsWithDiscountCode(req: Request, res: Response): Promise<any> {
-        const { code } = req.params
-        const Discount = await DiscountService.getAllDiscountCodesWithProduct({ code, ...req.query });
+
+    static async delete(req: Request, res: Response): Promise<any> {
+        const { code } = req.params;
+        const deletedDiscount = await DiscountService.deleteDiscount(code);
         return new SuccessResponse({
-            message: "get Products successfully",
-            metadata: Discount,
+            message: "Discount deleted successfully",
+            metadata: deletedDiscount || {},
         }).send(res);
     }
-    static async active(req: Request, res: Response): Promise<any> {
-        const Discount = await DiscountService.activeDiscount(req.body);
+
+    static async getDiscountsByBook(req: Request, res: Response): Promise<any> {
+        const { bookId } = req.params;
+        const discounts = await DiscountService.getDiscountByBook(bookId);
         return new SuccessResponse({
-            message: "active Discount successfully",
-            metadata: Discount,
+            message: "Discounts for book retrieved successfully",
+            metadata: discounts,
         }).send(res);
     }
-    static async inActive(req: Request, res: Response): Promise<any> {
-        const Discount = await DiscountService.inActiveDiscount(req.body);
+
+    static async activate(req: Request, res: Response): Promise<any> {
+        const { code } = req.body;
+        const result = await DiscountService.activateDiscount(code);
         return new SuccessResponse({
-            message: "inActive Discount successfully",
-            metadata: Discount,
+            message: "Discount activated successfully",
+            metadata: result,
         }).send(res);
     }
+
+    static async deactivate(req: Request, res: Response): Promise<any> {
+        const { code } = req.body;
+        const result = await DiscountService.deactivateDiscount(code);
+        return new SuccessResponse({
+            message: "Discount deactivated successfully",
+            metadata: result,
+        }).send(res);
+    }
+
     static async cancelDiscount(req: Request, res: Response): Promise<any> {
-        const Discount = await DiscountService.cancelDiscount(req.body);
+        const { code, userId } = req.body;
+        const result = await DiscountService.cancelDiscount(code, userId);
         return new SuccessResponse({
-            message: "cancel Discount successfully",
-            metadata: Discount,
+            message: "Discount cancelled successfully",
+            metadata: result,
         }).send(res);
     }
 
-    static async getAmount(req: Request, res: Response): Promise<any> {
-        const Discount = await DiscountService.getDiscountAmount2(req.body);
+    static async getDiscountAmount(req: Request, res: Response): Promise<any> {
+        const amount = await DiscountService.getDiscountAmount2(req.body);
         return new SuccessResponse({
-            message: "cancel Discount successfully",
-            metadata: Discount,
+            message: "Discount amount calculated successfully",
+            metadata: amount,
         }).send(res);
     }
-
-
-
-
-
 }
 
 export default DiscountController;

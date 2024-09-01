@@ -47,4 +47,8 @@ export class ResourceNotFoundError extends ApiError {
 
   }
 }
-
+export class ValidationError extends ApiError {
+  constructor(message?: ReasonStatusCode | string) {
+    super(message || ReasonStatusCode.VALIDATION_ERROR, StatusCode.UNPROCESSABLE_ENTITY);
+  }
+}

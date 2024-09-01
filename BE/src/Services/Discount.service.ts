@@ -1,373 +1,208 @@
-"use strict";
-
-import { BadRequestError, InternalServerError, ResourceNotFoundError } from "../cores/error.response";
+import { BadRequestError, ResourceNotFoundError } from "../cores/error.response";
 import Discount from "../models/Discount.model";
-import Product from "../models/Product.model";
-import { validate } from "../schemas";
-import discountSchema from "../schemas/discount.schema";
+import Book from "../models/Book.model";
+import { discountCreateSchema, discountUpdateSchema, discountQuerySchema } from "../schemas/discount.schema";
 import { deleteNullObject } from "../utils";
+import {
+    DiscountCreateInputDTO,
+    DiscountUpdateInputDTO,
+    DiscountQueryInputDTO,
+    DiscountOutputDTO,
+    DiscountListOutputDTO
+} from "./dtos/Discount.dto";
+import { DiscountType, DiscountApplyTo } from '../interfaces/models/IDiscount';
+import { IOrderProduct } from "../interfaces/models/IOrder";
 
 const { default: mongoose } = require("mongoose");
 
-
-interface Product {
-    productId: string
-    quantity: number
-    discountCode: string
-    price: number
-
+interface BookItem {
+    product_id: string;
+    quantity: number;
+    product_price: number;
+    discount: number;
+    title: string;
+    code?: string;
 }
 
-
-
+export interface DiscountInput {
+    products: BookItem[];
+    userId: string;
+}
 
 class DiscountService {
-    static async createDiscount(data: any) {
-        console.log(data)
-        const {
-            discount_name,
+    static async createDiscount(data: DiscountCreateInputDTO): Promise<DiscountOutputDTO> {
+        const { error } = discountCreateSchema.validate(data);
+        if (error) throw new BadRequestError(error.details[0].message);
 
-            //ma giam gia
-            discount_code,
-            //loai ma giam gai
-            discount_type,
-            discount_description,
-
-            //gia tri giam gia
-            discount_value,
-            //ap dung voi
-            discount_applies_to,
-            //ma san pha mduoc ap dung
-            discount_product_ids,
-            //ma danh muc duoc ap dung
-            discount_category_ids,
-            //so lan su dung cua ma giam gia
-            discount_stock,
-
-            //gia tri don hang toi thieu de su dung
-            discount_min_order_value,
-            //so lan su dung toi da cho moi user
-            discount_max_use_per_user,
-            //danh sach user da su dung
-            discount_users_used,
-            //tinh trang ma giam gia
-            discount_start_date,
-            discount_end_date,
-        } = data;
-
-        console.log(discount_name,
-            discount_code,
-            discount_type,
-            discount_description,
-            discount_value,
-            discount_category_ids,
-            discount_stock,
-            discount_min_order_value,
-            discount_max_use_per_user,
-            discount_users_used,
-            discount_start_date,
-            discount_end_date,
-            discount_applies_to,)
-        validate(discountSchema, data)
-
-        if (new Date() > new Date(discount_end_date)) {
-            throw new BadRequestError("discount code has expired");
+        const existingDiscount = await Discount.findOne({ discount_code: data.discount_code });
+        if (existingDiscount) {
+            throw new BadRequestError("Mã giảm giá đã tồn tại");
         }
 
-        //create index for discount code
-        const foundDiscountCode = await Discount
-            .findOne({
-                discount_code: discount_code,
-            })
-            .lean();
-
-        if (foundDiscountCode && foundDiscountCode.discount_is_active)
-            throw new BadRequestError("discount code already exists");
-        const newDiscount = await Discount.create({
-            discount_name,
-            discount_code,
-            discount_type,
-            discount_description,
-            discount_value,
-            discount_category_ids,
-            discount_stock,
-            discount_min_order_value,
-            discount_max_use_per_user,
-            discount_users_used,
-            discount_start_date,
-            discount_end_date,
-            discount_applies_to,
-            discount_product_ids: discount_applies_to === "specific" ? discount_product_ids : [],
-        });
-        return newDiscount;
+        const newDiscount = await Discount.create(data);
+        return newDiscount.toObject() as DiscountOutputDTO;
     }
-    static async getAll({ limit, page }: any) {
+
+    static async getAllDiscounts(query: DiscountQueryInputDTO): Promise<DiscountListOutputDTO> {
+        const { error } = discountQuerySchema.validate(query);
+        if (error) throw new BadRequestError(error.details[0].message);
+
+        const { page = 1, limit = 10, code } = query;
         const skip = (page - 1) * limit;
+
+        const filter: any = { discount_is_active: true };
+        if (code) {
+            filter.discount_code = code;
+        }
+
         const [discounts, totalCount] = await Promise.all([
-            Discount.find({ discount_is_active: true }).skip(skip).limit(limit).lean(),
-            Discount.countDocuments({}),
+            Discount.find(filter).skip(skip).limit(limit).lean(),
+            Discount.countDocuments(filter),
         ]);
 
         const totalPages = Math.ceil(totalCount / limit);
-
+        const mappedDiscounts: DiscountOutputDTO[] = discounts.map(d => ({
+            id: d._id.toString(),
+            ...d,
+            createdAt: (d as any).createdAt?.toISOString(),
+            updatedAt: (d as any).updatedAt?.toISOString(),
+        }));
         return {
-            discounts,
+            discounts: mappedDiscounts,
+            total: totalCount,
+            page,
+            limit,
             totalPages,
         };
     }
-    static async updateDiscount(payload: any) {
 
-        const foundShop = await Discount
-            .findOne({
-                discount_code: payload.code,
-                discount_shopId: new mongoose.Types.ObjectId(payload.shopId),
-            })
-            .lean();
-        if (!foundShop) throw new BadRequestError("discount code not found");
-        const result = await Discount.updateOne(
-            {
-                discount_code: payload.code,
-            },
+    static async updateDiscount(id: string, payload: DiscountUpdateInputDTO): Promise<DiscountOutputDTO> {
+        const { error } = discountUpdateSchema.validate(payload);
+        if (error) throw new BadRequestError(error.details[0].message);
+
+        const updatedDiscount = await Discount.findOneAndUpdate(
+            { _id: id, discount_is_active: true },
             deleteNullObject(payload),
             { new: true }
-        );
-        return result;
-    }
-    static async getAllDiscountCodesWithProduct({ code, limit, page }: any) {
-        const skip = (page - 1) * limit;
+        ).lean();
 
-        const foundDiscount = await Discount
-            .findOne({
-                discount_code: code,
-
-            })
-            .skip(skip).limit(limit)
-            .lean();
-        if (!foundDiscount || !foundDiscount.discount_is_active)
-            throw new BadRequestError("discount code not found");
-        if (foundDiscount.discount_applies_to === "all") {
-            const filter = {
-                isActive: true,
-            };
-            return await Product.find({
-                limit,
-                page,
-                sort: "ctime",
-                filter,
-                select: ["product_name"],
-            }).lean();
+        if (!updatedDiscount) {
+            throw new ResourceNotFoundError("Mã giảm giá không tồn tại hoặc đã bị vô hiệu hóa");
         }
-        if (foundDiscount.discount_applies_to === "specific") {
-            const filter = {
-                isPublish: true,
-                _id: { $in: foundDiscount.discount_product_ids },
-            };
 
-            return await Product.find(filter).skip(skip).limit(limit).lean();
-        }
+        return updatedDiscount as unknown as DiscountOutputDTO;
     }
 
-
-
-
-    static async getDiscountAmount({ code, products, userId }: any) {
-        const foundDiscount = await Discount.findOne({
-            discount_code: code,
-
-        });
-        if (!foundDiscount) throw new BadRequestError("discount code not found");
-
-        const {
-            discount_is_active,
-            discount_start_date,
-            discount_end_date,
-            discount_min_order_value,
-            discount_max_use_per_user,
-            discount_value,
-            discount_applies_to,
-            discount_category_ids,
-            discount_product_ids,
-
-            discount_type,
-            discount_stock
-        } = foundDiscount;
-        if (!discount_is_active)
-            throw new BadRequestError("discount code is not active");
-        if (!discount_stock)
-            throw new BadRequestError("discount code is out of stock");
-        if (
-            new Date() < new Date(discount_start_date) ||
-            new Date() > new Date(discount_end_date)
-        )
-            throw new BadRequestError("discount code has expired");
-
-
-
-        let total = products.reduce((acc: number, cur: any) => {
-            return acc + cur.product_price * cur.quantity;
-        }, 0);
-        if (discount_min_order_value > 0) {
-            if (total < discount_min_order_value)
-                throw new BadRequestError("order value is not enough");
-        }
-        if (discount_max_use_per_user > 0) {
-            const foundUser = await Discount.find({
-                discount_code: code,
-                discount_users_used: userId,
-            });
-            if (foundUser.length >= discount_max_use_per_user)
-                throw new BadRequestError("you have already used this code");
-        }
-
-        if (discount_applies_to == "all") {
-            let amount =
-                discount_type === "fixed_amount"
-                    ? discount_value
-                    : (discount_value * total) / 100;
-
-            return {
-                total,
-                discount: amount,
-                totalPrice: total - amount,
-            };
-        } else if (discount_applies_to == "specific" && discount_product_ids.length > 0) {
-            let amount = 0
-            products.filter((product: any) => {
-                if (discount_product_ids.includes(product.product_id.toString())) {
-                    amount += discount_type === "fixed_amount" ? discount_value : (discount_value * product.product_price) / 100;
-                }
-            })
-            return {
-                total,
-                discount: amount,
-                totalPrice: total - amount,
-            };
-        } else {
-            let amount = 0;
-            products.forEach((product: any) => {
-                if (product.categories.some((category: any) => discount_category_ids.includes(category.toString()))) {
-                    if (discount_type === "fixed_amount") {
-                        amount += discount_value;
-                    } else {
-                        amount += (discount_value * product.product_price) / 100;
-                    }
-                }
-            });
-
-            return {
-                total,
-                discount: amount,
-                totalPrice: total - amount,
-            };
-        }
-
-    }
-
-    static async deleteDiscount({ code }: any) {
-        const deleteDiscount = await Discount.findOneAndDelete({
+    static async deleteDiscount(code: string): Promise<DiscountOutputDTO | null> {
+        const deletedDiscount = await Discount.findOneAndDelete({
             discount_code: code,
             discount_is_active: true,
+        }).lean();
 
-        });
-
-        return deleteDiscount;
+        return deletedDiscount as DiscountOutputDTO | null;
     }
-    static async cancelDiscount({ code, userId }: any) {
-        const foundDiscount = await Discount.findOne({
-            discount_code: code,
-        });
-        if (!foundDiscount) throw new BadRequestError("discount code not found");
 
+    static async cancelDiscount(code: string, userId: string): Promise<any> {
         const result = await Discount.updateOne(
-            { _id: foundDiscount._id },
+            { discount_code: code, discount_is_active: true },
             {
                 $pull: { discount_users_used: userId },
-                $inc: { discount_uses_count: 1, discount_max_uses: 1 },
+                $inc: { discount_uses_count: -1, discount_max_uses: 1 },
             }
         );
 
+        if (result.modifiedCount === 0) {
+            throw new BadRequestError("Mã giảm giá không tồn tại hoặc đã bị vô hiệu hóa");
+        }
+
         return result;
     }
-    static async activeDiscount({ code }: any) {
-        const foundDiscount = await Discount.findOne({
-            discount_code: code,
-        });
-        if (!foundDiscount) throw new BadRequestError("discount code not found");
+
+    static async activateDiscount(code: string): Promise<any> {
         const result = await Discount.updateOne(
-            { _id: foundDiscount._id },
-            {
-                discount_is_active: true,
-            }
+            { discount_code: code },
+            { discount_is_active: true }
         );
+
+        if (result.modifiedCount === 0) {
+            throw new BadRequestError("Mã giảm giá không tồn tại");
+        }
+
         return result;
     }
-    static async inActiveDiscount({ code }: any) {
-        const foundDiscount = await Discount.findOne({
-            discount_code: code,
-        });
-        if (!foundDiscount) throw new BadRequestError("discount code not found");
+
+    static async deactivateDiscount(code: string): Promise<any> {
         const result = await Discount.updateOne(
-            { _id: foundDiscount._id },
-            {
-                discount_is_active: false,
-            }
+            { discount_code: code },
+            { discount_is_active: false }
         );
+
+        if (result.modifiedCount === 0) {
+            throw new BadRequestError("Mã giảm giá không tồn tại");
+        }
+
         return result;
     }
 
-    static async getDiscountByProduct(productId: string): Promise<any> {
-        const foundProduct = await Product.findOne({
-            _id: productId
-        });
+    static async getDiscountByBook(bookId: string): Promise<any> {
+        const foundBook = await Book.findOne({ _id: bookId, isActive: true });
 
-        if (!foundProduct) {
-            throw new ResourceNotFoundError("This product doesn't exist!");
+        if (!foundBook) {
+            throw new ResourceNotFoundError("Sách không tồn tại hoặc đã bị vô hiệu hóa");
         }
 
         const discounts = await Discount.find({
+            discount_is_active: true,
             $or: [
-                { discount_applies_to: "all", discount_is_active: true },
-                { discount_is_active: true, discount_product_ids: productId },
-                { discount_is_active: true, discount_category_ids: { $in: foundProduct.product_categories } }
+                { discount_applies_to: DiscountApplyTo.all },
+                { discount_applies_to: DiscountApplyTo.specific, discount_product_ids: bookId },
+                { discount_applies_to: DiscountApplyTo.category, discount_category_ids: { $in: foundBook.categories } }
             ]
-        });
+        }).lean();
 
         return discounts;
     }
 
-    // {
-    //     "products": [
-    //         {
-    //             "product_id": "66c49ff8b394a1c9ab51a83c",
-    //             "quantity": 2,
-    //             "product_price": 10000,
-    //             "code":"SUMMER2024"
-    //         }
-    //     ],
-    //     "userId":"235234234234234"
-    // }
-    static async getDiscountAmount2(data: any) {
+    static async getDiscountAmount2(data: DiscountInput) {
+
+
+
         const { products, userId } = data;
 
-        let total = products.reduce((acc: number, cur: any) => {
-            return acc + cur.product_price * cur.quantity;
+        let subtotal = products.reduce((acc: number, cur: BookItem) => {
+            return acc + (cur.product_price * cur.quantity);
         }, 0);
+        let discountAmount = products.reduce((acc: number, cur: BookItem) => {
+            return acc + (cur.product_price * cur.quantity * cur.discount / 100);
+        }, 0)
 
-        let amount = 0;
+        let discountAmountVoucher = 0;
 
-        const discountCache: { [code: string]: any } = {};
+        const productsAfterDiscount: IOrderProduct[] = []
 
+        // const discountCache: { [code: string]: any } = {};
 
         for (let product of products) {
+            // discount: productsFound[index]?.discount || 0,
+            // product_id: book.bookId,
+            // quantity: book.quantity,
+            // title: productsFound[index]?.title || "",
+            // product_price: productsFound[index]?.price || 0,
+            // code: book.code
+            // discountAmount
+            // total
+            // subtotal
+            // title
             const { code } = product;
+            const productAfterDiscount = { ...product, discountAmount: 0, discountAmountVoucher: 0, total: 0, subtotal: 0, title: product.title };
             if (!code) continue;
 
-            let foundDiscount = discountCache[code];
-            if (!foundDiscount) {
-                foundDiscount = await Discount.findOne({ discount_code: code })
-                if (!foundDiscount) throw new BadRequestError("Discount code not found");
-                discountCache[code] = foundDiscount;
-            }
+            // let foundDiscount = discountCache[code];
+            // if (!foundDiscount) {
+            let foundDiscount = await Discount.findOne({ discount_code: code });
+            if (!foundDiscount) throw new BadRequestError("Mã giảm giá không tồn tại");
+            //     discountCache[code] = foundDiscount;
+            // }
 
             const {
                 discount_is_active,
@@ -383,69 +218,87 @@ class DiscountService {
                 discount_stock,
             } = foundDiscount;
 
-            if (!discount_is_active) throw new BadRequestError("Discount code is not active");
-            if (!discount_stock) throw new BadRequestError("Discount code is out of stock");
+            if (!discount_is_active) throw new BadRequestError("Mã giảm giá không còn hoạt động");
+            if (!discount_stock) throw new BadRequestError("Mã giảm giá đã hết lượt sử dụng");
             if (new Date() < new Date(discount_start_date) || new Date() > new Date(discount_end_date)) {
-                throw new BadRequestError("Discount code has expired");
+                throw new BadRequestError("Mã giảm giá đã hết hạn");
             }
 
-            if (discount_min_order_value > 0 && total < discount_min_order_value) {
-                throw new BadRequestError("Order value is not enough");
+            if (discount_min_order_value > 0 && subtotal < discount_min_order_value) {
+                throw new BadRequestError("Giá trị đơn hàng chưa đủ để áp dụng mã giảm giá");
             }
 
             if (discount_max_use_per_user > 0) {
                 const foundUser = await Discount.countDocuments({
                     discount_code: code,
                     discount_users_used: userId,
-                })
+                });
                 if (foundUser >= discount_max_use_per_user) {
-                    throw new BadRequestError("You have already used this code");
+                    throw new BadRequestError("Bạn đã sử dụng hết số lần cho phép của mã giảm giá này");
                 }
             }
 
-            if (discount_applies_to === "all") {
-                amount += discount_type === "fixed_amount"
+            const foundBook = await Book.findById(product.product_id).lean();
+            if (!foundBook) throw new ResourceNotFoundError("Sách không tồn tại");
+
+            if (discount_applies_to === DiscountApplyTo.all) {
+                const discountValue = discount_type === DiscountType.fix_amount
                     ? discount_value
                     : (discount_value * product.product_price * product.quantity) / 100;
-            } else if (discount_applies_to === "specific" && discount_product_ids.includes(product.product_id)) {
-                amount += discount_type === "fixed_amount"
+                discountAmountVoucher += discountValue;
+                productAfterDiscount.discountAmountVoucher = discountValue;
+
+            } else if (discount_applies_to === DiscountApplyTo.specific && discount_product_ids.includes(product.product_id)) {
+                const discountValue = discount_type === DiscountType.fix_amount
                     ? discount_value
-                    : (discount_value * product.product_price) / 100;
-            } else if (product.categories.some((category: any) => discount_category_ids.includes(category))) {
-                amount += discount_type === "fixed_amount"
+                    : (discount_value * product.product_price * product.quantity) / 100;
+                discountAmountVoucher += discountValue;
+                productAfterDiscount.discountAmountVoucher = discountValue;
+            } else if (discount_applies_to === DiscountApplyTo.category && foundBook.categories.some((category: string) => discount_category_ids.includes(category))) {
+                const discountValue = discount_type === DiscountType.fix_amount
                     ? discount_value
-                    : (discount_value * product.product_price) / 100;
+                    : (discount_value * product.product_price * product.quantity) / 100;
+                discountAmountVoucher += discountValue;
+                productAfterDiscount.discountAmountVoucher = discountValue;
             }
 
+            // discountCache[code].discount_users_used.push(userId);
+            // discountCache[code].discount_stock = discount_stock - 1;
 
-            discountCache[code].discount_users_used.push(userId);
-            discountCache[code].discount_stock = discount_stock - 1;
-            if (discountCache[code].discount_stock < 0) throw new BadRequestError("Discount code is out of stock");
+            productAfterDiscount.subtotal = product.product_price * product.quantity;
+            productAfterDiscount.discountAmount = product.product_price * product.quantity * product.discount / 100
+            productAfterDiscount.total = productAfterDiscount.subtotal - productAfterDiscount.discountAmount - productAfterDiscount.discountAmountVoucher;
+            productsAfterDiscount.push({
+                bookId: product.product_id,
+                title: product.title,
+                quantity: product.quantity,
+                price: product.product_price,
+                discount: product.discount,
+                discountAmountVoucher: productAfterDiscount.discountAmountVoucher,
+                discountAmount: productAfterDiscount.discountAmount,
+                total: productAfterDiscount.total,
+                subtotal: productAfterDiscount.subtotal,
+            });
         }
 
-
-        await Discount.bulkWrite(Object.values(discountCache).map((discount: any) => ({
-            updateOne: {
-                filter: { _id: discount._id },
-                update: {
-                    $set: { discount_stock: discount.discount_stock },
-                    $push: { discount_users_used: userId },
-                },
-            },
-        })));
-
+        // await Discount.bulkWrite(Object.values(discountCache).map((discount: any) => ({
+        //     updateOne: {
+        //         filter: { _id: discount._id },
+        //         update: {
+        //             $set: { discount_stock: discount.discount_stock },
+        //             $push: { discount_users_used: userId },
+        //         },
+        //     },
+        // })));
 
         return {
-            total,
-            discount: amount,
-            totalPrice: total - amount,
+            productsAfterDiscount,
+            subtotal,
+            discountAmount,
+            discountAmountVoucher,
+            total: subtotal - discountAmount - discountAmountVoucher,
         };
-
     }
-
 }
-
-
-
 
 export default DiscountService;
