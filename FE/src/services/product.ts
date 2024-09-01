@@ -50,3 +50,12 @@ export const fetchComment = async () => {
     throw error;
   }
 };
+
+export const fetchUsers = async () => {
+  try {
+    return await SendRequest("GET", `${base_URL}user`);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+};

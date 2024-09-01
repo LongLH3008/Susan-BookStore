@@ -49,6 +49,7 @@ const RouterWebsite = (props: Props) => {
       ],
     },
     { path: "products", element: <ProductsPage /> },
+    { path: "users", element: <UsersPage /> },
     { path: "product/add", element: <ProductForm /> },
   ]);
   return routers;

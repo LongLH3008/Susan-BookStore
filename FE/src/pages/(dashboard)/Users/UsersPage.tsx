@@ -6,7 +6,7 @@ import { Button, Typography } from "@mui/material";
 import MyTable2 from "../components/table";
 import { useToast } from "@/common/hooks/useToast";
 import SearchForm from "../components/searchForm";
-import { deleteProduct, fetchProducts } from "@/services/product";
+import { deleteProduct, fetchProducts, fetchUsers } from "@/services/product";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
@@ -16,17 +16,10 @@ const UsersPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const { toast } = useToast();
-  const [search, setSearch] = useState("");
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["products", limit, page, search],
-    queryFn: () => fetchProducts(limit, page, search),
+    queryKey: ["products"],
+    queryFn: () => fetchUsers(),
   });
-
-  const handleSearch = (searchTerm: string) => {
-    setSearch(searchTerm);
-    refetch();
-  };
-
   const { mutateAsync } = useMutation({
     mutationFn: deleteProduct,
     onSuccess: () => {
@@ -51,45 +44,20 @@ const UsersPage: React.FC = () => {
   const columns = React.useMemo(
     () => [
       {
-        headerName: "Tên sản phẩm",
-        field: "product_name",
+        headerName: "Avatar",
+        field: "user_avatar",
       },
       {
-        headerName: "Giá sản phẩm",
-        field: "product_price",
+        headerName: "Username",
+        field: "user_name",
       },
       {
-        headerName: "Danh mục",
-        field: "product_categories",
-        cellRenderer: (params: any) => {
-          console.log(params);
-          const categoryNames = params.product_categories;
-          return categoryNames.join(", ");
-        },
+        headerName: "Role",
+        field: "user_role",
       },
       {
-        headerName: "Thuộc tính",
-        field: "product_attributes",
-        cellRenderer: (row: any) => {
-          const attributes = row.product_attributes;
-          if (typeof attributes === "object") {
-            return Object.entries(attributes)
-              .map(([key, value]) => `${key}: ${value}`)
-              .join(", ");
-          }
-          return attributes;
-        },
-      },
-      {
-        headerName: "Ảnh đại diện",
-        field: "product_thumb",
-        cellRenderer: (row: any) => (
-          <img
-            src={row.product_thumb}
-            alt={row.product_name}
-            style={{ width: "50px", height: "50px" }}
-          />
-        ),
+        headerName: "Phone",
+        field: "user_phone_number",
       },
       {
         headerName: "Thao tác",
@@ -123,10 +91,10 @@ const UsersPage: React.FC = () => {
           </p>
         </div>
 
-        <SearchForm onSearch={handleSearch} initialSearchTerm={search} />
+        {/* <SearchForm onSearch={handleSearch} initialSearchTerm={search} /> */}
 
         <MyTable2
-          rows={data?.metadata || []}
+          rows={data?.metadata?.allUsers || []}
           columns={columns}
           limit={limit}
           count={data?.total || 0}
