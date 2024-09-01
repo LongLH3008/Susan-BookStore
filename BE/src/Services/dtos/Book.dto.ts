@@ -77,7 +77,7 @@ export interface BookQueryInputDTO {
 }
 
 export interface BookOutputDTO {
-    id: string;
+    _id: string;
     title: string;
     slug: string;
     author: string;

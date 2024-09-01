@@ -2,6 +2,8 @@ import Book from '../models/Book.model';
 import { IReviewDTO, IUpdateReviewDTO } from './dtos/Review.dto';
 import { reviewCreateSchema, reviewUpdateSchema } from '../schemas/review.schema';
 import { BadRequestError } from '../cores/error.response';
+import BookService from './Book.service';
+import { BookOutputDTO, BookQueryInputDTO } from './dtos/Book.dto';
 
 
 export class ReviewService {
@@ -52,7 +54,7 @@ export class ReviewService {
 
         const startIndex = (page - 1) * limit;
         const endIndex = page * limit;
-        const reviews = book.reviews.slice(startIndex, endIndex); 
+        const reviews = book.reviews.slice(startIndex, endIndex);
 
         return {
             totalReviews: book.reviews.length,
@@ -68,5 +70,23 @@ export class ReviewService {
         const review = book.reviews.find(review => review.userId === userId);
         if (!review) throw new BadRequestError('Review not found');
         return review;
+    }
+
+    static async getAllReviews(query: BookQueryInputDTO) {
+        const books = await BookService.getBookByQuery(query)
+
+        const res = books.books.map((book: BookOutputDTO) => {
+            return {
+                bookId: book._id,
+                title: book.title,
+                coverImage: book.coverImage,
+                reviews: book.reviews
+            }
+        })
+        return {
+            total: books.total,
+            page: books.page,
+            reviews: res
+        }
     }
 }

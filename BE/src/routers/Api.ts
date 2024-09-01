@@ -55,6 +55,7 @@ router.put("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.updat
 router.delete("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.deleteReview));
 router.get("/books/:bookId/reviews", asyncHandler(ReviewController.getReviews));
 router.get("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.getReviewByUser));
+router.get("/books/reviews", asyncHandler(ReviewController.getAllReviews));
 //book
 // Public routes
 router.get('/books', asyncHandler(BookController.getByQuery));

@@ -47,6 +47,15 @@ class ReviewController {
             metadata: review
         }).send(res);
     }
+
+    static async getAllReviews(req: Request, res: Response): Promise<any> {
+        const reviews = await ReviewService.getAllReviews(req.query);
+        return new SuccessResponse({
+            message: "Review retrieved successfully",
+            metadata: reviews
+        }).send(res);
+    }
 }
+
 
 export default ReviewController;
