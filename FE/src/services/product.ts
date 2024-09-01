@@ -3,15 +3,16 @@ import { SendRequest } from "@/config";
 
 const base_URL = `http://localhost:5000/api/v1/`;
 
-export const fetchProducts = async (
-  limit: number,
-  page: number,
-  search: string
-) => {
+type filter = {
+  limit?: number;
+  page?: number;
+  search?: string;
+};
+export const fetchProducts = async (arg: filter) => {
   try {
-    const params = `?limit=${limit}&page=${page}&search=${encodeURIComponent(
-      search
-    )}`;
+    const params = `?page=${arg.page ?? ""}&limit=${
+      arg.limit ?? ""
+    }&search=${encodeURIComponent(arg.search ?? "")}`;
     return await SendRequest("GET", `${base_URL}products${params}`);
   } catch (error) {
     console.error("Error fetching products:", error);

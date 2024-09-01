@@ -1,41 +1,55 @@
+import { fetchProducts } from "@/services/product";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { createContext, useContext, useState } from "react";
 
-type ModalType = {
-	isOpen: boolean;
-	open: () => void;
-	close: () => void;
-};
-
 type ProdContextType = {
-	compareModal: ModalType;
-	detailModal: ModalType;
-	featuresProduct: ModalType;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  limit: number;
+  setLimit: React.Dispatch<React.SetStateAction<number>>;
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
+  productQuery: UseQueryResult<any, Error>;
 };
 
 type ProdContextProps = {
-	children: React.ReactNode;
+  children: React.ReactNode;
 };
 
-export const ProductContext = createContext<ProdContextType>({} as ProdContextType);
+export const ProductContext = createContext<ProdContextType>(
+  {} as ProdContextType
+);
 
-function Modal() {
-	const [isOpen, setIsOpen] = useState(false);
-	const open = () => setIsOpen(true);
-	const close = () => setIsOpen(false);
-	return { isOpen, open, close };
-}
+export const ProductProvider = ({ children }: ProdContextProps) => {
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [search, setSearch] = useState("");
+  const filter = { page, limit, search };
 
-export const ProdContextProvider = ({ children }: ProdContextProps) => {
-	const featuresProduct = Modal();
-	const detailModal = Modal();
-	const compareModal = Modal();
-	return (
-		<ProductContext.Provider value={{ compareModal, detailModal, featuresProduct }}>
-			{children}
-		</ProductContext.Provider>
-	);
+  // Fetch products using useQuery
+  const productQuery = useQuery({
+    queryKey: ["Products", filter],
+    queryFn: () => fetchProducts(filter),
+    staleTime: 5000,
+  });
+
+  return (
+    <ProductContext.Provider
+      value={{
+        page,
+        setPage,
+        limit,
+        setLimit,
+        search,
+        setSearch,
+        productQuery,
+      }}
+    >
+      {children}
+    </ProductContext.Provider>
+  );
 };
 
-export default function useProductContext() {
-	return useContext(ProductContext);
+export default function useProduct() {
+  return useContext(ProductContext);
 }
