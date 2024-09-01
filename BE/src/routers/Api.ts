@@ -57,8 +57,7 @@ router.get("/books/:bookId/reviews", asyncHandler(ReviewController.getReviews));
 router.get("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.getReviewByUser));
 //book
 // Public routes
-router.get('/books', asyncHandler(BookController.getAllBooks));
-router.get('/books/query', asyncHandler(BookController.getByQuery));
+router.get('/books', asyncHandler(BookController.getByQuery));
 router.get('/books/:id', asyncHandler(BookController.getById));
 
 // Protected routes
