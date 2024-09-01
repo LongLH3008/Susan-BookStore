@@ -20,6 +20,7 @@ const Upload_controller_1 = __importDefault(require("../controllers/Api/Upload.c
 const Book_controller_1 = __importDefault(require("../controllers/Api/Book.controller"));
 const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
 const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
+const GiaoHangNhanhTest_controller_1 = __importDefault(require("../controllers/Api/GiaoHangNhanhTest.controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -98,4 +99,7 @@ router.post('/upload', multer_config_1.upload.array('files', 10), (0, utils_1.as
 router.post('/upload/delete', (0, utils_1.asyncHandler)(Upload_controller_1.default.delete));
 //checkoutAmount 
 router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_Controller_1.default.checkoutReview));
+// giao hàng nhanh 
+router.post("/giao-hang-nhanh/create", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.CreateTest));
+router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.getDetail));
 exports.default = router;

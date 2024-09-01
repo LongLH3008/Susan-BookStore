@@ -16,6 +16,7 @@ import UploadController from "../controllers/Api/Upload.controller";
 import BookController from "../controllers/Api/Book.controller";
 import ReviewController from "../controllers/Api/Review.controller";
 import OrderController from "../controllers/Api/Order.Controller";
+import GiaoHangNhanhController from "../controllers/Api/GiaoHangNhanhTest.controller";
 
 
 
@@ -122,5 +123,9 @@ router.post('/upload/delete', asyncHandler(UploadController.delete));
 //checkoutAmount 
 
 router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview))
+
+// giao hàng nhanh 
+router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest))
+router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail))
 
 export default router;
