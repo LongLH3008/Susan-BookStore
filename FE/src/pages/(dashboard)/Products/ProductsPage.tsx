@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import PageLayout from "@/layouts/DashboardLayout";
 import { SendRequest } from "@/config";
 import { Button, Typography } from "@mui/material";
 import MyTable2 from "../components/table";
 import { useToast } from "@/common/hooks/useToast";
 import SearchForm from "../components/searchForm";
-import { fetchCategoryById, fetchProducts } from "@/services/product";
+import { deleteProduct, fetchProducts } from "@/services/product";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
 import Tooltip from "@mui/material/Tooltip";
+import { AxiosError } from "axios";
 const ProductsPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
@@ -26,19 +27,24 @@ const ProductsPage: React.FC = () => {
     refetch();
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      await SendRequest(
-        "DELETE",
-        `http://localhost:5000/api/v1/products`,
-        null,
-        id
+  const { mutateAsync } = useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      console.log("Xóa sản phẩm thành công");
+    },
+    onError: (error: AxiosError) => {
+      console.error(
+        "Lỗi khi xóa sản phẩm:",
+        error.response?.data || error.message
       );
-      refetch();
-      toast(data.status, `Xóa thành công`);
-    } catch (deleteError: any) {
-      console.error("Error deleting product:", deleteError);
-      toast(deleteError.status, deleteError.message);
+    },
+  });
+
+  const onDelete = async (id: string) => {
+    try {
+      await mutateAsync(id);
+    } catch (error) {
+      // Error handling is already done in onError of useMutation
     }
   };
 
@@ -55,30 +61,9 @@ const ProductsPage: React.FC = () => {
       {
         headerName: "Danh mục",
         field: "product_categories",
-        cellRenderer: (row: any) => {
-          const [categoryNames, setCategoryNames] = React.useState<string[]>(
-            []
-          );
-
-          React.useEffect(() => {
-            const fetchCategories = async () => {
-              try {
-                const names = await Promise.all(
-                  row.product_categories.map((categoryId: string) =>
-                    fetchCategoryById(categoryId).then(
-                      (category) => category.metadata.category_name
-                    )
-                  )
-                );
-                setCategoryNames(names);
-              } catch (error) {
-                console.error("Error fetching categories:", error);
-              }
-            };
-
-            fetchCategories();
-          }, [row.product_categories]);
-
+        cellRenderer: (params: any) => {
+          console.log(params);
+          const categoryNames = params.product_categories;
           return categoryNames.join(", ");
         },
       },
@@ -112,6 +97,7 @@ const ProductsPage: React.FC = () => {
         width: "110px",
         cellRenderer: (row: any) => (
           <>
+            {console.log(row._id)}
             <Tooltip title="Chỉnh sửa">
               <EditIcon />
             </Tooltip>
@@ -119,13 +105,13 @@ const ProductsPage: React.FC = () => {
               <InfoIcon />
             </Tooltip>
             <Tooltip title="Xóa">
-              <DeleteIcon onClick={() => handleDelete(row._id)} />
+              <DeleteIcon onClick={() => onDelete(row._id)} />
             </Tooltip>
           </>
         ),
       },
     ],
-    [handleDelete]
+    [onDelete]
   );
 
   return (
