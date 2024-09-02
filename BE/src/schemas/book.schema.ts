@@ -17,6 +17,10 @@ const bookCreateSchema = joi.object({
         "string.empty": "Mô tả sách là bắt buộc",
         "any.required": "Trường 'Mô tả sách' là bắt buộc",
     }),
+    ebookDemoLink: joi.string().required().messages({
+        "string.empty": "link sách là bắt buộc",
+        "any.required": "Trường 'link tả sách' là bắt buộc",
+    }),
     price: joi.number().required().messages({
         "number.base": "Giá sách phải là số",
         "any.required": "Trường 'Giá sách' là bắt buộc",

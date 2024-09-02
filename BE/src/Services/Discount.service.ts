@@ -20,6 +20,10 @@ interface BookItem {
     quantity: number;
     product_price: number;
     discount: number;
+    weight: number;
+    height?: number;
+    width?: number;
+    thickness?: number;
     title: string;
     code?: string;
 }
@@ -278,6 +282,11 @@ class DiscountService {
                 discountAmount: productAfterDiscount.discountAmount,
                 total: productAfterDiscount.total,
                 subtotal: productAfterDiscount.subtotal,
+                weight: product.weight,
+                height: product.height,
+                width: product.width,
+                thickness: product.thickness
+
             });
         }
 

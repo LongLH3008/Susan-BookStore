@@ -10,6 +10,7 @@ export interface BookCreateInputDTO {
     coverImage: string;
     publisher: string;
     publicationDate: Date;
+    ebookDemoLink:string;
     language: string;
     numberOfPages: number;
     format: 'Hardcover' | 'Paperback';

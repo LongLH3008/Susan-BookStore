@@ -27,7 +27,11 @@ class OrderService {
                 quantity: book.quantity,
                 title: productsFound[index]?.title || "",
                 product_price: productsFound[index]?.price || 0,
-                code: book.code
+                code: book.code,
+                weight: productsFound[index]?.weight?.value || 0,
+                height: productsFound[index]?.dimensions?.height || 0,
+                width: productsFound[index]?.dimensions?.width || 0,
+                thickness: productsFound[index]?.dimensions?.thickness || 0,
             })),
             userId: userId
         }
@@ -38,9 +42,9 @@ class OrderService {
         const { userId, shipping, payment, products, total, trackingNumber } = data
 
         const foundUser = await User.findById(userId)
-        if(!foundUser) throw new ResourceNotFoundError("nguoi dung khong ton tai")
+        if (!foundUser) throw new ResourceNotFoundError("nguoi dung khong ton tai")
 
-        
+
 
     }
 

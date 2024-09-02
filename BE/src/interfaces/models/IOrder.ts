@@ -9,6 +9,10 @@ export interface IOrderProduct {
     title: string;
     quantity: number;
     price: number;
+    weight: number;
+    height?: number;
+    thickness?: number;
+    width?: number;
     subtotal: number;
     discount?: number;
     discountAmount?: number

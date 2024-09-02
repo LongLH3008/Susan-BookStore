@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import AuthChangeFwApiController from "../controllers/Api/Auth/ChangePassword";
 import AuthForgotfwApiController from "../controllers/Api/Auth/ForgotPassword";
 import AuthLoginApiController from "../controllers/Api/Auth/Login";
@@ -16,6 +16,8 @@ import UploadController from "../controllers/Api/Upload.controller";
 import BookController from "../controllers/Api/Book.controller";
 import ReviewController from "../controllers/Api/Review.controller";
 import OrderController from "../controllers/Api/Order.Controller";
+import PaymentController from "../controllers/Api/Vnpay.controller";
+import ShippingController from "../controllers/Api/Shipping.controller";
 
 
 
@@ -122,5 +124,19 @@ router.post('/upload/delete', asyncHandler(UploadController.delete));
 //checkoutAmount 
 
 router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview))
+
+
+//payment
+
+router.get("/paymnet/bank-list", asyncHandler(PaymentController.getBankList))
+router.post("/payment/create-payment-url", asyncHandler(PaymentController.getPaymentUrl))
+router.post("/payment/verify-url", asyncHandler(PaymentController.verifyUrl))
+
+
+//shipping
+
+router.post("/shipping/calculate-fee", asyncHandler(ShippingController.calculateFee))
+
+
 
 export default router;

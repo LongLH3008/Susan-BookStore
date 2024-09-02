@@ -20,6 +20,8 @@ const Upload_controller_1 = __importDefault(require("../controllers/Api/Upload.c
 const Book_controller_1 = __importDefault(require("../controllers/Api/Book.controller"));
 const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
 const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
+const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.controller"));
+const Shipping_controller_1 = __importDefault(require("../controllers/Api/Shipping.controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -98,4 +100,10 @@ router.post('/upload', multer_config_1.upload.array('files', 10), (0, utils_1.as
 router.post('/upload/delete', (0, utils_1.asyncHandler)(Upload_controller_1.default.delete));
 //checkoutAmount 
 router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_Controller_1.default.checkoutReview));
+//payment
+router.get("/paymnet/bank-list", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getBankList));
+router.post("/payment/create-payment-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getPaymentUrl));
+router.post("/payment/verify-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.verifyUrl));
+//shipping
+router.post("/shipping/calculate-fee", (0, utils_1.asyncHandler)(Shipping_controller_1.default.calculateFee));
 exports.default = router;
