@@ -4,9 +4,11 @@ import { token } from "morgan";
 import { BadRequestError } from "../cores/error.response";
 
 class GiaoHangNhanhService {
-    static readonly token: string = "c2204b30-6812-11ef-b3c4-52669f455b4f";
-    static readonly shop_id: number = 5298137;
-    static CreateOrder = async (orderData: GiaoHangNhanhDto) => {
+    static readonly token: string = "c5793e8f-688e-11ef-8e53-0a00184fe694";
+    static readonly shop_id: number = 194426;
+    
+    // Tạo đơn hàng bên phía giao hàng nhanh 
+    static CreateOrderGHN = async (orderData: GiaoHangNhanhDto) => {
         try {
             // Gửi yêu cầu POST đến API của GHN
             const response = await axios.post('https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/create', orderData, {
@@ -32,6 +34,7 @@ class GiaoHangNhanhService {
         }
     }
 
+    // lấy chi tiết đơn hàng 
     static GetDetailOrderGHN = async ({ order_code }: { order_code: string }) => {
         try {
             const response = await axios.post('https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/detail',
@@ -52,7 +55,7 @@ class GiaoHangNhanhService {
                 console.log('Đơn hàng đã được tạo thành công:', orderInfo);
                 return orderInfo
             } else {
-                console.log('Lỗi tạo đơn hàng:', response.data.message);
+                console.log('Lỗi khi lấy chi tiết đơn hàng đơn hàng:', response.data.message);
                 throw new BadRequestError(response.data.message)
             }
         } catch (error: any) {

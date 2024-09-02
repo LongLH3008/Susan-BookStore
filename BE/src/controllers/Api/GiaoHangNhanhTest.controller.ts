@@ -7,7 +7,7 @@ class GiaoHangNhanhController {
 
         return new SuccessResponse({
             message: "order create successfully",
-            metadata: await GiaoHangNhanhService.CreateOrder(req.body as any)
+            metadata: await GiaoHangNhanhService.CreateOrderGHN(req.body as any)
         }).send(res);
     }
     static async getDetail(req: Request, res: Response): Promise<any> {
