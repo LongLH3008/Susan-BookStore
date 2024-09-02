@@ -1,28 +1,44 @@
+import { IProduct } from "@/common/interfaces/product";
 import { SendRequest } from "@/config";
 
 const base_URL = `http://localhost:5000/api/v1/`;
 
-export const fetchProducts = async (
-  limit: number,
-  page: number,
-  search: string
-) => {
+type filter = {
+  limit?: number;
+  page?: number;
+  search?: string;
+};
+export const fetchProducts = async (arg: filter) => {
   try {
-    const params = `?limit=${limit}&page=${page}&search=${encodeURIComponent(
-      search
-    )}`;
+    const params = `?page=${arg.page ?? ""}&limit=${
+      arg.limit ?? ""
+    }&search=${encodeURIComponent(arg.search ?? "")}`;
     return await SendRequest("GET", `${base_URL}products${params}`);
   } catch (error) {
     console.error("Error fetching products:", error);
     throw error;
   }
 };
-
-export const fetchCategoryById = async (categoryId: string) => {
+export const deleteProduct = async (id: string) => {
   try {
-    return await SendRequest("GET", `${base_URL}categories/${categoryId}`);
+    console.log("Gọi API với ID:", id);
+    return await SendRequest("DELETE", `${base_URL}products`, null, id);
   } catch (error) {
-    console.error(`Error fetching category with id ${categoryId}:`, error);
+    console.error("Error delete products:", error);
+    throw error;
+  }
+};
+
+export const addProduct = async (data: IProduct) => {
+  try {
+    const response = await SendRequest("POST", `${base_URL}products`, data);
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Error adding product: ${errorMessage}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error adding product:", error);
     throw error;
   }
 };
@@ -32,6 +48,15 @@ export const fetchComment = async () => {
     return await SendRequest("GET", `${base_URL}comments`);
   } catch (error) {
     console.error(`Error fetching comments:`, error);
+    throw error;
+  }
+};
+
+export const fetchUsers = async () => {
+  try {
+    return await SendRequest("GET", `${base_URL}user`);
+  } catch (error) {
+    console.error("Error fetching users:", error);
     throw error;
   }
 };

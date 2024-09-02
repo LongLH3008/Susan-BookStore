@@ -1,77 +1,124 @@
-import PageLayout from "../../../layouts/DashboardLayout";
-import Table from "../../../components/(dashboard)/Table";
-import axios from "axios";
-import { useForm } from "react-hook-form";
-import { useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
-import useSWR from "swr";
+import React, { useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import PageLayout from "@/layouts/DashboardLayout";
+import { SendRequest } from "@/config";
+import { Button, Typography } from "@mui/material";
+import MyTable2 from "../components/table";
+import { useToast } from "@/common/hooks/useToast";
+import SearchForm from "../components/searchForm";
+import { deleteProduct, fetchProducts, fetchUsers } from "@/services/product";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import InfoIcon from "@mui/icons-material/Info";
+import Tooltip from "@mui/material/Tooltip";
+import { AxiosError } from "axios";
+const UsersPage: React.FC = () => {
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const { toast } = useToast();
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["products"],
+    queryFn: () => fetchUsers(),
+  });
+  const { mutateAsync } = useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      console.log("Xóa sản phẩm thành công");
+    },
+    onError: (error: AxiosError) => {
+      console.error(
+        "Lỗi khi xóa sản phẩm:",
+        error.response?.data || error.message
+      );
+    },
+  });
 
-const UsersPage = () => {
-	const header = {
-		attributes: ["Category Name"],
-		path: "categories",
-	};
-	const { register, handleSubmit, reset } = useForm();
+  const onDelete = async (id: string) => {
+    try {
+      await mutateAsync(id);
+    } catch (error) {
+      // Error handling is already done in onError of useMutation
+    }
+  };
 
-	const data = {
-		categories: [],
-		total: 1,
-		total_pages: 1,
-	};
+  const columns = React.useMemo(
+    () => [
+      {
+        headerName: "Avatar",
+        field: "user_avatar",
+      },
+      {
+        headerName: "Username",
+        field: "user_name",
+      },
+      {
+        headerName: "Role",
+        field: "user_role",
+      },
+      {
+        headerName: "Phone",
+        field: "user_phone_number",
+      },
+      {
+        headerName: "Thao tác",
+        field: "actions",
+        width: "110px",
+        cellRenderer: (row: any) => (
+          <>
+            {console.log(row._id)}
+            <Tooltip title="Chỉnh sửa">
+              <EditIcon />
+            </Tooltip>
+            <Tooltip title="Hiển thị chi tiết">
+              <InfoIcon />
+            </Tooltip>
+            <Tooltip title="Xóa">
+              <DeleteIcon onClick={() => onDelete(row._id)} />
+            </Tooltip>
+          </>
+        ),
+      },
+    ],
+    []
+  );
 
-	// const client = useQueryClient();
-	const location = useLocation();
+  return (
+    <PageLayout>
+      <div className="p-0 sm:ml-64 h-[100%] dark:bg-gray-800">
+        <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+          <p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
+            Products Page Dashboard
+          </p>
+        </div>
 
-	const queryParams = new URLSearchParams(location.search);
-	const page = queryParams.get("page");
-	// console.log(page);
+        {/* <SearchForm onSearch={handleSearch} initialSearchTerm={search} /> */}
 
-	return (
-		<PageLayout>
-			<div className="px-10 sm:ml-64 h-auto dark:bg-gray-800">
-				<div className="flex flex-col items-center justify-center h-48 rounded bg-gray-50 dark:bg-gray-800">
-					<p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
-						Categories Page DashBoard
-					</p>
-				</div>
-
-				<form className="max-w-sm mx-auto mb-4">
-					<div className="mb-5">
-						<label
-							htmlFor="name"
-							className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-						>
-							Category Name
-						</label>
-						<input
-							type="text"
-							id="name"
-							{...register("name")}
-							className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-							placeholder="New category"
-							required
-						/>
-					</div>
-					<button
-						type="submit"
-						className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-					>
-						Add
-					</button>
-				</form>
-				{/* {isLoading ? <h1>Loading data table...</h1> : (<Table header={header} data={data?.categories} onDelete={onDelete} total={data?.total} total_pages={data?.total_pages} current_page={page}/>)} */}
-
-				<Table
-					header={header}
-					data={data?.categories}
-					onDelete={() => {}}
-					total={data?.total}
-					total_pages={data?.total_pages}
-					current_page={page}
-				/>
-			</div>
-		</PageLayout>
-	);
+        <MyTable2
+          rows={data?.metadata?.allUsers || []}
+          columns={columns}
+          limit={limit}
+          count={data?.total || 0}
+          page={page}
+          loading={isLoading}
+          error={isError ? error?.message : ""}
+          onBackPage={() => setPage((prev) => Math.max(prev - 1, 1))}
+          onNextPage={() => setPage((prev) => prev + 1)}
+          onChangeLimit={(newLimit) => setLimit(newLimit)}
+        />
+        {isError && (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              padding: "20px",
+            }}
+          >
+            <Typography color="error">Error: {error?.message}</Typography>
+          </div>
+        )}
+      </div>
+    </PageLayout>
+  );
 };
 
 export default UsersPage;

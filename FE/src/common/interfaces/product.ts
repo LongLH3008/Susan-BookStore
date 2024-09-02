@@ -3,6 +3,7 @@ export interface IProduct {
   product_name: string;
   product_thumb: string;
   product_description: string;
+  product_slug: string;
   product_price: number;
   product_variations: [
     {
@@ -13,7 +14,6 @@ export interface IProduct {
       _id: string;
     }
   ];
-  product_rating_average: number;
   product_categories: [string];
   product_images: [
     {
@@ -27,7 +27,10 @@ export interface IProduct {
     color: string;
     brand: string;
   };
+  product_sold: string;
+  products_discount: number;
+  product_rating_average: number;
+
   createdAt: string;
   updatedAt: string;
-  product_slug: string;
 }

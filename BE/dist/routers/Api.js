@@ -50,10 +50,10 @@ router.put("/books/:bookId/reviews/:userId", (0, utils_1.asyncHandler)(Review_co
 router.delete("/books/:bookId/reviews/:userId", (0, utils_1.asyncHandler)(Review_controller_1.default.deleteReview));
 router.get("/books/:bookId/reviews", (0, utils_1.asyncHandler)(Review_controller_1.default.getReviews));
 router.get("/books/:bookId/reviews/:userId", (0, utils_1.asyncHandler)(Review_controller_1.default.getReviewByUser));
+router.get("/books/reviews", (0, utils_1.asyncHandler)(Review_controller_1.default.getAllReviews));
 //book
 // Public routes
-router.get('/books', (0, utils_1.asyncHandler)(Book_controller_1.default.getAllBooks));
-router.get('/books/query', (0, utils_1.asyncHandler)(Book_controller_1.default.getByQuery));
+router.get('/books', (0, utils_1.asyncHandler)(Book_controller_1.default.getByQuery));
 router.get('/books/:id', (0, utils_1.asyncHandler)(Book_controller_1.default.getById));
 // Protected routes
 router.post('/books', (0, utils_1.asyncHandler)(Book_controller_1.default.create));
