@@ -44,23 +44,27 @@ const Left = (props: Props) => {
                   </span>
                 </div>
                 <div className="checkbox-container categories-list sidebar-price-filter flex">
-                  <div className="filter-range-from flex flex-col items-start  pr-3">
+                  <div className="filter-range-from flex  items-center pr-3 *:me-1">
                     <span>$</span>
                     <input
+                      className="w-20"
                       name="filter.v.price.gte"
                       id="Filter-price-1"
                       type="number"
+                      placeholder="0"
                       min={0}
                       max={110.0}
                     />
                     <label htmlFor="Filter-price-1">From</label>
                   </div>
-                  <div className="filter-price-range-to flex flex-col items-start">
+                  <div className="filter-price-range-to flex  items-center *:me-1">
                     <span>$</span>
                     <input
+                      className="w-20"
                       name="filter.v.price.lte"
                       id="Filter-price-1"
                       type="number"
+                      placeholder="110.0"
                       min={0}
                       max={110.0}
                     />

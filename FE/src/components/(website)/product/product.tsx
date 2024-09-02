@@ -26,8 +26,8 @@ const Product = ({ dataProduct }: Props) => {
 const ProdContent = ({ dataProduct }: Props) => {
   const { featuresProduct } = useProductContext();
   const location = useLocation(); // Lấy location từ useLocation
-  console.log(dataProduct);
-  const { setSelectedProduct, clearSelectedProduct } = useProductStore();
+  // console.log(dataProduct);
+  const { setSelectedProduct } = useProductStore();
 
   // useEffect(() => {
   //   setSelectedProduct(dataProduct);
@@ -48,9 +48,9 @@ const ProdContent = ({ dataProduct }: Props) => {
         >
           <Link to="/book_detail" state={{ from: location.pathname }}>
             <img
-              className="w-full h-full"
-              src={dataProduct?.product_thumb}
-              alt={dataProduct?.product_name}
+              className="w-full h-full object-cover"
+              src={dataProduct?.coverImage}
+              alt={dataProduct?.title}
             />
           </Link>
           {/* Status */}
@@ -60,9 +60,9 @@ const ProdContent = ({ dataProduct }: Props) => {
             </span>
           )} */}
           {/* Discount */}
-          {dataProduct?.products_discount > 0 && (
+          {dataProduct?.discount > 0 && (
             <span className="absolute top-[5%] rounded-full right-[5%] bg-zinc-800 w-[50px] h-[30px]">
-              - {dataProduct?.products_discount}%
+              - {dataProduct?.discount}%
             </span>
           )}
         </div>
@@ -78,19 +78,18 @@ const ProdContent = ({ dataProduct }: Props) => {
             state={{ from: location.pathname }}
             className="text-zinc-700 text-[15px] font-semibold"
           >
-            {dataProduct?.product_name}
+            {dataProduct?.title}
           </Link>
           <p className="text-zinc-500">Author</p>
           <div>
             <span className="text-[16px] text-[#00BFC5] font-semibold">
               $
-              {dataProduct?.product_price -
-                (dataProduct?.product_price * dataProduct?.products_discount) /
-                  100}
+              {dataProduct?.price -
+                (dataProduct?.price * dataProduct?.discount) / 100}
             </span>
-            {dataProduct?.products_discount > 0 && (
+            {dataProduct?.discount > 0 && (
               <span className="line-through ms-3 text-zinc-500">
-                ${dataProduct?.product_price}
+                ${dataProduct?.price}
               </span>
             )}
           </div>

@@ -25,7 +25,7 @@ const Right = ({
     <>
       <div className="col-span-9 mb-10">
         <div className="flex flex-wrap -mx-4 ">
-          {productQuery?.data?.metadata?.map((product: IProduct) => (
+          {productQuery?.data?.metadata?.books?.map((product: IProduct) => (
             <div
               key={product._id}
               className={`${

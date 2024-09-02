@@ -1,36 +1,53 @@
 export interface IProduct {
   _id: string;
-  product_name: string;
-  product_thumb: string;
-  product_description: string;
-  product_slug: string;
-  product_price: number;
-  product_variations: [
+  title: string;
+  author: string;
+  isbn: string;
+  description: string;
+  price: number;
+  discount: number;
+  sold: number;
+  coverImage: string;
+  publisher: string;
+  publicationDate: string;
+  language: string;
+  numberOfPages: number;
+  format: string;
+  categories: Array<string>;
+  tags: Array<string>;
+  rating: number;
+  slug: string;
+  ebookDemoLink: string;
+  reviews: [
     {
-      product_variant_id: string;
-      product_quantity: number;
-      product_price: number;
-      is_default: false;
-      _id: string;
+      userId: string;
+      rating: number;
+      comment: string;
+      createdAt: string;
     }
   ];
-  product_categories: [string];
-  product_images: [
+  stock: number;
+  totalReviews: number;
+  images: [
     {
-      image_id: string;
-      image_url: string;
-      _id: string;
+      id: string;
+      url: string;
     }
   ];
-  product_attributes: {
-    material: string;
-    color: string;
-    brand: string;
+  dimensions: {
+    height: number;
+    width: number;
+    thickness: number;
+    unit: string;
   };
-  product_sold: string;
-  products_discount: number;
-  product_rating_average: number;
-
+  weight: {
+    value: number;
+    unit: string;
+  };
+  edition: string;
+  series: null;
+  ageRange: string;
+  isActive: true;
   createdAt: string;
   updatedAt: string;
 }
