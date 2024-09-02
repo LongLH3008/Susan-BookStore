@@ -23,15 +23,16 @@ export const ProductContext = createContext<ProdContextType>(
 export const ProductProvider = ({ children }: ProdContextProps) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [search, setSearch] = useState("");
-  const filter = { page, limit, search };
+  const [search, setSearch] = useState("content");
+  const filter = { page, limit };
 
   // Fetch products using useQuery
   const productQuery = useQuery({
-    queryKey: ["Products", filter],
+    queryKey: ["Books", filter],
     queryFn: () => fetchProducts(filter),
     staleTime: 5000,
   });
+  // console.log(productQuery.data);
 
   return (
     <ProductContext.Provider

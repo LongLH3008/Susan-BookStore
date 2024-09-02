@@ -21,7 +21,7 @@ const LatestProducts = (props: Props) => {
 
       {/* List Prods  */}
       <div className="grid min-[500px]:grid-cols-2 md:grid-cols-3 min-[1100px]:grid-cols-4 gap-[30px]">
-        {productQuery?.data?.metadata?.map((product: IProduct) => (
+        {productQuery?.data?.metadata?.books?.map((product: IProduct) => (
           <Product dataProduct={product} />
         ))}
       </div>
