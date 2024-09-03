@@ -13,7 +13,6 @@ class CartService {
         const checkCartExist = await Cart.findOne({
             cart_user_id: cart_user_id
         })
-
         return checkCartExist
     }
 
