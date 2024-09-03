@@ -84,8 +84,10 @@ const ProdContent = ({ dataProduct }: Props) => {
           <div>
             <span className="text-[16px] text-[#00BFC5] font-semibold">
               $
-              {dataProduct?.price -
-                (dataProduct?.price * dataProduct?.discount) / 100}
+              {(
+                dataProduct?.price -
+                (dataProduct?.price * dataProduct?.discount) / 100
+              ).toFixed(2)}
             </span>
             {dataProduct?.discount > 0 && (
               <span className="line-through ms-3 text-zinc-500">

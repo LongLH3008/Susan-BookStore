@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 import { IProduct } from "../interfaces/product";
 
 type ProductStore = {
