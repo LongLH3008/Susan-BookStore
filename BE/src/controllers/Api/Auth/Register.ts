@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import User from "../../../models/User.model";
 import { validate } from "../../../schemas";
 import userSchema from "../../../schemas/user.schema";
+import CartService from "../../../Services/Cart.service";
 
 class Register {
 	public static async Register(req: any, res: any): Promise<any> {
@@ -54,6 +55,7 @@ class Register {
 
 			// Lưu người dùng mới vào cơ sở dữ liệu
 			await newUser.save();
+			await CartService.create({ cart_user_id: newUser._id });
 
 			// Trả về thông tin cần thiết của người dùng sau khi đăng ký
 			return res.status(201).json({
