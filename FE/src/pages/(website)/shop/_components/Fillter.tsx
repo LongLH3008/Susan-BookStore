@@ -4,14 +4,51 @@ import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 type Props = {};
 
 const Left = (props: Props) => {
-  const [openItem, setOpenItem] = useState(null);
+  const [openItem, setOpenItem] = useState<number[]>([]);
+  const [filterValues, setFilterValues] = useState({
+    price: { gte: 0, lte: 110 },
+    availability: [],
+    productType: [],
+    brand: [],
+    color: [],
+    material: [],
+    size: [],
+  });
 
-  const toggleItem = (index: any) => {
-    setOpenItem(openItem === index ? null : index);
+  const toggleItem = (index: number) => {
+    setOpenItem((prevItems) =>
+      prevItems.includes(index)
+        ? prevItems.filter((item) => item !== index)
+        : [...prevItems, index]
+    );
   };
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = event.target;
+
+    setFilterValues((prev) => {
+      if (type === "checkbox") {
+        const values = prev[name as keyof typeof prev] as string[];
+        return {
+          ...prev,
+          [name]: checked
+            ? [...values, value]
+            : values.filter((v) => v !== value),
+        };
+      } else {
+        const [key, subKey] = name.split(".");
+        return {
+          ...prev,
+          [key]: { ...prev[key as keyof typeof prev], [subKey]: Number(value) },
+        };
+      }
+    });
+  };
+
+  // console.log(filterValues);
+
   const handleToggle = (
-    index: any,
+    index: number,
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
@@ -29,14 +66,14 @@ const Left = (props: Props) => {
             <div className="flex justify-between items-center">
               <h5 className="title widget-collapse-show">Price</h5>
               <button onClick={(event) => handleToggle(1, event)}>
-                {openItem === 1 ? (
+                {openItem.includes(1) ? (
                   <MdKeyboardArrowDown className="w-5 h-5" />
                 ) : (
                   <MdKeyboardArrowRight className="w-5 h-5" />
                 )}
               </button>
             </div>
-            {openItem === 1 && (
+            {openItem.includes(1) && (
               <div className="sidebar-body">
                 <div className="filter-value-counter">
                   <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
@@ -48,12 +85,14 @@ const Left = (props: Props) => {
                     <span>$</span>
                     <input
                       className="w-20"
-                      name="filter.v.price.gte"
+                      name="price.gte"
                       id="Filter-price-1"
                       type="number"
                       placeholder="0"
                       min={0}
                       max={110.0}
+                      value={filterValues.price.gte}
+                      onChange={handleChange}
                     />
                     <label htmlFor="Filter-price-1">From</label>
                   </div>
@@ -61,12 +100,14 @@ const Left = (props: Props) => {
                     <span>$</span>
                     <input
                       className="w-20"
-                      name="filter.v.price.lte"
+                      name="price.lte"
                       id="Filter-price-1"
                       type="number"
                       placeholder="110.0"
                       min={0}
                       max={110.0}
+                      value={filterValues.price.lte}
+                      onChange={handleChange}
                     />
                     <label htmlFor="Filter-price-1">To</label>
                   </div>
@@ -81,14 +122,14 @@ const Left = (props: Props) => {
             <div className="flex justify-between items-center">
               <h5 className="title widget-collapse-show">Availability</h5>
               <button onClick={(event) => handleToggle(2, event)}>
-                {openItem === 2 ? (
+                {openItem.includes(2) ? (
                   <MdKeyboardArrowDown className="w-5 h-5" />
                 ) : (
                   <MdKeyboardArrowRight className="w-5 h-5" />
                 )}
               </button>
             </div>
-            {openItem === 2 && (
+            {openItem.includes(2) && (
               <div className="sidebar-body widget-collapse-hide  ">
                 <div className="filter-value-counter">
                   <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
@@ -100,9 +141,11 @@ const Left = (props: Props) => {
                     <div className="custom-control custom-checkbox hover:text-[#00BFC5] ">
                       <input
                         type="checkbox"
-                        name="filter.v.availability"
+                        name="availability"
+                        defaultValue={1}
                         id="Filter-availability-1"
                         className="custom-control-input"
+                        onChange={handleChange}
                       />
                       <label
                         htmlFor="Filter-availability-1"
@@ -118,9 +161,10 @@ const Left = (props: Props) => {
                     <div className="custom-control custom-checkbox hover:text-[#00BFC5]">
                       <input
                         type="checkbox"
-                        name="filter.v.availability"
+                        name="availability"
                         defaultValue={0}
                         className="custom-control-input"
+                        onChange={handleChange}
                       />
                       <label
                         htmlFor="Filter-availability-2"
@@ -140,14 +184,14 @@ const Left = (props: Props) => {
             <div className="flex justify-between items-center">
               <h5 className="title widget-collapse-show">Product type</h5>
               <button onClick={(event) => handleToggle(3, event)}>
-                {openItem === 3 ? (
+                {openItem.includes(3) ? (
                   <MdKeyboardArrowDown className="w-5 h-5" />
                 ) : (
                   <MdKeyboardArrowRight className="w-5 h-5" />
                 )}
               </button>
             </div>
-            {openItem === 3 && (
+            {openItem.includes(3) && (
               <div className="sidebar-body widget-collapse-hide ">
                 <div className="filter-value-counter">
                   <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
@@ -164,6 +208,7 @@ const Left = (props: Props) => {
                           defaultValue={`Type ${index + 1}`}
                           id={`Filter-product-type-${index + 1}`}
                           className="custom-control-input"
+                          onChange={handleChange}
                         />
                         <label
                           htmlFor={`Filter-product-type-${index + 1}`}
@@ -184,14 +229,14 @@ const Left = (props: Props) => {
             <div className="flex justify-between items-center">
               <h5 className="title widget-collapse-show">Brand</h5>
               <button onClick={(event) => handleToggle(4, event)}>
-                {openItem === 4 ? (
+                {openItem.includes(4) ? (
                   <MdKeyboardArrowDown className="w-5 h-5" />
                 ) : (
                   <MdKeyboardArrowRight className="w-5 h-5" />
                 )}
               </button>
             </div>
-            {openItem === 4 && (
+            {openItem.includes(4) && (
               <div className="sidebar-body widget-collapse-hide ">
                 <div className="filter-value-counter">
                   <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
@@ -208,6 +253,7 @@ const Left = (props: Props) => {
                           defaultValue={`Vendor ${index + 1}`}
                           id={`Filter-brand-${index + 1}`}
                           className="custom-control-input"
+                          onChange={handleChange}
                         />
                         <label
                           htmlFor={`Filter-brand-${index + 1}`}
@@ -228,14 +274,14 @@ const Left = (props: Props) => {
             <div className="flex justify-between items-center">
               <h5 className="title widget-collapse-show">Color</h5>
               <button onClick={(event) => handleToggle(5, event)}>
-                {openItem === 5 ? (
+                {openItem.includes(5) ? (
                   <MdKeyboardArrowDown className="w-5 h-5" />
                 ) : (
                   <MdKeyboardArrowRight className="w-5 h-5" />
                 )}
               </button>
             </div>
-            {openItem === 5 && (
+            {openItem.includes(5) && (
               <div className="sidebar-body widget-collapse-hide">
                 <div className="filter-value-counter">
                   <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
@@ -264,7 +310,7 @@ const Left = (props: Props) => {
                       <div className="custom-control custom-checkbox hover:text-[#00BFC5]">
                         <input
                           type="checkbox"
-                          name="filter.v.option.color"
+                          name="option.color"
                           defaultValue={color}
                           id={`Filter-color-${index + 1}`}
                           className="custom-control-input"
@@ -288,14 +334,14 @@ const Left = (props: Props) => {
             <div className="flex justify-between items-center">
               <h5 className="title widget-collapse-show">Material</h5>
               <button onClick={(event) => handleToggle(6, event)}>
-                {openItem === 6 ? (
+                {openItem.includes(6) ? (
                   <MdKeyboardArrowDown className="w-5 h-5" />
                 ) : (
                   <MdKeyboardArrowRight className="w-5 h-5" />
                 )}
               </button>
             </div>
-            {openItem === 6 && (
+            {openItem.includes(6) && (
               <div className="sidebar-body widget-collapse-hide ">
                 <div className="filter-value-counter">
                   <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
@@ -309,7 +355,7 @@ const Left = (props: Props) => {
                         <div className="custom-control custom-checkbox hover:text-[#00BFC5]">
                           <input
                             type="checkbox"
-                            name="filter.v.option.material"
+                            name="option.material"
                             defaultValue={material}
                             id={`Filter-material-${index + 1}`}
                             className="custom-control-input"
@@ -334,14 +380,14 @@ const Left = (props: Props) => {
             <div className="flex justify-between items-center">
               <h5 className="title widget-collapse-show">Size</h5>
               <button onClick={(event) => handleToggle(7, event)}>
-                {openItem === 7 ? (
+                {openItem.includes(7) ? (
                   <MdKeyboardArrowDown className="w-5 h-5" />
                 ) : (
                   <MdKeyboardArrowRight className="w-5 h-5" />
                 )}
               </button>
             </div>
-            {openItem === 7 && (
+            {openItem.includes(7) && (
               <div className="sidebar-body widget-collapse-hide ">
                 <div className="filter-value-counter">
                   <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
@@ -354,7 +400,7 @@ const Left = (props: Props) => {
                       <div className="custom-control custom-checkbox hover:text-[#00BFC5]">
                         <input
                           type="checkbox"
-                          name="filter.v.option.size"
+                          name="option.size"
                           defaultValue={size}
                           id={`Filter-size-${index + 1}`}
                           className="custom-control-input"
