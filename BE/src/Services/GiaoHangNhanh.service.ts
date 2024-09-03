@@ -63,8 +63,6 @@ class GiaoHangNhanhService {
             throw new BadRequestError(error.message)
         }
     }
-
-
 }
 
 export default GiaoHangNhanhService;
