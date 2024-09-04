@@ -25,6 +25,11 @@ class Locals {
 		const emailPass = process.env.EMAIL_PASS;
 		const jwtAccessKey = process.env.JWT_ACCESS_KEY;
 		const jwtRefreshKey = process.env.JWT_REFRESH_KEY;
+
+		//advanced search
+		const fireworkToken = `${process.env.FIREWORK_TOKEN}` || process.env.FIREWORK_TOKEN;
+		const fireworkUrl = `${process.env.FIREWORK_URL}` || process.env.FIREWORK_URL;
+		const qdrantUrl = `${process.env.QDRANT_URL}` || process.env.QDRANT_URL;
 		return {
 			isCorsEnabled,
 			apiPrefix,
@@ -44,6 +49,9 @@ class Locals {
 			google_url_callback,
 			google_client_id,
 			google_client_secret,
+			fireworkToken,
+			fireworkUrl,
+			qdrantUrl
 		};
 	}
 
