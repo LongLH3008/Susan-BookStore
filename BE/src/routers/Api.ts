@@ -128,4 +128,8 @@ router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutRevi
 router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest))
 router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail))
 
+
+// advanced search and similar books
+router.post("/search", asyncHandler)
+
 export default router;

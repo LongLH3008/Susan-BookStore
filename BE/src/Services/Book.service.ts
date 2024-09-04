@@ -226,6 +226,10 @@ class BookService {
     if (!updatedBook) throw new ResourceNotFoundError("Book not found");
     return updatedBook.toObject() as BookOutputDTO;
   }
+
+  static async getBookByKeyword(keyword: string) {
+    
+  }
 }
 
 export default BookService;
