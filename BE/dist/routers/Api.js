@@ -102,4 +102,6 @@ router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_Controlle
 // giao hàng nhanh 
 router.post("/giao-hang-nhanh/create", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.CreateTest));
 router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.getDetail));
+// advanced search and similar books
+router.post("/search", utils_1.asyncHandler);
 exports.default = router;
