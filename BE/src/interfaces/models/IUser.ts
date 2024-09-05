@@ -6,6 +6,12 @@ export enum UserStatus {
     pending = "pending"
 }
 
+declare global {
+    namespace Express {
+
+        interface User extends IUser, mongoose.Document { }
+    }
+}
 export enum UserRole {
     admin = "admin", user = "user", root = "root"
 }
@@ -16,6 +22,7 @@ export enum UserTypeAuth {
 }
 
 export interface IUser {
+
     user_name: string
     user_otp: string
     user_email: string

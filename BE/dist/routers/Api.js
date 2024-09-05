@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -22,6 +31,7 @@ const Review_controller_1 = __importDefault(require("../controllers/Api/Review.c
 const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
 const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.controller"));
 const Shipping_controller_1 = __importDefault(require("../controllers/Api/Shipping.controller"));
+const auth_middleware_1 = require("../middlewares/auth.middleware");
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -106,4 +116,10 @@ router.post("/payment/create-payment-url", (0, utils_1.asyncHandler)(Vnpay_contr
 router.post("/payment/verify-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.verifyUrl));
 //shipping
 router.post("/shipping/calculate-fee", (0, utils_1.asyncHandler)(Shipping_controller_1.default.calculateFee));
+router.post("/blogs/like/:blogId/:cmtId", auth_middleware_1.auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let userId;
+    if (req.user) {
+        userId = req.user._id;
+    }
+}));
 exports.default = router;
