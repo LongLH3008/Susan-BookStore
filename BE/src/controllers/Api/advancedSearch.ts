@@ -7,7 +7,7 @@
 //     static async advancedSearch(req: Request, res: Response): Promise<any> {
 //         return new SuccessResponse({
 //             message: "Get books successfully",
-//             metadata: await BookService.advancedSearch(req.query)
+//             metadata: await BookService.advancedSearch(req.query);
 //         }).send(res);
 //     }
 // }

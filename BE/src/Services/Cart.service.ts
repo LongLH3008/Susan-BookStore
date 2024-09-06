@@ -11,11 +11,11 @@ class CartService {
 		// check user có giỏ hàng hay chưa
 		const checkCartExist = await Cart.findOne({
 			cart_user_id: cart_user_id,
-		})
-			.populate({
-				path: 'cart_products.product_id',
-				model: 'Books'
-			});
+		}).populate({
+			path: "cart_products.product_id",
+			model: "Books",
+			select: "title price discount slug coverImage",
+		});
 
 		return checkCartExist;
 	}
@@ -40,7 +40,6 @@ class CartService {
 		if (check[0].cart_products.length === 0) return null;
 		return check;
 	}
-
 
 	private static checkQuantityProductVariant() {
 		// code here ...

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/(website)/breadcrumb/breadcrumb";
 import * as icon from "@/common/assets/icon";
-import { useAuth } from "@/common/hooks/useAuth";
+import { useAuth, userState } from "@/common/hooks/useAuth";
 import { useToast } from "@/common/hooks/useToast";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
@@ -22,9 +22,11 @@ const Login = (props: Props) => {
 	const { onSubmit } = useAuth({
 		action: "LOGIN",
 		onSuccess: (data: any) => {
-			const name = data.message.user.user_email.split("@")[0];
-			toast(data.status, `Welcome ${name} !`);
+			const { user, accessToken, refreshToken } = data.message;
+			localStorage.setItem("accessToken", accessToken);
+			localStorage.setItem("refreshToken", refreshToken);
 			nav("/");
+			toast(data.status, `Welcome ${user.user_email.split("@")[0]} !`);
 		},
 		onError: (err: any) => {
 			toast(err.status, err.message);
