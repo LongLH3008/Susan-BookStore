@@ -1,18 +1,21 @@
 import { Link } from "react-router-dom";
 import DropdownShop from "./dropdownShop";
 import DropdownInfoUser from "./dropdownInfoUser";
-import DropdownMiniCart from "./dropdownMiniCart";
 import DropdownSearch from "./dropdownSearch";
 import ResponsiveSidebar from "./responsiveSidebar";
 import { useEffect, useState } from "react";
 import ScrollToTop from "../scrolltotop/scrolltoptop";
+import { userState } from "@/common/hooks/useAuth";
+import DropdownMiniCart from "./dropdownMiniCart";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
 	const [scroll, setScroll] = useState(0);
+	const { AuthorUser } = userState();
 
 	useEffect(() => {
+		AuthorUser();
 		const handleScroll = () => setScroll(window.scrollY);
 		window.addEventListener("scroll", handleScroll);
 		return () => window.removeEventListener("scroll", handleScroll);

@@ -2,12 +2,14 @@ import { useState } from "react";
 import ModalCompare from "./modal_compare";
 import ModalDetail from "./modal_detail";
 import useProductContext from "../../../common/context/ContextProduct";
+import { userState } from "@/common/hooks/useAuth";
 
-const ProductFeatures = () => {
-	const { featuresProduct } = useProductContext();
+const ProductFeatures = ({ product_id }: { product_id: string }) => {
+	const { featuresProduct, AddToCart } = useProductContext();
 
 	const [loading, setLoading] = useState<Boolean>(false);
 	const [like, setLike] = useState<Boolean>(false);
+	const { id } = userState();
 
 	const loadCart = () => {
 		setLoading(true);
@@ -23,6 +25,11 @@ const ProductFeatures = () => {
 		}, 1500);
 	};
 
+	const AddProductToCart = () => {
+		loadCart();
+		AddToCart({ product_id, user_id: id, product_quantity: 1 });
+	};
+
 	return (
 		<div
 			className={`${
@@ -32,7 +39,7 @@ const ProductFeatures = () => {
 			<div className="grid grid-cols-4 w-full h-full *:border-r *:grid *:place-items-center *:cursor-pointer *:text-zinc-700">
 				<div className="" role="status">
 					<i
-						onClick={loadCart}
+						onClick={AddProductToCart}
 						className={`${
 							loading ? "hidden" : "block"
 						} hover:text-[#00BFC5] fa-solid fa-bag-shopping`}
