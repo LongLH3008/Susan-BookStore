@@ -25,6 +25,16 @@ class Locals {
 		const emailPass = process.env.EMAIL_PASS;
 		const jwtAccessKey = process.env.JWT_ACCESS_KEY;
 		const jwtRefreshKey = process.env.JWT_REFRESH_KEY;
+		// giao hang nhanh 
+		const token_ghn = process.env.SHOP_ID_V1;
+		const shop_id = process.env.TOKEN_GHN;
+		const api_create_order_ghn = process.env.API_CREATE_ORDER_GHN;
+		const api_get_detail_order_ghn = process.env.API_GET_DETAIL_ORDER_GHN;
+		const api_preview_order_information = process.env.API_PREVIEW_ORDER_INFORMATION;
+		const api_get_province = process.env.API_GET_PROVINCE;
+		const api_get_district = process.env.API_GET_DISTRICT;
+		const api_get_ward = process.env.API_GET_WARD;
+
 		return {
 			isCorsEnabled,
 			apiPrefix,
@@ -44,6 +54,14 @@ class Locals {
 			google_url_callback,
 			google_client_id,
 			google_client_secret,
+			token_ghn,
+			shop_id,
+			api_create_order_ghn,
+			api_get_detail_order_ghn,
+			api_preview_order_information,
+			api_get_province,
+			api_get_district,
+			api_get_ward
 		};
 	}
 

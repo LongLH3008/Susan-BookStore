@@ -127,5 +127,6 @@ router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutRevi
 // giao hàng nhanh 
 router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest))
 router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail))
+router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince))
 
 export default router;

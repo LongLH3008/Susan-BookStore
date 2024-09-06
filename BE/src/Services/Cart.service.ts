@@ -13,6 +13,10 @@ class CartService {
         const checkCartExist = await Cart.findOne({
             cart_user_id: cart_user_id
         })
+            .populate({
+                path: 'cart_products.product_id',
+                model: 'Books'
+            })
 
         return checkCartExist
     }
