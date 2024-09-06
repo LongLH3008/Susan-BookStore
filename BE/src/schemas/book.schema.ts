@@ -33,6 +33,10 @@ const bookCreateSchema = joi.object({
         "string.empty": "Nhà xuất bản là bắt buộc",
         "any.required": "Trường 'Nhà xuất bản' là bắt buộc",
     }),
+    ebookDemoLink: joi.string().required().messages({
+        "string.empty": "Link ebook demo là bắt buộc",
+        "any.required": "Trường 'Link ebook demo' là bắt buộc",
+    }),
     publicationDate: joi.date().required().messages({
         "date.base": "Ngày xuất bản không hợp lệ",
         "any.required": "Trường 'Ngày xuất bản' là bắt buộc",
@@ -78,8 +82,8 @@ const bookCreateSchema = joi.object({
         value: joi.number().required(),
         unit: joi.string().required()
     }),
-    edition: joi.string().allow(''), 
-    series: joi.string().allow(''),   
+    edition: joi.string().allow(''),
+    series: joi.string().allow(''),
     ageRange: joi.string().allow(''),
 });
 

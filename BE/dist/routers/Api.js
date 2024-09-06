@@ -55,6 +55,7 @@ router.get("/books/reviews", (0, utils_1.asyncHandler)(Review_controller_1.defau
 // Public routes
 router.get('/books', (0, utils_1.asyncHandler)(Book_controller_1.default.getByQuery));
 router.get('/books/:id', (0, utils_1.asyncHandler)(Book_controller_1.default.getById));
+router.get('/books/slug/:slug', (0, utils_1.asyncHandler)(Book_controller_1.default.getBySlug));
 // Protected routes
 router.post('/books', (0, utils_1.asyncHandler)(Book_controller_1.default.create));
 router.put('/books/:id', (0, utils_1.asyncHandler)(Book_controller_1.default.updateOne));

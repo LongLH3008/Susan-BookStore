@@ -18,7 +18,7 @@ export interface IBook extends mongoose.Document {
     tags: string[];
     rating: number;
     slug: string;
-    ebookDemoLink:string
+    ebookDemoLink:string;
     reviews: IReview[];
     stock: number;
     totalReviews: number;
