@@ -10,10 +10,8 @@ type filter = {
 };
 export const fetchProducts = async (arg: filter) => {
   try {
-    const params = `?page=${arg.page ?? ""}&limit=${
-      arg.limit ?? ""
-    }&search=${encodeURIComponent(arg.search ?? "")}`;
-    return await SendRequest("GET", `${base_URL}products${params}`);
+    const params = `?page=${arg.page ?? ""}&limit=${arg.limit ?? ""}`;
+    return await SendRequest("GET", `${base_URL}books${params}`);
   } catch (error) {
     console.error("Error fetching products:", error);
     throw error;

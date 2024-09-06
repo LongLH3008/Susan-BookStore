@@ -129,4 +129,8 @@ router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.Crea
 router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail))
 router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince))
 
+
+// advanced search and similar books
+router.post("/search", asyncHandler)
+
 export default router;

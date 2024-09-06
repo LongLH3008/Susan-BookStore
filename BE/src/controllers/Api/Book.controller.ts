@@ -99,6 +99,8 @@ class BookController {
       metadata: await BookService.updateSoldNumber(id, quantity)
     }).send(res);
   }
+
+  
 }
 
 export default BookController;

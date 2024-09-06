@@ -14,7 +14,7 @@ const ModalDetail = (props: Props) => {
     detailModal.open();
     featuresProduct.close();
   };
-  console.log(selectedProduct);
+  //   console.log(selectedProduct);
 
   return (
     <>
@@ -34,23 +34,31 @@ const ModalDetail = (props: Props) => {
           <div className="grid max sm:grid-cols-2 p-5">
             <span className="h-[465px] flex justify-center items-center overflow-hidden border">
               <img
-                className="h-full"
-                src={selectedProduct?.product_thumb}
-                alt={selectedProduct?.product_name}
+                className="h-full object-cover w-full"
+                src={selectedProduct?.coverImage}
+                alt={selectedProduct?.title}
               />
             </span>
             <div className=" flex flex-col gap-[1rem] pt-10 sm:pt-0 sm:ps-10">
               <h3 className="text-zinc-700 text-[26px] font-semibold">
-                {selectedProduct?.product_name}
+                {selectedProduct?.title}
               </h3>
               <div className="*:text-[20px]">
-                <span className="line-through text-zinc-500">
-                  $ {selectedProduct?.product_price}
+                <span className="text-[#00BFC5] ">
+                  $
+                  {(
+                    selectedProduct?.price -
+                    (selectedProduct?.price * selectedProduct?.discount) / 100
+                  ).toFixed(2)}
                 </span>
-                <span className="text-[#00BFC5] ms-3">$ NewPrice</span>
+                {selectedProduct?.discount > 0 && (
+                  <span className="line-through text-zinc-500 ms-3">
+                    $ {selectedProduct?.price}
+                  </span>
+                )}
               </div>
               <p className="text-[#707070] text-[14px] mt-3">
-                {selectedProduct?.product_description}
+                {selectedProduct?.description}
               </p>
               <select className="mt-2 border border-gray-300 text-gray-900 text-sm rounded-sm ring-0 outline-none focus:border-zinc-500 block w-full p-2.5 ">
                 <option defaultValue="">Choose a value</option>

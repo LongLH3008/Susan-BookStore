@@ -104,9 +104,6 @@ class GiaoHangNhanhService {
         }
     }
 
-
-
-
 }
 
 export default GiaoHangNhanhService;

@@ -35,6 +35,10 @@ class Locals {
 		const api_get_district = process.env.API_GET_DISTRICT;
 		const api_get_ward = process.env.API_GET_WARD;
 
+		//advanced search
+		const fireworkToken = `${process.env.FIREWORK_TOKEN}` || process.env.FIREWORK_TOKEN;
+		const fireworkUrl = `${process.env.FIREWORK_URL}` || process.env.FIREWORK_URL;
+		const qdrantUrl = `${process.env.QDRANT_URL}` || process.env.QDRANT_URL;
 		return {
 			isCorsEnabled,
 			apiPrefix,
@@ -61,7 +65,10 @@ class Locals {
 			api_preview_order_information,
 			api_get_province,
 			api_get_district,
-			api_get_ward
+			api_get_ward,
+			fireworkToken,
+			fireworkUrl,
+			qdrantUrl
 		};
 	}
 
