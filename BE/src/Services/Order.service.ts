@@ -38,9 +38,9 @@ class OrderService {
         const { userId, shipping, payment, products, total, trackingNumber } = data
 
         const foundUser = await User.findById(userId)
-        if(!foundUser) throw new ResourceNotFoundError("nguoi dung khong ton tai")
+        if (!foundUser) throw new ResourceNotFoundError("nguoi dung khong ton tai")
+        return {}
 
-        
 
     }
 

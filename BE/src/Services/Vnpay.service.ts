@@ -69,8 +69,9 @@ class VnpayService {
         if (!order) throw new BadRequestError("Something went wrong!")
         console.log(order)
         //tao order tai day
-
+        
         //tao xong xoa cache
+        this.cache.delCache(id)
         return {}
     }
 

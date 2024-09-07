@@ -21,6 +21,7 @@ const Book_controller_1 = __importDefault(require("../controllers/Api/Book.contr
 const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
 const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
 const GiaoHangNhanhTest_controller_1 = __importDefault(require("../controllers/Api/GiaoHangNhanhTest.controller"));
+const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -106,4 +107,8 @@ router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_co
 router.get("/get-province", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.GetProvince));
 // advanced search and similar books
 router.post("/search", utils_1.asyncHandler);
+//payment\
+router.get("/payment/bank-list", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getBankList));
+router.post("/payment/create-payment-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getPaymentUrl));
+router.post("/payment/verify-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.verifyUrl));
 exports.default = router;

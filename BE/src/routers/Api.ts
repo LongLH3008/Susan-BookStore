@@ -17,6 +17,7 @@ import BookController from "../controllers/Api/Book.controller";
 import ReviewController from "../controllers/Api/Review.controller";
 import OrderController from "../controllers/Api/Order.Controller";
 import GiaoHangNhanhController from "../controllers/Api/GiaoHangNhanhTest.controller";
+import PaymentController from "../controllers/Api/Vnpay.controller";
 
 
 
@@ -122,7 +123,6 @@ router.post('/upload/delete', asyncHandler(UploadController.delete));
 
 
 //checkoutAmount 
-
 router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview))
 
 // giao hàng nhanh 
@@ -133,5 +133,10 @@ router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince))
 
 // advanced search and similar books
 router.post("/search", asyncHandler)
+
+//payment\
+router.get("/payment/bank-list", asyncHandler(PaymentController.getBankList))
+router.post("/payment/create-payment-url", asyncHandler(PaymentController.getPaymentUrl))
+router.post("/payment/verify-url", asyncHandler(PaymentController.verifyUrl))
 
 export default router;
