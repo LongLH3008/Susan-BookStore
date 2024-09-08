@@ -1,3 +1,4 @@
+import { authMiddleware, checkAdmin } from './../middlewares/AuthMiddleware';
 import { Router } from "express";
 import AuthChangeFwApiController from "../controllers/Api/Auth/ChangePassword";
 import AuthForgotfwApiController from "../controllers/Api/Auth/ForgotPassword";
@@ -17,8 +18,6 @@ import BookController from "../controllers/Api/Book.controller";
 import ReviewController from "../controllers/Api/Review.controller";
 import OrderController from "../controllers/Api/Order.Controller";
 import GiaoHangNhanhController from "../controllers/Api/GiaoHangNhanhTest.controller";
-import authMiddleware from "../middlewares/AuthMiddleware";
-
 import PaymentController from "../controllers/Api/Vnpay.controller";
 import VectorSearchController from "../controllers/Api/vectorSearch.controller";
 
@@ -75,7 +74,7 @@ router.patch("/books/:id/discount", asyncHandler(BookController.setDiscountByBoo
 router.patch("/books/:id/sold", asyncHandler(BookController.updateSoldNumber));
 //blog
 router.post("/blog/views/:userId/:blogId", asyncHandler(BlogController.views));
-router.get("/blog",authMiddleware, asyncHandler(BlogController.getAllBlogs));
+router.get("/blog",authMiddleware,checkAdmin, asyncHandler(BlogController.getAllBlogs));
 router.get("/blog/:id", asyncHandler(BlogController.getOneBlog));
 router.delete("/blog/:id", asyncHandler(BlogController.deleteBlog));
 router.put("/blog/update/:id", asyncHandler(BlogController.updateBlog));
