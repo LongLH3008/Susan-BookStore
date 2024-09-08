@@ -18,6 +18,8 @@ import ReviewController from "../controllers/Api/Review.controller";
 import OrderController from "../controllers/Api/Order.Controller";
 import GiaoHangNhanhController from "../controllers/Api/GiaoHangNhanhTest.controller";
 import PaymentController from "../controllers/Api/Vnpay.controller";
+import VectorSearchController from "../controllers/Api/vectorSearch.controller";
+
 
 const router = Router();
 
@@ -124,7 +126,8 @@ router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail
 router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince));
 
 // advanced search and similar books
-router.post("/search", asyncHandler);
+router.post("/search", asyncHandler(VectorSearchController.advancedSearch))
+router.post("/loaddata", asyncHandler(VectorSearchController.loadData))
 
 //payment\
 router.get("/payment/bank-list", asyncHandler(PaymentController.getBankList))
