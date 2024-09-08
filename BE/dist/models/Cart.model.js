@@ -29,12 +29,16 @@ const CartSchema = new mongoose_1.default.Schema({
         {
             product_id: {
                 type: mongoose_1.default.Types.ObjectId,
-                ref: "Books"
+                ref: "Books",
             },
             product_quantity: {
                 type: Number,
-            }
-        }
+            },
+            selected: {
+                type: Boolean,
+                default: true,
+            },
+        },
     ],
 }, {
     timestamps: true,

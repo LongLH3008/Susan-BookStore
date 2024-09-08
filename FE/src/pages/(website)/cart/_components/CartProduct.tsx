@@ -1,57 +1,84 @@
-type Props = {};
-import * as img from "@/common/assets/img";
+import { useCart } from "@/common/hooks/useCart";
 import { Link } from "react-router-dom";
+import ItemCart from "./ItemCart";
 
-const ItemCart = () => {
-	return (
-		<div className="relative grid md:grid-cols-12 items-center border-l-2 pl-5 hover:border-zinc-900 duration-100 ease-in cursor-pointer">
-			<input
-				type="checkbox"
-				name="product1"
-				className="max-[640px]:absolute top-0 right-5 md:col-span-1 ring-0 ring-offset-0 checked:bg-black checked:text-white bg-white border-zinc-300"
-			/>
-			<span className="md:col-span-2 flex justify-center items-center overflow-hidden w-[80px] h-[80px] border border-zinc-300">
-				<img src={img.demo} alt="" />
-			</span>
-			<span className="md:col-span-5 text-zinc-800 font-[400] text-[14px]">
-				<p className="text-wrap">Name Product</p>
-				<p className="text-[12px] text-zinc-500">Attribute</p>
-			</span>
-			<div className="md:col-span-2 flex justify-between items-center border text-[15px]">
-				<span className="p-2">-</span>
-				<p>1</p>
-				<span className="p-2">+</span>
-			</div>
-			<span className="max-[640px]:absolute -top-1 right-0 md:col-span-2 justify-self-end hover:text-red-500 text-zinc-500">
-				<i className="fa-solid fa-xmark"></i>
-			</span>
-		</div>
-	);
-};
+export default function CartProducts({ dataCart, user_id }: { dataCart: ICart[]; user_id: string }) {
+	const { onAction: Remove } = useCart({ action: "REMOVE" });
+	const { onAction: IncreaseAmount } = useCart({ action: "INCREASE" });
+	const { onAction: DecreaseAmount } = useCart({ action: "DECREASE" });
+	const { onAction: Select } = useCart({ action: "SELECT_TO_CHECKOUT" });
 
-const CartProducts = (props: Props) => {
+	const selectedProducts = dataCart?.map(({ _id, selected }) => ({ _id, selected }));
+	console.log(selectedProducts);
+
+	const removeProduct = (product_id: string) => {
+		Remove({ user_id, product_id });
+	};
+
+	const Increase = (product_id: string) => {
+		IncreaseAmount({ user_id, product_id });
+	};
+
+	const Decrease = (product_id: string) => {
+		DecreaseAmount({ user_id, product_id });
+	};
+
+	const SelectSingle = (arg: { _id: string; selected: boolean }) => {
+		const data_item_cart = selectedProducts.map((item: TCartSelectItem) =>
+			item._id == arg._id ? { ...arg } : item
+		);
+		Select({ user_id, data_item_cart });
+	};
+
+	const removeAllSelect = () => {
+		const data_item_cart = selectedProducts.map((item: TCartSelectItem) => ({ ...item, selected: false }));
+		Select({ user_id, data_item_cart });
+	};
+
+	const selectAll = () => {
+		const data_item_cart = selectedProducts.map((item: TCartSelectItem) => ({ ...item, selected: true }));
+		Select({ user_id, data_item_cart });
+	};
+
 	return (
 		<div className="overflow-hidden overscrollHidden overflow-y-scroll min-[1000px]:col-span-3 min-[1000px]:pr-[30px] flex flex-col justify-between gap-3">
-			<div className="h-[50vh] flex flex-col gap-8 overflow-hidden overflow-y-scroll overscrollHidden mb-5 scroll-smooth">
-				<ItemCart />
-				<ItemCart />
-				<ItemCart />
-				<ItemCart />
-				<ItemCart />
-				<ItemCart />
-			</div>
+			{dataCart?.length && dataCart.length > 0 ? (
+				<div className="h-[50vh] flex flex-col gap-8 overflow-hidden overflow-y-scroll overscrollHidden mb-5 scroll-smooth">
+					{dataCart.map((item: ICart, index: number) => (
+						<ItemCart
+							key={index}
+							isSelected={item.selected}
+							select={SelectSingle}
+							inc={Increase}
+							dec={Decrease}
+							remove={removeProduct}
+							data={item}
+						/>
+					))}
+				</div>
+			) : (
+				<div className="h-[50dvh] w-full flex items-center justify-center">Your cart is empty</div>
+			)}
 			<div className="grid grid-cols-2 min-[1000px]:flex min-[1000px]:flex-wrap min-[1000px]:justify-start min-[1000px]:items-center gap-3 *:bg-black *:text-white *:px-[25px] *:py-[10px] *:text-[14px]">
-				<button className="hover:bg-zinc-700">Clear</button>
-				<button className="hover:bg-zinc-700">Select All</button>
+				{dataCart?.filter((item: TCartSelectItem) => item.selected == true).length > 0 && (
+					<button onClick={() => removeAllSelect()} className="hover:bg-zinc-700">
+						Clear
+					</button>
+				)}
+				{dataCart?.filter((item: TCartSelectItem) => item.selected == false).length > 0 && (
+					<button onClick={() => selectAll()} className="hover:bg-zinc-700">
+						Select All
+					</button>
+				)}
 				<Link to={"/shop"} state={{ from: location.pathname }} className="hover:bg-zinc-700">
 					Continue Shopping
 				</Link>
-				<Link to={"/checkout"} state={{ from: location.pathname }} className="hover:bg-zinc-700">
-					Continue Checkout
-				</Link>
+				{dataCart?.filter((item: TCartSelectItem) => item.selected == true).length > 0 && (
+					<Link to={"/checkout"} state={{ from: location.pathname }} className="hover:bg-zinc-700">
+						Continue Checkout
+					</Link>
+				)}
 			</div>
 		</div>
 	);
-};
-
-export default CartProducts;
+}
