@@ -21,6 +21,7 @@ const Book_controller_1 = __importDefault(require("../controllers/Api/Book.contr
 const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
 const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
 const GiaoHangNhanhTest_controller_1 = __importDefault(require("../controllers/Api/GiaoHangNhanhTest.controller"));
+const AuthMiddleware_1 = __importDefault(require("../middlewares/AuthMiddleware"));
 const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.controller"));
 const vectorSearch_controller_1 = __importDefault(require("../controllers/Api/vectorSearch.controller"));
 const router = (0, express_1.Router)();
@@ -70,7 +71,7 @@ router.patch("/books/:id/discount", (0, utils_1.asyncHandler)(Book_controller_1.
 router.patch("/books/:id/sold", (0, utils_1.asyncHandler)(Book_controller_1.default.updateSoldNumber));
 //blog
 router.post("/blog/views/:userId/:blogId", (0, utils_1.asyncHandler)(blog_controller_1.default.views));
-router.get("/blog", (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlogs));
+router.get("/blog", AuthMiddleware_1.default, (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlogs));
 router.get("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.getOneBlog));
 router.delete("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.deleteBlog));
 router.put("/blog/update/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.updateBlog));

@@ -75,7 +75,7 @@ router.patch("/books/:id/discount", asyncHandler(BookController.setDiscountByBoo
 router.patch("/books/:id/sold", asyncHandler(BookController.updateSoldNumber));
 //blog
 router.post("/blog/views/:userId/:blogId", asyncHandler(BlogController.views));
-router.get("/blog", asyncHandler(BlogController.getAllBlogs));
+router.get("/blog",authMiddleware, asyncHandler(BlogController.getAllBlogs));
 router.get("/blog/:id", asyncHandler(BlogController.getOneBlog));
 router.delete("/blog/:id", asyncHandler(BlogController.deleteBlog));
 router.put("/blog/update/:id", asyncHandler(BlogController.updateBlog));
