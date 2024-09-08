@@ -18,6 +18,9 @@ export const Decrease = async (arg: ICartRecalculate) => {
 };
 
 export const RemoveFromCart = async (arg: ICartRecalculate) => {
-	console.log(arg);
 	return await SendRequest("DELETE", `cart/${arg.user_id}/${arg.product_id}`);
+};
+
+export const SelectToCheckout = async (arg: ICartSelectToCheckout) => {
+	return await SendRequest("PUT", `cart/select/${arg.user_id}`, arg);
 };

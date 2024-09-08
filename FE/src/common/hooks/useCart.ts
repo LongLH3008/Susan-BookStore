@@ -4,7 +4,7 @@ import * as CartService from "@/services/cart";
 import { debounce } from "../shared/debounce";
 
 type useCart = {
-	action: "ADD" | "REMOVE" | "INCREASE" | "DECREASE";
+	action: "ADD" | "REMOVE" | "INCREASE" | "DECREASE" | "SELECT_TO_CHECKOUT";
 	onSuccess?: (data?: any) => void;
 	onError?: (error?: any) => void;
 };
@@ -28,6 +28,9 @@ export const useCart = ({ action, onSuccess, onError }: useCart) => {
 						break;
 					case "DECREASE":
 						response = await CartService.Decrease(args);
+						break;
+					case "SELECT_TO_CHECKOUT":
+						response = await CartService.SelectToCheckout(args);
 						break;
 				}
 				return response;
@@ -55,7 +58,12 @@ export const useCart = ({ action, onSuccess, onError }: useCart) => {
 	});
 
 	const onAction: SubmitHandler<any> = async (args: any) => {
-		if (args.action == "REMOVE" || args.action == "INCREASE" || args.action == "DECREASE") {
+		if (
+			args.action == "REMOVE" ||
+			args.action == "INCREASE" ||
+			args.action == "DECREASE" ||
+			args.action == "SELECT_TO_CHECKOUT"
+		) {
 			return debounce(() => mutate(args));
 		}
 		mutate(args);

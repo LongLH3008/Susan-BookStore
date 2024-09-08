@@ -25,6 +25,8 @@ export const userState = create<userState>((set) => ({
 	user_role: "",
 	AuthorUser: () => {
 		const accessToken = localStorage.getItem("accessToken");
+		console.log(accessToken);
+
 		if (!accessToken) return;
 		try {
 			const { id, user_role } = jwtDecode<IPayloadAuthToken>(accessToken);
