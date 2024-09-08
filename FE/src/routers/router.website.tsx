@@ -9,51 +9,53 @@ import UsersPage from "@/pages/(dashboard)/Users/UsersPage";
 import * as Website from "@/pages/(website)";
 import { useRoutes } from "react-router-dom";
 
-import FormAttr from "@/pages/(dashboard)/Products/FormAttr";
 import ProductForm from "@/pages/(dashboard)/Products/productForm";
+import DashboardGuard from "./dashboard.guard";
 
-type Props = {};
+const RouterWebsite = () => {
+	const routers = useRoutes([
+		{
+			path: "",
+			Component: LayoutClient,
+			children: [
+				{ path: "", element: <Website.Home /> },
+				{ path: "login", element: <Website.Login /> },
+				{ path: "register", element: <Website.Register /> },
+				{ path: "forgotpassword", element: <Website.ForgotPassword /> },
+				{ path: "blog", element: <Website.Blog /> },
+				{ path: "blog/:id", element: <Website.BlogDetail /> },
+				{ path: "book/:id", element: <Website.BookDetail /> },
+				{ path: "cart", element: <Website.Cart /> },
+				{ path: "shop", element: <Website.Shop /> },
+				{ path: "contact", element: <Website.Contact /> },
+				{ path: "about", element: <Website.About /> },
+			],
+		},
+		{ path: "checkout", element: <Website.Checkout /> },
+		{ path: "*", element: <Website.NotFound404 /> },
 
-const RouterWebsite = (props: Props) => {
-  const routers = useRoutes([
-    {
-      path: "",
-      Component: LayoutClient,
-      children: [
-        { path: "", element: <Website.Home /> },
-        { path: "login", element: <Website.Login /> },
-        { path: "register", element: <Website.Register /> },
-        { path: "forgotpassword", element: <Website.ForgotPassword /> },
-        { path: "blog", element: <Website.Blog /> },
-        { path: "blog/:id", element: <Website.BlogDetail /> },
-        { path: "book/:id", element: <Website.BookDetail /> },
-        { path: "cart", element: <Website.Cart /> },
-        { path: "shop", element: <Website.Shop /> },
-        { path: "contact", element: <Website.Contact /> },
-        { path: "about", element: <Website.About /> },
-      ],
-    },
-    { path: "checkout", element: <Website.Checkout /> },
-    { path: "*", element: <Website.NotFound404 /> },
-
-    {
-      path: "/admin",
-      element: <MainPage />,
-      children: [
-        { path: "orders", element: <OrdersPage /> },
-        { path: "users", element: <UsersPage /> },
-        { path: "categories", element: <CategoriesPage /> },
-        { path: "products", element: <ProductsPage /> },
-        { path: "comments", element: <CommentsPage /> },
-        { path: "blogs", element: <BlogPage /> },
-      ],
-    },
-    { path: "products", element: <ProductsPage /> },
-    { path: "users", element: <UsersPage /> },
-    { path: "product/edit/:id", element: <ProductForm /> },
-    { path: "product/add", element: <ProductForm /> },
-  ]);
-  return routers;
+		{
+			path: "/admin",
+			element: (
+				<DashboardGuard>
+					<MainPage />
+				</DashboardGuard>
+			),
+			children: [
+				{ path: "orders", element: <OrdersPage /> },
+				{ path: "users", element: <UsersPage /> },
+				{ path: "categories", element: <CategoriesPage /> },
+				{ path: "products", element: <ProductsPage /> },
+				{ path: "comments", element: <CommentsPage /> },
+				{ path: "blogs", element: <BlogPage /> },
+			],
+		},
+		{ path: "products", element: <ProductsPage /> },
+		{ path: "users", element: <UsersPage /> },
+		{ path: "product/edit/:id", element: <ProductForm /> },
+		{ path: "product/add", element: <ProductForm /> },
+	]);
+	return routers;
 };
 
 export default RouterWebsite;
