@@ -23,7 +23,6 @@ class UserController {
 
   static async getByUserId(req: Request | any, res: Response): Promise<any> {
     //console.log(req.params.id);
-
     return new SuccessResponse({
       message: "get user from id successFully !",
       metadata: await UserService.getUserById({ id: req.params.id }),

@@ -1,20 +1,29 @@
-import joi from "joi"
+import joi from "joi";
 
-const blogSchema = joi.object({
-    title: joi.string().required().messages({
-        "string.empty": "Tiêu đề bài viết là bắt buộc",
-        "any.required": "Trường 'Tiêu đề bài viết' là bắt buộc",
-    }),
-    content: joi.string().required().messages({
-        "string.empty": "Nội dung bài viết là bắt buộc",
-        "any.required": "Trường 'Nội dung bài viết' là bắt buộc",
-    }),
-    author: joi.string().required().messages({
-        "string.empty": "Tác giả là bắt buộc",
-        "any.required": "Trường 'Tác giả' là bắt buộc",
-    }),
-    tags: joi.array().items(joi.string()).required().messages({
-        "any.required": "Nhãn bài viết là bắt buộc",
-    }),
+const blogValidationSchema = joi.object({
+  blog_title: joi.string().required().messages({
+    "string.empty": "Tiêu đề bài viết là bắt buộc",
+    "any.required": "Trường 'Tiêu đề bài viết' là bắt buộc",
+  }),
+  blog_content: joi.string().required().messages({
+    "string.empty": "Nội dung bài viết là bắt buộc",
+    "any.required": "Trường 'Nội dung bài viết' là bắt buộc",
+  }),
+  blog_author: joi.string().required().messages({
+    "string.empty": "Tác giả là bắt buộc",
+    "any.required": "Trường 'Tác giả' là bắt buộc",
+  }),
+  blog_tags: joi.array().items(joi.string()).required().messages({
+    "any.required": "Nhãn bài viết là bắt buộc",
+  }),
+  blog_slug: joi.string().required().messages({
+    "string.empty": "Slug là bắt buộc",
+    "any.required": "Trường 'Slug' là bắt buộc",
+  }),
+  blog_image: joi.string().required().messages({
+    "string.empty": "Ảnh bài viết là bắt buộc",
+    "any.required": "Trường 'Ảnh bài viết' là bắt buộc",
+  }),
 });
-export default blogSchema
+
+export default blogValidationSchema;
