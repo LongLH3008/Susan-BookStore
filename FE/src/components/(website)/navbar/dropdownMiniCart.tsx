@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import * as icon from "@/common/assets/icon";
 import { CustomDropDownMiniCart } from "@/common/ui/CustomDropDownNavbar";
 import { Dropdown } from "flowbite-react";
-import { useEffect, useState } from "react";
 import { userState } from "@/common/hooks/useAuth";
 import { getCartByUser } from "@/services/cart";
 import { useCart } from "@/common/hooks/useCart";
 import { useQuery } from "@tanstack/react-query";
+import { MakeRoundToTwoDigitDecimal } from "@/common/shared/round-number";
 
 const ItemMiniCart = ({ data, amount, remove }: { data: any; amount: number; remove: (product_id: string) => any }) => {
 	return (
@@ -51,10 +51,6 @@ const ItemMiniCart = ({ data, amount, remove }: { data: any; amount: number; rem
 
 const DropdownMiniCart = () => {
 	const { id } = userState();
-
-	const MakeRoundToTwoDigitDecimal = (number?: number) => {
-		return number ? Math.round(number * 100) / 100 : 0;
-	};
 
 	const { onAction } = useCart({
 		action: "REMOVE",
@@ -148,11 +144,6 @@ const DropdownMiniCart = () => {
 							<Link to={"/cart"} state={{ from: location.pathname }}>
 								<button className="mt-5 border-2 text-[13px] font-semibold border-zinc-900 w-full uppercase h-[55px] hover:bg-zinc-900 hover:text-white">
 									view cart
-								</button>
-							</Link>
-							<Link target="_blank" to={"/checkout"}>
-								<button className="mt-5 border-2 text-[13px] font-semibold border-zinc-900 w-full uppercase h-[55px] hover:bg-zinc-900 hover:text-white">
-									checkout
 								</button>
 							</Link>
 						</>
