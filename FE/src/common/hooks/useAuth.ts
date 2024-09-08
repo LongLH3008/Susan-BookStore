@@ -4,6 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { SubmitHandler } from "react-hook-form";
 import { create } from "zustand";
 import { getCookie } from "../shared/cookie";
+import { Authentication } from "../shared/authentication";
 
 type ForgotPassword = "REQUEST_OTP" | "CHECK_OTP" | "CONFIRM_NEW_PASSWORD";
 
@@ -24,19 +25,9 @@ export const userState = create<userState>((set) => ({
 	id: "",
 	user_role: "",
 	AuthorUser: () => {
-		const accessToken = localStorage.getItem("accessToken");
-		console.log(accessToken);
-
-		if (!accessToken) return;
-		try {
-			const { id, user_role } = jwtDecode<IPayloadAuthToken>(accessToken);
-			console.log(id, user_role);
-			if (id && user_role) {
-				set({ id, user_role });
-			}
-			console.log("done");
-		} catch (error) {
-			console.error("Invalid token", error);
+		const payload = Authentication();
+		if (payload) {
+			set({ ...payload });
 		}
 	},
 	resetState: () => {
@@ -78,6 +69,15 @@ export const useAuth = ({ action, onSuccess, onError }: useAuth) => {
 			}
 		},
 		onSuccess: (response: any) => {
+			if (action == "LOGIN") {
+				const { accessToken, refreshToken } = response;
+				localStorage.setItem("accessToken", accessToken);
+				localStorage.setItem("refreshToken", refreshToken);
+			}
+			if (action == "LOGOUT") {
+				localStorage.remove("accessToken");
+				localStorage.remove("refreshToken");
+			}
 			onSuccess && onSuccess({ status: "SUCCESS", message: response });
 		},
 		onError: (error: any) => {

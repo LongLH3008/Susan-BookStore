@@ -7,10 +7,9 @@ import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { loginValidate } from "@/schemas/auth";
 
-type Props = {};
-
-const Login = (props: Props) => {
+const Login = () => {
 	const { toast } = useToast();
+	const { AuthorUser } = userState();
 	const nav = useNavigate();
 
 	const {
@@ -22,11 +21,12 @@ const Login = (props: Props) => {
 	const { onSubmit } = useAuth({
 		action: "LOGIN",
 		onSuccess: (data: any) => {
-			const { user, accessToken, refreshToken } = data.message;
-			localStorage.setItem("accessToken", accessToken);
-			localStorage.setItem("refreshToken", refreshToken);
-			nav("/");
-			toast(data.status, `Welcome ${user.user_email.split("@")[0]} !`);
+			const { user } = data.message;
+			AuthorUser();
+			setTimeout(() => {
+				toast(data.status, `Welcome ${user.user_email.split("@")[0]} !`);
+				nav("/");
+			}, 300);
 		},
 		onError: (err: any) => {
 			toast(err.status, err.message);
