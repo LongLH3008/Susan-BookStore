@@ -1,102 +1,202 @@
-import React, { useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import {
   TextField,
   Button,
   Box,
-  Grid,
   Checkbox,
   FormControlLabel,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  OutlinedInput,
+  Chip,
+  FormGroup,
+  Typography,
+  Grid,
 } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
-import { addProduct } from "@/services/product";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import axios from "axios"; // Sử dụng axios để gửi request upload
+import {
+  addProduct,
+  editProduct,
+  fetchCategory,
+  fetchProductById,
+} from "@/services/product";
 import { AxiosError } from "axios";
-
-interface ProductFormValues {
-  product_name: string;
-  product_description: string;
-  product_price: number;
-  product_thumb: string;
-  product_categories: string[];
-  product_variations: {
-    product_variant_id: string;
-    product_quantity: number;
-    product_price: number;
-    is_default: boolean;
-    isActive: boolean;
-  }[];
-  product_images: {
-    image_id: string;
-    image_url: string;
-  }[];
-  product_attributes: Record<string, any>;
-  isActive: boolean;
-}
+import { Book, Image } from "@/schemas/product";
+import { Console } from "console";
+import { useToast } from "@/common/hooks/useToast";
+import { useNavigate, useParams } from "react-router-dom";
 
 const ProductForm: React.FC = () => {
-  const { control, register, handleSubmit, setValue, watch } =
-    useForm<ProductFormValues>({
-      defaultValues: {
-        product_name: "",
-        product_description: "",
-        product_price: 0,
-        product_thumb: "vsbgseg",
-        product_categories: ["664ff507a063645cbd2f906f"],
-        product_variations: [],
-        product_images: [],
-        product_attributes: {},
-        isActive: true,
-      },
-    });
+  const { toast } = useToast();
+  const nav = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const { control, register, handleSubmit, setValue, watch, reset } =
+    useForm<Book>();
 
-  const { fields, append } = useFieldArray({
-    control,
-    name: "product_variations",
+  // const { fields, append } = useFieldArray({
+  //   control,
+  //   name: "product_variations",
+  // });
+
+  const { data: categories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategory,
   });
 
-  const { mutateAsync, isError, error } = useMutation({
-    mutationFn: addProduct,
-    onSuccess: () => {
-      console.log("Sản phẩm đã được thêm thành công");
-    },
-    onError: (error: AxiosError) => {
-      console.error(
-        "Lỗi khi thêm sản phẩm:",
-        error.response?.data || error.message
-      );
-    },
-  });
+  const selectedCategories = watch("categories");
 
-  const onSubmit = async (data: ProductFormValues) => {
-    try {
-      await mutateAsync(data);
-    } catch (error) {
-      // Error handling is already done in onError of useMutation
-    }
+  const handleCategoryChange = (categoryId: string) => {
+    const updatedCategories = selectedCategories.includes(categoryId)
+      ? selectedCategories.filter((id) => id !== categoryId)
+      : [...selectedCategories, categoryId];
+
+    setValue("categories", updatedCategories);
   };
 
-  const handleProductImagesUpload = (
+  const { mutateAsync, isError, error } = id
+    ? useMutation({
+        mutationFn: ({ data, id }: { data: Book; id: string }) =>
+          editProduct(data, id),
+        onSuccess: (data: any) => {
+          toast(data.status, `Thêm thành công`);
+          nav("/products");
+        },
+        onError: (err: any) => {
+          toast(err.status, err.message);
+        },
+      })
+    : useMutation({
+        mutationFn: addProduct,
+        onSuccess: (data: any) => {
+          toast(data.status, `Thêm thành công`);
+          nav("/products");
+        },
+        onError: (err: any) => {
+          toast(err.status, err.message);
+        },
+      });
+
+  const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
+  const [selectedCoverImage, setSelectedCoverImage] = useState<File | null>(
+    null
+  );
+  const [selectedImages, setSelectedImages] = useState<FileList | null>(null);
+  const [previewCoverImage, setPreviewCoverImage] = useState<string | null>(
+    null
+  );
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+
+  const onSubmit = async (data: Book) => {
+    try {
+      let coverImageUrl = "";
+      let imageUrls: Image[] = [];
+
+      // Upload ảnh đại diện nếu có
+      if (selectedCoverImage) {
+        const coverImageFormData = new FormData();
+        coverImageFormData.append("files", selectedCoverImage);
+
+        const coverImageResponse = await axios.post(
+          "http://localhost:5000/api/v1/upload",
+          coverImageFormData
+        );
+        coverImageUrl = coverImageResponse.data.metadata.fileLinks[0]; // Giả sử URL của ảnh đại diện là phần tử đầu tiên trong mảng
+        data.coverImage = coverImageUrl; // Cập nhật URL ảnh đại diện vào form data
+      }
+
+      // Upload mảng hình ảnh nếu có
+      console.log(selectedImages);
+      if (selectedImages) {
+        const imagesFormData = new FormData();
+        Array.from(selectedImages).forEach((file) => {
+          imagesFormData.append("files", file);
+        });
+        console.log("imagesFormData", imagesFormData);
+        const imagesResponse = await axios.post(
+          "http://localhost:5000/api/v1/upload",
+          imagesFormData
+        );
+
+        imageUrls = imagesResponse.data.metadata.fileLinks.map(
+          (img: string, index: number) => ({
+            id: `img${index + 1}`,
+            url: img,
+          })
+        );
+
+        data.images = imageUrls;
+      }
+      // Gửi dữ liệu sản phẩm cùng với URL ảnh lên
+      if (id) {
+        delete data._id;
+        delete data.sold;
+        delete data.rating;
+        delete data.totalReviews;
+        delete data.reviews;
+        delete data.createdAt;
+        delete data.updatedAt;
+        delete data.slug;
+        delete data.__v;
+      }
+      id ? await mutateAsync({ data, id }) : await mutateAsync(data);
+    } catch (error) {
+      console.error("Lỗi khi gửi form:", error);
+    }
+  };
+  const { data: book } = useQuery({
+    queryKey: ["book", id],
+    queryFn: () => fetchProductById(id!),
+    enabled: !!id, // Chỉ thực hiện khi có ID
+  });
+  console.log("book", book);
+
+  useEffect(() => {
+    reset(book?.metadata);
+  }, [book]);
+  // Lưu trữ các file khi người dùng chọn ảnh và tạo URL xem trước ảnh
+  const handleProductImagesChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
+    console.log("files", files);
     if (files) {
-      const uploadedImages: { image_id: string; image_url: string }[] = [];
+      setSelectedImages(files); // Lưu file vào state để upload sau
 
+      // Tạo URL xem trước cho từng ảnh đã chọn
+      const imagePreviews: string[] = [];
       Array.from(files).forEach((file) => {
         const reader = new FileReader();
         reader.onloadend = () => {
-          const result = reader.result as string;
-          uploadedImages.push({
-            image_id: file.name, // Using file name as ID
-            image_url: result,
-          });
-          setValue("product_images", uploadedImages);
+          if (reader.result) {
+            imagePreviews.push(reader.result as string);
+            setPreviewImages([...imagePreviews]); // Cập nhật URL xem trước
+          }
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file); // Đọc file dưới dạng URL
       });
     }
   };
+  const handleCoverImageChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedCoverImage(file);
 
+      // Tạo URL xem trước cho ảnh đại diện
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          setPreviewCoverImage(reader.result as string);
+        }
+      };
+      reader.readAsDataURL(file); // Đọc file dưới dạng URL
+    }
+  };
   return (
     <Box
       component="form"
@@ -106,49 +206,155 @@ const ProductForm: React.FC = () => {
       p={2}
     >
       <TextField
-        label="Tên sản phẩm"
-        {...register("product_name")}
+        label="Title"
+        {...register("title")}
         fullWidth
         margin="normal"
       />
       <TextField
+        label="Author"
+        {...register("author")}
+        fullWidth
+        margin="normal"
+      />
+      <TextField label="ISBN" {...register("isbn")} fullWidth margin="normal" />
+      <TextField
         label="Mô tả sản phẩm"
-        {...register("product_description")}
+        {...register("description")}
         fullWidth
         multiline
         rows={4}
         margin="normal"
       />
       <TextField
-        label="Giá sản phẩm"
+        label="Price"
         type="number"
-        {...register("product_price")}
+        {...register("price")}
         fullWidth
         margin="normal"
       />
       <TextField
-        label="Danh mục sản phẩm"
-        {...register("product_categories")}
+        label="Discount"
+        type="number"
+        {...register("discount")}
+        fullWidth
+        margin="normal"
+      />
+      {/* <TextField
+        label="Sold"
+        type="number"
+        {...register("sold")}
+        fullWidth
+        margin="normal"
+      /> */}
+      {/* Checkbox cho danh mục */}
+      <Controller
+        name="tags"
+        control={control}
+        render={({ field }) => (
+          <TextField
+            label="Tags"
+            fullWidth
+            margin="normal"
+            value={field?.value?.join(", ")} // Hiển thị các thẻ dưới dạng chuỗi
+            onChange={(e) => {
+              const tagsArray = e.target.value
+                .split(",")
+                .map((tag) => tag.trim());
+              field.onChange(tagsArray);
+            }}
+            helperText="Enter tags separated by commas"
+          />
+        )}
+      />
+
+      <Typography variant="h6" sx={{ marginTop: 2, marginBottom: 1 }}>
+        Chọn danh mục
+      </Typography>
+      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+        {categories?.metadata?.map((category: any) => (
+          <FormControlLabel
+            key={category?.id}
+            control={
+              <Checkbox
+                checked={selectedCategories?.includes(category?.id)}
+                onChange={() => handleCategoryChange(category?.id)}
+              />
+            }
+            label={category?.category_name}
+            sx={{ width: "auto" }}
+          />
+        ))}
+      </Box>
+
+      <TextField
+        label="Nhà sản xuất"
+        {...register("publisher")}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Ngày sản xuất"
+        {...register("publicationDate")}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Ngôn ngữ"
+        {...register("language")}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Số Trang"
+        {...register("numberOfPages")}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Định dạng sách"
+        {...register("format")}
+        fullWidth
+        margin="normal"
+      />
+      <TextField
+        label="Link ebook"
+        {...register("ebookDemoLink")}
         fullWidth
         margin="normal"
       />
 
+      <TextField
+        label="Sản phẩm tồn kho"
+        {...register("stock")}
+        fullWidth
+        margin="normal"
+      />
+      {/* <TextField
+        label="Hình ảnh"
+        {...register("images")}
+        fullWidth
+        margin="normal"
+      /> */}
+
+      <h3>Ảnh đại diện</h3>
+      <input type="file" accept="image/*" onChange={handleCoverImageChange} />
+      {previewCoverImage && (
+        <img src={previewCoverImage} alt="Cover Preview" width="200" />
+      )}
+
+      <h3>Mảng hình ảnh</h3>
       <input
         type="file"
         accept="image/*"
         multiple
-        onChange={handleProductImagesUpload}
+        onChange={handleProductImagesChange}
       />
-      {watch("product_images").map((image, idx) => (
-        <img
-          key={idx}
-          src={image.image_url}
-          alt={`Product Image ${idx}`}
-          width="200"
-        />
+      {previewImages.map((src, idx) => (
+        <img key={idx} src={src} alt={`Preview ${idx}`} width="200" />
       ))}
 
-      <h3>Biến thể sản phẩm</h3>
+      {/* <h3>Biến thể sản phẩm</h3>
       {fields.map((item, index) => (
         <Box key={item.id} mb={2}>
           <TextField
@@ -200,20 +406,12 @@ const ProductForm: React.FC = () => {
         }
       >
         Thêm biến thể
-      </Button>
+      </Button> */}
 
-      {/* <h3>Thuộc tính sản phẩm</h3>
-      <TextField
-        label="Thuộc tính"
-        {...register("product_attributes")}
-        fullWidth
-        margin="normal"
-      /> */}
-
-      <FormControlLabel
+      {/* <FormControlLabel
         control={<Checkbox {...register("isActive")} />}
         label="Kích hoạt sản phẩm"
-      />
+      /> */}
 
       <Box mt={2}>
         <Button variant="contained" color="primary" type="submit">

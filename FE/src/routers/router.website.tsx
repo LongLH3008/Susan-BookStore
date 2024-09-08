@@ -50,7 +50,7 @@ const RouterWebsite = (props: Props) => {
     },
     { path: "products", element: <ProductsPage /> },
     { path: "users", element: <UsersPage /> },
-    { path: "product/add", element: <ProductForm /> },
+    { path: "product/add/:id", element: <ProductForm /> },
   ]);
   return routers;
 };
