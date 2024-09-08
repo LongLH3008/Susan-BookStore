@@ -6,9 +6,13 @@ interface ICart {
 		discount: number;
 		coverImage: string;
 		slug: string;
+		author: string;
+		format: string;
+		stock: number;
 	};
 	product_quantity: number;
 	_id: string;
+	selected: boolean;
 }
 
 type ProductInCart = {
@@ -26,4 +30,14 @@ interface ICartNewProduct {
 interface ICartRecalculate {
 	user_id: string;
 	product_id: string;
+}
+
+type TCartSelectItem = {
+	_id: string;
+	selected: boolean;
+};
+
+interface ICartSelectToCheckout {
+	user_id: string;
+	data_item_cart: TCartSelectItem[];
 }
