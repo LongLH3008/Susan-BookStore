@@ -21,6 +21,8 @@ const Book_controller_1 = __importDefault(require("../controllers/Api/Book.contr
 const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
 const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
 const GiaoHangNhanhTest_controller_1 = __importDefault(require("../controllers/Api/GiaoHangNhanhTest.controller"));
+const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.controller"));
+const vectorSearch_controller_1 = __importDefault(require("../controllers/Api/vectorSearch.controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -53,18 +55,19 @@ router.get("/books/:bookId/reviews/:userId", (0, utils_1.asyncHandler)(Review_co
 router.get("/books/reviews", (0, utils_1.asyncHandler)(Review_controller_1.default.getAllReviews));
 //book
 // Public routes
-router.get('/books', (0, utils_1.asyncHandler)(Book_controller_1.default.getByQuery));
-router.get('/books/:id', (0, utils_1.asyncHandler)(Book_controller_1.default.getById));
+router.get("/books", (0, utils_1.asyncHandler)(Book_controller_1.default.getByQuery));
+router.get("/books/:id", (0, utils_1.asyncHandler)(Book_controller_1.default.getById));
+router.get("/books/slug/:slug", (0, utils_1.asyncHandler)(Book_controller_1.default.getBySlug));
 // Protected routes
-router.post('/books', (0, utils_1.asyncHandler)(Book_controller_1.default.create));
-router.put('/books/:id', (0, utils_1.asyncHandler)(Book_controller_1.default.updateOne));
-router.delete('/books/:id', (0, utils_1.asyncHandler)(Book_controller_1.default.deleteOne));
-router.patch('/books/:id/unactive', (0, utils_1.asyncHandler)(Book_controller_1.default.unActiveBook));
-router.patch('/books/:id/active', (0, utils_1.asyncHandler)(Book_controller_1.default.activeBook));
-router.patch('/books/category/:category_id/discount', (0, utils_1.asyncHandler)(Book_controller_1.default.setDiscountByCategoryId));
-router.patch('/books/discount', (0, utils_1.asyncHandler)(Book_controller_1.default.setDiscountToAll));
-router.patch('/books/:id/discount', (0, utils_1.asyncHandler)(Book_controller_1.default.setDiscountByBookId));
-router.patch('/books/:id/sold', (0, utils_1.asyncHandler)(Book_controller_1.default.updateSoldNumber));
+router.post("/books", (0, utils_1.asyncHandler)(Book_controller_1.default.create));
+router.put("/books/:id", (0, utils_1.asyncHandler)(Book_controller_1.default.updateOne));
+router.delete("/books/:id", (0, utils_1.asyncHandler)(Book_controller_1.default.deleteOne));
+router.patch("/books/:id/unactive", (0, utils_1.asyncHandler)(Book_controller_1.default.unActiveBook));
+router.patch("/books/:id/active", (0, utils_1.asyncHandler)(Book_controller_1.default.activeBook));
+router.patch("/books/category/:category_id/discount", (0, utils_1.asyncHandler)(Book_controller_1.default.setDiscountByCategoryId));
+router.patch("/books/discount", (0, utils_1.asyncHandler)(Book_controller_1.default.setDiscountToAll));
+router.patch("/books/:id/discount", (0, utils_1.asyncHandler)(Book_controller_1.default.setDiscountByBookId));
+router.patch("/books/:id/sold", (0, utils_1.asyncHandler)(Book_controller_1.default.updateSoldNumber));
 //blog
 router.post("/blog/views/:userId/:blogId", (0, utils_1.asyncHandler)(blog_controller_1.default.views));
 router.get("/blog", (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlogs));
@@ -90,6 +93,7 @@ router.post("/cart/addproduct/:user_id", (0, utils_1.asyncHandler)(Cart_controll
 router.delete("/cart/:user_id/:product_id", (0, utils_1.asyncHandler)(Cart_controller_1.default.deleteProductInCart));
 router.get("/cart/increment-quantity/:user_id/:product_id", (0, utils_1.asyncHandler)(Cart_controller_1.default.incrementQuantityProductInCart));
 router.get("/cart/decrement-quantity/:user_id/:product_id", (0, utils_1.asyncHandler)(Cart_controller_1.default.decrementQuantityProductInCart));
+router.put("/cart/select/:user_id", (0, utils_1.asyncHandler)(Cart_controller_1.default.selectProductToCheckOut));
 //discount
 router.post("/discounts", (0, utils_1.asyncHandler)(Discount_controller_1.default.create));
 router.get("/discounts", (0, utils_1.asyncHandler)(Discount_controller_1.default.getAll));
@@ -101,11 +105,19 @@ router.post("/discounts/deactivate", (0, utils_1.asyncHandler)(Discount_controll
 router.post("/discounts/cancel", (0, utils_1.asyncHandler)(Discount_controller_1.default.cancelDiscount));
 router.post("/discounts/amount", (0, utils_1.asyncHandler)(Discount_controller_1.default.getDiscountAmount));
 //upload
-router.post('/upload', multer_config_1.upload.array('files', 10), (0, utils_1.asyncHandler)(Upload_controller_1.default.upload));
-router.post('/upload/delete', (0, utils_1.asyncHandler)(Upload_controller_1.default.delete));
-//checkoutAmount 
+router.post("/upload", multer_config_1.upload.array("files", 10), (0, utils_1.asyncHandler)(Upload_controller_1.default.upload));
+router.post("/upload/delete", (0, utils_1.asyncHandler)(Upload_controller_1.default.delete));
+//checkoutAmount
 router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_Controller_1.default.checkoutReview));
-// giao hàng nhanh 
+// giao hàng nhanh
 router.post("/giao-hang-nhanh/create", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.CreateTest));
 router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.getDetail));
+router.get("/get-province", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.GetProvince));
+// advanced search and similar books
+router.post("/search", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearch));
+router.post("/loaddata", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.loadData));
+//payment\
+router.get("/payment/bank-list", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getBankList));
+router.post("/payment/create-payment-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getPaymentUrl));
+router.post("/payment/verify-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.verifyUrl));
 exports.default = router;

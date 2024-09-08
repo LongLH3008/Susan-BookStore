@@ -12,3 +12,10 @@ interface IForgotPassword {
 	user_email: string;
 	user_otp: string;
 }
+
+interface IPayloadAuthToken {
+	iat: number;
+	exp: number;
+	id: string;
+	user_role: "admin" | "user";
+}

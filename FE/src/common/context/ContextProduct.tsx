@@ -1,4 +1,6 @@
 import { createContext, useContext, useState } from "react";
+import { useCart } from "../hooks/useCart";
+import { useToast } from "../hooks/useToast";
 
 type ModalType = {
 	isOpen: boolean;
@@ -7,12 +9,10 @@ type ModalType = {
 };
 
 type ProdContextType = {
-	// compare: boolean;
-	// feature: boolean;
-	// detail: boolean;
 	compareModal: ModalType;
 	detailModal: ModalType;
 	featuresProduct: ModalType;
+	AddToCart: (arg: ICartNewProduct) => void;
 };
 
 type ProdContextProps = {
@@ -29,11 +29,23 @@ function Modal() {
 }
 
 export const ProdContextProvider = ({ children }: ProdContextProps) => {
+	const { toast } = useToast();
 	const featuresProduct = Modal();
 	const detailModal = Modal();
 	const compareModal = Modal();
+
+	const { onAction: AddToCart } = useCart({
+		action: "ADD",
+		onSuccess: (data: any) => {
+			toast("ADD_TO_CART", "Added to Cart", 1500);
+		},
+		onError: (err: any) => {
+			console.log(err);
+		},
+	});
+
 	return (
-		<ProductContext.Provider value={{ compareModal, detailModal, featuresProduct }}>
+		<ProductContext.Provider value={{ compareModal, detailModal, featuresProduct, AddToCart }}>
 			{children}
 		</ProductContext.Provider>
 	);

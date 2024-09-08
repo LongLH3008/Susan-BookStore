@@ -1,21 +1,42 @@
-import * as img from "@/common/assets/img";
-type Props = {};
+import { Skeleton } from "@mui/material";
 
-const ItemInCheckout = (props: Props) => {
+const ItemInCheckout = ({ data }: { data: ICart }) => {
 	return (
-		<div className="w-full mb-4 relative flex justify-between items-center">
-			<span className="bg-[rgba(0,0,0,0.6)] rounded-full p-[7px] py-0 text-white absolute z-10 -top-2 left-[50px]">
-				1
-			</span>
-			<div className="w-[62px] h-[62px] flex justify-center overflow-hidden items-center border border-zinc-300 rounded">
-				<img src={img.demo} alt="" />
-			</div>
-			<span className="min-[320px]:mr-[10%] sm:mr-[50%] lg:mr-[30%] ">
-				<p className="text-[15px] text-zinc-700">6. Variable with soldout</p>
-				<p className="text-zinc-500 text-[12px]">s / green</p>
-			</span>
-			<p className="text-[14px] :text-zinc-700">$55.00</p>
-		</div>
+		<>
+			{data && data.product_id ? (
+				<div className="w-full mb-4 relative grid grid-cols-5">
+					<span className="bg-[rgba(0,0,0,0.6)] rounded-full p-[7px] py-0 text-white absolute z-10 -top-2 left-[50px]">
+						{data.product_quantity}
+					</span>
+					<div className="w-[62px] h-[62px] flex justify-center overflow-hidden items-center border border-zinc-300 rounded">
+						<img src={data.product_id.coverImage} alt={data.product_id.title} />
+					</div>
+					<span className="col-span-3 flex flex-col justify-center">
+						<p className="text-[15px] text-zinc-700">{data.product_id.title}</p>
+						<p className="text-zinc-500 text-[12px]">{data.product_id.format}</p>
+					</span>
+					<div className="flex flex-col justify-center">
+						{data.product_id.discount > 0 && (
+							<p className="text-[14px] text-zinc-700 text-right line-through">
+								{data.product_id.price}
+							</p>
+						)}
+
+						<p className="text-[14px] text-zinc-700 text-right">
+							$
+							{data.product_id.discount > 0
+								? (
+										data.product_id.price *
+										((100 - data.product_id.discount) / 100)
+								  ).toFixed(2)
+								: data.product_id.price.toFixed(2)}
+						</p>
+					</div>
+				</div>
+			) : (
+				<Skeleton animation="wave" className="w-full h-16" />
+			)}
+		</>
 	);
 };
 

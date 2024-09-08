@@ -19,6 +19,8 @@ import OrderController from "../controllers/Api/Order.Controller";
 import GiaoHangNhanhController from "../controllers/Api/GiaoHangNhanhTest.controller";
 import authMiddleware from "../middlewares/AuthMiddleware";
 
+import PaymentController from "../controllers/Api/Vnpay.controller";
+import VectorSearchController from "../controllers/Api/vectorSearch.controller";
 
 
 const router = Router();
@@ -41,15 +43,12 @@ router.post("/auth/change-pw", AuthChangeFwApiController.changePassword);
 router.post("/auth/request-otp", AuthForgotfwApiController.requestReset);
 router.post("/auth/check-otp", AuthForgotfwApiController.verifyOTP);
 
-router.post("/auth/forgot-pw", AuthForgotfwApiController.resetPassword)
+router.post("/auth/forgot-pw", AuthForgotfwApiController.resetPassword);
 //categories
 router.get("/categories", asyncHandler(CategoryController.getAll));
 router.get("/categories/:id", asyncHandler(CategoryController.getOne));
 router.post("/categories", asyncHandler(CategoryController.create));
-router.patch(
-  "/categories/:id",
-  asyncHandler(CategoryController.update)
-);
+router.patch("/categories/:id", asyncHandler(CategoryController.update));
 router.delete("/categories/:id", asyncHandler(CategoryController.delete));
 //review
 router.post("/books/:bookId/reviews", asyncHandler(ReviewController.addReview));
@@ -60,19 +59,20 @@ router.get("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.getRe
 router.get("/books/reviews", asyncHandler(ReviewController.getAllReviews));
 //book
 // Public routes
-router.get('/books', asyncHandler(BookController.getByQuery));
-router.get('/books/:id', asyncHandler(BookController.getById));
+router.get("/books", asyncHandler(BookController.getByQuery));
+router.get("/books/:id", asyncHandler(BookController.getById));
+router.get("/books/slug/:slug", asyncHandler(BookController.getBySlug));
 
 // Protected routes
-router.post('/books', asyncHandler(BookController.create));
-router.put('/books/:id', asyncHandler(BookController.updateOne));
-router.delete('/books/:id', asyncHandler(BookController.deleteOne));
-router.patch('/books/:id/unactive', asyncHandler(BookController.unActiveBook));
-router.patch('/books/:id/active', asyncHandler(BookController.activeBook));
-router.patch('/books/category/:category_id/discount', asyncHandler(BookController.setDiscountByCategoryId));
-router.patch('/books/discount', asyncHandler(BookController.setDiscountToAll));
-router.patch('/books/:id/discount', asyncHandler(BookController.setDiscountByBookId));
-router.patch('/books/:id/sold', asyncHandler(BookController.updateSoldNumber));
+router.post("/books", asyncHandler(BookController.create));
+router.put("/books/:id", asyncHandler(BookController.updateOne));
+router.delete("/books/:id", asyncHandler(BookController.deleteOne));
+router.patch("/books/:id/unactive", asyncHandler(BookController.unActiveBook));
+router.patch("/books/:id/active", asyncHandler(BookController.activeBook));
+router.patch("/books/category/:category_id/discount", asyncHandler(BookController.setDiscountByCategoryId));
+router.patch("/books/discount", asyncHandler(BookController.setDiscountToAll));
+router.patch("/books/:id/discount", asyncHandler(BookController.setDiscountByBookId));
+router.patch("/books/:id/sold", asyncHandler(BookController.updateSoldNumber));
 //blog
 router.post("/blog/views/:userId/:blogId", asyncHandler(BlogController.views));
 router.get("/blog", asyncHandler(BlogController.getAllBlogs));
@@ -99,14 +99,14 @@ router.get("/cart/:user_id", asyncHandler(CartController.getCartByOneUser)); // 
 router.post("/cart/addproduct/:user_id", asyncHandler(CartController.addProductToCart));
 router.delete("/cart/:user_id/:product_id", asyncHandler(CartController.deleteProductInCart));
 router.get(
-  "/cart/increment-quantity/:user_id/:product_id",
-  asyncHandler(CartController.incrementQuantityProductInCart)
+	"/cart/increment-quantity/:user_id/:product_id",
+	asyncHandler(CartController.incrementQuantityProductInCart)
 );
 router.get(
-  "/cart/decrement-quantity/:user_id/:product_id",
-  asyncHandler(CartController.decrementQuantityProductInCart)
+	"/cart/decrement-quantity/:user_id/:product_id",
+	asyncHandler(CartController.decrementQuantityProductInCart)
 );
-
+router.put("/cart/select/:user_id", asyncHandler(CartController.selectProductToCheckOut));
 
 //discount
 router.post("/discounts", asyncHandler(DiscountController.create));
@@ -119,19 +119,26 @@ router.post("/discounts/deactivate", asyncHandler(DiscountController.deactivate)
 router.post("/discounts/cancel", asyncHandler(DiscountController.cancelDiscount));
 router.post("/discounts/amount", asyncHandler(DiscountController.getDiscountAmount));
 
-
-
 //upload
-router.post('/upload', upload.array('files', 10), asyncHandler(UploadController.upload));
-router.post('/upload/delete', asyncHandler(UploadController.delete));
+router.post("/upload", upload.array("files", 10), asyncHandler(UploadController.upload));
+router.post("/upload/delete", asyncHandler(UploadController.delete));
 
+//checkoutAmount
 
-//checkoutAmount 
+router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview));
 
-router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview))
+// giao hàng nhanh
+router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest));
+router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail));
+router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince));
 
-// giao hàng nhanh 
-router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest))
-router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail))
+// advanced search and similar books
+router.post("/search", asyncHandler(VectorSearchController.advancedSearch))
+router.post("/loaddata", asyncHandler(VectorSearchController.loadData))
+
+//payment\
+router.get("/payment/bank-list", asyncHandler(PaymentController.getBankList))
+router.post("/payment/create-payment-url", asyncHandler(PaymentController.getPaymentUrl))
+router.post("/payment/verify-url", asyncHandler(PaymentController.verifyUrl))
 
 export default router;
