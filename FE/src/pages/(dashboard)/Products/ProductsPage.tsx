@@ -16,10 +16,10 @@ const ProductsPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const { toast } = useToast();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState<string>("");
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["products", limit, page, search],
-    queryFn: () => fetchProducts(limit, page, search),
+    queryKey: ["books", limit, page, search],
+    queryFn: () => fetchProducts({ limit, page, search }),
   });
 
   const handleSearch = (searchTerm: string) => {
@@ -41,52 +41,52 @@ const ProductsPage: React.FC = () => {
   });
 
   const onDelete = async (id: string) => {
-    try {
-      await mutateAsync(id);
-    } catch (error) {
-      // Error handling is already done in onError of useMutation
-    }
+    await mutateAsync(id);
   };
 
   const columns = React.useMemo(
     () => [
       {
         headerName: "Tên sản phẩm",
-        field: "product_name",
+        field: "title",
       },
       {
         headerName: "Giá sản phẩm",
-        field: "product_price",
+        field: "price",
       },
       {
-        headerName: "Danh mục",
-        field: "product_categories",
-        cellRenderer: (params: any) => {
-          console.log(params);
-          const categoryNames = params.product_categories;
-          return categoryNames.join(", ");
-        },
+        headerName: "Tác giả",
+        field: "author",
       },
-      {
-        headerName: "Thuộc tính",
-        field: "product_attributes",
-        cellRenderer: (row: any) => {
-          const attributes = row.product_attributes;
-          if (typeof attributes === "object") {
-            return Object.entries(attributes)
-              .map(([key, value]) => `${key}: ${value}`)
-              .join(", ");
-          }
-          return attributes;
-        },
-      },
+      // {
+      //   headerName: "Danh mục",
+      //   field: "categories",
+      //   cellRenderer: (params: any) => {
+      //     console.log(params);
+      //     const categoryNames = params.product_categories;
+      //     return categoryNames.join(", ");
+      //   },
+      // },
+      // {
+      //   headerName: "Thuộc tính",
+      //   field: "product_attributes",
+      //   cellRenderer: (row: any) => {
+      //     const attributes = row.product_attributes;
+      //     if (typeof attributes === "object") {
+      //       return Object.entries(attributes)
+      //         .map(([key, value]) => `${key}: ${value}`)
+      //         .join(", ");
+      //     }
+      //     return attributes;
+      //   },
+      // },
       {
         headerName: "Ảnh đại diện",
-        field: "product_thumb",
+        field: "coverImage",
         cellRenderer: (row: any) => (
           <img
-            src={row.product_thumb}
-            alt={row.product_name}
+            src={row.coverImage}
+            alt={row.coverImage}
             style={{ width: "50px", height: "50px" }}
           />
         ),
@@ -126,7 +126,7 @@ const ProductsPage: React.FC = () => {
         <SearchForm onSearch={handleSearch} initialSearchTerm={search} />
 
         <MyTable2
-          rows={data?.metadata || []}
+          rows={data?.metadata?.books || []}
           columns={columns}
           limit={limit}
           count={data?.total || 0}
