@@ -91,7 +91,7 @@ const Login = () => {
 										: "border-red-500 ring-0"
 								} 
                 text-zinc-900 block px-2.5 pb-2.5 pt-5 w-full text-sm outline-none  peer`}
-								placeholder=" "
+								placeholder=""
 								{...register("user_password")}
 							/>
 							<label
