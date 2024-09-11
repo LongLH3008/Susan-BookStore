@@ -95,14 +95,14 @@ const bookUpdateSchema = bookCreateSchema.fork(
 });
 
 const bookQuerySchema = joi.object({
-    category_ids: joi.string(),
-    page: joi.number().integer().min(1),
-    limit: joi.number().integer().min(1),
-    sort: joi.string().valid("ascByPrice", "descByPrice", "ascByRating", "descByRating", "ascByTitle", "descByTitle"),
-    minPrice: joi.number().min(0),
-    maxPrice: joi.number().min(0),
-    minRating: joi.number().min(0).max(5),
-    search: joi.string(),
+    category_ids: joi.string().optional(),
+    page: joi.number().integer().min(1).optional(),
+    limit: joi.number().integer().min(1).optional(),
+    sort: joi.string().valid("ascByPrice", "descByPrice", "ascByRating", "descByRating", "ascByTitle", "descByTitle").optional(),
+    minPrice: joi.number().min(0).optional(),
+    maxPrice: joi.number().min(0).optional(),
+    minRating: joi.number().min(0).max(5).optional(),
+    search: joi.optional()
 });
 
 export { bookCreateSchema, bookUpdateSchema, bookQuerySchema };
