@@ -97,7 +97,7 @@ const bookUpdateSchema = bookCreateSchema.fork(
 const bookQuerySchema = joi.object({
     category_ids: joi.string().optional(),
     page: joi.number().integer().min(1).optional(),
-    limit: joi.number().integer().min(1).optional(),
+    limit: joi.number().integer().optional(),
     sort: joi.string().valid("ascByPrice", "descByPrice", "ascByRating", "descByRating", "ascByTitle", "descByTitle").optional(),
     minPrice: joi.number().min(0).optional(),
     maxPrice: joi.number().min(0).optional(),
