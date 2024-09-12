@@ -2,8 +2,6 @@ import { IProduct } from "@/common/interfaces/product";
 import { SendRequest } from "@/config";
 import { Book } from "@/schemas/product";
 
-const base_URL = `http://localhost:5000/api/v1/`;
-
 type filter = {
   limit?: number;
   page?: number;
@@ -12,32 +10,44 @@ type filter = {
 export const fetchProducts = async (arg: filter) => {
   try {
     const params = `?page=${arg.page ?? ""}&limit=${arg.limit ?? ""}`;
-    return await SendRequest("GET", `${base_URL}books${params}`);
+    return await SendRequest("GET", `/books${params}`);
   } catch (error) {
     console.error("Error fetching products:", error);
     throw error;
   }
 };
-export const fetchProductById = async (id: string) => {
-  const response = await SendRequest("GET", `${base_URL}books/${id}`);
-  return response;
-};
-export const deleteProduct = async (id: string) => {
-  return await SendRequest("DELETE", `${base_URL}books`, null, id);
+
+export const getProducttById = async (_id: string) => {
+  return await SendRequest("GET", `/books/${_id}`);
 };
 
-export const addProduct = async (data: Book) => {
-  return await SendRequest("POST", `${base_URL}books`, data);
+export const deleteProduct = async (id: string) => {
+  try {
+    console.log("Gọi API với ID:", id);
+    return await SendRequest("DELETE", `/books`, null, id);
+  } catch (error) {
+    console.error("Error delete products:", error);
+    throw error;
+  }
 };
-export const editProduct = async (data: Book, id: string) => {
-  return await SendRequest("PUT", `${base_URL}books`, data, id);
-};
-export const fetchCategory = async () => {
-  return await SendRequest("GET", `${base_URL}categories`);
+
+export const addProduct = async (data: IProduct) => {
+  try {
+    const response = await SendRequest("POST", `/books`, data);
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      throw new Error(`Error adding product: ${errorMessage}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error adding product:", error);
+    throw error;
+  }
+
 };
 export const fetchComment = async () => {
   try {
-    return await SendRequest("GET", `${base_URL}comments`);
+    return await SendRequest("GET", `/comments`);
   } catch (error) {
     console.error(`Error fetching comments:`, error);
     throw error;
@@ -46,7 +56,7 @@ export const fetchComment = async () => {
 
 export const fetchUsers = async () => {
   try {
-    return await SendRequest("GET", `${base_URL}user`);
+    return await SendRequest("GET", `/user`);
   } catch (error) {
     console.error("Error fetching users:", error);
     throw error;
