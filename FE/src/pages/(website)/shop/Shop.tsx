@@ -5,6 +5,7 @@ import Breadcrumb from "../../../components/(website)/breadcrumb/breadcrumb.tsx"
 import Pagination from "./_components/pagination.tsx";
 import Left from "./_components/Fillter.tsx";
 import { ProductProvider } from "@/common/hooks/useProduct.tsx";
+import { CategoryProvider } from "@/common/hooks/useCategories.tsx";
 
 type Props = {};
 
@@ -50,7 +51,9 @@ const Shop = (props: Props) => {
           onPageChange={handlePageChange}
         />
         <div className="grid grid-cols-12 gap-8">
-          <Left />
+          <CategoryProvider>
+            <Left />
+          </CategoryProvider>
           <ProductProvider>
             <Right
               totalItems={totalItems}
