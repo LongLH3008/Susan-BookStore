@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const AuthMiddleware_1 = require("./../middlewares/AuthMiddleware");
 const express_1 = require("express");
 const ChangePassword_1 = __importDefault(require("../controllers/Api/Auth/ChangePassword"));
 const ForgotPassword_1 = __importDefault(require("../controllers/Api/Auth/ForgotPassword"));
@@ -69,11 +70,17 @@ router.patch("/books/discount", (0, utils_1.asyncHandler)(Book_controller_1.defa
 router.patch("/books/:id/discount", (0, utils_1.asyncHandler)(Book_controller_1.default.setDiscountByBookId));
 router.patch("/books/:id/sold", (0, utils_1.asyncHandler)(Book_controller_1.default.updateSoldNumber));
 //blog
-router.post("/blog/add", (0, utils_1.asyncHandler)(blog_controller_1.default.create));
-router.get("/blog", (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlogs));
+router.post("/blog/views/:userId/:blogId", (0, utils_1.asyncHandler)(blog_controller_1.default.views));
+router.get("/blog", AuthMiddleware_1.authMiddleware, AuthMiddleware_1.checkAdmin, (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlogs));
 router.get("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.getOneBlog));
 router.delete("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.deleteBlog));
 router.put("/blog/update/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.updateBlog));
+//blogcomment
+router.post("/blog/addcomment/:blogId", (0, utils_1.asyncHandler)(blog_controller_1.default.addComment));
+router.get("/blog/commentblog/:blogId", (0, utils_1.asyncHandler)(blog_controller_1.default.getComments));
+router.put("/blog/updatecommentBlog/:blogId/:commentId", (0, utils_1.asyncHandler)(blog_controller_1.default.updateComment));
+router.delete("/blog/deletecommentBlog/:blogId/:commentId", (0, utils_1.asyncHandler)(blog_controller_1.default.deleteComment));
+router.post("/blog/likecomment/:blogId/:commentId", (0, utils_1.asyncHandler)(blog_controller_1.default.likeComment));
 //order
 // router.post("/orders", asyncHandler(OrderController.create));
 // router.get("/orders/:id", asyncHandler(OrderController.getOrderById));

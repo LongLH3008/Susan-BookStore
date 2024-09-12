@@ -71,7 +71,7 @@ export interface BookQueryInputDTO {
     category_ids?: string;
     page?: number;
     limit?: number;
-    sort?: string;
+    sort?: "ascByPrice" | "descByPrice" | "ascByRating" | "descByRating" | "ascByTitle" | "descByTitle";
     minPrice?: number;
     maxPrice?: number;
     minRating?: number;

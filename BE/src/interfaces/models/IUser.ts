@@ -15,6 +15,12 @@ export enum UserTypeAuth {
     google = "google"
 }
 
+declare global {
+    namespace Express {
+      
+        interface User extends IUser, mongoose.Document { }
+    }
+}
 export interface IUser {
     user_name: string
     user_otp: string

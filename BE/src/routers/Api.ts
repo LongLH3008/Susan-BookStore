@@ -1,3 +1,4 @@
+import { authMiddleware, checkAdmin } from './../middlewares/AuthMiddleware';
 import { Router } from "express";
 import AuthChangeFwApiController from "../controllers/Api/Auth/ChangePassword";
 import AuthForgotfwApiController from "../controllers/Api/Auth/ForgotPassword";
@@ -72,12 +73,17 @@ router.patch("/books/discount", asyncHandler(BookController.setDiscountToAll));
 router.patch("/books/:id/discount", asyncHandler(BookController.setDiscountByBookId));
 router.patch("/books/:id/sold", asyncHandler(BookController.updateSoldNumber));
 //blog
-
-router.post("/blog/add", asyncHandler(BlogController.create));
-router.get("/blog", asyncHandler(BlogController.getAllBlogs));
+router.post("/blog/views/:userId/:blogId", asyncHandler(BlogController.views));
+router.get("/blog",authMiddleware,checkAdmin, asyncHandler(BlogController.getAllBlogs));
 router.get("/blog/:id", asyncHandler(BlogController.getOneBlog));
 router.delete("/blog/:id", asyncHandler(BlogController.deleteBlog));
 router.put("/blog/update/:id", asyncHandler(BlogController.updateBlog));
+//blogcomment
+router.post("/blog/addcomment/:blogId", asyncHandler(BlogController.addComment));
+router.get("/blog/commentblog/:blogId", asyncHandler(BlogController.getComments));
+router.put("/blog/updatecommentBlog/:blogId/:commentId", asyncHandler(BlogController.updateComment));
+router.delete("/blog/deletecommentBlog/:blogId/:commentId", asyncHandler(BlogController.deleteComment));
+router.post("/blog/likecomment/:blogId/:commentId", asyncHandler(BlogController.likeComment));
 
 //order
 // router.post("/orders", asyncHandler(OrderController.create));

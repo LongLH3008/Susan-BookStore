@@ -9,12 +9,10 @@ import UsersPage from "@/pages/(dashboard)/Users/UsersPage";
 import * as Website from "@/pages/(website)";
 import { useRoutes } from "react-router-dom";
 
-import FormAttr from "@/pages/(dashboard)/Products/FormAttr";
 import ProductForm from "@/pages/(dashboard)/Products/productForm";
+import DashboardGuard from "./dashboard.guard";
 
-type Props = {};
-
-const RouterWebsite = (props: Props) => {
+const RouterWebsite = () => {
 	const routers = useRoutes([
 		{
 			path: "",
@@ -38,7 +36,11 @@ const RouterWebsite = (props: Props) => {
 
 		{
 			path: "/admin",
-			element: <MainPage />,
+			element: (
+				<DashboardGuard>
+					<MainPage />
+				</DashboardGuard>
+			),
 			children: [
 				{ path: "orders", element: <OrdersPage /> },
 				{ path: "users", element: <UsersPage /> },
@@ -50,6 +52,7 @@ const RouterWebsite = (props: Props) => {
 		},
 		{ path: "products", element: <ProductsPage /> },
 		{ path: "users", element: <UsersPage /> },
+		{ path: "product/edit/:id", element: <ProductForm /> },
 		{ path: "product/add", element: <ProductForm /> },
 	]);
 	return routers;

@@ -1,5 +1,6 @@
 import { IProduct } from "@/common/interfaces/product";
 import { SendRequest } from "@/config";
+import { Book } from "@/schemas/product";
 
 type filter = {
   limit?: number;
@@ -15,6 +16,7 @@ export const fetchProducts = async (arg: filter) => {
     throw error;
   }
 };
+
 export const getProducttById = async (_id: string) => {
   return await SendRequest("GET", `/books/${_id}`);
 };
@@ -41,8 +43,8 @@ export const addProduct = async (data: IProduct) => {
     console.error("Error adding product:", error);
     throw error;
   }
-};
 
+};
 export const fetchComment = async () => {
   try {
     return await SendRequest("GET", `/comments`);

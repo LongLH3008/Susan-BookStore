@@ -13,7 +13,9 @@ class Http {
 		// _express.use(cors());
 		_express.use(flash());
 
-		_express.use(helmet());
+		_express.use(helmet({
+			crossOriginResourcePolicy: false,
+		}));
 
 		_express.use(compression());
 
