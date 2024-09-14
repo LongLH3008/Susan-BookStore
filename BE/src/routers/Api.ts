@@ -128,6 +128,7 @@ router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutRevi
 router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest))
 router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail))
 router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince))
+router.post("/giao-hang-nhanh/preview-shipfee", asyncHandler(GiaoHangNhanhController.PreviewShipFee))
 
 
 // advanced search and similar books

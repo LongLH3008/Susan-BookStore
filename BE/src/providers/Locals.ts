@@ -34,6 +34,7 @@ class Locals {
 		const api_get_province = process.env.API_GET_PROVINCE;
 		const api_get_district = process.env.API_GET_DISTRICT;
 		const api_get_ward = process.env.API_GET_WARD;
+		const api_preview_totalfee = process.env.API_PREVIEW_TOTAL_FEE
 
 		//advanced search
 		const fireworkToken = `${process.env.FIREWORK_TOKEN}` || process.env.FIREWORK_TOKEN;
@@ -68,7 +69,8 @@ class Locals {
 			api_get_ward,
 			fireworkToken,
 			fireworkUrl,
-			qdrantUrl
+			qdrantUrl,
+			api_preview_totalfee
 		};
 	}
 

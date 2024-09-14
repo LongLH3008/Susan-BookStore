@@ -1,5 +1,5 @@
 import { SuccessResponse } from "../../cores/succes.response";
-import { GiaoHangNhanhDto } from "../../Services/dtos/GiaoHangNhanh.dto";
+import { GiaoHangNhanhDto, PreviewShipFee } from "../../Services/dtos/GiaoHangNhanh.dto";
 import GiaoHangNhanhService from "../../Services/GiaoHangNhanh.service";
 
 class GiaoHangNhanhController {
@@ -26,9 +26,17 @@ class GiaoHangNhanhController {
         }).send(res);
     }
 
-    
+    // tính phí trước cho khách hàng xem 
+    static async PreviewShipFee(req: Request | any, res: Response): Promise<any> {
+        return new SuccessResponse({
+            message: "Get Ship Fee successfully",
+            metadata: await GiaoHangNhanhService.FeeTotal(req.body)
+        }).send(res);
+    }
 
-    
+
+
+
 }
 
 export default GiaoHangNhanhController

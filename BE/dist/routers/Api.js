@@ -103,6 +103,7 @@ router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_Controlle
 router.post("/giao-hang-nhanh/create", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.CreateTest));
 router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.getDetail));
 router.get("/get-province", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.GetProvince));
+router.post("/giao-hang-nhanh/preview-shipfee", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.PreviewShipFee));
 // advanced search and similar books
 router.post("/search", utils_1.asyncHandler);
 exports.default = router;
