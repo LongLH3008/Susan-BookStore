@@ -1,13 +1,10 @@
-import * as img from "@/common/assets/img";
 import ProductFeatures from "./features";
 import useProductContext, {
   ProdContextProvider,
 } from "../../../common/context/ContextProduct";
 import { Link, useLocation } from "react-router-dom";
-import useProduct from "@/common/hooks/useProduct";
 import { IProduct } from "@/common/interfaces/product";
 import useProductStore from "@/common/Zustand/detailProduct";
-import { useEffect } from "react";
 
 type Props = {
   dataProduct: IProduct;
@@ -46,7 +43,10 @@ const ProdContent = ({ dataProduct }: Props) => {
           key={dataProduct._id}
           className="relative flex items-center justify-center h-[337px] overflow-hidden cursor-pointer *:text-white *:text-[14px] *:grid *:place-items-center"
         >
-          <Link to="/book_detail" state={{ from: location.pathname }}>
+          <Link
+            to={"/book/" + dataProduct?._id}
+            state={{ from: location.pathname }}
+          >
             <img
               className="w-full h-full object-cover"
               src={dataProduct?.coverImage}
@@ -80,7 +80,7 @@ const ProdContent = ({ dataProduct }: Props) => {
           >
             {dataProduct?.title}
           </Link>
-          <p className="text-zinc-500">Author</p>
+          <p className="text-zinc-500">{dataProduct?.author}</p>
           <div>
             <span className="text-[16px] text-[#00BFC5] font-semibold">
               $
@@ -96,7 +96,7 @@ const ProdContent = ({ dataProduct }: Props) => {
             )}
           </div>
         </div>
-        <ProductFeatures />
+        <ProductFeatures product_id={dataProduct?._id} />
       </section>
     </>
   );

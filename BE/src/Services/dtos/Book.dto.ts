@@ -11,6 +11,7 @@ export interface BookCreateInputDTO {
     publisher: string;
     publicationDate: Date;
     language: string;
+    ebookDemoLink: string;
     numberOfPages: number;
     format: 'Hardcover' | 'Paperback';
     categories: string[];
@@ -42,6 +43,7 @@ export interface BookUpdateInputDTO {
     coverImage?: string;
     publisher?: string;
     publicationDate?: Date;
+    ebookDemoLink?: string;
     language?: string;
     numberOfPages?: number;
     format?: 'Hardcover' | 'Paperback';
@@ -69,7 +71,7 @@ export interface BookQueryInputDTO {
     category_ids?: string;
     page?: number;
     limit?: number;
-    sort?: string;
+    sort?: "ascByPrice" | "descByPrice" | "ascByRating" | "descByRating" | "ascByTitle" | "descByTitle";
     minPrice?: number;
     maxPrice?: number;
     minRating?: number;
@@ -86,6 +88,7 @@ export interface BookOutputDTO {
     price: number;
     discount: number;
     sold: number;
+    ebookDemoLink: string;
     coverImage: string;
     publisher: string;
     publicationDate: Date;

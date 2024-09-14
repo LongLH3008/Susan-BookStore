@@ -65,6 +65,7 @@ class BookService {
     let sortBy: { [key: string]: 1 | -1 } = {};
     let filter: any = { isActive: true };
 
+
     if (category_ids) {
       const categoriesArray = category_ids.split(",");
       filter.categories = { $in: categoriesArray };
@@ -80,7 +81,7 @@ class BookService {
       filter.rating = { $gte: parseFloat(minRating.toString()) };
     }
 
-    if (search) {
+    if (search && search != '""' && search != "''") {
       filter.$text = { $search: search };
     }
 
@@ -109,7 +110,13 @@ class BookService {
       }
     }
 
-    const books = await Book.find(filter)
+    let books: BookOutputDTO[] = []
+    if (limit == 0) {
+      books = await Book.find(filter)
+        .sort(sortBy)
+        .lean();
+    }
+    books = await Book.find(filter)
       .sort(sortBy)
       .skip(skip)
       .limit(limit)
@@ -228,7 +235,12 @@ class BookService {
   }
 
   static async getBookByKeyword(keyword: string) {
-    
+
+  }
+  static async getBookBySlug(slug: string) {
+    const foundBook = await Book.findOne({ slug })
+    if (!foundBook) throw new ResourceNotFoundError("Book not found")
+    return foundBook as BookOutputDTO
   }
 }
 

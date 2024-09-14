@@ -1,5 +1,5 @@
 import { ConflictError, InternalServerError, ResourceNotFoundError } from "../cores/error.response";
-import { ICart } from "../interfaces/models/ICart";
+import { ICart, ICartSelectItem } from "../interfaces/models/ICart";
 import mongoose, { trusted } from "mongoose";
 import Cart from "../models/Cart.model";
 import Product from "../models/Book.model";
@@ -11,11 +11,11 @@ class CartService {
 		// check user có giỏ hàng hay chưa
 		const checkCartExist = await Cart.findOne({
 			cart_user_id: cart_user_id,
-		})
-			.populate({
-				path: 'cart_products.product_id',
-				model: 'Books'
-			});
+		}).populate({
+			path: "cart_products.product_id",
+			model: "Books",
+			select: "title price discount slug coverImage author format stock",
+		});
 
 		return checkCartExist;
 	}
@@ -40,7 +40,6 @@ class CartService {
 		if (check[0].cart_products.length === 0) return null;
 		return check;
 	}
-
 
 	private static checkQuantityProductVariant() {
 		// code here ...
@@ -127,7 +126,7 @@ class CartService {
 			{ new: true }
 		);
 
-		if (!newCart) throw new InternalServerError("Error delete product in cart , please try agian !");
+		if (!newCart) throw new InternalServerError("Error delete product in cart , please try again !");
 		return newCart;
 	}
 
@@ -180,6 +179,21 @@ class CartService {
 			return NewCart;
 		}
 		return;
+	}
+
+	static async updateSelectedProductInCart(cart_user_id: string, cart_item: ICartSelectItem[]) {
+		const checkCartExist = await this.checkCart(cart_user_id);
+		if (!checkCartExist) throw new ResourceNotFoundError("Cant not find cart by user_id");
+
+		const { cart_products } = checkCartExist;
+
+		cart_products.map((item: any, index: number) =>
+			item._id == cart_item[index]._id ? (item.selected = cart_item[index].selected) : item
+		);
+
+		const newCart = await Cart.findOneAndUpdate({ cart_user_id }, { cart_products }, { new: true });
+		if (!newCart) throw new InternalServerError("Error delete product in cart , please try again !");
+		return newCart;
 	}
 }
 

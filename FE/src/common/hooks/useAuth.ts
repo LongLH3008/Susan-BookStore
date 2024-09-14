@@ -1,6 +1,10 @@
 import { checkOTP, confirmNewPassword, login, register, requestOTP } from "@/services/auth";
 import { useMutation } from "@tanstack/react-query";
+import { jwtDecode } from "jwt-decode";
 import { SubmitHandler } from "react-hook-form";
+import { create } from "zustand";
+import { getCookie } from "../shared/cookie";
+import { Authentication } from "../shared/authentication";
 
 type ForgotPassword = "REQUEST_OTP" | "CHECK_OTP" | "CONFIRM_NEW_PASSWORD";
 
@@ -9,6 +13,29 @@ type useAuth = {
 	onSuccess?: (data?: any) => void;
 	onError?: (error?: any) => void;
 };
+
+type userState = {
+	id: string;
+	user_role: "user" | "admin" | "";
+	AuthorUser: () => void;
+	resetState: () => void;
+};
+
+export const userState = create<userState>((set) => ({
+	id: "",
+	user_role: "",
+	AuthorUser: () => {
+		const payload = Authentication();
+		if (payload) {
+			set({ ...payload });
+		}
+	},
+	resetState: () => {
+		localStorage.removeItem("refreshToken");
+		localStorage.removeItem("accessToken");
+		set({ id: "", user_role: "" });
+	},
+}));
 
 export const useAuth = ({ action, onSuccess, onError }: useAuth) => {
 	const { mutate, ...rest } = useMutation({
@@ -42,6 +69,15 @@ export const useAuth = ({ action, onSuccess, onError }: useAuth) => {
 			}
 		},
 		onSuccess: (response: any) => {
+			if (action == "LOGIN") {
+				const { accessToken, refreshToken } = response;
+				localStorage.setItem("accessToken", accessToken);
+				localStorage.setItem("refreshToken", refreshToken);
+			}
+			if (action == "LOGOUT") {
+				localStorage.remove("accessToken");
+				localStorage.remove("refreshToken");
+			}
 			onSuccess && onSuccess({ status: "SUCCESS", message: response });
 		},
 		onError: (error: any) => {

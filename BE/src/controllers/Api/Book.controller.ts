@@ -99,8 +99,16 @@ class BookController {
       metadata: await BookService.updateSoldNumber(id, quantity)
     }).send(res);
   }
+  static async getBySlug(req: Request, res: Response): Promise<any> {
+    const { slug } = req.params;
 
-  
+    return new SuccessResponse({
+      message: "get book  successfully",
+      metadata: await BookService.getBookBySlug(slug)
+    }).send(res);
+  }
+
+
 }
 
 export default BookController;

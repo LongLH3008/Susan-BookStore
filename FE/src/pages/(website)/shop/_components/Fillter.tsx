@@ -1,10 +1,20 @@
-import React, { useState } from "react";
+import useCategory from "@/common/hooks/useCategories";
+import { ICategory } from "@/common/interfaces/category";
+import { log } from "console";
+import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 
 type Props = {};
 
 const Left = (props: Props) => {
   const [openItem, setOpenItem] = useState<number[]>([]);
+  const { CategoryQuery, setLimit } = useCategory();
+  // console.log(CategoryQuery);
+
+  console.log(CategoryQuery);
+  useEffect(() => {
+    setLimit(9);
+  }, []);
   const [filterValues, setFilterValues] = useState({
     price: { gte: 0, lte: 110 },
     availability: [],
@@ -45,7 +55,7 @@ const Left = (props: Props) => {
     });
   };
 
-  // console.log(filterValues);
+  console.log(filterValues);
 
   const handleToggle = (
     index: number,
@@ -54,6 +64,108 @@ const Left = (props: Props) => {
     event.preventDefault();
     toggleItem(index);
   };
+  const sidebarItems = [
+    {
+      id: 2,
+      title: "Availability",
+      open: openItem.includes(2),
+      items: [
+        {
+          type: "checkbox",
+          name: "availability",
+          value: 1,
+          label: "In stock",
+          count: 34,
+        },
+        {
+          type: "checkbox",
+          name: "availability",
+          value: 0,
+          label: "Out of stock",
+          count: 18,
+        },
+      ],
+    },
+    {
+      id: 3,
+      title: "Product type",
+      open: openItem.includes(3),
+      items: CategoryQuery?.data?.metadata?.map((item: ICategory) => ({
+        type: "checkbox",
+        name: "productType",
+        value: item.category_name,
+        label: item.category_name,
+        count: 3,
+      })),
+    },
+    {
+      id: 4,
+      title: "Brand",
+      open: openItem.includes(4),
+      items: [...Array(12)].map((_, index) => ({
+        type: "checkbox",
+        name: "brand",
+        value: `Vendor ${index + 1}`,
+        label: `Vendor ${index + 1}`,
+        count: 3,
+      })),
+    },
+    {
+      id: 5,
+      title: "Color",
+      open: openItem.includes(5),
+      items: [
+        "black",
+        "blue",
+        "gold",
+        "gray",
+        "green",
+        "magenta",
+        "maroon",
+        "navy",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "violet",
+        "white",
+        "yellow",
+      ].map((color, index) => ({
+        type: "checkbox",
+        name: "brand",
+        value: color,
+        label: color,
+        count: 6,
+      })),
+    },
+    {
+      id: 6,
+      title: "Material",
+      open: openItem.includes(6),
+      items: ["fiber", "leather", "metal", "resin", "slag"].map(
+        (material, index) => ({
+          type: "checkbox",
+          name: "material",
+          value: material,
+          label: material,
+          count: 3,
+        })
+      ),
+    },
+    {
+      id: 7,
+      title: "Size",
+      open: openItem.includes(7),
+      items: ["s", "m", "l", "xl", "xxl"].map((size, index) => ({
+        type: "checkbox",
+        name: "size",
+        value: size,
+        label: size,
+        count: 13 - index,
+      })),
+    },
+  ];
+
   return (
     <div className="lg:col-span-3 order-last lg:order-first ">
       <div className="sidebar-wrapper shop-sidebar storefront-filter icofont ">
@@ -75,16 +187,21 @@ const Left = (props: Props) => {
             </div>
             {openItem.includes(1) && (
               <div className="sidebar-body">
-                <div className="filter-value-counter">
-                  <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
-                    selected
+                <div className="filter-value-counter flex justify-between items-center">
+                  <span className="filter-value-selected border border-dashed border-gray-500 text-[#838383] rounded-full px-2 inline-block my-3">
+                    {filterValues
+                      ? `Price: $${filterValues?.price?.gte} - $${filterValues?.price?.lte}`
+                      : "selected"}
                   </span>
+                  <button className="underline hover:text-[#00BFC5]">
+                    Reset
+                  </button>
                 </div>
                 <div className="checkbox-container categories-list sidebar-price-filter flex">
-                  <div className="filter-range-from flex  items-center pr-3 *:me-1">
-                    <span>$</span>
+                  <div className="filter-range-from flex  items-center pr-2 *:me-1 ">
+                    <span className="text-[#838383]">$</span>
                     <input
-                      className="w-20"
+                      className="w-14 placeholder-gray-300 "
                       name="price.gte"
                       id="Filter-price-1"
                       type="number"
@@ -94,12 +211,14 @@ const Left = (props: Props) => {
                       value={filterValues.price.gte}
                       onChange={handleChange}
                     />
-                    <label htmlFor="Filter-price-1">From</label>
+                    <label className="text-[#838383]" htmlFor="Filter-price-1">
+                      From
+                    </label>
                   </div>
-                  <div className="filter-price-range-to flex  items-center *:me-1">
-                    <span>$</span>
+                  <div className="filter-price-range-to flex  items-center *:me-1 ">
+                    <span className="text-[#838383]">$</span>
                     <input
-                      className="w-20"
+                      className="w-[70px] placeholder-gray-300 "
                       name="price.lte"
                       id="Filter-price-1"
                       type="number"
@@ -109,7 +228,9 @@ const Left = (props: Props) => {
                       value={filterValues.price.lte}
                       onChange={handleChange}
                     />
-                    <label htmlFor="Filter-price-1">To</label>
+                    <label className="text-[#838383]" htmlFor="Filter-price-1">
+                      To
+                    </label>
                   </div>
                 </div>
                 <button className="mt-10 bg-black text-white px-5 py-2">
@@ -118,310 +239,62 @@ const Left = (props: Props) => {
               </div>
             )}
           </div>
-          <div className="blog-sidebar">
-            <div className="flex justify-between items-center">
-              <h5 className="title widget-collapse-show">Availability</h5>
-              <button onClick={(event) => handleToggle(2, event)}>
-                {openItem.includes(2) ? (
-                  <MdKeyboardArrowDown className="w-5 h-5" />
-                ) : (
-                  <MdKeyboardArrowRight className="w-5 h-5" />
-                )}
-              </button>
-            </div>
-            {openItem.includes(2) && (
-              <div className="sidebar-body widget-collapse-hide  ">
-                <div className="filter-value-counter">
-                  <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
-                    0 selected
-                  </span>
-                </div>
-                <ul className="checkbox-container categories-list ">
-                  <li>
-                    <div className="custom-control custom-checkbox hover:text-[#00BFC5] ">
-                      <input
-                        type="checkbox"
-                        name="availability"
-                        defaultValue={1}
-                        id="Filter-availability-1"
-                        className="custom-control-input"
-                        onChange={handleChange}
-                      />
-                      <label
-                        htmlFor="Filter-availability-1"
-                        className="custom-control-label px-2"
-                      >
-                        In stock{" "}
-                        <span className="count_value float-end">(34)</span>
-                      </label>
-                      <span className="checkmark" />
-                    </div>
-                  </li>
-                  <li>
-                    <div className="custom-control custom-checkbox hover:text-[#00BFC5]">
-                      <input
-                        type="checkbox"
-                        name="availability"
-                        defaultValue={0}
-                        className="custom-control-input"
-                        onChange={handleChange}
-                      />
-                      <label
-                        htmlFor="Filter-availability-2"
-                        className="custom-control-label px-2"
-                      >
-                        Out of stock{" "}
-                        <span className="count_value float-end">(18)</span>
-                      </label>
-                      <span className="checkmark" />
-                    </div>
-                  </li>
-                </ul>
+          {sidebarItems.map((item) => (
+            <div className="blog-sidebar" key={item.id}>
+              <div className="flex justify-between items-center">
+                <h5 className="title widget-collapse-show">{item.title}</h5>
+                <button onClick={(event) => handleToggle(item.id, event)}>
+                  {item.open ? (
+                    <MdKeyboardArrowDown className="w-5 h-5" />
+                  ) : (
+                    <MdKeyboardArrowRight className="w-5 h-5" />
+                  )}
+                </button>
               </div>
-            )}
-          </div>
-          <div className="blog-sidebar">
-            <div className="flex justify-between items-center">
-              <h5 className="title widget-collapse-show">Product type</h5>
-              <button onClick={(event) => handleToggle(3, event)}>
-                {openItem.includes(3) ? (
-                  <MdKeyboardArrowDown className="w-5 h-5" />
-                ) : (
-                  <MdKeyboardArrowRight className="w-5 h-5" />
-                )}
-              </button>
-            </div>
-            {openItem.includes(3) && (
-              <div className="sidebar-body widget-collapse-hide ">
-                <div className="filter-value-counter">
-                  <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
-                    0 selected
-                  </span>
-                </div>
-                <ul className="checkbox-container categories-list">
-                  {[...Array(12)].map((_, index) => (
-                    <li key={index}>
-                      <div className="custom-control custom-checkbox hover:text-[#00BFC5]">
-                        <input
-                          type="checkbox"
-                          name="filter.p.product_type"
-                          defaultValue={`Type ${index + 1}`}
-                          id={`Filter-product-type-${index + 1}`}
-                          className="custom-control-input"
-                          onChange={handleChange}
-                        />
-                        <label
-                          htmlFor={`Filter-product-type-${index + 1}`}
-                          className="custom-control-label px-2"
-                        >
-                          {`Type ${index + 1}`}{" "}
-                          <span className="count_value float-end">(3)</span>
-                        </label>
-                        <span className="checkmark" />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-          <div className="blog-sidebar">
-            <div className="flex justify-between items-center">
-              <h5 className="title widget-collapse-show">Brand</h5>
-              <button onClick={(event) => handleToggle(4, event)}>
-                {openItem.includes(4) ? (
-                  <MdKeyboardArrowDown className="w-5 h-5" />
-                ) : (
-                  <MdKeyboardArrowRight className="w-5 h-5" />
-                )}
-              </button>
-            </div>
-            {openItem.includes(4) && (
-              <div className="sidebar-body widget-collapse-hide ">
-                <div className="filter-value-counter">
-                  <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
-                    0 selected
-                  </span>
-                </div>
-                <ul className="checkbox-container categories-list">
-                  {[...Array(12)].map((_, index) => (
-                    <li key={index}>
-                      <div className="custom-control custom-checkbox hover:text-[#00BFC5]">
-                        <input
-                          type="checkbox"
-                          name="filter.p.vendor"
-                          defaultValue={`Vendor ${index + 1}`}
-                          id={`Filter-brand-${index + 1}`}
-                          className="custom-control-input"
-                          onChange={handleChange}
-                        />
-                        <label
-                          htmlFor={`Filter-brand-${index + 1}`}
-                          className="custom-control-label px-2"
-                        >
-                          {`Vendor ${index + 1}`}{" "}
-                          <span className="count_value float-end">(3)</span>
-                        </label>
-                        <span className="checkmark" />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-          <div className="blog-sidebar">
-            <div className="flex justify-between items-center">
-              <h5 className="title widget-collapse-show">Color</h5>
-              <button onClick={(event) => handleToggle(5, event)}>
-                {openItem.includes(5) ? (
-                  <MdKeyboardArrowDown className="w-5 h-5" />
-                ) : (
-                  <MdKeyboardArrowRight className="w-5 h-5" />
-                )}
-              </button>
-            </div>
-            {openItem.includes(5) && (
-              <div className="sidebar-body widget-collapse-hide">
-                <div className="filter-value-counter">
-                  <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
-                    0 selected
-                  </span>
-                </div>
-                <ul className="checkbox-container categories-list">
-                  {[
-                    "black",
-                    "blue",
-                    "gold",
-                    "gray",
-                    "green",
-                    "magenta",
-                    "maroon",
-                    "navy",
-                    "orange",
-                    "pink",
-                    "purple",
-                    "red",
-                    "violet",
-                    "white",
-                    "yellow",
-                  ].map((color, index) => (
-                    <li key={index}>
-                      <div className="custom-control custom-checkbox hover:text-[#00BFC5]">
-                        <input
-                          type="checkbox"
-                          name="option.color"
-                          defaultValue={color}
-                          id={`Filter-color-${index + 1}`}
-                          className="custom-control-input"
-                        />
-                        <label
-                          htmlFor={`Filter-color-${index + 1}`}
-                          className="custom-control-label px-2"
-                        >
-                          {color}{" "}
-                          <span className="count_value float-end">(6)</span>
-                        </label>
-                        <span className="checkmark" />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-          <div className="blog-sidebar">
-            <div className="flex justify-between items-center">
-              <h5 className="title widget-collapse-show">Material</h5>
-              <button onClick={(event) => handleToggle(6, event)}>
-                {openItem.includes(6) ? (
-                  <MdKeyboardArrowDown className="w-5 h-5" />
-                ) : (
-                  <MdKeyboardArrowRight className="w-5 h-5" />
-                )}
-              </button>
-            </div>
-            {openItem.includes(6) && (
-              <div className="sidebar-body widget-collapse-hide ">
-                <div className="filter-value-counter">
-                  <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
-                    0 selected
-                  </span>
-                </div>
-                <ul className="checkbox-container categories-list">
-                  {["fiber", "leather", "metal", "resin", "slag"].map(
-                    (material, index) => (
+              {item.open && (
+                <div className="sidebar-body widget-collapse-hide">
+                  <div className="filter-value-counter flex justify-between items-center">
+                    <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
+                      selected
+                    </span>
+                    <button className="underline hover:text-[#00BFC5]">
+                      Reset
+                    </button>
+                  </div>
+                  <ul className="checkbox-container categories-list">
+                    {item.items.map((subItem: any, index: any) => (
                       <li key={index}>
                         <div className="custom-control custom-checkbox hover:text-[#00BFC5]">
                           <input
-                            type="checkbox"
-                            name="option.material"
-                            defaultValue={material}
-                            id={`Filter-material-${index + 1}`}
+                            type={subItem.type}
+                            name={subItem.name}
+                            defaultValue={subItem.value}
+                            id={`Filter-${item.title
+                              .toLowerCase()
+                              .replace(/\s+/g, "-")}-${index + 1}`}
                             className="custom-control-input"
+                            onChange={handleChange}
                           />
                           <label
-                            htmlFor={`Filter-material-${index + 1}`}
+                            htmlFor={`Filter-${item.title
+                              .toLowerCase()
+                              .replace(/\s+/g, "-")}-${index + 1}`}
                             className="custom-control-label px-2"
                           >
-                            {material}{" "}
-                            <span className="count_value float-end">(3)</span>
+                            {subItem.label}{" "}
+                            <span className="count_value float-end">
+                              ({subItem.count})
+                            </span>
                           </label>
                           <span className="checkmark" />
                         </div>
                       </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            )}
-          </div>
-          <div className="blog-sidebar">
-            <div className="flex justify-between items-center">
-              <h5 className="title widget-collapse-show">Size</h5>
-              <button onClick={(event) => handleToggle(7, event)}>
-                {openItem.includes(7) ? (
-                  <MdKeyboardArrowDown className="w-5 h-5" />
-                ) : (
-                  <MdKeyboardArrowRight className="w-5 h-5" />
-                )}
-              </button>
-            </div>
-            {openItem.includes(7) && (
-              <div className="sidebar-body widget-collapse-hide ">
-                <div className="filter-value-counter">
-                  <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
-                    0 selected
-                  </span>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="checkbox-container categories-list">
-                  {["s", "m", "l", "xl", "xxl"].map((size, index) => (
-                    <li key={index}>
-                      <div className="custom-control custom-checkbox hover:text-[#00BFC5]">
-                        <input
-                          type="checkbox"
-                          name="option.size"
-                          defaultValue={size}
-                          id={`Filter-size-${index + 1}`}
-                          className="custom-control-input"
-                        />
-                        <label
-                          htmlFor={`Filter-size-${index + 1}`}
-                          className="custom-control-label px-2"
-                        >
-                          {size}{" "}
-                          <span className="count_value float-end">
-                            ({13 - index})
-                          </span>
-                        </label>
-                        <span className="checkmark" />
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          ))}
         </form>
       </div>
     </div>

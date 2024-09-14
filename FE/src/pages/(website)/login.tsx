@@ -1,16 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/(website)/breadcrumb/breadcrumb";
 import * as icon from "@/common/assets/icon";
-import { useAuth } from "@/common/hooks/useAuth";
+import { useAuth, userState } from "@/common/hooks/useAuth";
 import { useToast } from "@/common/hooks/useToast";
 import { useForm } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { loginValidate } from "@/schemas/auth";
 
-type Props = {};
-
-const Login = (props: Props) => {
+const Login = () => {
 	const { toast } = useToast();
+	const { AuthorUser } = userState();
 	const nav = useNavigate();
 
 	const {
@@ -22,9 +21,12 @@ const Login = (props: Props) => {
 	const { onSubmit } = useAuth({
 		action: "LOGIN",
 		onSuccess: (data: any) => {
-			const name = data.message.user.user_email.split("@")[0];
-			toast(data.status, `Welcome ${name} !`);
-			nav("/");
+			const { user } = data.message;
+			AuthorUser();
+			setTimeout(() => {
+				toast(data.status, `Welcome ${user.user_email.split("@")[0]} !`);
+				nav("/");
+			}, 300);
 		},
 		onError: (err: any) => {
 			toast(err.status, err.message);
@@ -89,7 +91,7 @@ const Login = (props: Props) => {
 										: "border-red-500 ring-0"
 								} 
                 text-zinc-900 block px-2.5 pb-2.5 pt-5 w-full text-sm outline-none  peer`}
-								placeholder=" "
+								placeholder=""
 								{...register("user_password")}
 							/>
 							<label

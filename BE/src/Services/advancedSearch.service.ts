@@ -1,7 +1,7 @@
 import Locals from "../providers/Locals";
 import axios from "axios";
 
-class FireworksService {
+export class FireworksService {
   private baseUrl: string;
   private token: string;
 
@@ -25,7 +25,7 @@ class FireworksService {
   }
 }
 
-class QdrantService {
+export class QdrantService {
   private baseUrl: string;
 
   constructor() {
@@ -62,10 +62,5 @@ class QdrantService {
   }
 }
 
-class AdvancedSearch {
-  static async advancedSearch(query: any): Promise<any> {
-    return query;
-  }
-}
 
 // export default AdvancedSearch;

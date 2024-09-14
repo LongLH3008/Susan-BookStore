@@ -33,6 +33,10 @@ const bookCreateSchema = joi.object({
         "string.empty": "Nhà xuất bản là bắt buộc",
         "any.required": "Trường 'Nhà xuất bản' là bắt buộc",
     }),
+    ebookDemoLink: joi.string().required().messages({
+        "string.empty": "Link ebook demo là bắt buộc",
+        "any.required": "Trường 'Link ebook demo' là bắt buộc",
+    }),
     publicationDate: joi.date().required().messages({
         "date.base": "Ngày xuất bản không hợp lệ",
         "any.required": "Trường 'Ngày xuất bản' là bắt buộc",
@@ -78,8 +82,8 @@ const bookCreateSchema = joi.object({
         value: joi.number().required(),
         unit: joi.string().required()
     }),
-    edition: joi.string().allow(''), 
-    series: joi.string().allow(''),   
+    edition: joi.string().allow(''),
+    series: joi.string().allow(''),
     ageRange: joi.string().allow(''),
 });
 
@@ -91,14 +95,14 @@ const bookUpdateSchema = bookCreateSchema.fork(
 });
 
 const bookQuerySchema = joi.object({
-    category_ids: joi.string(),
-    page: joi.number().integer().min(1),
-    limit: joi.number().integer().min(1),
-    sort: joi.string().valid("ascByPrice", "descByPrice", "ascByRating", "descByRating", "ascByTitle", "descByTitle"),
-    minPrice: joi.number().min(0),
-    maxPrice: joi.number().min(0),
-    minRating: joi.number().min(0).max(5),
-    search: joi.string(),
+    category_ids: joi.string().optional(),
+    page: joi.number().integer().min(1).optional(),
+    limit: joi.number().integer().optional(),
+    sort: joi.string().valid("ascByPrice", "descByPrice", "ascByRating", "descByRating", "ascByTitle", "descByTitle").optional(),
+    minPrice: joi.number().min(0).optional(),
+    maxPrice: joi.number().min(0).optional(),
+    minRating: joi.number().min(0).max(5).optional(),
+    search: joi.optional()
 });
 
 export { bookCreateSchema, bookUpdateSchema, bookQuerySchema };
