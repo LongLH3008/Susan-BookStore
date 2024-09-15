@@ -1,37 +1,38 @@
-import React, { useState } from "react";
+import { CategoryProvider } from "@/common/hooks/useCategories.tsx";
+import { MegeMenuProvider } from "@/common/hooks/useMegaMenu.tsx";
+import useProduct from "@/common/hooks/useProduct.tsx";
+import { useEffect, useState } from "react";
+import Breadcrumb from "../../../components/(website)/breadcrumb/breadcrumb.tsx";
+import Left from "./_components/Fillter.tsx";
 import Nav from "./_components/Headershop.tsx";
 import Right from "./_components/Productshop.tsx";
-import Breadcrumb from "../../../components/(website)/breadcrumb/breadcrumb.tsx";
-import Pagination from "./_components/pagination.tsx";
-import Left from "./_components/Fillter.tsx";
-import { ProductProvider } from "@/common/hooks/useProduct.tsx";
-import { CategoryProvider } from "@/common/hooks/useCategories.tsx";
 
-type Props = {};
-
-const Shop = (props: Props) => {
+const Shop = () => {
   const [viewMode, setViewMode] = useState(null);
-  const [itemsToShow, setItemsToShow] = useState(4);
+  const [itemsToShow, setItemsToShow] = useState(6);
   const [sortBy, setSortBy] = useState("manual");
   const [currentPage, setCurrentPage] = useState(1);
+  const { productQuery, setLimit } = useProduct();
 
-  const totalItems = 37;
+  const totalItems = productQuery?.data?.metadata?.total;
+
+  useEffect(() => {
+    setLimit(itemsToShow);
+  }, [itemsToShow, setLimit]);
+  console.log(currentPage);
 
   const handleViewChange = (mode: any) => {
     setViewMode(mode);
   };
 
   const handleItemsToShowChange = (event: any) => {
-    setItemsToShow(parseInt(event.target.value, 10));
+    const newItemsToShow = parseInt(event.target.value, 10);
+    setItemsToShow(newItemsToShow);
     setCurrentPage(1);
   };
 
   const handleSortByChange = (event: any) => {
     setSortBy(event.target.value);
-  };
-
-  const handlePageChange = (page: any) => {
-    setCurrentPage(page);
   };
 
   return (
@@ -48,21 +49,22 @@ const Shop = (props: Props) => {
           totalItems={totalItems}
           itemsPerPage={itemsToShow}
           currentPage={currentPage}
-          onPageChange={handlePageChange}
+          onPageChange={setCurrentPage}
         />
         <div className="grid grid-cols-12 gap-8">
           <CategoryProvider>
-            <Left />
+            <MegeMenuProvider>
+              <Left />
+            </MegeMenuProvider>
           </CategoryProvider>
-          <ProductProvider>
-            <Right
-              totalItems={totalItems}
-              itemsToShow={itemsToShow}
-              currentPage={currentPage}
-              onPageChange={handlePageChange}
-              viewMode={viewMode}
-            />
-          </ProductProvider>
+
+          <Right
+            totalItems={totalItems}
+            itemsToShow={itemsToShow}
+            currentPage={currentPage}
+            onPageChange={setCurrentPage}
+            viewMode={viewMode}
+          />
         </div>
       </div>
     </>

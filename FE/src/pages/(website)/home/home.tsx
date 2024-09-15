@@ -7,6 +7,7 @@ import LatestProducts from "./_components/latest_products";
 import LatestBlogs from "./_components/latest_blogs";
 import Subcribe from "../../../components/(website)/subcribe/subcribe";
 import { ProductProvider } from "@/common/hooks/useProduct";
+import { CategoryProvider } from "@/common/hooks/useCategories";
 
 type Props = {};
 
@@ -26,7 +27,9 @@ const Home = (props: Props) => {
         </Link>
       </section>
       <ProductProvider>
-        <HomeProducts />
+        <CategoryProvider>
+          <HomeProducts />
+        </CategoryProvider>
       </ProductProvider>
       <section
         id=""
