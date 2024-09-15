@@ -4,11 +4,12 @@ import * as img from "@/common/assets/img";
 import { useState } from "react";
 import useCategory from "@/common/hooks/useCategories";
 import { ICategory } from "@/common/interfaces/category";
+import useMegaMenu from "@/common/hooks/useMegaMenu";
+import { IProduct } from "@/common/interfaces/product";
 
-type Props = {};
-
-const DropdownShop = (props: Props) => {
+const DropdownShop = () => {
   const { CategoryQuery } = useCategory();
+  const { author, Publishers, BestSeller } = useMegaMenu();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -52,52 +53,35 @@ const DropdownShop = (props: Props) => {
               <h3 className="text-zinc-800 uppercase font-semibold my-2 ">
                 author
               </h3>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
+              {author.slice(0, 4).map((aut: string) => (
+                <Link to={"/"} className="hover:text-[#00CFB5]">
+                  {aut}
+                </Link>
+              ))}
             </div>
             <div className="">
               <h3 className="text-zinc-800 uppercase font-semibold my-2 ">
                 publisher
               </h3>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
+
+              {Publishers.slice(0, 4).map((Publ: string) => (
+                <Link to={"/"} className="hover:text-[#00CFB5]">
+                  {Publ}
+                </Link>
+              ))}
             </div>
             <div className="border-none">
               <h3 className="text-zinc-800 uppercase font-semibold my-2">
                 bestseller
               </h3>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
-              <Link to={"/"} className="hover:text-[#00CFB5]">
-                Name
-              </Link>
+              {BestSeller.slice(0, 4).map((product: IProduct) => (
+                <Link
+                  to={"/book/" + product._id}
+                  className="hover:text-[#00CFB5]"
+                >
+                  {product.title}
+                </Link>
+              ))}
             </div>
           </div>
           <Link to={"/shop"}>

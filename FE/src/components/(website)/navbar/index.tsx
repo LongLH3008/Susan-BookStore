@@ -8,6 +8,8 @@ import DropdownMiniCart from "./dropdownMiniCart";
 import DropdownSearch from "./dropdownSearch";
 import DropdownShop from "./dropdownShop";
 import ResponsiveSidebar from "./responsiveSidebar";
+import { ProductProvider } from "@/common/hooks/useProduct";
+import { MegeMenuProvider } from "@/common/hooks/useMegaMenu";
 
 type Props = {};
 
@@ -15,18 +17,16 @@ const Navbar = (props: Props) => {
   const [scroll, setScroll] = useState(0);
   const { AuthorUser } = userState();
 
-
-	useEffect(() => {
-		AuthorUser();
-		const handleScroll = () => {
-			if (window.scrollY < 30) {
-				setScroll(window.scrollY);
-			}
-		};
-		window.addEventListener("scroll", handleScroll);
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, []);
-
+  useEffect(() => {
+    AuthorUser();
+    const handleScroll = () => {
+      if (window.scrollY < 30) {
+        setScroll(window.scrollY);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
@@ -35,7 +35,10 @@ const Navbar = (props: Props) => {
 			${scroll < 5 && "h-[68px] lg:h-[95px] duration-0"}
 
 			${scroll > 5 && scroll < 20 && "h-0 -top-20"}
-			${scroll > 20 && "h-[68px] shadow-sm border-0 top-0 bg-[rgba(255,255,255,0.7)] opacity-100"}
+			${
+        scroll > 20 &&
+        "h-[68px] shadow-sm border-0 top-0 bg-[rgba(255,255,255,0.7)] opacity-100"
+      }
 
 			fixed hover:bg-white ease-in duration-500 z-30 w-full`}
       >
@@ -56,7 +59,9 @@ const Navbar = (props: Props) => {
               HOME
             </Link>
             <CategoryProvider>
-              <DropdownShop />
+              <MegeMenuProvider>
+                <DropdownShop />
+              </MegeMenuProvider>
             </CategoryProvider>
             <Link
               className="hover:text-[#00BFC5] h-full grid place-items-center"
@@ -81,7 +86,9 @@ const Navbar = (props: Props) => {
             </Link>
           </div>
           <div className="h-full flex justify-end items-center max-[1000px]:gap-[10%] max-[1000px]:w-[20%] gap-[25%] *:cursor-pointer">
-            <DropdownSearch />
+            <ProductProvider>
+              <DropdownSearch />
+            </ProductProvider>
             <DropdownMiniCart />
             <DropdownInfoUser />
             <ResponsiveSidebar />
