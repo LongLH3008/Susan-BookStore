@@ -137,7 +137,6 @@ router.post("/giao-hang-nhanh/preview-shipfee", asyncHandler(GiaoHangNhanhContro
 
 router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview));
 
-
 // giao hàng nhanh
 router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest));
 router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail));

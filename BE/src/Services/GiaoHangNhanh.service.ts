@@ -4,6 +4,7 @@ import { BadRequestError, InternalServerError } from "../cores/error.response";
 import Locals from "../providers/Locals";
 import Book, { IBookModel } from "../models/Book.model";
 import Log from "../providers/Log";
+import { stringify } from "flatted";
 
 class GiaoHangNhanhService {
     static readonly token: string = "c5793e8f-688e-11ef-8e53-0a00184fe694";
@@ -135,10 +136,10 @@ class GiaoHangNhanhService {
                 ListItems.push({
                     name: ListBooks[i].title,
                     quantity: req.items[i].quantity,
-                    length: parseFloat(ListBooks[i].dimensions?.height as any) * unit,
-                    weight: parseFloat(ListBooks[i].weight?.value as any) * unitW,
-                    height: ListThickness[i] * unit,
-                    width: parseFloat(ListBooks[i].dimensions?.width as any) * unit
+                    length: Math.ceil(parseFloat(ListBooks[i].dimensions?.height as any) * unit),
+                    weight: Math.ceil(parseFloat(ListBooks[i].weight?.value as any) * unitW),
+                    height: Math.ceil(ListThickness[i] * unit),
+                    width: Math.ceil(parseFloat(ListBooks[i].dimensions?.width as any) * unit)
 
                 })
                 // độ dày 
@@ -150,9 +151,9 @@ class GiaoHangNhanhService {
 
             }
             const body = {
-                service_type_id : 5,
-                from_district_id : "",
-                from_ward_code : "",
+                service_type_id: 5,
+                from_district_id: 3440,
+                from_ward_code: "13005",
                 to_district_id: req.to_district_id,
                 to_ward_code: req.to_ward_code,
                 height: Math.ceil(TotalThickness + 5 as any),
@@ -164,6 +165,9 @@ class GiaoHangNhanhService {
                 items: ListItems
 
             }
+
+            console.log(body);
+
             //call api tính tiền phí 
             const res = await axios.post(Locals.config().api_preview_totalfee, body, {
                 headers: {
@@ -172,7 +176,10 @@ class GiaoHangNhanhService {
                     'ShopId': this.shop_id
                 },
             })
-            return res
+            return {
+                input : body,
+                output : res.data
+            }
         } catch (error: any) {
             throw new BadRequestError(error)
         }

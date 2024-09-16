@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { SuccessResponse } from "../../cores/succes.response";
-import UploadService from "../../Services/Upload.service";
+import UploadService from "../../Services/upload.service";
 
 
 
