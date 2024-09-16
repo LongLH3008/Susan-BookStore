@@ -1,28 +1,24 @@
 import useCategory from "@/common/hooks/useCategories";
+import useMegaMenu from "@/common/hooks/useMegaMenu";
+import useProduct from "@/common/hooks/useProduct";
 import { ICategory } from "@/common/interfaces/category";
-import { log } from "console";
 import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 
-type Props = {};
-
-const Left = (props: Props) => {
+const Left = () => {
   const [openItem, setOpenItem] = useState<number[]>([]);
   const { CategoryQuery, setLimit } = useCategory();
-  // console.log(CategoryQuery);
-
-  console.log(CategoryQuery);
+  const { author } = useMegaMenu();
+  const { setFeature } = useProduct();
   useEffect(() => {
-    setLimit(9);
+    setLimit(10);
   }, []);
+
   const [filterValues, setFilterValues] = useState({
     price: { gte: 0, lte: 110 },
     availability: [],
     productType: [],
-    brand: [],
-    color: [],
-    material: [],
-    size: [],
+    author: [],
   });
 
   const toggleItem = (index: number) => {
@@ -54,8 +50,10 @@ const Left = (props: Props) => {
       }
     });
   };
-
-  console.log(filterValues);
+  useEffect(() => {
+    setFeature(filterValues);
+    console.log(filterValues);
+  }, [JSON.stringify(filterValues)]);
 
   const handleToggle = (
     index: number,
@@ -100,68 +98,14 @@ const Left = (props: Props) => {
     },
     {
       id: 4,
-      title: "Brand",
+      title: "Author",
       open: openItem.includes(4),
-      items: [...Array(12)].map((_, index) => ({
+      items: author.map((au) => ({
         type: "checkbox",
-        name: "brand",
-        value: `Vendor ${index + 1}`,
-        label: `Vendor ${index + 1}`,
+        name: "author",
+        value: `${au}`,
+        label: `${au}`,
         count: 3,
-      })),
-    },
-    {
-      id: 5,
-      title: "Color",
-      open: openItem.includes(5),
-      items: [
-        "black",
-        "blue",
-        "gold",
-        "gray",
-        "green",
-        "magenta",
-        "maroon",
-        "navy",
-        "orange",
-        "pink",
-        "purple",
-        "red",
-        "violet",
-        "white",
-        "yellow",
-      ].map((color, index) => ({
-        type: "checkbox",
-        name: "brand",
-        value: color,
-        label: color,
-        count: 6,
-      })),
-    },
-    {
-      id: 6,
-      title: "Material",
-      open: openItem.includes(6),
-      items: ["fiber", "leather", "metal", "resin", "slag"].map(
-        (material, index) => ({
-          type: "checkbox",
-          name: "material",
-          value: material,
-          label: material,
-          count: 3,
-        })
-      ),
-    },
-    {
-      id: 7,
-      title: "Size",
-      open: openItem.includes(7),
-      items: ["s", "m", "l", "xl", "xxl"].map((size, index) => ({
-        type: "checkbox",
-        name: "size",
-        value: size,
-        label: size,
-        count: 13 - index,
       })),
     },
   ];

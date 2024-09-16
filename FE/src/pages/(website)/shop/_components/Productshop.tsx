@@ -2,6 +2,7 @@ import useProduct from "@/common/hooks/useProduct";
 import { IProduct } from "@/common/interfaces/product";
 import Product from "../../../../components/(website)/product/product";
 import Pagination from "./pagination";
+import { useEffect } from "react";
 
 type Props = {
   totalItems: number;
@@ -18,9 +19,11 @@ const Right = ({
   onPageChange,
   viewMode,
 }: Props) => {
-  const { productQuery } = useProduct();
+  const { productQuery, setPage } = useProduct();
   // console.log(data?.metadata);
-
+  useEffect(() => {
+    setPage(currentPage);
+  }, [currentPage]);
   return (
     <>
       <div className="col-span-9 mb-10">
