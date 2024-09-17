@@ -1,5 +1,10 @@
 BE/node_modules
 FE/node_modules
 FE/.env
+FE/package-log.json
+
 BE/.env
 BE/dist
+BE/bun.lockb
+BE/package-log.json
+BE/pnpm-lock.yaml
