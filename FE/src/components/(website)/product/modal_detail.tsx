@@ -58,15 +58,14 @@ const ModalDetail = () => {
               </h3>
               <div className="*:text-[20px]">
                 <span className="text-[#00BFC5] ">
-                  $
-                  {(
-                    selectedProduct?.price -
-                    (selectedProduct?.price * selectedProduct?.discount) / 100
-                  ).toFixed(2)}
+                  {selectedProduct?.price -
+                    (selectedProduct?.price * selectedProduct?.discount) /
+                      100}{" "}
+                  VND
                 </span>
                 {selectedProduct?.discount > 0 && (
                   <span className="line-through text-zinc-500 ms-3">
-                    $ {selectedProduct?.price}
+                    {selectedProduct?.price} VND
                   </span>
                 )}
               </div>

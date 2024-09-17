@@ -19,7 +19,6 @@ const Shop = () => {
   useEffect(() => {
     setLimit(itemsToShow);
   }, [itemsToShow, setLimit]);
-  console.log(currentPage);
 
   const handleViewChange = (mode: any) => {
     setViewMode(mode);

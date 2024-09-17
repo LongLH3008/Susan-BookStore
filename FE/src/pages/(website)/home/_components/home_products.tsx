@@ -48,11 +48,11 @@ const HomeProducts = () => {
         className="homeproducts grid min-[500px]:grid-cols-2 md:grid-cols-3 min-[1100px]:grid-cols-4 gap-[30px]"
       >
         {productQuery?.data?.metadata?.books.length !== 0 ? (
-          productQuery?.data?.metadata?.books?.map(
-            (product: IProduct, index: number) => (
+          productQuery?.data?.metadata?.books
+            ?.slice(0, 8)
+            ?.map((product: IProduct, index: number) => (
               <Product key={index} dataProduct={product} />
-            )
-          )
+            ))
         ) : (
           <div>
             <p>Không tìm thấy sản phẩm tương ứng</p>

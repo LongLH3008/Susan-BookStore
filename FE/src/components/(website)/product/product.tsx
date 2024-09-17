@@ -20,14 +20,17 @@ const StarRating = ({ rating }: { rating: number }) => {
   // Thêm ngôi sao đầy đủ
   for (let i = 0; i < fullStars; i++) {
     stars.push(
-      <i className="fa-solid fa-star text-amber-400 ps-1 text-xs"></i>
+      <i key={i} className="fa-solid fa-star text-amber-400 ps-1 text-xs"></i>
     );
   }
 
   // Thêm ngôi sao rưỡi nếu có
   if (hasHalfStar) {
     stars.push(
-      <i className="fa-solid fa-star-half-stroke text-amber-400 text-xs"></i>
+      <i
+        key="half-star"
+        className="fa-solid fa-star-half-stroke text-amber-400 text-xs"
+      ></i>
     );
   }
 
@@ -114,15 +117,13 @@ const ProdContent = ({ dataProduct }: Props) => {
           <p className="text-zinc-500">{dataProduct?.author}</p>
           <div>
             <span className="text-[16px] text-[#00BFC5] font-semibold">
-              $
-              {(
-                dataProduct?.price -
-                (dataProduct?.price * dataProduct?.discount) / 100
-              ).toFixed(2)}
+              {dataProduct?.price -
+                (dataProduct?.price * dataProduct?.discount) / 100}
+              VND
             </span>
             {dataProduct?.discount > 0 && (
               <span className="line-through ms-3 text-zinc-500">
-                ${dataProduct?.price}
+                {dataProduct?.price}VND
               </span>
             )}
           </div>
