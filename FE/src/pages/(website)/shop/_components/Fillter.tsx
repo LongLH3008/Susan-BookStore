@@ -15,7 +15,7 @@ const Left = () => {
   }, []);
 
   const [filterValues, setFilterValues] = useState({
-    price: { gte: 0, lte: 110 },
+    price: { gte: 0, lte: 1100000 },
     availability: [],
     productType: [],
     author: [],
@@ -141,40 +141,44 @@ const Left = () => {
                     Reset
                   </button>
                 </div>
-                <div className="checkbox-container categories-list sidebar-price-filter flex">
-                  <div className="filter-range-from flex  items-center pr-2 *:me-1 ">
-                    <span className="text-[#838383]">$</span>
-                    <input
-                      className="w-14 placeholder-gray-300 "
-                      name="price.gte"
-                      id="Filter-price-1"
-                      type="number"
-                      placeholder="0"
-                      min={0}
-                      max={110.0}
-                      value={filterValues.price.gte}
-                      onChange={handleChange}
-                    />
+                <div className="checkbox-container categories-list sidebar-price-filter *:pt-2">
+                  <div className="filter-range-from flex justify-between items-center   ">
                     <label className="text-[#838383]" htmlFor="Filter-price-1">
-                      From
+                      From :
                     </label>
+                    <div className="">
+                      <input
+                        className="w-36 placeholder-gray-300 "
+                        name="price.gte"
+                        id="Filter-price-1"
+                        type="number"
+                        placeholder="0"
+                        min={0}
+                        max={1100000}
+                        value={filterValues.price.gte}
+                        onChange={handleChange}
+                      />
+                      <span className="text-[#838383] ms-2">VND</span>
+                    </div>
                   </div>
-                  <div className="filter-price-range-to flex  items-center *:me-1 ">
-                    <span className="text-[#838383]">$</span>
-                    <input
-                      className="w-[70px] placeholder-gray-300 "
-                      name="price.lte"
-                      id="Filter-price-1"
-                      type="number"
-                      placeholder="110.0"
-                      min={0}
-                      max={110.0}
-                      value={filterValues.price.lte}
-                      onChange={handleChange}
-                    />
+                  <div className="filter-price-range-to flex justify-between items-center  ">
                     <label className="text-[#838383]" htmlFor="Filter-price-1">
-                      To
+                      To :
                     </label>
+                    <div className="">
+                      <input
+                        className="w-36 placeholder-gray-300 "
+                        name="price.lte"
+                        id="Filter-price-1"
+                        type="number"
+                        placeholder="110.0"
+                        min={0}
+                        max={110.0}
+                        value={filterValues.price.lte}
+                        onChange={handleChange}
+                      />
+                      <span className="text-[#838383] ms-2">VND</span>
+                    </div>
                   </div>
                 </div>
                 <button className="mt-10 bg-black text-white px-5 py-2">

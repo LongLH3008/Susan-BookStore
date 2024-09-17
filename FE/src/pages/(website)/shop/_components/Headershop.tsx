@@ -1,8 +1,4 @@
-import React from "react";
-import Pagination from "./pagination";
-
 const Nav = ({
-  viewMode,
   handleViewChange,
   itemsToShow,
   handleItemsToShowChange,
@@ -10,7 +6,6 @@ const Nav = ({
   handleSortByChange,
   totalItems,
   currentPage,
-  onPageChange,
 }: any) => {
   return (
     <div className="border-t border-b border-gray-100 py-2 my-10">
