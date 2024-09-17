@@ -1,10 +1,10 @@
+import { useAuth } from "@/common/hooks/useAuth";
+import { useToast } from "@/common/hooks/useToast";
+import { registerValidate } from "@/schemas/auth";
+import { joiResolver } from "@hookform/resolvers/joi";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/(website)/breadcrumb/breadcrumb";
-import { useToast } from "@/common/hooks/useToast";
-import { useAuth } from "@/common/hooks/useAuth";
-import { useForm } from "react-hook-form";
-import { joiResolver } from "@hookform/resolvers/joi";
-import { registerValidate } from "@/schemas/auth";
 
 type Props = {};
 
@@ -20,7 +20,7 @@ const Register = (props: Props) => {
 	const { onSubmit } = useAuth({
 		action: "REGISTER",
 		onSuccess: (data: any) => {
-			toast(data.status, `Register Successfully`);
+			toast(data.status, `Đăng kí thành công`);
 			nav("/login");
 		},
 		onError: (err: any) => {
@@ -30,14 +30,12 @@ const Register = (props: Props) => {
 
 	return (
 		<>
-			<Breadcrumb title="Register" />
+			<Breadcrumb title="Đăng kí" />
 			<div className="xl:px-[11.5%] 2xl:px-[17.5%] h-fit flex justify-center *:h-full py-[100px]">
 				<div className="w-[540px] h-fit bg-[#f3f3f3] flex flex-col justify-start gap-2 items-center px-[40px] py-[37px]">
-					<p className="text-[30px] leading-[36px] font-medium text-[#333] poppins">
-						Create Account
-					</p>
+					<p className="text-[30px] leading-[36px] font-medium text-[#333]">Tạo tài khoản</p>
 					<p className="text-[#666] text-[15px] leading-[15px]">
-						Please Register using account detail bellow.
+						Điền thông tin của bạn phía dưới.
 					</p>
 					<form
 						onSubmit={handleSubmit(onSubmit)}
@@ -66,7 +64,7 @@ const Register = (props: Props) => {
 								{errors.user_name && (
 									<span className="text-red-500 mr-2 tracking-widest">(*)</span>
 								)}
-								Name
+								Tên
 							</label>
 							<p
 								className={`${
@@ -132,7 +130,7 @@ const Register = (props: Props) => {
 								{errors.user_password && (
 									<span className="text-red-500 mr-2 tracking-widest">(*)</span>
 								)}
-								Password
+								Mật khẩu
 							</label>
 							<p
 								className={`${
@@ -167,7 +165,7 @@ const Register = (props: Props) => {
 								{errors.user_confirmpassword && (
 									<span className="text-red-500 mr-2 tracking-widest">(*)</span>
 								)}
-								RePassword
+								Nhập lại mật khẩu
 							</label>
 							<p
 								className={`${
@@ -182,7 +180,7 @@ const Register = (props: Props) => {
 								type="submit"
 								className="w-full mt-2 bg-black text-white py-[10px] px-[25px]"
 							>
-								Register
+								Đăng kí
 							</button>
 						</div>
 						<Link
@@ -190,7 +188,7 @@ const Register = (props: Props) => {
 							state={{ from: location.pathname }}
 							className="w-full hover:bg-black text-center hover:text-white bg-white border border-zinc-500 py-[10px] px-[25px]"
 						>
-							Back to Login
+							Quay lại đăng nhập
 						</Link>
 					</form>
 				</div>

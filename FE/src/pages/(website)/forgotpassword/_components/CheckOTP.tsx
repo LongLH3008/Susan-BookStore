@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { PulseLoader } from "react-spinners";
 import { useAuth } from "@/common/hooks/useAuth";
 import { useToast } from "@/common/hooks/useToast";
+import { useState } from "react";
+import { PulseLoader } from "react-spinners";
 
 const CheckOTP = ({
 	open,
@@ -77,7 +77,7 @@ const CheckOTP = ({
 						className="w-full bg-black text-white py-[10px] px-[25px]"
 						disabled={OTP.length !== 6}
 					>
-						Verify OTP
+						Xác thực OTP
 					</button>
 				)}
 			</div>

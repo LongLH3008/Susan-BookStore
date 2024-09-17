@@ -37,7 +37,7 @@ export const ProdContextProvider = ({ children }: ProdContextProps) => {
 	const { onAction: AddToCart } = useCart({
 		action: "ADD",
 		onSuccess: (data: any) => {
-			toast("ADD_TO_CART", "Added to Cart", 1500);
+			toast("ADD_TO_CART", "Đã thêm vào giỏ hàng", 1500);
 		},
 		onError: (err: any) => {
 			console.log(err);

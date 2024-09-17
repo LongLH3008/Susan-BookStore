@@ -73,7 +73,7 @@ const ChangePassword = ({ open, user }: { open: boolean; user: string }) => {
                 absolute text-sm duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-[0.92] peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto`}
 				>
 					{errors.newPassword && <span className="text-red-500 mr-2 tracking-widest">(*)</span>}
-					New Password
+					Mật khẩu mới
 				</label>
 				<p
 					className={`${
@@ -106,7 +106,7 @@ const ChangePassword = ({ open, user }: { open: boolean; user: string }) => {
 					{errors.confirmedPassword && (
 						<span className="text-red-500 mr-2 tracking-widest">(*)</span>
 					)}
-					Confirm Password
+					Xác nhận mật khẩu
 				</label>
 				<p
 					className={`${
@@ -123,7 +123,7 @@ const ChangePassword = ({ open, user }: { open: boolean; user: string }) => {
 					</span>
 				) : (
 					<button type="submit" className="w-full bg-black text-white py-[10px] px-[25px]">
-						Change Password
+						Đổi mật khẩu
 					</button>
 				)}
 			</div>

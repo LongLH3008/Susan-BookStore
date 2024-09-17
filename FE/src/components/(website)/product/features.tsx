@@ -1,8 +1,7 @@
-import { useState } from "react";
-import ModalCompare from "./modal_compare";
-import ModalDetail from "./modal_detail";
-import useProductContext from "../../../common/context/ContextProduct";
 import { userState } from "@/common/hooks/useAuth";
+import { useState } from "react";
+import useProductContext from "../../../common/context/ContextProduct";
+import ModalDetail from "./modal_detail";
 
 const ProductFeatures = ({ product_id }: { product_id: string }) => {
 	const { featuresProduct, AddToCart } = useProductContext();
@@ -36,14 +35,16 @@ const ProductFeatures = ({ product_id }: { product_id: string }) => {
 				featuresProduct.isOpen ? "bottom-[30%] opacity-1" : "bottom-[20%] opacity-0"
 			} absolute ease-in duration-200 h-[58px] left-[10%] bg-white shadow-md rounded-sm w-[80%] py-[15px]`}
 		>
-			<div className="grid grid-cols-4 w-full h-full *:border-r *:grid *:place-items-center *:cursor-pointer *:text-zinc-700">
+			<div className="grid grid-cols-3 w-full h-full *:border-r *:grid *:place-items-center *:cursor-pointer *:text-zinc-700">
 				<div className="" role="status">
-					<i
-						onClick={AddProductToCart}
-						className={`${
-							loading ? "hidden" : "block"
-						} hover:text-[#00BFC5] fa-solid fa-bag-shopping`}
-					></i>
+					<div onClick={AddProductToCart} className="flex items-center gap-1 text-red-500">
+						!
+						<i
+							className={`${
+								loading ? "hidden" : "block"
+							} hover:text-[#00BFC5] fa-solid fa-bag-shopping`}
+						></i>
+					</div>
 					<svg
 						aria-hidden="true"
 						className={`${
@@ -67,7 +68,7 @@ const ProductFeatures = ({ product_id }: { product_id: string }) => {
 					<i className={`${like && "text-[#00BFC5]"} hover:text-[#00BFC5] fa-solid fa-heart`}></i>
 				</div>
 				{/* Compare */}
-				<ModalCompare />
+				{/* <ModalCompare /> */}
 				{/* Mini Detail */}
 				<ModalDetail />
 			</div>

@@ -11,9 +11,9 @@ const NotFound404 = (props: Props) => {
 					<img className="w-1/3" src={img.notfound} alt="" />
 					<div>
 						<p className="text-[100px] font-bold">404</p>
-						<div className="flex items-center">Oops , this page not found</div>
+						<div className="flex items-center">Đã có lỗi xảy ra , đường dẫn không tồn tại</div>
 						<Link to={"/"} className="border-b pr-1 border-black py-1 w-fit">
-							Return home
+							Trở về trang chủ
 						</Link>
 					</div>
 				</div>

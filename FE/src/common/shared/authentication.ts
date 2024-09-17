@@ -7,7 +7,6 @@ export const Authentication = () => {
 	if (!accessToken) return;
 	try {
 		const { id, user_role } = jwtDecode<IPayloadAuthToken>(accessToken);
-		console.log(id, user_role);
 		if (id && user_role) {
 			return { id, user_role };
 		}

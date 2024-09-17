@@ -1,4 +1,3 @@
-import React from "react";
 import AboutPage from "./_components/aboutPage";
 
 type Props = {};
