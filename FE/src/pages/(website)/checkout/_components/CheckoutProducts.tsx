@@ -1,8 +1,8 @@
-import { getCartByUser } from "@/services/cart";
-import ItemInCheckout from "./ItemInCheckout";
-import { useQuery } from "@tanstack/react-query";
 import { userState } from "@/common/hooks/useAuth";
-import { MakeRoundToTwoDigitDecimal } from "@/common/shared/round-number";
+import { ConvertVNDString } from "@/common/shared/round-number";
+import { getCartByUser } from "@/services/cart";
+import { useQuery } from "@tanstack/react-query";
+import ItemInCheckout from "./ItemInCheckout";
 
 const CheckoutProducts = () => {
 	const { id } = userState();
@@ -34,15 +34,15 @@ const CheckoutProducts = () => {
 			<div className="w-full mt-10 flex flex-col gap-2 *:flex *:justify-between *:items-center">
 				<div className="text-zinc-700 text-[14px] font-[500]">
 					<p>Subtotal</p>
-					<p>${MakeRoundToTwoDigitDecimal(subtotal)}</p>
+					<p>{ConvertVNDString(subtotal)} đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
 					<p>Discount</p>
-					<p>${MakeRoundToTwoDigitDecimal(discount)}</p>
+					<p>{ConvertVNDString(discount)} đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
 					<p>Shipping</p>
-					<p>0.17</p>
+					<p>17.000 đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
 					<p>Voucher</p>
@@ -51,8 +51,8 @@ const CheckoutProducts = () => {
 				<div className="text-zinc-700 text-[18px] font-semibold mt-10">
 					<p>Total</p>
 					<p>
-						<span className="text-[13px] text-zinc-400 mr-1">USD</span>
-						<span>${MakeRoundToTwoDigitDecimal(subtotal - discount + 0.17)}</span>
+						<span className="text-[13px] text-zinc-400 mr-1">VND</span>
+						<span>{ConvertVNDString(subtotal - discount + 17000)} đ</span>
 					</p>
 				</div>
 			</div>

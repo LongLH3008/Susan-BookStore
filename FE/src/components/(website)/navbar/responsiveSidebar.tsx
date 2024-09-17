@@ -1,3 +1,4 @@
+import { userState } from "@/common/hooks/useAuth";
 import { CustomDrawerSidebar } from "@/common/ui/CustomDrawerSidebar";
 import { Drawer } from "flowbite-react";
 import { useState } from "react";
@@ -9,6 +10,7 @@ const ResponsiveSidebar = (props: Props) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleClose = () => setIsOpen(false);
+	const { id } = userState();
 
 	return (
 		<>
@@ -31,7 +33,7 @@ const ResponsiveSidebar = (props: Props) => {
 							<input
 								type="text"
 								className="outline-none ring-0 border-none"
-								placeholder="Search our store"
+								placeholder="Tìm kiếm ..."
 							/>
 							<button className="hover:bg-zinc-700 hover:text-white px-3 py-2 rounded-full">
 								<i className="fa-solid fa-magnifying-glass"></i>
@@ -45,7 +47,7 @@ const ResponsiveSidebar = (props: Props) => {
 								onClick={() => setIsOpen(false)}
 								to={"/"}
 							>
-								Home
+								Trang chủ
 							</Link>
 							<Link
 								className="hover:bg-zinc-700 hover:text-white"
@@ -53,7 +55,7 @@ const ResponsiveSidebar = (props: Props) => {
 								to={"/shop"}
 								state={{ from: location.pathname }}
 							>
-								Shop
+								Cửa hàng
 							</Link>
 							<Link
 								className="hover:bg-zinc-700 hover:text-white"
@@ -61,7 +63,7 @@ const ResponsiveSidebar = (props: Props) => {
 								to={"/blog"}
 								state={{ from: location.pathname }}
 							>
-								Blog
+								Tin tức
 							</Link>
 							<Link
 								className="hover:bg-zinc-700 hover:text-white"
@@ -69,7 +71,7 @@ const ResponsiveSidebar = (props: Props) => {
 								to={"/about"}
 								state={{ from: location.pathname }}
 							>
-								About
+								Giới thiệu
 							</Link>
 							<Link
 								className="hover:bg-zinc-700 hover:text-white"
@@ -77,27 +79,76 @@ const ResponsiveSidebar = (props: Props) => {
 								to={"/contact"}
 								state={{ from: location.pathname }}
 							>
-								Contact
+								Liên hệ
 							</Link>
 						</div>
-						<div className="mt-2 py-2 *:py-[0.9rem] grid *:font-semibold *:px-9 border-t">
-							<Link
-								className="hover:bg-zinc-700 hover:text-white"
-								onClick={() => setIsOpen(false)}
-								to={"/login"}
-								state={{ from: location.pathname }}
-							>
-								Login
-							</Link>
-							<Link
-								className="hover:bg-zinc-700 hover:text-white"
-								onClick={() => setIsOpen(false)}
-								to={"/register"}
-								state={{ from: location.pathname }}
-							>
-								Create account
-							</Link>
-						</div>
+						{id ? (
+							<>
+								<div className="mt-2 py-2 *:py-[0.9rem] grid *:font-semibold *:px-9 border-t">
+									<Link
+										className="hover:bg-zinc-700 hover:text-white"
+										onClick={() => setIsOpen(false)}
+										to={"/login"}
+										state={{ from: location.pathname }}
+									>
+										Đơn hàng
+									</Link>
+									<Link
+										className="hover:bg-zinc-700 hover:text-white"
+										onClick={() => setIsOpen(false)}
+										to={"/login"}
+										state={{ from: location.pathname }}
+									>
+										Sản phẩm yêu thích
+									</Link>
+									<Link
+										className="hover:bg-zinc-700 hover:text-white"
+										onClick={() => setIsOpen(false)}
+										to={"/login"}
+										state={{ from: location.pathname }}
+									>
+										Giỏ hàng
+									</Link>
+								</div>
+								<div className="mt-2 py-2 *:py-[0.9rem] grid *:font-semibold *:px-9 border-t">
+									<Link
+										className="hover:bg-zinc-700 hover:text-white"
+										onClick={() => setIsOpen(false)}
+										to={"/login"}
+										state={{ from: location.pathname }}
+									>
+										Đổi mật khẩu
+									</Link>
+									<Link
+										className="hover:bg-zinc-700 hover:text-white"
+										onClick={() => setIsOpen(false)}
+										to={"/login"}
+										state={{ from: location.pathname }}
+									>
+										Đăng xuất
+									</Link>
+								</div>
+							</>
+						) : (
+							<div className="mt-2 py-2 *:py-[0.9rem] grid *:font-semibold *:px-9 border-t">
+								<Link
+									className="hover:bg-zinc-700 hover:text-white"
+									onClick={() => setIsOpen(false)}
+									to={"/login"}
+									state={{ from: location.pathname }}
+								>
+									Đăng nhập
+								</Link>
+								<Link
+									className="hover:bg-zinc-700 hover:text-white"
+									onClick={() => setIsOpen(false)}
+									to={"/register"}
+									state={{ from: location.pathname }}
+								>
+									Tạo tài khoản
+								</Link>
+							</div>
+						)}
 					</div>
 				</Drawer.Items>
 			</Drawer>

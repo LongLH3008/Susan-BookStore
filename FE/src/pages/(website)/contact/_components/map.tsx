@@ -1,39 +1,12 @@
-import React, { useEffect, useRef } from "react";
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
-
 const Map = () => {
-	const mapRef = useRef(null);
-	const mapInstanceRef = useRef<HTMLDivElement | any>(null);
-
-	useEffect(() => {
-		if (!mapInstanceRef.current && mapRef.current) {
-			const map = L.map(mapRef.current).setView([21.027764, 105.83416], 13);
-			L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-				attribution:
-					'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-			}).addTo(map);
-
-			// Add a marker
-			const marker = L.marker([21.027764, 105.83416]).addTo(map);
-			marker.bindPopup("Ha Noi, Viet Nam");
-
-			// Add a bounding box
-			const bounds = [
-				[20.9, 105.6],
-				[21.1, 106.0],
-			];
-			//   const rectangle = L.rectangle(bounds, {
-			//     color: "blue",
-			//     weight: 2,
-			//     opacity: 0.5,
-			//   }).addTo(map);
-
-			mapInstanceRef.current = map;
-		}
-	}, [mapRef]);
-
-	return <div ref={mapRef} style={{ width: "100%", height: "50vh" }} />;
+	return (
+		<iframe
+			src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.8638060191124!2d105.74468687547683!3d21.038134787456084!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313455e940879933%3A0xcf10b34e9f1a03df!2zVHLGsOG7nW5nIENhbyDEkeG6s25nIEZQVCBQb2x5dGVjaG5pYw!5e0!3m2!1svi!2s!4v1726610778762!5m2!1svi!2s"
+			className="w-full h-[60dvh] my-10 shadow-lg rounded-md border-2 border-[#222] p-1"
+			loading="lazy"
+			referrerPolicy="no-referrer-when-downgrade"
+		></iframe>
+	);
 };
 
 export default Map;

@@ -39,9 +39,9 @@ export default function ItemCart({
 				</Link>
 				<p className="text-[12px] text-zinc-500">{author}</p>
 				{product_quantity == 10 && (
-					<p className="text-[12px] text-red-500">Quantity reached max allow limit</p>
+					<p className="text-[12px] text-red-500">Số lượng đã đạt tối đa cho phép</p>
 				)}
-				{product_quantity == stock && <p className="text-[12px] text-red-500">Out of stock</p>}
+				{product_quantity == stock && <p className="text-[12px] text-red-500">Sản phẩm đã hết</p>}
 			</span>
 			<div className="md:col-span-2 flex justify-between items-center border text-[15px]">
 				<span

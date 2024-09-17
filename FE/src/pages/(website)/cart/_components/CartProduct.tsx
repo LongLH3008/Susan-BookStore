@@ -57,25 +57,27 @@ export default function CartProducts({ dataCart, user_id }: { dataCart: ICart[];
 					))}
 				</div>
 			) : (
-				<div className="h-[50dvh] w-full flex items-center justify-center">Your cart is empty</div>
+				<div className="h-[50dvh] w-full flex items-center justify-center">
+					Giỏ hàng chưa có sản phẩm
+				</div>
 			)}
 			<div className="grid grid-cols-2 min-[1000px]:flex min-[1000px]:flex-wrap min-[1000px]:justify-start min-[1000px]:items-center gap-3 *:bg-black *:text-white *:px-[25px] *:py-[10px] *:text-[14px]">
 				{dataCart?.filter((item: TCartSelectItem) => item.selected == true).length > 0 && (
 					<button onClick={() => removeAllSelect()} className="hover:bg-zinc-700">
-						Clear
+						Bỏ chọn tất cả
 					</button>
 				)}
 				{dataCart?.filter((item: TCartSelectItem) => item.selected == false).length > 0 && (
 					<button onClick={() => selectAll()} className="hover:bg-zinc-700">
-						Select All
+						Chọn tất cả
 					</button>
 				)}
 				<Link to={"/shop"} state={{ from: location.pathname }} className="hover:bg-zinc-700">
-					Continue Shopping
+					Tiếp tục mua hàng
 				</Link>
 				{dataCart?.filter((item: TCartSelectItem) => item.selected == true).length > 0 && (
 					<Link to={"/checkout"} state={{ from: location.pathname }} className="hover:bg-zinc-700">
-						Continue Checkout
+						Thanh toán
 					</Link>
 				)}
 			</div>

@@ -69,7 +69,7 @@ text-zinc-900 block px-2.5 pb-2.5 pt-5 w-full text-sm outline-none  peer`}
 absolute text-sm duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-[0.92] peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto`}
 				>
 					{errors.user_email && <span className="text-red-500 mr-2 tracking-widest">(*)</span>}
-					Your email
+					Email của bạn
 				</label>
 				<p
 					className={`${
@@ -86,7 +86,7 @@ absolute text-sm duration-300 transform -translate-y-4 scale-75 top-4 z-10 origi
 					</span>
 				) : (
 					<button type="submit" className="w-full bg-black text-white py-[10px] px-[25px]">
-						Send OTP
+						Gửi OTP
 					</button>
 				)}
 			</div>

@@ -1,3 +1,4 @@
+import { ConvertVNDString } from "@/common/shared/round-number";
 import { Skeleton } from "@mui/material";
 
 const ItemInCheckout = ({ data }: { data: ICart }) => {
@@ -18,18 +19,18 @@ const ItemInCheckout = ({ data }: { data: ICart }) => {
 					<div className="flex flex-col justify-center">
 						{data.product_id.discount > 0 && (
 							<p className="text-[14px] text-zinc-700 text-right line-through">
-								{data.product_id.price}
+								{ConvertVNDString(data.product_id.price)} đ
 							</p>
 						)}
 
 						<p className="text-[14px] text-zinc-700 text-right">
-							$
 							{data.product_id.discount > 0
-								? (
+								? ConvertVNDString(
 										data.product_id.price *
-										((100 - data.product_id.discount) / 100)
-								  ).toFixed(2)
-								: data.product_id.price.toFixed(2)}
+											((100 - data.product_id.discount) / 100)
+								  )
+								: ConvertVNDString(data.product_id.price)}{" "}
+							đ
 						</p>
 					</div>
 				</div>
