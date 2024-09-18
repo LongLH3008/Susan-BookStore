@@ -33,23 +33,23 @@ const CheckoutProducts = () => {
 			{cart && cart.map((item: ICart, index: number) => <ItemInCheckout key={index} data={item} />)}
 			<div className="w-full mt-10 flex flex-col gap-2 *:flex *:justify-between *:items-center">
 				<div className="text-zinc-700 text-[14px] font-[500]">
-					<p>Subtotal</p>
+					<p>Tạm tính</p>
 					<p>{ConvertVNDString(subtotal)} đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
-					<p>Discount</p>
+					<p>Giảm giá</p>
 					<p>{ConvertVNDString(discount)} đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
-					<p>Shipping</p>
+					<p>Phí vận chuyển</p>
 					<p>17.000 đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
-					<p>Voucher</p>
+					<p>Mã giảm giá</p>
 					<p>0.17</p>
 				</div>
 				<div className="text-zinc-700 text-[18px] font-semibold mt-10">
-					<p>Total</p>
+					<p>Tổng cộng</p>
 					<p>
 						<span className="text-[13px] text-zinc-400 mr-1">VND</span>
 						<span>{ConvertVNDString(subtotal - discount + 17000)} đ</span>

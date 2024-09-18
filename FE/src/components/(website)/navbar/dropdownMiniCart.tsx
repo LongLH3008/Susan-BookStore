@@ -95,7 +95,7 @@ const MiniCart = () => {
 				<div
 					onMouseEnter={() => setOpen(true)}
 					onMouseLeave={() => setOpen(false)}
-					className={`w-[320px] -right-1/4 translate-x-1/4 absolute top-[80%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
+					className={`w-[320px] -right-1/4 translate-x-1/4 absolute top-[110%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
 				>
 					{cart?.metadata.cart_products.length && cart.metadata.cart_products.length > 0 ? (
 						<>
@@ -131,7 +131,7 @@ const MiniCart = () => {
 							</ul>
 							<Link
 								onClick={() => setOpen(false)}
-								to={"/cart"}
+								to={"/gio-hang"}
 								state={{ from: location.pathname }}
 							>
 								<button className="mt-5 border-2 text-[13px] font-semibold border-zinc-900 w-full uppercase h-[55px] hover:bg-zinc-900 hover:text-white">
@@ -140,7 +140,7 @@ const MiniCart = () => {
 							</Link>
 						</>
 					) : (
-						<div className="flex items-center justify-center">Your cart is empty</div>
+						<div className="flex items-center justify-center">Giỏ hàng chưa có sản phẩm</div>
 					)}
 				</div>
 			)}
@@ -168,7 +168,7 @@ const DropdownMiniCart = () => {
 				>
 					<div className="w-[320px] h-fit shadow-lg bg-white border p-[35px] flex items-center">
 						<Link
-							to={"/login"}
+							to={"/dang-nhap"}
 							state={{ from: location.pathname }}
 							className="flex items-center text-center justify-center border-2 text-[13px] font-semibold border-zinc-900 w-full uppercase h-[55px] hover:bg-zinc-900 hover:text-white p-2"
 						>

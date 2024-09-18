@@ -72,11 +72,15 @@ export default function CartProducts({ dataCart, user_id }: { dataCart: ICart[];
 						Chọn tất cả
 					</button>
 				)}
-				<Link to={"/shop"} state={{ from: location.pathname }} className="hover:bg-zinc-700">
+				<Link to={"/cua-hang"} state={{ from: location.pathname }} className="hover:bg-zinc-700">
 					Tiếp tục mua hàng
 				</Link>
 				{dataCart?.filter((item: TCartSelectItem) => item.selected == true).length > 0 && (
-					<Link to={"/checkout"} state={{ from: location.pathname }} className="hover:bg-zinc-700">
+					<Link
+						to={"/thanh-toan"}
+						state={{ from: location.pathname }}
+						className="hover:bg-zinc-700"
+					>
 						Thanh toán
 					</Link>
 				)}

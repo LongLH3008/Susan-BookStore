@@ -24,12 +24,12 @@ const DropdownShop = () => {
 		<>
 			<Link
 				className="hover:text-[#00BFC5] h-full grid place-items-center"
-				to="/shop"
+				to="/cua-hang"
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 			>
 				<span className="flex justify-between items-center">
-					SHOP <icon.arrowDownSvg />
+					CỬA HÀNG <icon.arrowDownSvg />
 				</span>
 			</Link>
 			{isModalOpen && (
@@ -40,7 +40,7 @@ const DropdownShop = () => {
 				>
 					<div className="grid grid-cols-4 mb-10 *:border-r *:border-r-zinc-200 *:ps-6 *:flex *:flex-col *:gap-y-6 first:ps-0 *:font-normal *:text-zinc-500">
 						<div className="">
-							<h3 className="text-zinc-800 uppercase font-semibold my-2">book type</h3>
+							<h3 className="text-zinc-800 uppercase font-semibold my-2">thể loại</h3>
 							{CategoryQuery?.data?.metadata?.map((category: ICategory) => (
 								<Link to={"/"} className="hover:text-[#00CFB5]">
 									{category?.category_name}
@@ -48,7 +48,7 @@ const DropdownShop = () => {
 							))}
 						</div>
 						<div className="">
-							<h3 className="text-zinc-800 uppercase font-semibold my-2 ">author</h3>
+							<h3 className="text-zinc-800 uppercase font-semibold my-2 ">tác giả</h3>
 							{author.slice(0, 4).map((aut: string) => (
 								<Link to={"/"} className="hover:text-[#00CFB5]">
 									{aut}
@@ -56,7 +56,7 @@ const DropdownShop = () => {
 							))}
 						</div>
 						<div className="">
-							<h3 className="text-zinc-800 uppercase font-semibold my-2 ">publisher</h3>
+							<h3 className="text-zinc-800 uppercase font-semibold my-2 ">nhà xuất bản</h3>
 
 							{Publishers.slice(0, 4).map((Publ: string) => (
 								<Link to={"/"} className="hover:text-[#00CFB5]">
@@ -65,7 +65,7 @@ const DropdownShop = () => {
 							))}
 						</div>
 						<div className="border-none">
-							<h3 className="text-zinc-800 uppercase font-semibold my-2">bestseller</h3>
+							<h3 className="text-zinc-800 uppercase font-semibold my-2">bán chạy</h3>
 							{BestSeller.slice(0, 4).map((product: IProduct) => (
 								<Link to={"/book/" + product._id} className="hover:text-[#00CFB5]">
 									{product.title}

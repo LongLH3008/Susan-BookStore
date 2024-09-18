@@ -16,9 +16,9 @@ const ResponsiveSidebar = (props: Props) => {
 		<>
 			<span
 				onClick={() => setIsOpen(true)}
-				className="min-[1000px]:hidden max-[1000px]:block cursor-pointer *:text-[22px] *:text-zinc-800"
+				className="min-[1000px]:hidden max-[1000px]:block cursor-pointer relative *:text-[22px] *:text-zinc-800"
 			>
-				<i className="fa-solid fa-bars"></i>
+				<i className="fa-solid fa-bars absolute top-1/2 -translate-y-1/2 right-0"></i>
 			</span>
 			<Drawer theme={CustomDrawerSidebar} open={isOpen} onClose={handleClose} position="right">
 				<Drawer.Items>
@@ -52,7 +52,7 @@ const ResponsiveSidebar = (props: Props) => {
 							<Link
 								className="hover:bg-zinc-700 hover:text-white"
 								onClick={() => setIsOpen(false)}
-								to={"/shop"}
+								to={"/cua-hang"}
 								state={{ from: location.pathname }}
 							>
 								Cửa hàng
@@ -60,7 +60,7 @@ const ResponsiveSidebar = (props: Props) => {
 							<Link
 								className="hover:bg-zinc-700 hover:text-white"
 								onClick={() => setIsOpen(false)}
-								to={"/blog"}
+								to={"/tin-tuc"}
 								state={{ from: location.pathname }}
 							>
 								Tin tức
@@ -68,7 +68,7 @@ const ResponsiveSidebar = (props: Props) => {
 							<Link
 								className="hover:bg-zinc-700 hover:text-white"
 								onClick={() => setIsOpen(false)}
-								to={"/about"}
+								to={"/gioi-thieu"}
 								state={{ from: location.pathname }}
 							>
 								Giới thiệu
@@ -76,7 +76,7 @@ const ResponsiveSidebar = (props: Props) => {
 							<Link
 								className="hover:bg-zinc-700 hover:text-white"
 								onClick={() => setIsOpen(false)}
-								to={"/contact"}
+								to={"/lien-he"}
 								state={{ from: location.pathname }}
 							>
 								Liên hệ
@@ -88,7 +88,7 @@ const ResponsiveSidebar = (props: Props) => {
 									<Link
 										className="hover:bg-zinc-700 hover:text-white"
 										onClick={() => setIsOpen(false)}
-										to={"/login"}
+										to={"/don-hang"}
 										state={{ from: location.pathname }}
 									>
 										Đơn hàng
@@ -96,7 +96,7 @@ const ResponsiveSidebar = (props: Props) => {
 									<Link
 										className="hover:bg-zinc-700 hover:text-white"
 										onClick={() => setIsOpen(false)}
-										to={"/login"}
+										to={"/san-pham-yeu-thich"}
 										state={{ from: location.pathname }}
 									>
 										Sản phẩm yêu thích
@@ -104,7 +104,7 @@ const ResponsiveSidebar = (props: Props) => {
 									<Link
 										className="hover:bg-zinc-700 hover:text-white"
 										onClick={() => setIsOpen(false)}
-										to={"/login"}
+										to={"/gio-hang"}
 										state={{ from: location.pathname }}
 									>
 										Giỏ hàng
@@ -114,7 +114,7 @@ const ResponsiveSidebar = (props: Props) => {
 									<Link
 										className="hover:bg-zinc-700 hover:text-white"
 										onClick={() => setIsOpen(false)}
-										to={"/login"}
+										to={"/doi-mat-khau"}
 										state={{ from: location.pathname }}
 									>
 										Đổi mật khẩu
@@ -122,7 +122,7 @@ const ResponsiveSidebar = (props: Props) => {
 									<Link
 										className="hover:bg-zinc-700 hover:text-white"
 										onClick={() => setIsOpen(false)}
-										to={"/login"}
+										to={"/dang-xuat"}
 										state={{ from: location.pathname }}
 									>
 										Đăng xuất

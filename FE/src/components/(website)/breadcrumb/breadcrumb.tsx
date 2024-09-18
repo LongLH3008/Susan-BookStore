@@ -1,3 +1,4 @@
+import { handleBreadCrumbItemURL } from "@/common/shared/render_breadcrumb_item";
 import { Link, useLocation } from "react-router-dom";
 
 const Breadcrumb = ({ title }: { title: string }) => {
@@ -37,7 +38,7 @@ const Breadcrumb = ({ title }: { title: string }) => {
 								state={{ from: location.pathname }}
 								className="ms-1 text-sm font-medium text-gray-700 hover:text-[#00BFC5] md:ms-2 dark:text-gray-400 dark:hover:text-white"
 							>
-								{from.split("/")[1].charAt(0).toUpperCase() + from.slice(2)}
+								{handleBreadCrumbItemURL(from)}
 							</Link>
 						</div>
 					</li>

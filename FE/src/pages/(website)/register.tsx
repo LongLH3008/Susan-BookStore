@@ -184,7 +184,7 @@ const Register = (props: Props) => {
 							</button>
 						</div>
 						<Link
-							to="/login"
+							to="/dang-nhap"
 							state={{ from: location.pathname }}
 							className="w-full hover:bg-black text-center hover:text-white bg-white border border-zinc-500 py-[10px] px-[25px]"
 						>
