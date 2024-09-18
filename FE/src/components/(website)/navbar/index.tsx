@@ -59,27 +59,27 @@ const Navbar = (props: Props) => {
 						</CategoryProvider>
 						<Link
 							className="hover:text-[#00BFC5] h-full flex items-center"
-							to="/blog"
+							to="/tin-tuc"
 							state={{ from: location.pathname }}
 						>
 							tin tức
 						</Link>
 						<Link
 							className="hover:text-[#00BFC5] h-full flex items-center"
-							to="/about"
+							to="/gioi-thieu"
 							state={{ from: location.pathname }}
 						>
 							giới thiệu
 						</Link>
 						<Link
 							className="hover:text-[#00BFC5] h-full flex items-center"
-							to="/contact"
+							to="/lien-he"
 							state={{ from: location.pathname }}
 						>
 							liên hệ
 						</Link>
 					</div>
-					<div className="col-span-1 h-full flex justify-end items-center *:h-full *:flex *:items-center lg:gap-[25%] *:cursor-pointer">
+					<div className="col-span-1 h-full flex justify-end items-center lg:gap-[25%] *:cursor-pointer relative">
 						<ProductProvider>
 							<DropdownSearch />
 						</ProductProvider>

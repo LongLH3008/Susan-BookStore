@@ -17,9 +17,11 @@ const CheckoutInfomation = (props: Props) => {
 					type="submit"
 					className="w-full rounded border border-zinc-300 h-[58px] font-medium hover:bg-zinc-800 hover:text-white duration-150 ease-in"
 				>
-					Pay Now
+					Thanh toán
 				</button>
-				<div className="border-t  border-zinc-300 mt-10 text-zinc-500 text-[12px] pt-5">All rights reserved Susan Bookstore</div>
+				<div className="border-t  border-zinc-300 mt-10 text-zinc-500 text-[12px] pt-5">
+					Bản quyền thuộc về Susan
+				</div>
 			</form>
 		</div>
 	);

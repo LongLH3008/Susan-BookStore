@@ -22,6 +22,7 @@ const Login = () => {
 		action: "LOGIN",
 		onSuccess: (data: any) => {
 			const { user } = data.message;
+			console.log(data);
 			AuthorUser();
 			setTimeout(() => {
 				toast(data.status, `Chào mừng ${user.user_email.split("@")[0]} !`);
@@ -124,11 +125,11 @@ const Login = () => {
 							<img src={icon.ggIcon} width={20} alt="" /> Đăng nhập với Google
 						</button>
 						<div className="flex flex-wrap justify-center min-[500px]:justify-between min-[500px]:items-start">
-							<Link to="/forgotpassword" className=" pt-1">
+							<Link to="/quen-mat-khau" className=" pt-1">
 								Quên mật khẩu
 							</Link>
 							<Link
-								to="/register"
+								to="/dang-ky"
 								state={{ from: location.pathname }}
 								className="max-[500px]:text-center"
 							>

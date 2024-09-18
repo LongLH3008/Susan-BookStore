@@ -1,10 +1,10 @@
 import * as icon from "@/common/assets/icon";
-import CheckoutInfomation from "./_components/CheckoutInfomation";
-import CheckoutProducts from "./_components/CheckoutProducts";
-import { Link } from "react-router-dom";
-import ResponsiveCheckoutProducts from "./_components/ResponsiveCheckoutProducts";
 import { userState } from "@/common/hooks/useAuth";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import CheckoutInfomation from "./_components/CheckoutInfomation";
+import CheckoutProducts from "./_components/CheckoutProducts";
+import ResponsiveCheckoutProducts from "./_components/ResponsiveCheckoutProducts";
 
 const Checkout = () => {
 	const { AuthorUser } = userState();
@@ -20,11 +20,11 @@ const Checkout = () => {
 					<p className="text-[21px] font-semibold">Susan Bookstore</p>
 				</Link>
 				<Link
-					to={"/cart"}
+					to={"/gio-hang"}
 					state={{ from: location.pathname }}
 					className="flex items-center gap-2 font-semibold"
 				>
-					Back to cart <img className="w-[25px]" src={icon.cartCheckout} alt="" />
+					Quay lại giỏ hàng <img className="w-[25px]" src={icon.cartCheckout} alt="" />
 				</Link>
 			</nav>
 			<ResponsiveCheckoutProducts />

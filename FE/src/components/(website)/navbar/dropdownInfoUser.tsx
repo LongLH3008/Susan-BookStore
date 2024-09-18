@@ -25,7 +25,7 @@ const DropdownInfoUser = (props: Props) => {
 				<div
 					onMouseEnter={() => setOpen(true)}
 					onMouseLeave={() => setOpen(false)}
-					className={`w-[280px] -right-1/4 translate-x-1/4  absolute top-[70%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
+					className={`w-[280px] -right-1/4 translate-x-1/4  absolute top-[110%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
 				>
 					<div className="font-semibold uppercase text-[12px] pb-3 border-b border-zinc-400 text-zinc-800">
 						Tài khoản
@@ -33,21 +33,21 @@ const DropdownInfoUser = (props: Props) => {
 					{id ? (
 						<div className="flex flex-col *:p-3 pt-2">
 							<Link
-								to="/logout"
+								to="/don-hang"
 								state={{ from: location.pathname }}
 								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
 							>
 								Đơn hàng
 							</Link>
 							<Link
-								to="/logout"
+								to="/san-pham-yeu-thich"
 								state={{ from: location.pathname }}
 								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
 							>
 								Sản phẩm yêu thích
 							</Link>
 							<Link
-								to="/cart"
+								to="/gio-hang"
 								state={{ from: location.pathname }}
 								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
 							>
@@ -55,14 +55,14 @@ const DropdownInfoUser = (props: Props) => {
 							</Link>
 							<div className="font-semibold uppercase text-[12px] pb-3 border-b border-zinc-400 text-zinc-800"></div>
 							<Link
-								to="/logout"
+								to="/doi-mat-khau"
 								state={{ from: location.pathname }}
 								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
 							>
 								Đổi mật khẩu
 							</Link>
 							<Link
-								to="/logout"
+								to="/dang-xuat"
 								state={{ from: location.pathname }}
 								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
 							>
@@ -70,16 +70,20 @@ const DropdownInfoUser = (props: Props) => {
 							</Link>
 						</div>
 					) : (
-						<div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+						<div
+							className="flex flex-col *:p-3 pt-2"
+							onMouseEnter={() => setOpen(true)}
+							onMouseLeave={() => setOpen(false)}
+						>
 							<Link
-								to="/login"
+								to="/dang-nhap"
 								state={{ from: location.pathname }}
 								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
 							>
 								Đăng nhập
 							</Link>
 							<Link
-								to="/register"
+								to="/dang-ky"
 								state={{ from: location.pathname }}
 								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
 							>

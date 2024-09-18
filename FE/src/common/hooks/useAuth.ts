@@ -1,9 +1,7 @@
 import { checkOTP, confirmNewPassword, login, register, requestOTP } from "@/services/auth";
 import { useMutation } from "@tanstack/react-query";
-import { jwtDecode } from "jwt-decode";
 import { SubmitHandler } from "react-hook-form";
 import { create } from "zustand";
-import { getCookie } from "../shared/cookie";
 import { Authentication } from "../shared/authentication";
 
 type ForgotPassword = "REQUEST_OTP" | "CHECK_OTP" | "CONFIRM_NEW_PASSWORD";

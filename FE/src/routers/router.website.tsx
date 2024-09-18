@@ -10,60 +10,51 @@ import * as Website from "@/pages/(website)";
 import { useRoutes } from "react-router-dom";
 
 // import ProductForm from "@/pages/(dashboard)/Products/productForm";
-import DashboardGuard from "./dashboard.guard";
 import { ProductProvider } from "@/common/hooks/useProduct";
+import AuthGuard from "./guards/auth.guard";
+import DashboardGuard from "./guards/dashboard.guard";
+import UserGuard from "./guards/user.guard";
 
 const RouterWebsite = () => {
-  const routers = useRoutes([
-    {
-      path: "",
-      Component: LayoutClient,
-      children: [
-        { path: "", element: <Website.Home /> },
-        { path: "login", element: <Website.Login /> },
-        { path: "register", element: <Website.Register /> },
-        { path: "forgotpassword", element: <Website.ForgotPassword /> },
-        { path: "blog", element: <Website.Blog /> },
-        { path: "blog/:id", element: <Website.BlogDetail /> },
-        { path: "book/:id", element: <Website.BookDetail /> },
-        { path: "cart", element: <Website.Cart /> },
-        {
-          path: "shop",
-          element: (
-            <ProductProvider>
-              <Website.Shop />
-            </ProductProvider>
-          ),
-        },
-        { path: "contact", element: <Website.Contact /> },
-        { path: "about", element: <Website.About /> },
-      ],
-    },
-    { path: "checkout", element: <Website.Checkout /> },
-    { path: "*", element: <Website.NotFound404 /> },
+	const routers = useRoutes([
+		{
+			path: "",
+			element: <UserGuard children={<LayoutClient />} />,
+			children: [
+				{ path: "", element: <Website.Home /> },
+				{ path: "tin-tuc", element: <Website.Blog /> },
+				{ path: "tin-tuc/:slug", element: <Website.BlogDetail /> },
+				{ path: "sach/:slug", element: <Website.BookDetail /> },
+				{ path: "gio-hang", element: <Website.Cart /> },
+				{ path: "dang-nhap", element: <AuthGuard children={<Website.Login />} /> },
+				{ path: "dang-ky", element: <AuthGuard children={<Website.Register />} /> },
+				{ path: "quen-mat-khau", element: <AuthGuard children={<Website.ForgotPassword />} /> },
+				{ path: "cua-hang", element: <ProductProvider children={<Website.Shop />} /> },
+				{ path: "lien-he", element: <Website.Contact /> },
+				{ path: "gioi-thieu", element: <Website.About /> },
+			],
+		},
+		{ path: "thanh-toan", element: <Website.Checkout /> },
+		{ path: "*", element: <Website.NotFound404 /> },
 
-    {
-      path: "/admin",
-      element: (
-        <DashboardGuard>
-          <MainPage />
-        </DashboardGuard>
-      ),
-      children: [
-        { path: "orders", element: <OrdersPage /> },
-        { path: "users", element: <UsersPage /> },
-        { path: "categories", element: <CategoriesPage /> },
-        { path: "products", element: <ProductsPage /> },
-        { path: "comments", element: <CommentsPage /> },
-        { path: "blogs", element: <BlogPage /> },
-      ],
-    },
-    { path: "products", element: <ProductsPage /> },
-    { path: "users", element: <UsersPage /> },
-    // { path: "product/edit/:id", element: <ProductForm /> },
-    // { path: "product/add", element: <ProductForm /> },
-  ]);
-  return routers;
+		{
+			path: "/quan-tri",
+			element: <DashboardGuard children={<MainPage />} />,
+			children: [
+				{ path: "orders", element: <OrdersPage /> },
+				{ path: "users", element: <UsersPage /> },
+				{ path: "categories", element: <CategoriesPage /> },
+				{ path: "products", element: <ProductsPage /> },
+				{ path: "comments", element: <CommentsPage /> },
+				{ path: "blogs", element: <BlogPage /> },
+			],
+		},
+		{ path: "products", element: <ProductsPage /> },
+		{ path: "users", element: <UsersPage /> },
+		// { path: "product/edit/:id", element: <ProductForm /> },
+		// { path: "product/add", element: <ProductForm /> },
+	]);
+	return routers;
 };
 
 export default RouterWebsite;
