@@ -14,7 +14,7 @@ const Cart = () => {
 
 	return (
 		<>
-			<Breadcrumb title="Your Shopping Cart" />
+			<Breadcrumb title="Giỏ hàng" />
 			<div className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] grid min-[1000px]:grid-cols-5 h-fit py-[80px] relative poppins">
 				<CartProducts user_id={id} dataCart={cart?.metadata.cart_products} />
 				<TotalCart dataCart={cart?.metadata.cart_products} />
