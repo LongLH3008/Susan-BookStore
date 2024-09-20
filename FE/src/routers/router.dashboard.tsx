@@ -1,4 +1,5 @@
 // src/routes/DashboardRoutes.js
+import DashboardLayout from "@/layouts/DashboardLayout";
 import BlogPage from "@/pages/(dashboard)/Blogs/BlogPage";
 import CategoriesPage from "@/pages/(dashboard)/Categories/CategoriesPage";
 import CommentsPage from "@/pages/(dashboard)/Comments/CommentsPage";
@@ -13,8 +14,9 @@ import DashboardGuard from "./guards/dashboard.guard";
 const DashboardRoutes = [
 	{
 		path: "/quan-tri",
-		element: <DashboardGuard children={<MainPage />} />,
+		element: <DashboardGuard children={<DashboardLayout />} />,
 		children: [
+			{ path: "", element: <MainPage /> },
 			{ path: "don-hang", element: <OrdersPage /> },
 			{ path: "nguoi-dung", element: <UsersPage /> },
 			{ path: "danh-muc", element: <CategoriesPage /> },
