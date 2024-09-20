@@ -31,7 +31,7 @@ const Nav = (props: any) => {
 								></path>
 							</svg>
 						</button>
-						<Link to={"/"} className="flex ms-2 md:me-24">
+						<Link to={"/quan-tri"} className="flex ms-2 md:me-24">
 							<i className="fa-solid fa-mug-hot text-3xl pb-2 pr-2 dark:text-gray-50"></i>
 							<span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
 								My Admin

@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "../components/(website)/navbar";
 import Footer from "../components/(website)/footer/footer";
-import { Toast } from "@/components/(website)/toast/Toast";
+import Navbar from "../components/(website)/navbar";
 
 type Props = {};
 
@@ -12,7 +11,6 @@ const LayoutClient = (props: Props) => {
 			<div className="relative h-fit scroll-smooth fade-in">
 				<Navbar />
 				<div className="pt-[68px] lg:pt-[95px]">
-					<Toast />
 					<Outlet />
 				</div>
 				<Footer />

@@ -21,10 +21,14 @@ const Register = (props: Props) => {
 		action: "REGISTER",
 		onSuccess: (data: any) => {
 			toast(data.status, `Đăng kí thành công`);
-			nav("/login");
+			nav("/dang-nhap");
 		},
 		onError: (err: any) => {
-			toast(err.status, err.message);
+			let message = err.message;
+			if (err.message.includes("Account")) {
+				message = "Tài khoản đã tồn tại";
+			}
+			toast(err.status, message);
 		},
 	});
 

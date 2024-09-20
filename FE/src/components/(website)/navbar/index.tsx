@@ -37,7 +37,7 @@ const Navbar = (props: Props) => {
 			${scroll > 5 && scroll < 50 && "h-0 -top-20"}
 			${scroll > 50 && "h-[68px] shadow-sm border-0 top-0 bg-[rgba(255,255,255,0.85)] opacity-100"}
 
-			fixed hover:bg-white ease-in duration-500 z-30 w-full`}
+			fixed ease-in duration-500 z-30 w-full`}
 			>
 				<nav className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] max-[1000px]:h-[68px] h-full text-[14px] grid grid-cols-2 lg:grid-cols-9 border-b">
 					<Link id="logo_header" className="col-span-1 flex items-center h-full" to={"/"}>
