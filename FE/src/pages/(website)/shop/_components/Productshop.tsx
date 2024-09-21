@@ -2,10 +2,12 @@ import useProduct from "@/common/hooks/useProduct";
 import { IProduct } from "@/common/interfaces/product";
 import Product from "../../../../components/(website)/product/product";
 import Pagination from "./pagination";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import SkeletonProduct from "@/components/(website)/product/skeletonProduct";
+import { any } from "joi";
 
 type Props = {
+  dataProduct: IProduct[];
   totalItems: number;
   itemsToShow: number;
   currentPage: number;
@@ -14,6 +16,7 @@ type Props = {
 };
 
 const Right = ({
+  dataProduct,
   totalItems,
   itemsToShow,
   currentPage,
@@ -31,10 +34,10 @@ const Right = ({
       <div className="col-span-9 mb-10">
         <div className="flex flex-wrap -mx-4 ">
           {productQuery?.isLoading
-            ? Array.from({ length: itemsToShow }).map((_, index) => (
+            ? Array.from({ length: 8 }).map((_, index) => (
                 <SkeletonProduct index={index} />
               ))
-            : productQuery?.data?.metadata?.books?.map((product: IProduct) => (
+            : dataProduct?.map((product: IProduct) => (
                 <div
                   key={product._id}
                   className={`${

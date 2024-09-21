@@ -70,23 +70,23 @@ export const ProductProvider = ({ children }: ProdContextProps) => {
   // useEffect(() => {
   //   setProductQuery(productdata);
   // }, [JSON.stringify(productdata)]);
-  useEffect(() => {
-    if (features?.price) {
-      setMinPrice(features?.price?.gte);
-      setMaxPrice(features?.price?.lte);
-    }
-    if (features?.productType && features.productType.length > 0) {
-      const selectedCategoryIds = features.productType.join(",");
-      setCategoryIds(selectedCategoryIds);
-    } else {
-      setCategoryIds(undefined);
-    }
-    if (features.author.length > 0) {
-      productQuery = productQuery?.data?.metadata?.books?.filter(
-        (product) => features.author.includes(product.author) // Điều chỉnh theo cấu trúc dữ liệu sản phẩm
-      );
-    }
-  }, [JSON.stringify(features)]);
+  // useEffect(() => {
+  //   if (features?.price) {
+  //     setMinPrice(features?.price?.gte);
+  //     setMaxPrice(features?.price?.lte);
+  //   }
+  //   if (features?.productType && features.productType.length > 0) {
+  //     const selectedCategoryIds = features.productType.join(",");
+  //     setCategoryIds(selectedCategoryIds);
+  //   } else {
+  //     setCategoryIds(undefined);
+  //   }
+  //   // if (features.author.length > 0) {
+  //   //   productQuery = productQuery?.data?.metadata?.books?.filter(
+  //   //     (product) => features.author.includes(product.author) // Điều chỉnh theo cấu trúc dữ liệu sản phẩm
+  //   //   );
+  //   // }
+  // }, [JSON.stringify(features)]);
   return (
     <ProductContext.Provider
       value={{
