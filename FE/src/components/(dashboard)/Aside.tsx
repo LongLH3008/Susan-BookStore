@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 const Aside = (props: any) => {
 	const navigate = useNavigate();
+	const [resizeAside, setResizeAside] = useState(false);
 
 	const onLogout = () => {
 		if (confirm("Do you want to logout ?")) {
@@ -10,109 +12,159 @@ const Aside = (props: any) => {
 		}
 	};
 	return (
-		<aside
-			id="logo-sidebar"
-			className={` ${
-				props.showState ? "-translate-x-full" : ""
-			} fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform bg-white border-r border-gray-200 sm:translate-x-0  dark:bg-gray-800 dark:border-gray-700`}
-			aria-label="Sidebar"
+		<div
+			className={`duration-700 relative ease-in-out transition-all  flex flex-col justify-between gap-3 p-10 h-screen px-3 pb-4 text-[#535353] bg-white dark:bg-gray-800
+			${resizeAside ? "w-20" : "w-[20%]"}`}
 		>
-			<div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-				<ul className="space-y-2 font-medium">
-					<li>
-						<Link
-							to={"/quan-tri"}
-							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+			<ul className="font-medium *:overflow-hidden">
+				<Link to={""}>
+					<div className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md">
+						<i className="fa-solid fa-chart-simple"></i>
+						<span
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
+							}`}
 						>
-							<i className="w-5 fa-solid fa-house"></i>
-
-							<span className="flex-1 ms-3 whitespace-nowrap">Main Dashboard</span>
-							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
-								3
-							</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							to={"/quan-tri/nguoi-dung"}
-							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+							Thống kê
+						</span>
+					</div>
+				</Link>
+				<li className="">
+					<Link
+						to={"/quan-tri/nguoi-dung"}
+						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
+					>
+						<i className="fa-solid fa-user"></i>
+						<span
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
+							}`}
 						>
-							<i className="fa-solid fa-user"></i>
-							<span className="flex-1 ms-3 whitespace-nowrap">Users</span>
-							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
-								3
-							</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							to={"/quan-tri/danh-muc"}
-							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+							Người dùng
+						</span>
+					</Link>
+				</li>
+				<li className="">
+					<Link
+						to={"/quan-tri/danh-muc"}
+						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
+					>
+						<i className="w-5 fa-solid fa-layer-group"></i>
+						<span
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
+							}`}
 						>
-							<i className="w-5 fa-solid fa-layer-group"></i>
-							<span className="flex-1 ms-3 whitespace-nowrap">Categories</span>
-							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
-								3
-							</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							to={"/quan-tri/san-pham"}
-							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+							Danh mục
+						</span>
+					</Link>
+				</li>
+				<li className="">
+					<Link
+						to={"/quan-tri/san-pham"}
+						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
+					>
+						<i className="fa-solid fa-boxes-stacked"></i>
+						<span
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
+							}`}
 						>
-							<i className="fa-solid fa-boxes-stacked"></i>
-							<span className="flex-1 ms-3 whitespace-nowrap">Products</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							to={"/quan-tri/don-hang"}
-							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+							Sản phẩm
+						</span>
+					</Link>
+				</li>
+				<li className="">
+					<Link
+						to={"/quan-tri/ma-giam-gia"}
+						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
+					>
+						<i className="fa-solid fa-ticket"></i>
+						<span
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
+							}`}
 						>
-							<i className="fa-solid fa-cart-shopping"></i>
-							<span className="flex-1 ms-3 whitespace-nowrap">Orders</span>
-							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
-								3
-							</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							to={"/quan-tri/tin-tuc"}
-							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+							Mã giảm giá
+						</span>
+					</Link>
+				</li>
+				<li className="">
+					<Link
+						to={"/quan-tri/don-hang"}
+						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
+					>
+						<i className="fa-solid fa-cart-shopping"></i>
+						<span
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
+							}`}
 						>
-							<i className="fa-solid fa-blog"></i>
-							<span className="flex-1 ms-3 whitespace-nowrap">Blogs</span>
-							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
-								3
-							</span>
-						</Link>
-					</li>
-					<li>
-						<Link
-							to={"/quan-tri/binh-luan"}
-							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+							Đơn hàng
+						</span>
+					</Link>
+				</li>
+				<li className="">
+					<Link
+						to={"/quan-tri/tin-tuc"}
+						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
+					>
+						<i className="fa-solid fa-blog"></i>
+						<span
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
+							}`}
 						>
-							<i className="fa-solid fa-comment"></i>
-							<span className="flex-1 ms-3 whitespace-nowrap">Comments</span>
-							<span className="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">
-								3
-							</span>
-						</Link>
-					</li>
-					<li>
-						<button
-							onClick={onLogout}
-							className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+							Tin tức
+						</span>
+					</Link>
+				</li>
+				<li className="">
+					<Link
+						to={"/quan-tri/binh-luan"}
+						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
+					>
+						<i className="fa-solid fa-comment"></i>
+						<span
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
+							}`}
 						>
-							<i className="w-5 fa-solid fa-right-from-bracket"></i>
-							<span className="flex-1 ms-3 whitespace-nowrap">Logout</span>
-						</button>
-					</li>
-				</ul>
+							Bình luận
+						</span>
+					</Link>
+				</li>
+			</ul>
+			<div className="flex flex-col gap-2">
+				<div className="flex items-center cursor-pointer h-[60px] px-5 relative overflow-hidden border hover:text-white hover:bg-zinc-900 border-zinc-900 rounded-md">
+					<i className="fa-solid fa-power-off"></i>
+					<span
+						className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+							resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
+						}`}
+					>
+						Đăng xuất
+					</span>
+				</div>
+				<div
+					onClick={() => setResizeAside(!resizeAside)}
+					className="flex items-center h-[60px] px-5 relative cursor-pointer overflow-hidden bg-[rgba(0,0,0,0.9)] rounded-lg text-white"
+				>
+					<i
+						className={`fa-solid fa-chevron-left duration-700 ease-in-out ${
+							resizeAside && "rotate-180"
+						}`}
+					></i>
+					<span
+						className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3 text-sm ease-in-out ${
+							resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
+						}`}
+					>
+						Thu nhỏ
+					</span>
+				</div>
 			</div>
-		</aside>
+		</div>
 	);
 };
 

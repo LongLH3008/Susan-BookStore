@@ -10,10 +10,9 @@ import OrdersPage from "@/pages/(dashboard)/Orders/OrdersPage";
 import ProductsPage from "@/pages/(dashboard)/Products/ProductsPage";
 import UsersPage from "@/pages/(dashboard)/Users/UsersPage";
 import DashboardGuard from "./guards/dashboard.guard";
-import ProductForm from "@/pages/(dashboard)/Products/productForm";
+import DiscountAdd from "@/pages/(dashboard)/Discount/discount.add";
 
 const DashboardRoutes = [
-
 	{
 		path: "/quan-tri",
 		element: <DashboardGuard children={<DashboardLayout />} />,
@@ -27,11 +26,12 @@ const DashboardRoutes = [
 			{ path: "san-pham/them-moi", element: <ProductsPage /> },
 			{ path: "binh-luan", element: <CommentsPage /> },
 			{ path: "tin-tuc", element: <BlogPage /> },
+
 			{ path: "ma-giam-gia", element: <DiscountList /> },
 			{ path: "ma-giam-gia/:id", element: <DiscountEdit /> },
+			{ path: "ma-giam-gia/them-moi", element: <DiscountAdd /> },
 		],
 	},
-
 ];
 
 export default DashboardRoutes;

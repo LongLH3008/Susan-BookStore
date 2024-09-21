@@ -1,20 +1,13 @@
-import Nav from "@/components/(dashboard)/Nav";
-import { Flowbite } from "flowbite-react";
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Aside from "../components/(dashboard)/Aside";
 const DashboardLayout = () => {
-	const [showState, setShowState] = useState(true);
 	return (
-		<>
-			<Flowbite>
-				<div className="container max-w-full bg-gray-50 dark:bg-gray-800 h-[100%]">
-					<Nav showState={showState} setShowState={setShowState} />
-					<Aside showState={showState} />
-				</div>
-			</Flowbite>
-			<Outlet />
-		</>
+		<div className="flex items-start">
+			<Aside />
+			<div className="w-full overflow-y-scroll h-screen p-10 bg-zinc-100">
+				<Outlet />
+			</div>
+		</div>
 	);
 };
 
