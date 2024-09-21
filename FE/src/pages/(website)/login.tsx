@@ -30,7 +30,11 @@ const Login = () => {
 			}, 300);
 		},
 		onError: (err: any) => {
-			toast(err.status, err.message);
+			let message = err.message;
+			if (err.message.includes("password")) {
+				message = "Tài khoản hoặc mật khẩu không đúng";
+			}
+			toast(err.status, message);
 		},
 	});
 	return (

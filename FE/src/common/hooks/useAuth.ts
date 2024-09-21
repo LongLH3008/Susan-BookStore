@@ -88,7 +88,7 @@ export const useAuth = ({ action, onSuccess, onError }: useAuth) => {
 								status: "ERROR",
 								message: error.response.data.message ?? error.response.data.error,
 						  }
-						: { status: "LOST_CONNECT", message: error.message }
+						: { status: "LOST_CONNECT", message: "Lỗi kết nối máy chủ" }
 				);
 		},
 	});
