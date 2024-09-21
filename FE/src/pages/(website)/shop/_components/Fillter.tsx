@@ -20,6 +20,12 @@ const Left = () => {
     productType: [],
     author: [],
   });
+  console.log(filterValues);
+
+  //logic filter
+  useEffect(() => {
+    setFeature(filterValues);
+  }, [JSON.stringify(filterValues)]);
 
   const toggleItem = (index: number) => {
     setOpenItem((prevItems) =>
@@ -28,7 +34,7 @@ const Left = () => {
         : [...prevItems, index]
     );
   };
-
+  //lấy data filter
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = event.target;
 
@@ -50,10 +56,6 @@ const Left = () => {
       }
     });
   };
-  useEffect(() => {
-    setFeature(filterValues);
-    console.log(filterValues);
-  }, [JSON.stringify(filterValues)]);
 
   const handleToggle = (
     index: number,
@@ -62,49 +64,51 @@ const Left = () => {
     event.preventDefault();
     toggleItem(index);
   };
+
+  //data filter
   const sidebarItems = [
     {
       id: 2,
-      title: "Availability",
+      title: "Trạng thái",
       open: openItem.includes(2),
       items: [
         {
           type: "checkbox",
           name: "availability",
           value: 1,
-          label: "In stock",
+          label: "Còn hàng",
           count: 34,
         },
         {
           type: "checkbox",
           name: "availability",
           value: 0,
-          label: "Out of stock",
+          label: "Hết hàng",
           count: 18,
         },
       ],
     },
     {
       id: 3,
-      title: "Product type",
+      title: "Loại sách",
       open: openItem.includes(3),
       items: CategoryQuery?.data?.metadata?.map((item: ICategory) => ({
         type: "checkbox",
         name: "productType",
-        value: item.category_name,
+        value: item.id,
         label: item.category_name,
         count: 3,
       })),
     },
     {
       id: 4,
-      title: "Author",
+      title: "Tác giả",
       open: openItem.includes(4),
       items: author.map((au) => ({
         type: "checkbox",
         name: "author",
-        value: `${au}`,
-        label: `${au}`,
+        value: au,
+        label: au,
         count: 3,
       })),
     },
@@ -120,7 +124,7 @@ const Left = () => {
         >
           <div className="blog-sidebar">
             <div className="flex justify-between items-center">
-              <h5 className="title widget-collapse-show">Price</h5>
+              <h5 className="title widget-collapse-show">Giá </h5>
               <button onClick={(event) => handleToggle(1, event)}>
                 {openItem.includes(1) ? (
                   <MdKeyboardArrowDown className="w-5 h-5" />
@@ -134,17 +138,17 @@ const Left = () => {
                 <div className="filter-value-counter flex justify-between items-center">
                   <span className="filter-value-selected border border-dashed border-gray-500 text-[#838383] rounded-full px-2 inline-block my-3">
                     {filterValues
-                      ? `Price: $${filterValues?.price?.gte} - $${filterValues?.price?.lte}`
-                      : "selected"}
+                      ? `Giá: ${filterValues?.price?.gte}VND - ${filterValues?.price?.lte}VND`
+                      : "Đã chọn"}
                   </span>
                   <button className="underline hover:text-[#00BFC5]">
-                    Reset
+                    Làm mới
                   </button>
                 </div>
                 <div className="checkbox-container categories-list sidebar-price-filter *:pt-2">
                   <div className="filter-range-from flex justify-between items-center   ">
                     <label className="text-[#838383]" htmlFor="Filter-price-1">
-                      From :
+                      Từ :
                     </label>
                     <div className="">
                       <input
@@ -163,7 +167,7 @@ const Left = () => {
                   </div>
                   <div className="filter-price-range-to flex justify-between items-center  ">
                     <label className="text-[#838383]" htmlFor="Filter-price-1">
-                      To :
+                      Đến :
                     </label>
                     <div className="">
                       <input
@@ -181,9 +185,6 @@ const Left = () => {
                     </div>
                   </div>
                 </div>
-                <button className="mt-10 bg-black text-white px-5 py-2">
-                  Filter
-                </button>
               </div>
             )}
           </div>
@@ -203,10 +204,10 @@ const Left = () => {
                 <div className="sidebar-body widget-collapse-hide">
                   <div className="filter-value-counter flex justify-between items-center">
                     <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
-                      selected
+                      Đã chọn
                     </span>
                     <button className="underline hover:text-[#00BFC5]">
-                      Reset
+                      Làm mới
                     </button>
                   </div>
                   <ul className="checkbox-container categories-list">

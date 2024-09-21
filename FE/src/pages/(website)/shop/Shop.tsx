@@ -8,7 +8,7 @@ import Nav from "./_components/Headershop.tsx";
 import Right from "./_components/Productshop.tsx";
 
 const Shop = () => {
-  const [viewMode, setViewMode] = useState(null);
+  const [viewMode, setViewMode] = useState("md:w-1/3 sm:w-1/2");
   const [itemsToShow, setItemsToShow] = useState(6);
   const [sortBy, setSortBy] = useState("manual");
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,6 +19,7 @@ const Shop = () => {
   useEffect(() => {
     setLimit(itemsToShow);
   }, [itemsToShow, setLimit]);
+  console.log(viewMode);
 
   const handleViewChange = (mode: any) => {
     setViewMode(mode);

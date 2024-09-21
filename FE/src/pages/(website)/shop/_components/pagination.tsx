@@ -37,9 +37,9 @@ const Pagination = ({
   return (
     <div className="flex justify-between items-center border-t border-b border-gray-300 mt-10 py-2 text-[#707070]">
       <div className="flex-grow">
-        Showing {(currentPage - 1) * itemsPerPage + 1} -{" "}
-        {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}{" "}
-        results
+        Hiển thị {(currentPage - 1) * itemsPerPage + 1} -{" "}
+        {Math.min(currentPage * itemsPerPage, totalItems)} của {totalItems} kết
+        quả
       </div>
       <nav aria-label="Page navigation example">
         <ul className="inline-flex -space-x-px text-base h-10">
