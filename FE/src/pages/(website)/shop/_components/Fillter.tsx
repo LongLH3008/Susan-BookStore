@@ -5,27 +5,25 @@ import { ICategory } from "@/common/interfaces/category";
 import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 
-const Left = () => {
+interface FilterProb {
+  price: { gte: 0; lte: 1100000 };
+  availability: [];
+  productType: [];
+  author: [];
+}
+interface Prob {
+  handleFilterProduct: any;
+  filterValues: FilterProb;
+}
+const Left = ({ handleFilterProduct, filterValues }: Prob) => {
   const [openItem, setOpenItem] = useState<number[]>([]);
   const { CategoryQuery, setLimit } = useCategory();
   const { author } = useMegaMenu();
-  const { setFeature } = useProduct();
   useEffect(() => {
     setLimit(10);
   }, []);
 
-  const [filterValues, setFilterValues] = useState({
-    price: { gte: 0, lte: 1100000 },
-    availability: [],
-    productType: [],
-    author: [],
-  });
-  console.log(filterValues);
-
   //logic filter
-  useEffect(() => {
-    setFeature(filterValues);
-  }, [JSON.stringify(filterValues)]);
 
   const toggleItem = (index: number) => {
     setOpenItem((prevItems) =>
@@ -38,7 +36,7 @@ const Left = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = event.target;
 
-    setFilterValues((prev) => {
+    handleFilterProduct((prev: any) => {
       if (type === "checkbox") {
         const values = prev[name as keyof typeof prev] as string[];
         return {
