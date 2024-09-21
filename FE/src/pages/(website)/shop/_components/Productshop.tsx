@@ -3,6 +3,7 @@ import { IProduct } from "@/common/interfaces/product";
 import Product from "../../../../components/(website)/product/product";
 import Pagination from "./pagination";
 import { useEffect } from "react";
+import SkeletonProduct from "@/components/(website)/product/skeletonProduct";
 
 type Props = {
   totalItems: number;
@@ -24,20 +25,25 @@ const Right = ({
   useEffect(() => {
     setPage(currentPage);
   }, [currentPage]);
+
   return (
     <>
       <div className="col-span-9 mb-10">
         <div className="flex flex-wrap -mx-4 ">
-          {productQuery?.data?.metadata?.books?.map((product: IProduct) => (
-            <div
-              key={product._id}
-              className={`${
-                viewMode ? viewMode : " md:w-1/3 sm:w-1/2 "
-              } px-4 mt-5`}
-            >
-              <Product dataProduct={product} />{" "}
-            </div>
-          ))}
+          {productQuery?.isLoading
+            ? Array.from({ length: itemsToShow }).map((_, index) => (
+                <SkeletonProduct index={index} />
+              ))
+            : productQuery?.data?.metadata?.books?.map((product: IProduct) => (
+                <div
+                  key={product._id}
+                  className={`${
+                    viewMode ? viewMode : " md:w-1/3 sm:w-1/2 "
+                  } px-4 mt-5`}
+                >
+                  <Product dataProduct={product} />{" "}
+                </div>
+              ))}
         </div>
         <Pagination
           totalItems={totalItems}

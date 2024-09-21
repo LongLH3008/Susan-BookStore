@@ -38,6 +38,7 @@ export const ProductContext = createContext<ProdContextType>(
 );
 
 export const ProductProvider = ({ children }: ProdContextProps) => {
+  // const [productQuery, setProductQuery] = useState<any[]>([]);
   const [features, setFeature] = useState<featureProbs | undefined>();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(0);
@@ -65,13 +66,27 @@ export const ProductProvider = ({ children }: ProdContextProps) => {
     staleTime: 5000,
   });
   // console.log(productQuery.data);
+
+  // useEffect(() => {
+  //   setProductQuery(productdata);
+  // }, [JSON.stringify(productdata)]);
   useEffect(() => {
     if (features?.price) {
       setMinPrice(features?.price?.gte);
       setMaxPrice(features?.price?.lte);
     }
+    if (features?.productType && features.productType.length > 0) {
+      const selectedCategoryIds = features.productType.join(",");
+      setCategoryIds(selectedCategoryIds);
+    } else {
+      setCategoryIds(undefined);
+    }
+    if (features.author.length > 0) {
+      productQuery = productQuery?.data?.metadata?.books?.filter(
+        (product) => features.author.includes(product.author) // Điều chỉnh theo cấu trúc dữ liệu sản phẩm
+      );
+    }
   }, [JSON.stringify(features)]);
-
   return (
     <ProductContext.Provider
       value={{
