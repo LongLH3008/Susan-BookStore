@@ -36,6 +36,7 @@ router.put("/user/:id", asyncHandler(UserController.updateUser));
 //--------------USER ROUTES-------------------
 //AUTH
 router.post("/auth/login", AuthLoginApiController.Login);
+router.post("/auth/logout", AuthLoginApiController.Logout);
 router.post("/auth/refresh-token", AuthLoginApiController.refreshToken);
 router.post("/auth/register", AuthRegisterApiController.Register);
 router.post("/auth/change-pw", AuthChangeFwApiController.changePassword);

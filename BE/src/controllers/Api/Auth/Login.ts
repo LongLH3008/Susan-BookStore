@@ -98,6 +98,12 @@ class Login {
             });
         }
     }
+    //logout
+    public static async Logout(req: any, res: any) : Promise<any> {
+        res.clearCookie("accessToken");
+        res.clearCookie("refreshToken");
+        return res.status(200).json({ message: "Logout successfully" });
+    }
 }
 
 export default Login;
