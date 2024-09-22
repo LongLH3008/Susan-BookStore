@@ -1,16 +1,33 @@
+import { useAuth, userState } from "@/common/hooks/useAuth";
+import { useToast } from "@/common/hooks/useToast";
+import { ToastVariant } from "@/common/interfaces/toast";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 const Aside = (props: any) => {
 	const navigate = useNavigate();
+	const { toast, close } = useToast();
+	const { resetState } = userState();
 	const [resizeAside, setResizeAside] = useState(false);
 
-	const onLogout = () => {
-		if (confirm("Do you want to logout ?")) {
-			localStorage.clear();
-			location.reload();
-			navigate("/login");
-		}
+	const { onSubmit } = useAuth({
+		action: "LOGOUT",
+		onSuccess: () => {
+			resetState();
+			close();
+			navigate("/dang-nhap");
+		},
+		onError: (err: any) => console.log(err),
+	});
+
+	const Logout = () => {
+		toast({
+			variant: ToastVariant.CONFIRM,
+			content: "Bạn muốn đăng xuất",
+			confirm: onSubmit,
+			confirmTextButton: "Đồng ý",
+		});
 	};
+
 	return (
 		<div
 			className={`duration-700 relative ease-in-out transition-all  flex flex-col justify-between gap-3 p-10 h-screen px-3 pb-4 text-[#535353] bg-white dark:bg-gray-800
@@ -136,7 +153,10 @@ const Aside = (props: any) => {
 				</li>
 			</ul>
 			<div className="flex flex-col gap-2">
-				<div className="flex items-center cursor-pointer h-[60px] px-5 relative overflow-hidden border hover:text-white hover:bg-zinc-900 border-zinc-900 rounded-md">
+				<div
+					onClick={Logout}
+					className="flex items-center cursor-pointer h-[60px] px-5 relative overflow-hidden border hover:text-white hover:bg-zinc-900 border-zinc-900 rounded-md"
+				>
 					<i className="fa-solid fa-power-off"></i>
 					<span
 						className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${

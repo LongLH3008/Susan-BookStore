@@ -16,6 +16,7 @@ const ClientRoutes = [
 			{ path: "cua-hang", element: <ProductProvider children={<Website.Shop />} /> },
 			{ path: "lien-he", element: <Website.Contact /> },
 			{ path: "gioi-thieu", element: <Website.About /> },
+			{ path: "doi-mat-khau", element: <Website.ChangePassword /> },
 		],
 	},
 	{ path: "thanh-toan", element: <Website.Checkout /> },
