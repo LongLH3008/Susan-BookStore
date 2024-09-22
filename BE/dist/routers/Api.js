@@ -35,6 +35,7 @@ router.put("/user/:id", (0, utils_1.asyncHandler)(User_controller_1.default.upda
 //--------------USER ROUTES-------------------
 //AUTH
 router.post("/auth/login", Login_1.default.Login);
+router.post("/auth/logout", Login_1.default.Logout);
 router.post("/auth/refresh-token", Login_1.default.refreshToken);
 router.post("/auth/register", Register_1.default.Register);
 router.post("/auth/change-pw", ChangePassword_1.default.changePassword);
