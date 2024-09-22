@@ -1,7 +1,8 @@
-import { checkOTP, confirmNewPassword, login, register, requestOTP } from "@/services/auth";
+import { changePassword, checkOTP, confirmNewPassword, login, logout, register, requestOTP } from "@/services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { SubmitHandler } from "react-hook-form";
 import { create } from "zustand";
+import { ToastVariant } from "../interfaces/toast";
 import { Authentication } from "../shared/authentication";
 
 type ForgotPassword = "REQUEST_OTP" | "CHECK_OTP" | "CONFIRM_NEW_PASSWORD";
@@ -48,8 +49,10 @@ export const useAuth = ({ action, onSuccess, onError }: useAuth) => {
 						response = await register(args);
 						break;
 					case "LOGOUT":
+						response = await logout();
 						break;
 					case "CHANGE_PASSWORD":
+						response = await changePassword(args);
 						break;
 					case "REQUEST_OTP":
 						response = await requestOTP(args);
@@ -73,10 +76,10 @@ export const useAuth = ({ action, onSuccess, onError }: useAuth) => {
 				localStorage.setItem("refreshToken", refreshToken);
 			}
 			if (action == "LOGOUT") {
-				localStorage.remove("accessToken");
-				localStorage.remove("refreshToken");
+				localStorage.removeItem("accessToken");
+				localStorage.removeItem("refreshToken");
 			}
-			onSuccess && onSuccess({ status: "SUCCESS", message: response });
+			onSuccess && onSuccess({ status: ToastVariant.SUCCESS, message: response });
 		},
 		onError: (error: any) => {
 			console.log(error);
@@ -85,10 +88,10 @@ export const useAuth = ({ action, onSuccess, onError }: useAuth) => {
 				onError(
 					error.response
 						? {
-								status: "ERROR",
+								status: ToastVariant.ERROR,
 								message: error.response.data.message ?? error.response.data.error,
 						  }
-						: { status: "LOST_CONNECT", message: "Lỗi kết nối máy chủ" }
+						: { status: ToastVariant.LOST_CONNECT, message: "Lỗi kết nối máy chủ" }
 				);
 		},
 	});

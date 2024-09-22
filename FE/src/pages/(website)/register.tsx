@@ -20,7 +20,10 @@ const Register = (props: Props) => {
 	const { onSubmit } = useAuth({
 		action: "REGISTER",
 		onSuccess: (data: any) => {
-			toast(data.status, `Đăng kí thành công`);
+			toast({
+				variant: data.status,
+				content: `Đăng kí thành công`,
+			});
 			nav("/dang-nhap");
 		},
 		onError: (err: any) => {
@@ -28,7 +31,10 @@ const Register = (props: Props) => {
 			if (err.message.includes("Account")) {
 				message = "Tài khoản đã tồn tại";
 			}
-			toast(err.status, message);
+			toast({
+				variant: err.status,
+				content: message,
+			});
 		},
 	});
 

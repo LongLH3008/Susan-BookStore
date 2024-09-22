@@ -27,13 +27,15 @@ const ChangePassword = ({ open, user }: { open: boolean; user: string }) => {
 	const { onSubmit } = useAuth({
 		action: "CONFIRM_NEW_PASSWORD",
 		onSuccess: (data: any) => {
-			console.log(data);
-			toast(data.status, "Change password successfully");
+			toast({
+				variant: data.status,
+				content: "Thay đổi mật khẩu thành công",
+			});
 			setSubmit(false);
-			nav("/login");
+			nav("/dang-nhap");
 		},
 		onError: (err: any) => {
-			toast(err.status, err.message);
+			toast({ variant: err.status, content: err.message });
 			setTimeout(() => {
 				setSubmit(false);
 			}, 500);

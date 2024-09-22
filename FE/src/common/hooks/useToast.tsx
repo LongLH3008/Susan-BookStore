@@ -1,32 +1,71 @@
 import { create } from "zustand";
+import { ToastVariant } from "../interfaces/toast";
 
 type useToast = {
 	show: boolean;
-	variant: string;
+	variant: ToastVariant;
 	content: string;
-	toast: (
-		variant: "LOST_CONNECT" | "ADD_TO_CART" | "DEFAULT" | "SUCCESS" | "ERROR" | "",
-		content: string,
-		duartion?: number
-	) => void;
+
+	confirm: Function;
+	confirmTextButton: string;
+
+	cancel?: Function;
+	cancelTextButton?: string;
+
+	toast: (args: {
+		variant: ToastVariant;
+		content: string;
+		duration?: number;
+		confirm?: Function;
+		confirmTextButton?: string;
+		cancel?: Function;
+		cancelTextButton?: string;
+	}) => void;
+
 	close: () => void;
 };
 
 export const useToast = create<useToast>((set) => ({
+	// Normal notifications
 	show: false,
-	variant: "",
+	variant: ToastVariant[""],
 	content: "",
-	toast: (variant, content, duration = 2500) => {
+
+	// For confirm notification
+	confirmTextButton: "",
+	confirm: () => {},
+	cancelTextButton: "",
+	cancel: () => {},
+
+	// Xử lý popup / toast
+	toast: ({ variant, content, duration = 2500, confirm, confirmTextButton, cancel, cancelTextButton }) => {
+		// Nếu là confirm
+		if (variant == ToastVariant.CONFIRM) {
+			set({ show: true, variant, content, confirm, confirmTextButton, cancel, cancelTextButton });
+			document.querySelector("body")?.classList.add("overflow-y-hidden");
+			return;
+		}
+
+		// Nếu là thông báo thường
 		set((prev) => {
 			if (prev.show) {
 				return prev;
 			}
 			setTimeout(() => {
-				set({ show: false, variant: "", content: "" });
+				set({ show: false, variant: ToastVariant[""], content: "" });
 			}, duration);
 
 			return { show: true, variant, content };
 		});
 	},
-	close: () => set({ show: false, variant: "", content: "" }),
+
+	// Close toast
+	close: () => {
+		set((prev) => {
+			if (prev.variant === ToastVariant.CONFIRM) {
+				document.querySelector("body")?.classList.remove("overflow-y-hidden");
+			}
+			return { show: false, variant: ToastVariant[""] };
+		});
+	},
 }));

@@ -1,14 +1,39 @@
 import * as icon from "@/common/assets/icon";
-import { userState } from "@/common/hooks/useAuth";
+import { useAuth, userState } from "@/common/hooks/useAuth";
+import { useToast } from "@/common/hooks/useToast";
+import { ToastVariant } from "@/common/interfaces/toast";
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const DropdownInfoUser = (props: Props) => {
 	const location = useLocation();
+	const { toast, close } = useToast();
+	const navigate = useNavigate();
+	const { resetState } = userState();
+
 	const { id } = userState();
 	const [open, setOpen] = useState<boolean>(false);
+
+	const { onSubmit } = useAuth({
+		action: "LOGOUT",
+		onSuccess: () => {
+			resetState();
+			close();
+			navigate("/dang-nhap");
+		},
+		onError: (err: any) => console.log(err),
+	});
+
+	const Logout = () => {
+		toast({
+			variant: ToastVariant.CONFIRM,
+			content: "Bạn muốn đăng xuất",
+			confirm: onSubmit,
+			confirmTextButton: "Đồng ý",
+		});
+	};
 
 	return (
 		<div className="relative">
@@ -31,43 +56,42 @@ const DropdownInfoUser = (props: Props) => {
 						Tài khoản
 					</div>
 					{id ? (
-						<div className="flex flex-col *:p-3 pt-2">
+						<div className="flex flex-col gap-1 pt-1">
 							<Link
 								to="/don-hang"
 								state={{ from: location.pathname }}
-								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
+								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
 							>
 								Đơn hàng
 							</Link>
 							<Link
 								to="/san-pham-yeu-thich"
 								state={{ from: location.pathname }}
-								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
+								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
 							>
 								Sản phẩm yêu thích
 							</Link>
 							<Link
 								to="/gio-hang"
 								state={{ from: location.pathname }}
-								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
+								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
 							>
 								Giỏ hàng
 							</Link>
-							<div className="font-semibold uppercase text-[12px] pb-3 border-b border-zinc-400 text-zinc-800"></div>
+							<div className="font-semibold h-1  border-b border-zinc-400 text-zinc-800"></div>
 							<Link
 								to="/doi-mat-khau"
 								state={{ from: location.pathname }}
-								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
+								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
 							>
 								Đổi mật khẩu
 							</Link>
-							<Link
-								to="/dang-xuat"
-								state={{ from: location.pathname }}
-								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
+							<div
+								onClick={() => Logout()}
+								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
 							>
 								Đăng xuất
-							</Link>
+							</div>
 						</div>
 					) : (
 						<div
@@ -78,14 +102,14 @@ const DropdownInfoUser = (props: Props) => {
 							<Link
 								to="/dang-nhap"
 								state={{ from: location.pathname }}
-								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
+								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
 							>
 								Đăng nhập
 							</Link>
 							<Link
 								to="/dang-ky"
 								state={{ from: location.pathname }}
-								className="text-[12px] hover:bg-[rgba(0,0,0,0.05)]"
+								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
 							>
 								Tạo tài khoản
 							</Link>

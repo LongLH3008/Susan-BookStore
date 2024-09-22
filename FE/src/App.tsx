@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Toast } from "./components/(website)/toast/Toast";
+import { Toast } from "./components/Toast";
 import RouterWebsite from "./routers/router";
 
 export default function App() {

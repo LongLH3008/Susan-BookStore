@@ -24,7 +24,7 @@ const CheckOTP = ({
 			setSubmit(false);
 		},
 		onError: (err: any) => {
-			toast(err.status, err.message);
+			toast({ variant: err.status, content: err.message });
 			setTimeout(() => {
 				setSubmit(false);
 			}, 500);
