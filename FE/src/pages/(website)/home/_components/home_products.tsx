@@ -4,17 +4,17 @@ import { ICategory } from "@/common/interfaces/category";
 import { IProduct } from "@/common/interfaces/product";
 import { useEffect, useState } from "react";
 import Product from "../../../../components/(website)/product/product";
-import SkeletonProduct from "@/components/(website)/product/skeletonProduct";
+import SkeletonProduct from "@/components/(website)/Skeleton/skeletonProduct";
 
 const HomeProducts = () => {
-  const { productQuery, setCategoryIds } = useProduct();
+  const { productQuery, updateFilter } = useProduct();
   const { CategoryQuery, setLimit } = useCategory();
   const [color, setColor] = useState("66ebf60f505ce54b4e29b42f");
 
   useEffect(() => {
     setLimit(4);
-    setCategoryIds("66ebf60f505ce54b4e29b42f");
-  }, [setCategoryIds, setLimit]);
+    updateFilter("category_ids", "66ebf60f505ce54b4e29b42f");
+  }, [setLimit]);
   return (
     <div className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] mb-[80px] min-[968px]:mb-[100px]">
       <h2 className="mb-[20px] text-center text-3xl text-zinc-800 font-medium tracking-wide">
@@ -35,7 +35,7 @@ const HomeProducts = () => {
             } hover:bg-zinc-800 hover:text-white relative 
             `}
             onClick={() => {
-              setCategoryIds(category.id);
+              updateFilter("category_ids", category.id);
               setColor(category.id);
             }}
           >

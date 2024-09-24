@@ -9,9 +9,8 @@ import HomeProducts from "./_components/home_products";
 import LatestBlogs from "./_components/latest_blogs";
 import LatestProducts from "./_components/latest_products";
 
-type Props = {};
 
-const Home = (props: Props) => {
+const Home = () => {
 	return (
 		<>
 			<Banner />

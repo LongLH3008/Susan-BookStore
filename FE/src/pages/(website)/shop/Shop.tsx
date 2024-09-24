@@ -11,30 +11,34 @@ import { IProduct } from "@/common/interfaces/product.ts";
 const Shop = () => {
   const [viewMode, setViewMode] = useState("md:w-1/3 sm:w-1/2");
   const [itemsToShow, setItemsToShow] = useState(6);
-  const [sortBy, setSortBy] = useState("manual");
+  // const [sortBy, setSortBy] = useState("manual");
   const [currentPage, setCurrentPage] = useState(1);
-  const [dataProducts, setDataProducts] = useState<IProduct[] | []>([]);
+  // const [dataProducts, setDataProducts] = useState<IProduct[] | []>([]);
   const [filterValues, setFilterValues] = useState({
     price: { gte: 0, lte: 1100000 },
     availability: [],
     productType: [],
     author: [],
   });
-  console.log(filterValues);
 
-  const { productQuery, setLimit, setCategoryIds, setMinPrice, setMaxPrice } =
+  const { productQuery, updateFilter, productDataFilter, setFeature } =
     useProduct();
   const totalItems = productQuery?.data?.metadata?.total;
+  console.log("Hihi", productDataFilter);
 
   useEffect(() => {
-    setLimit(itemsToShow);
-  }, [itemsToShow, setLimit]);
+    updateFilter("limit", itemsToShow);
+  }, [itemsToShow]);
+
+  // useEffect(() => {
+  //   if (productQuery?.data) {
+  //     setDataProducts(productQuery.data.metadata.books);
+  //   }
+  // }, [productQuery]);
 
   useEffect(() => {
-    if (productQuery?.data) {
-      setDataProducts(productQuery.data.metadata.books);
-    }
-  }, [productQuery]);
+    setFeature(filterValues);
+  }, [filterValues]);
 
   const handleFilterProduct = (data: any) => {
     setFilterValues(data);
@@ -49,38 +53,56 @@ const Shop = () => {
     setCurrentPage(1);
   };
 
+  /* <option value="manual">Sản Phẩm Nổi bật</option>
+              <option value="best-selling">Sản Phẩm Bán chạy</option>
+              <option value="title-ascending">Thứ tự A-Z</option>
+              <option value="title-descending">Thứ tự Z-A</option>
+              <option value="price-ascending">Giá thấp đến cao</option>
+              <option value="price-descending">Giá cao đến thấp</option>
+              <option value="created-descending">Ngày mới đến cũ</option>
+              <option value="created-ascending">Ngày Cũ đến mới</option>
+              sort?: "ascByPrice" | "" | "ascByRating" | "descByRating" | "ascByTitle" | "descByTitle";
+              */
   const handleSortByChange = (event: any) => {
-    setSortBy(event.target.value);
+    const sortMapping: { [key: string]: string | undefined } = {
+      "best-selling": "",
+      "title-ascending": "ascByTitle",
+      "title-descending": "descByTitle",
+      "price-ascending": "ascByPrice",
+      "price-descending": "descByPrice",
+    };
+
+    updateFilter("sort", sortMapping[event.target.value] || undefined);
   };
 
-  useEffect(() => {
-    if (filterValues?.price) {
-      setMinPrice(filterValues?.price?.gte);
-      setMaxPrice(filterValues?.price?.lte);
-    }
+  // useEffect(() => {
+  //   if (filterValues?.price) {
+  //     setMinPrice(filterValues?.price?.gte);
+  //     setMaxPrice(filterValues?.price?.lte);
+  //   }
 
-    // Cập nhật category_ids
-    if (filterValues?.productType && filterValues.productType.length > 0) {
-      const selectedCategoryIds = filterValues.productType.join(",");
-      setCategoryIds(selectedCategoryIds);
-    } else {
-      setCategoryIds(undefined);
-    }
+  //   // Cập nhật category_ids
+  //   if (filterValues?.productType && filterValues.productType.length > 0) {
+  //     const selectedCategoryIds = filterValues.productType.join(",");
+  //     setCategoryIds(selectedCategoryIds);
+  //   } else {
+  //     setCategoryIds(undefined);
+  //   }
 
-    // // Cập nhật author_ids
-    if (productQuery?.data) {
-      const products = productQuery.data.metadata.books;
+  //   if (productQuery?.data) {
+  //     const products = productQuery.data.metadata.books;
 
-      const filtered =
-        filterValues.author.length > 0
-          ? products.filter((product: IProduct) =>
-              filterValues.author.includes(product.author)
-            )
-          : products;
+  //     const filtered =
+  //       filterValues.author.length > 0
+  //         ? products.filter((product: IProduct) =>
+  //             filterValues.author.includes(product.author)
+  //           )
+  //         : products; // Trả về toàn bộ sản phẩm nếu không có bộ lọc tác giả
 
-      setDataProducts(filtered);
-    }
-  }, [filterValues]);
+  //     setDataProducts(filtered);
+  //   }
+  // }, [filterValues, productQuery]);
+
   return (
     <>
       <Breadcrumb title="Shop" />
@@ -90,7 +112,6 @@ const Shop = () => {
           handleViewChange={handleViewChange}
           itemsToShow={itemsToShow}
           handleItemsToShowChange={handleItemsToShowChange}
-          sortBy={sortBy}
           handleSortByChange={handleSortByChange}
           totalItems={totalItems}
           itemsPerPage={itemsToShow}
@@ -108,7 +129,7 @@ const Shop = () => {
           </CategoryProvider>
 
           <Right
-            dataProduct={dataProducts}
+            dataProduct={productDataFilter}
             totalItems={totalItems}
             itemsToShow={itemsToShow}
             currentPage={currentPage}

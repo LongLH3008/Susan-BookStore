@@ -6,18 +6,19 @@ import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 
 interface FilterProb {
-  price: { gte: 0; lte: 1100000 };
-  availability: [];
-  productType: [];
-  author: [];
+  price: { gte: number; lte: number };
+  availability: string[];
+  productType: string[];
+  author: string[];
 }
 interface Prob {
   handleFilterProduct: any;
   filterValues: FilterProb;
 }
-const Left = ({ handleFilterProduct, filterValues }: Prob) => {
+const Left = ({ filterValues, handleFilterProduct }: Prob) => {
   const [openItem, setOpenItem] = useState<number[]>([]);
   const { CategoryQuery, setLimit } = useCategory();
+
   const { author } = useMegaMenu();
   useEffect(() => {
     setLimit(10);
@@ -33,6 +34,7 @@ const Left = ({ handleFilterProduct, filterValues }: Prob) => {
     );
   };
   //lấy data filter
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = event.target;
 

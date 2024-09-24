@@ -4,6 +4,7 @@ import * as Website from "@/pages/(website)";
 import UserGuard from "./guards/user.guard";
 
 const ClientRoutes = [
+
 	{
 		path: "",
 		element: <UserGuard children={<LayoutClient />} />,
@@ -11,7 +12,10 @@ const ClientRoutes = [
 			{ path: "", element: <Website.Home /> },
 			{ path: "tin-tuc", element: <Website.Blog /> },
 			{ path: "tin-tuc/:slug", element: <Website.BlogDetail /> },
-			{ path: "san-pham/:slug", element: <Website.BookDetail /> },
+			  {
+        path: "san-pham/:slug",
+        element: <ProductProvider children={<Website.BookDetail />} />,
+      },
 			{ path: "gio-hang", element: <Website.Cart /> },
 			{ path: "cua-hang", element: <ProductProvider children={<Website.Shop />} /> },
 			{ path: "lien-he", element: <Website.Contact /> },

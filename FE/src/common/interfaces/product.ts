@@ -51,3 +51,10 @@ export interface IProduct {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface dataProductProb {
+  books: IProduct[];
+  total: number;
+  page: number;
+  limit: number;
+}

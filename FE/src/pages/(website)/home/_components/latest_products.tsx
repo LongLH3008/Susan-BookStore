@@ -1,7 +1,7 @@
 import useProduct from "@/common/hooks/useProduct";
 import { IProduct } from "@/common/interfaces/product";
 import Product from "../../../../components/(website)/product/product";
-import SkeletonProduct from "@/components/(website)/product/skeletonProduct";
+import SkeletonProduct from "@/components/(website)/Skeleton/skeletonProduct";
 
 const LatestProducts = () => {
   const { productQuery } = useProduct();

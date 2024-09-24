@@ -13,12 +13,19 @@ import {
   SlideImgaeBookPrev,
 } from "./SlideImageBookButtons";
 
-const BookImage = () => {
-  const [mainImage, setMainImage] = useState(
-    "https://susan-demo.myshopify.com/cdn/shop/products/7_0703c71f-03e5-4502-b7cc-ce60c55e74de_600x800.jpg?v=1569231186"
-  );
+interface Image {
+  id: string;
+  url: string;
+  _id: string;
+}
+interface imageProb {
+  coverImage: string | undefined;
+  Image: Array<Image>;
+}
+const BookImage = ({ coverImage, Image }: imageProb) => {
+  const [mainImage, setMainImage] = useState(coverImage);
 
-  const handleImageClick = (src: any) => {
+  const handleImageClick = (src: string) => {
     setMainImage(src);
   };
 
@@ -26,9 +33,18 @@ const BookImage = () => {
     <>
       <div className="">
         <div className="w-full border border-gray-200">
-          <img src={mainImage} alt="" />
+          <img
+            src={mainImage || coverImage}
+            alt="Main"
+            className="m-auto object-cover"
+          />
         </div>
-        <div className=" my-5 lg:w-full sm:w-[200px]">
+        <div
+          // className={`${
+          //   Image.length == 0 ? "hidden" : ""
+          // } my-5 lg:w-full sm:w-[200px]`}
+          className="my-5 lg:w-full sm:w-[200px]"
+        >
           <Swiper
             slidesPerView={1}
             spaceBetween={10}
@@ -54,96 +70,21 @@ const BookImage = () => {
             modules={[Pagination, Navigation]}
             className="mySwiper sliderbanner relative "
           >
-            <SwiperSlide>
-              <div
-                className="border border-gray-200"
-                onClick={() =>
-                  handleImageClick(
-                    "https://susan-demo.myshopify.com/cdn/shop/products/11_600x800.jpg?v=1569231186"
-                  )
-                }
-              >
-                <img
-                  src="https://susan-demo.myshopify.com/cdn/shop/products/11_600x800.jpg?v=1569231186"
-                  alt=""
-                />
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div
-                className="border border-gray-200"
-                onClick={() =>
-                  handleImageClick(
-                    "https://susan-demo.myshopify.com/cdn/shop/products/7_0703c71f-03e5-4502-b7cc-ce60c55e74de_600x800.jpg?v=1569231186"
-                  )
-                }
-              >
-                <img
-                  src="https://susan-demo.myshopify.com/cdn/shop/products/7_0703c71f-03e5-4502-b7cc-ce60c55e74de_600x800.jpg?v=1569231186"
-                  alt=""
-                />
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div
-                className="border border-gray-200"
-                onClick={() =>
-                  handleImageClick(
-                    "https://susan-demo.myshopify.com/cdn/shop/products/8_4953a517-3945-478c-9e98-925e2b1000c0_600x800.jpg?v=1569231186"
-                  )
-                }
-              >
-                <img
-                  src="https://susan-demo.myshopify.com/cdn/shop/products/8_4953a517-3945-478c-9e98-925e2b1000c0_600x800.jpg?v=1569231186"
-                  alt=""
-                />
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div
-                className="border border-gray-200"
-                onClick={() =>
-                  handleImageClick(
-                    "https://susan-demo.myshopify.com/cdn/shop/products/9_87e6deda-26c2-4645-90b2-efc6d0fb17d4_600x800.jpg?v=1569231186"
-                  )
-                }
-              >
-                <img
-                  src="https://susan-demo.myshopify.com/cdn/shop/products/9_87e6deda-26c2-4645-90b2-efc6d0fb17d4_600x800.jpg?v=1569231186"
-                  alt=""
-                />
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div
-                className="border border-gray-200"
-                onClick={() =>
-                  handleImageClick(
-                    "https://susan-demo.myshopify.com/cdn/shop/products/20_03cabe0d-7803-469e-b5f3-490646f396f8_600x800.png?v=1573978154"
-                  )
-                }
-              >
-                <img
-                  src="https://susan-demo.myshopify.com/cdn/shop/products/20_03cabe0d-7803-469e-b5f3-490646f396f8_600x800.png?v=1573978154"
-                  alt=""
-                />
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div
-                className="border border-gray-200"
-                onClick={() =>
-                  handleImageClick(
-                    "https://susan-demo.myshopify.com/cdn/shop/products/4_b155f66b-76de-44a2-a3e9-ca89308d9bc3_600x800.jpg?v=1569231152"
-                  )
-                }
-              >
-                <img
-                  src="https://susan-demo.myshopify.com/cdn/shop/products/4_b155f66b-76de-44a2-a3e9-ca89308d9bc3_600x800.jpg?v=1569231152"
-                  alt=""
-                />
-              </div>
-            </SwiperSlide>
+            {Image?.map((image: Image) => (
+              <SwiperSlide key={image?._id}>
+                <div
+                  className="border border-gray-200"
+                  onClick={() => handleImageClick(image?.url)}
+                >
+                  <img
+                    src={image?.url}
+                    alt=""
+                    className="h-24 object-cover m-auto"
+                  />
+                </div>
+              </SwiperSlide>
+            ))}
+
             <SlideImgaeBookNext />
             <SlideImgaeBookPrev />
           </Swiper>
