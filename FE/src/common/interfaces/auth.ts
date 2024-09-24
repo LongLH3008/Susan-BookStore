@@ -3,6 +3,12 @@ interface ILogin {
 	user_password: string;
 }
 
+interface IChangePassword {
+	oldPassword: string;
+	newPassword: string;
+	confirmPassword: string;
+}
+
 interface IRegister extends ILogin {
 	user_confirmpassword: string;
 	user_name: string;

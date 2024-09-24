@@ -1,5 +1,28 @@
 import Joi from "joi";
 
+export const changePassword = Joi.object({
+	oldPassword: Joi.string().required().messages({
+		"any.required": "Mật khẩu bắt buộc",
+		"string.empty": "Mật khẩu không được để trống",
+	}),
+	newPassword: Joi.string()
+		.min(6)
+		.max(32)
+		.required()
+		.pattern(new RegExp("^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{6,}$"))
+		.messages({
+			"any.required": "Mật khẩu mới bắt buộc",
+			"string.min": "Mật khẩu mới ít nhất 6 kí tự",
+			"string.max": "Mật khẩu mới tối đa 32 kí tự",
+			"string.pattern.base": "Tối thiểu 1 chữ cái viết hoa, 1 chữ thường và 1 kí tự đặc biệt",
+			"string.empty": "Mật khẩu mới không được để trống",
+		}),
+	confirmPassword: Joi.string().required().valid(Joi.ref("newPassword")).messages({
+		"any.only": "Mật khẩu mới không khớp",
+		"any.required": "Nhập lại mật khẩu mới",
+	}),
+});
+
 export const requestOTP = Joi.object({
 	user_email: Joi.string()
 		.email({ tlds: { allow: false } })

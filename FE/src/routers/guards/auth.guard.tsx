@@ -1,16 +1,13 @@
 import { Authentication } from "@/common/shared/authentication";
-import { Navigate, Outlet } from "react-router-dom";
+import { ReactNode } from "react";
+import { Navigate } from "react-router-dom";
 
-const AuthGuard = () => {
+const AuthGuard = ({ children }: { children: ReactNode }) => {
 	const payload = Authentication();
 	if (payload) {
 		return <Navigate to={"/"} />;
 	} else {
-		return (
-			<>
-				<Outlet />
-			</>
-		);
+		return children;
 	}
 };
 

@@ -6,6 +6,10 @@ export const login = async (args: ILogin) => {
 	return await SendRequest("POST", "auth/login", args);
 };
 
+export const logout = async () => {
+	return await SendRequest("POST", "auth/logout");
+};
+
 export const register = async (args: IRegister) => {
 	return await SendRequest("POST", "auth/register", args);
 };
@@ -24,6 +28,15 @@ export const confirmNewPassword = async (args: {
 	confirmedPassword: string;
 }) => {
 	return await SendRequest("POST", "auth/forgot-pw", args);
+};
+
+export const changePassword = async (args: {
+	user_id: string;
+	oldPassword: string;
+	newPassword: string;
+	confirmPassword: string;
+}) => {
+	return await SendRequest("POST", "auth/change-pw", args);
 };
 
 const checkAuthentication = async () => {

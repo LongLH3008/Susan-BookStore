@@ -3,7 +3,7 @@ import ColumnChart from "../../components/(dashboard)/Charts/ColumnChart";
 import LineChart from "../../components/(dashboard)/Charts/LineChart";
 export default function MainPage() {
 	return (
-		<div className="p-0 sm:ml-64 mb-20 h-auto dark:bg-gray-800">
+		<div className="p-0 mb-20 h-auto dark:bg-gray-800">
 			<div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
 				<p className="text-2xl font-bold text-gray-800 dark:text-gray-50">Main DashBoard</p>
 			</div>

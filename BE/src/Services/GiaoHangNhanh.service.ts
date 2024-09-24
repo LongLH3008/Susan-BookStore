@@ -4,7 +4,6 @@ import { BadRequestError, InternalServerError } from "../cores/error.response";
 import Locals from "../providers/Locals";
 import Book, { IBookModel } from "../models/Book.model";
 import Log from "../providers/Log";
-import { stringify } from "flatted";
 
 class GiaoHangNhanhService {
     static readonly token: string = "c5793e8f-688e-11ef-8e53-0a00184fe694";

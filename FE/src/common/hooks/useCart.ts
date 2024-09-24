@@ -1,6 +1,7 @@
+import * as CartService from "@/services/cart";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SubmitHandler } from "react-hook-form";
-import * as CartService from "@/services/cart";
+import { ToastVariant } from "../interfaces/toast";
 import { debounce } from "../shared/debounce";
 
 type useCart = {
@@ -39,7 +40,7 @@ export const useCart = ({ action, onSuccess, onError }: useCart) => {
 			}
 		},
 		onSuccess: (response: any) => {
-			onSuccess && onSuccess({ status: "SUCCESS", message: response });
+			onSuccess && onSuccess({ status: ToastVariant.ADD_TO_CART, message: response });
 			queryClient.invalidateQueries({ queryKey: ["cart"] });
 		},
 		onError: (error: any) => {

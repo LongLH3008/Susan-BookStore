@@ -4,27 +4,26 @@ import * as Website from "@/pages/(website)";
 import UserGuard from "./guards/user.guard";
 
 const ClientRoutes = [
-  {
-    path: "",
-    element: <UserGuard children={<LayoutClient />} />,
-    children: [
-      { path: "", element: <Website.Home /> },
-      { path: "tin-tuc", element: <Website.Blog /> },
-      { path: "tin-tuc/:slug", element: <Website.BlogDetail /> },
-      {
+
+	{
+		path: "",
+		element: <UserGuard children={<LayoutClient />} />,
+		children: [
+			{ path: "", element: <Website.Home /> },
+			{ path: "tin-tuc", element: <Website.Blog /> },
+			{ path: "tin-tuc/:slug", element: <Website.BlogDetail /> },
+			  {
         path: "san-pham/:slug",
         element: <ProductProvider children={<Website.BookDetail />} />,
       },
-      { path: "gio-hang", element: <Website.Cart /> },
-      {
-        path: "cua-hang",
-        element: <ProductProvider children={<Website.Shop />} />,
-      },
-      { path: "lien-he", element: <Website.Contact /> },
-      { path: "gioi-thieu", element: <Website.About /> },
-    ],
-  },
-  { path: "thanh-toan", element: <Website.Checkout /> },
+			{ path: "gio-hang", element: <Website.Cart /> },
+			{ path: "cua-hang", element: <ProductProvider children={<Website.Shop />} /> },
+			{ path: "lien-he", element: <Website.Contact /> },
+			{ path: "gioi-thieu", element: <Website.About /> },
+			{ path: "doi-mat-khau", element: <Website.ChangePassword /> },
+		],
+	},
+	{ path: "thanh-toan", element: <Website.Checkout /> },
 ];
 
 export default ClientRoutes;
