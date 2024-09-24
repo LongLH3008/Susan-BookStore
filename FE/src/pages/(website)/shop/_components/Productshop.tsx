@@ -1,13 +1,12 @@
 import useProduct from "@/common/hooks/useProduct";
-import { IProduct } from "@/common/interfaces/product";
+import { dataProductProb, IProduct } from "@/common/interfaces/product";
+import { useEffect } from "react";
 import Product from "../../../../components/(website)/product/product";
 import Pagination from "./pagination";
-import { useEffect, useState } from "react";
-import SkeletonProduct from "@/components/(website)/product/skeletonProduct";
-import { any } from "joi";
+import SkeletonProduct from "@/components/(website)/Skeleton/skeletonProduct";
 
 type Props = {
-  dataProduct: IProduct[];
+  dataProduct: dataProductProb | undefined;
   totalItems: number;
   itemsToShow: number;
   currentPage: number;
@@ -23,10 +22,10 @@ const Right = ({
   onPageChange,
   viewMode,
 }: Props) => {
-  const { productQuery, setPage } = useProduct();
+  const { productQuery, updateFilter } = useProduct();
   // console.log(data?.metadata);
   useEffect(() => {
-    setPage(currentPage);
+    updateFilter("page", currentPage);
   }, [currentPage]);
 
   return (
@@ -37,7 +36,7 @@ const Right = ({
             ? Array.from({ length: 8 }).map((_, index) => (
                 <SkeletonProduct index={index} />
               ))
-            : dataProduct?.map((product: IProduct) => (
+            : dataProduct?.books?.map((product: IProduct) => (
                 <div
                   key={product._id}
                   className={`${

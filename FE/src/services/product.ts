@@ -44,7 +44,9 @@ export const fetchProducts = async (arg: filter) => {
 export const getProducttById = async (_id: string) => {
   return await SendRequest("GET", `/books/${_id}`);
 };
-
+export const getProducttBySlug = async (slug: string) => {
+  return await SendRequest("GET", `/books/slug/${slug}`);
+};
 export const deleteProduct = async (id: string) => {
   try {
     console.log("Gọi API với ID:", id);

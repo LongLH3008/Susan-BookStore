@@ -6,35 +6,13 @@ import useProductContext, {
   ProdContextProvider,
 } from "../../../common/context/ContextProduct";
 import ProductFeatures from "./features";
+import { StarRating } from "../StarRating/StarRating";
 
 type Props = {
   dataProduct: IProduct;
 };
 
-const StarRating = ({ rating }: { rating: number }) => {
-  const fullStars = Math.floor(rating); // Số ngôi sao vàng đầy đủ
-  const hasHalfStar = rating % 1 >= 0.3 && rating % 1 <= 0.7; // Kiểm tra xem có sao rưỡi không
-
-  // Tạo mảng để hiển thị các ngôi sao
-  const stars = [];
-
-  // Thêm ngôi sao đầy đủ
-  for (let i = 0; i < fullStars; i++) {
-    stars.push(
-      <i key={i} className="fa-solid fa-star text-amber-400 ps-1 text-xs"></i>
-    );
-  }
-
-  // Thêm ngôi sao rưỡi nếu có
-  if (hasHalfStar) {
-    stars.push(
-      <i className="fa-solid fa-star-half-stroke text-amber-400 text-xs"></i>
-    );
-  }
-
-  return <div>{stars}</div>;
-};
-const Product = ({ dataProduct, itemsToShow }: Props) => {
+const Product = ({ dataProduct }: Props) => {
   // console.log(dataProduct);
 
   return (
@@ -56,6 +34,7 @@ const ProdContent = ({ dataProduct }: Props) => {
   return (
     <>
       <section
+        key={dataProduct._id}
         onMouseEnter={() => {
           featuresProduct.open();
           setSelectedProduct(dataProduct);
@@ -63,12 +42,9 @@ const ProdContent = ({ dataProduct }: Props) => {
         onMouseLeave={() => featuresProduct.close()}
         className="relative border cursor-pointer"
       >
-        <div
-          key={dataProduct._id}
-          className="relative flex items-center justify-center h-[35dvh] overflow-hidden cursor-pointer *:text-white *:text-[14px] *:grid *:place-items-center"
-        >
+        <div className="relative flex items-center justify-center h-[35dvh] overflow-hidden cursor-pointer *:text-white *:text-[14px] *:grid *:place-items-center">
           <Link
-            to={"/sach/" + dataProduct?.slug}
+            to={"/san-pham/" + dataProduct?.slug}
             state={{ from: location.pathname }}
           >
             <img
@@ -97,15 +73,15 @@ const ProdContent = ({ dataProduct }: Props) => {
           data-dropdown-placement="top"
           data-dropdown-trigger="hover"
         >
-          <div
-            className={`flex justify-between items-center ${
-              dataProduct?.rating == 0 ? "hidden" : ""
-            }`}
-          >
+          <div className={`flex justify-between items-center `}>
             <p className="text-zinc-500 text-sm">
               Đã bán : {dataProduct?.sold}
             </p>
-            <StarRating rating={dataProduct?.rating} />
+            {dataProduct?.rating ? (
+              <StarRating rating={dataProduct?.rating} />
+            ) : (
+              <StarRating rating={5} />
+            )}
           </div>
           <Link
             to="/book_detail"
