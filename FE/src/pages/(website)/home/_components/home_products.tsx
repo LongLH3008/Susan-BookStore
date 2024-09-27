@@ -56,8 +56,10 @@ const HomeProducts = () => {
           productQuery?.data?.metadata?.books
             ?.sort(() => 0.5 - Math.random())
             ?.slice(0, 8)
-            ?.map((product: IProduct, index: number) => (
-              <Product key={index} dataProduct={product} />
+            ?.map((product: IProduct) => (
+              <div key={product?._id}>
+                <Product dataProduct={product} />
+              </div>
             ))
         ) : (
           <div>

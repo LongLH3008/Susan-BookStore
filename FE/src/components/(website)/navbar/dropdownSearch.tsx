@@ -2,12 +2,17 @@ import * as icon from "@/common/assets/icon";
 import useProduct from "@/common/hooks/useProduct";
 import { IProduct } from "@/common/interfaces/product";
 import { customModalSearch } from "@/common/ui/CustomModalSearch";
+import { Skeleton } from "@mui/material";
 import { Modal } from "flowbite-react";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useLocation } from "react-router-dom";
 
 interface DataProductProps {
   dataProduct: IProduct[];
+}
+interface SearchForm {
+  search: string;
 }
 const ResultBook = ({ dataProduct }: DataProductProps) => {
   if (!dataProduct || dataProduct.length === 0) {
@@ -18,7 +23,7 @@ const ResultBook = ({ dataProduct }: DataProductProps) => {
     <div>
       {dataProduct?.map((product: IProduct) => (
         <Link
-          to={"/book/" + product._id}
+          to={"/san-pham/" + product.slug}
           className="grid grid-cols-7 h-[100px]"
           key={product._id}
         >
@@ -49,9 +54,16 @@ const ResultBook = ({ dataProduct }: DataProductProps) => {
 
 const DropdownSearch = () => {
   const [openModal, setOpenModal] = useState(false);
-  const { setSearch, productQuery } = useProduct();
-  //   console.log(productQuery);
+  const location = useLocation();
+  const { updateFilter, productQuery } = useProduct();
+  useEffect(() => {
+    setOpenModal(false);
+  }, [location]);
 
+  const { register, handleSubmit } = useForm<SearchForm>();
+  const onSubmit = (data: SearchForm) => {
+    console.log(data.search);
+  };
   return (
     <>
       <button
@@ -66,7 +78,7 @@ const DropdownSearch = () => {
         onClose={() => setOpenModal(false)}
       >
         <Modal.Header>
-          <form className="w-full mx-auto">
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full mx-auto">
             <label
               htmlFor="header_search"
               className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
@@ -96,7 +108,8 @@ const DropdownSearch = () => {
                 id="header_search"
                 className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-zinc-500 focus:border-zinc-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-zinc-500 dark:focus:border-zinc-500"
                 placeholder="Search Books, Author..."
-                onChange={(e) => setSearch(e.target.value)}
+                {...register("search")}
+                onChange={(e) => updateFilter("search", e.target.value)}
                 required
               />
               <button
@@ -114,10 +127,45 @@ const DropdownSearch = () => {
             className="p-4 pt-0 md:p-5 grid grid-cols-2"
           >
             <div className="text-zinc-600 max-h-[300px] pb-5 grid gap-y-6 border-r overscrollHidden overflow-y-scroll scroll-smooth">
-              {productQuery && (
+              {productQuery ? (
                 <ResultBook
-                  dataProduct={productQuery.data?.metadata?.books || []}
+                  dataProduct={productQuery?.data?.metadata?.books || []}
                 />
+              ) : (
+                <>
+                  <div className="grid grid-cols-2 gap-10 my-20">
+                    <Skeleton
+                      variant="rectangular"
+                      width="100%"
+                      height="20dvh"
+                    />
+                    <div className="flex flex-col gap-1 border-t py-4 px-3">
+                      <Skeleton variant="text" width="100%" />
+
+                      <Skeleton variant="text" width="100%" height={24} />
+
+                      <Skeleton variant="text" width="100%" />
+
+                      <Skeleton variant="text" width="100%" height={28} />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-10 my-20">
+                    <Skeleton
+                      variant="rectangular"
+                      width="100%"
+                      height="20dvh"
+                    />
+                    <div className="flex flex-col gap-1 border-t py-4 px-3">
+                      <Skeleton variant="text" width="100%" />
+
+                      <Skeleton variant="text" width="100%" height={24} />
+
+                      <Skeleton variant="text" width="100%" />
+
+                      <Skeleton variant="text" width="100%" height={28} />
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           </div>

@@ -25,8 +25,10 @@ const LatestProducts = () => {
               .slice()
               ?.reverse()
               .slice(0, 4)
-              ?.map((product: IProduct, index: number) => (
-                <Product key={index} dataProduct={product} />
+              ?.map((product: IProduct) => (
+                <div key={product?._id}>
+                  <Product dataProduct={product} />
+                </div>
               ))}
       </div>
     </div>
