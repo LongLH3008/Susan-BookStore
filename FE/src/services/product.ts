@@ -52,13 +52,8 @@ export const editProduct = async (data: Book, _id: string) => {
   return await SendRequest("PUT", `/books/${_id}`, data);
 };
 export const deleteProduct = async (id: string) => {
-  try {
-    console.log("Gọi API với ID:", id);
-    return await SendRequest("DELETE", `/books`, null, id);
-  } catch (error) {
-    console.error("Error delete products:", error);
-    throw error;
-  }
+  console.log("Gọi API với ID:", id);
+  return await SendRequest("DELETE", `/books`, null, id);
 };
 
 export const addProduct = async (data: IProduct) => {

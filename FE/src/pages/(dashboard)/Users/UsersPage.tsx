@@ -91,11 +91,6 @@ const UsersPage: React.FC = () => {
         width: "150px",
         cellRenderer: (row: any) => (
           <>
-            <Tooltip title="Chỉnh sửa">
-              <IconButton onClick={() => onEdit(row._id)}>
-                <EditIcon />
-              </IconButton>
-            </Tooltip>
             <Tooltip title="Hiển thị chi tiết">
               <IconButton onClick={() => onShowDetail(row)}>
                 <InfoIcon />
@@ -123,7 +118,7 @@ const UsersPage: React.FC = () => {
   );
 
   return (
-    <div className="p-0 sm:ml-64 h-[100%] dark:bg-gray-800">
+    <div>
       <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
         <p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
           Quản lý người dùng

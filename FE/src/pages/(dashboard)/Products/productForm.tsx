@@ -222,279 +222,274 @@ const ProductForm: React.FC = () => {
 
   return (
     <>
-      <div className="p-0 sm:ml-64 h-[100%] dark:bg-gray-800">
-        <Box className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-          <p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
-            {id ? "Chỉnh sửa sản phẩm" : "Thêm mới sản phẩm"}
-          </p>
-        </Box>
+      <Box className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+        <p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
+          {id ? "Chỉnh sửa sản phẩm" : "Thêm mới sản phẩm"}
+        </p>
+      </Box>
 
-        <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-          noValidate
-          autoComplete="off"
-          p={2}
-        >
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <FormControl fullWidth>
-              <FormLabel>Tiêu đề</FormLabel>
-              <TextField
-                {...register("title", { required: "Tiêu đề là bắt buộc" })}
-                error={!!errors?.title}
-                helperText={errors?.title && errors.title.message}
-                margin="dense"
-              />
-            </FormControl>
-            <FormControl fullWidth>
-              <FormLabel>Tác giả</FormLabel>
-              <TextField
-                {...register("author", { required: "Tác giả là bắt buộc" })}
-                error={!!errors?.author}
-                helperText={errors?.author && errors.author.message}
-                margin="dense"
-              />
-            </FormControl>
-            <FormControl fullWidth>
-              <FormLabel>ISBN</FormLabel>
-              <TextField
-                {...register("isbn", { required: "ISBN là bắt buộc" })}
-                error={!!errors?.isbn}
-                helperText={errors?.isbn && errors.isbn.message}
-                margin="dense"
-              />
-            </FormControl>
-          </Box>
-
-          <FormControl fullWidth margin="dense">
-            <FormLabel>Mô tả</FormLabel>
+      <Box
+        component="form"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
+        autoComplete="off"
+        p={2}
+      >
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <FormControl fullWidth>
+            <FormLabel>Tiêu đề</FormLabel>
             <TextField
-              {...register("description", { required: "Mô tả là bắt buộc" })}
-              error={!!errors?.description}
-              helperText={errors?.description && errors.description.message}
-              multiline
-              rows={3}
+              {...register("title", { required: "Tiêu đề là bắt buộc" })}
+              error={!!errors?.title}
+              helperText={errors?.title && errors.title.message}
               margin="dense"
             />
           </FormControl>
-
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <FormControl fullWidth>
-              <FormLabel>Giá</FormLabel>
-              <TextField
-                {...register("price", { required: "Giá là bắt buộc" })}
-                type="number"
-                error={!!errors?.price}
-                helperText={errors?.price && errors.price.message}
-                margin="dense"
-              />
-            </FormControl>
-            <FormControl fullWidth>
-              <FormLabel>Giảm giá</FormLabel>
-              <TextField
-                {...register("discount", {
-                  required: "Giảm giá là bắt buộc",
-                })}
-                type="number"
-                error={!!errors?.discount}
-                helperText={errors?.discount && errors.discount.message}
-                margin="dense"
-              />
-            </FormControl>
-          </Box>
-
-          <FormControl fullWidth margin="dense">
-            <Controller
-              name="categories"
-              control={control}
-              defaultValue={[]} // Đặt giá trị mặc định là mảng rỗng
-              rules={{ required: "Danh mục là bắt buộc" }} // Validation: bắt buộc phải chọn
-              render={({ field }) => (
-                <Autocomplete
-                  multiple
-                  options={options} // Các danh mục
-                  getOptionLabel={(option) => option.label} // Hiển thị tên của mỗi danh mục
-                  value={options.filter((option) =>
-                    field.value.includes(option.id)
-                  )}
-                  onChange={(_, newValue) => {
-                    const selectedIds = newValue.map((option) => option.id);
-                    field.onChange(selectedIds); // Cập nhật giá trị vào React Hook Form
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      label="Chọn danh mục"
-                      placeholder="Tìm kiếm..."
-                      error={!!errors.categories}
-                      helperText={errors.categories?.message}
-                    />
-                  )}
-                />
-              )}
+          <FormControl fullWidth>
+            <FormLabel>Tác giả</FormLabel>
+            <TextField
+              {...register("author", { required: "Tác giả là bắt buộc" })}
+              error={!!errors?.author}
+              helperText={errors?.author && errors.author.message}
+              margin="dense"
             />
           </FormControl>
+          <FormControl fullWidth>
+            <FormLabel>ISBN</FormLabel>
+            <TextField
+              {...register("isbn", { required: "ISBN là bắt buộc" })}
+              error={!!errors?.isbn}
+              helperText={errors?.isbn && errors.isbn.message}
+              margin="dense"
+            />
+          </FormControl>
+        </Box>
 
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <FormControl fullWidth>
-              <FormLabel>Nhà xuất bản</FormLabel>
-              <TextField
-                {...register("publisher", {
-                  required: "Nhà xuất bản là bắt buộc",
-                })}
-                error={!!errors?.publisher}
-                helperText={errors?.publisher && errors.publisher.message}
-                margin="dense"
-              />
-            </FormControl>
-            <FormControl fullWidth>
-              <FormLabel>Ngày xuất bản</FormLabel>
-              <TextField
-                {...register("publicationDate", {
-                  required: "Ngày xuất bản là bắt buộc",
-                })}
-                type="date"
-                error={!!errors?.publicationDate}
-                helperText={errors?.publicationDate?.message}
-                margin="dense"
-              />
-            </FormControl>
-          </Box>
+        <FormControl fullWidth margin="dense">
+          <FormLabel>Mô tả</FormLabel>
+          <TextField
+            {...register("description", { required: "Mô tả là bắt buộc" })}
+            error={!!errors?.description}
+            helperText={errors?.description && errors.description.message}
+            multiline
+            rows={3}
+            margin="dense"
+          />
+        </FormControl>
 
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <FormControl fullWidth>
-              <FormLabel>Thẻ</FormLabel>
-              <Controller
-                name="tags"
-                control={control}
-                render={({ field }) => (
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <FormControl fullWidth>
+            <FormLabel>Giá</FormLabel>
+            <TextField
+              {...register("price", { required: "Giá là bắt buộc" })}
+              type="number"
+              error={!!errors?.price}
+              helperText={errors?.price && errors.price.message}
+              margin="dense"
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <FormLabel>Giảm giá</FormLabel>
+            <TextField
+              {...register("discount", {
+                required: "Giảm giá là bắt buộc",
+              })}
+              type="number"
+              error={!!errors?.discount}
+              helperText={errors?.discount && errors.discount.message}
+              margin="dense"
+            />
+          </FormControl>
+        </Box>
+
+        <FormControl fullWidth margin="dense">
+          <Controller
+            name="categories"
+            control={control}
+            defaultValue={[]} // Đặt giá trị mặc định là mảng rỗng
+            rules={{ required: "Danh mục là bắt buộc" }} // Validation: bắt buộc phải chọn
+            render={({ field }) => (
+              <Autocomplete
+                multiple
+                options={options} // Các danh mục
+                getOptionLabel={(option) => option.label} // Hiển thị tên của mỗi danh mục
+                value={options.filter((option) =>
+                  field.value.includes(option.id)
+                )}
+                onChange={(_, newValue) => {
+                  const selectedIds = newValue.map((option) => option.id);
+                  field.onChange(selectedIds); // Cập nhật giá trị vào React Hook Form
+                }}
+                renderInput={(params) => (
                   <TextField
-                    fullWidth
-                    margin="dense"
-                    value={field?.value?.join(", ")}
-                    onChange={(e) => {
-                      const tagsArray = e.target.value
-                        .split(",")
-                        .map((tag) => tag.trim());
-                      field.onChange(tagsArray);
-                    }}
-                    helperText="Nhập các thẻ phân tách bằng dấu phẩy"
+                    {...params}
+                    variant="outlined"
+                    label="Chọn danh mục"
+                    placeholder="Tìm kiếm..."
+                    error={!!errors.categories}
+                    helperText={errors.categories?.message}
                   />
                 )}
               />
-            </FormControl>
+            )}
+          />
+        </FormControl>
 
-            <FormControl fullWidth>
-              <FormLabel>Ngôn ngữ</FormLabel>
-              <TextField
-                {...register("language", {
-                  required: "Ngôn ngữ là bắt buộc",
-                })}
-                error={!!errors?.language}
-                helperText={errors?.language && errors.language.message}
-                margin="dense"
-              />
-            </FormControl>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <FormControl fullWidth>
+            <FormLabel>Nhà xuất bản</FormLabel>
+            <TextField
+              {...register("publisher", {
+                required: "Nhà xuất bản là bắt buộc",
+              })}
+              error={!!errors?.publisher}
+              helperText={errors?.publisher && errors.publisher.message}
+              margin="dense"
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <FormLabel>Ngày xuất bản</FormLabel>
+            <TextField
+              {...register("publicationDate", {
+                required: "Ngày xuất bản là bắt buộc",
+              })}
+              type="date"
+              error={!!errors?.publicationDate}
+              helperText={errors?.publicationDate?.message}
+              margin="dense"
+            />
+          </FormControl>
+        </Box>
 
-            <FormControl fullWidth>
-              <FormLabel>Số trang</FormLabel>
-              <TextField
-                {...register("numberOfPages", {
-                  required: "Số trang là bắt buộc",
-                })}
-                type="number"
-                error={!!errors?.numberOfPages}
-                helperText={
-                  errors?.numberOfPages && errors.numberOfPages.message
-                }
-                margin="dense"
-              />
-            </FormControl>
-          </Box>
-
-          <FormControl fullWidth margin="dense">
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <FormControl fullWidth>
+            <FormLabel>Thẻ</FormLabel>
             <Controller
-              name="format"
+              name="tags"
               control={control}
-              defaultValue=""
-              rules={{ required: "Định dạng sách là bắt buộc" }}
               render={({ field }) => (
-                <Autocomplete
-                  {...field}
-                  options={formats}
-                  getOptionLabel={(option) => option.label}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Chọn định dạng sách"
-                      placeholder="Tìm kiếm..."
-                      error={!!errors.format}
-                      helperText={errors.format?.message}
-                    />
-                  )}
-                  onChange={(_, value) => field.onChange(value?.label)}
-                  value={
-                    formats.find((option) => option.label === field.value) ||
-                    null
-                  }
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  value={field?.value?.join(", ")}
+                  onChange={(e) => {
+                    const tagsArray = e.target.value
+                      .split(",")
+                      .map((tag) => tag.trim());
+                    field.onChange(tagsArray);
+                  }}
+                  helperText="Nhập các thẻ phân tách bằng dấu phẩy"
                 />
               )}
             />
           </FormControl>
+
           <FormControl fullWidth>
-            <FormLabel>Link ebook demo</FormLabel>
+            <FormLabel>Ngôn ngữ</FormLabel>
             <TextField
-              {...register("ebookDemoLink", {
-                required: "Link ebook demo là bắt buộc", // Validation
+              {...register("language", {
+                required: "Ngôn ngữ là bắt buộc",
               })}
-              error={!!errors?.ebookDemoLink}
-              helperText={errors?.ebookDemoLink && errors.ebookDemoLink.message}
+              error={!!errors?.language}
+              helperText={errors?.language && errors.language.message}
               margin="dense"
             />
           </FormControl>
+
           <FormControl fullWidth>
-            <FormLabel>Số lượng tồn kho</FormLabel>
+            <FormLabel>Số trang</FormLabel>
             <TextField
-              {...register("stock", {
-                required: "Số lượng tồn kho là bắt buộc",
+              {...register("numberOfPages", {
+                required: "Số trang là bắt buộc",
               })}
               type="number"
-              error={!!errors?.stock}
-              helperText={errors?.stock && errors.stock.message}
+              error={!!errors?.numberOfPages}
+              helperText={errors?.numberOfPages && errors.numberOfPages.message}
               margin="dense"
             />
           </FormControl>
-          <Box mt={2}>
-            <h3>Ảnh đại diện</h3>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleCoverImageChange}
-            />
-            {previewCoverImage && (
-              <img src={previewCoverImage} alt="Cover Preview" width="200" />
-            )}
-
-            <h3>Mảng hình ảnh</h3>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleProductImagesChange}
-            />
-            {previewImages.map((src, idx) => (
-              <img key={idx} src={src} alt={`Preview ${idx}`} width="200" />
-            ))}
-          </Box>
-
-          <Box mt={2}>
-            <Button variant="contained" color="primary" type="submit">
-              Lưu sản phẩm
-            </Button>
-          </Box>
         </Box>
-      </div>
+
+        <FormControl fullWidth margin="dense">
+          <Controller
+            name="format"
+            control={control}
+            defaultValue=""
+            rules={{ required: "Định dạng sách là bắt buộc" }}
+            render={({ field }) => (
+              <Autocomplete
+                {...field}
+                options={formats}
+                getOptionLabel={(option) => option.label}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Chọn định dạng sách"
+                    placeholder="Tìm kiếm..."
+                    error={!!errors.format}
+                    helperText={errors.format?.message}
+                  />
+                )}
+                onChange={(_, value) => field.onChange(value?.label)}
+                value={
+                  formats.find((option) => option.label === field.value) || null
+                }
+              />
+            )}
+          />
+        </FormControl>
+        <FormControl fullWidth>
+          <FormLabel>Link ebook demo</FormLabel>
+          <TextField
+            {...register("ebookDemoLink", {
+              required: "Link ebook demo là bắt buộc", // Validation
+            })}
+            error={!!errors?.ebookDemoLink}
+            helperText={errors?.ebookDemoLink && errors.ebookDemoLink.message}
+            margin="dense"
+          />
+        </FormControl>
+        <FormControl fullWidth>
+          <FormLabel>Số lượng tồn kho</FormLabel>
+          <TextField
+            {...register("stock", {
+              required: "Số lượng tồn kho là bắt buộc",
+            })}
+            type="number"
+            error={!!errors?.stock}
+            helperText={errors?.stock && errors.stock.message}
+            margin="dense"
+          />
+        </FormControl>
+        <Box mt={2}>
+          <h3>Ảnh đại diện</h3>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleCoverImageChange}
+          />
+          {previewCoverImage && (
+            <img src={previewCoverImage} alt="Cover Preview" width="200" />
+          )}
+
+          <h3>Mảng hình ảnh</h3>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleProductImagesChange}
+          />
+          {previewImages.map((src, idx) => (
+            <img key={idx} src={src} alt={`Preview ${idx}`} width="200" />
+          ))}
+        </Box>
+
+        <Box mt={2}>
+          <Button variant="contained" color="primary" type="submit">
+            Lưu sản phẩm
+          </Button>
+        </Box>
+      </Box>
     </>
   );
 };

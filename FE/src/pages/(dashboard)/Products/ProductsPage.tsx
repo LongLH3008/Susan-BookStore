@@ -126,134 +126,129 @@ const ProductsPage: React.FC = () => {
 
   return (
     <>
-      <div className="p-0 sm:ml-64 h-[100%] dark:bg-gray-800">
-        <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-          <p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
-           Danh sách sản phẩm
-          </p>
-        </div>
-
-        <SearchForm
-          onSearch={handleSearch}
-          initialSearchTerm={search}
-          linkAdd="/san-pham/them-moi"
-        />
-
-        <MyTable2
-          rows={data?.metadata?.books || []}
-          columns={columns}
-          limit={limit}
-          count={data?.total || 0}
-          page={page}
-          loading={isLoading}
-          error={isError ? error?.message : ""}
-          onBackPage={() => setPage((prev) => Math.max(prev - 1, 1))}
-          onNextPage={() => setPage((prev) => prev + 1)}
-          onChangeLimit={(newLimit) => setLimit(newLimit)}
-        />
-
-        {isError && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              padding: "20px",
-            }}
-          >
-            <Typography color="error">Error: {error?.message}</Typography>
-          </div>
-        )}
-
-        {/* Modal chi tiết sản phẩm */}
-        <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-          <DialogTitle>
-            Chi tiết sản phẩm
-            <IconButton
-              aria-label="close"
-              onClick={handleClose}
-              sx={{ position: "absolute", right: 8, top: 8 }}
-            >
-              <CloseIcon />
-            </IconButton>
-          </DialogTitle>
-          <DialogContent dividers>
-            {selectedProduct ? (
-              <Box>
-                <Typography variant="h6">Thông tin cơ bản</Typography>
-                <Typography>
-                  <strong>Tiêu đề:</strong> {selectedProduct.title}
-                </Typography>
-                <Typography>
-                  <strong>Tác giả:</strong> {selectedProduct.author}
-                </Typography>
-                <Typography>
-                  <strong>ISBN:</strong> {selectedProduct.isbn}
-                </Typography>
-                <Typography>
-                  <strong>Giá:</strong> {selectedProduct.price.toLocaleString()}
-                  VND
-                </Typography>
-                <Typography>
-                  <strong>Giảm giá:</strong> {selectedProduct.discount}%
-                </Typography>
-                <Typography>
-                  <strong>Nhà xuất bản:</strong> {selectedProduct.publisher}
-                </Typography>
-                <Typography>
-                  <strong>Ngày xuất bản:</strong>{" "}
-                  {new Date(
-                    selectedProduct.publicationDate
-                  ).toLocaleDateString()}
-                </Typography>
-                <Typography>
-                  <strong>Số lượng tồn kho:</strong> {selectedProduct.stock}
-                </Typography>
-
-                {/* Hiển thị ảnh đại diện */}
-                <Typography variant="h6" sx={{ mt: 2 }}>
-                  Ảnh đại diện
-                </Typography>
-                <img
-                  src={selectedProduct.coverImage}
-                  alt="Ảnh đại diện"
-                  style={{
-                    width: "200px",
-                    height: "auto",
-                    marginBottom: "20px",
-                  }}
-                />
-
-                {/* Hiển thị mảng hình ảnh nếu có */}
-                <Typography variant="h6" sx={{ mt: 2 }}>
-                  Hình ảnh sản phẩm
-                </Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-                  {selectedProduct.images &&
-                  selectedProduct.images.length > 0 ? (
-                    selectedProduct.images.map((src: string, idx: number) => (
-                      <img
-                        key={idx}
-                        src={src?.url}
-                        alt={`Hình ảnh ${idx + 1}`}
-                        style={{ width: "200px", height: "auto" }}
-                      />
-                    ))
-                  ) : (
-                    <Typography>Không có hình ảnh</Typography>
-                  )}
-                </Box>
-
-                <Typography variant="h6" sx={{ mt: 2 }}>
-                  Mô tả
-                </Typography>
-                <Typography>{selectedProduct.description}</Typography>
-              </Box>
-            ) : (
-              <Typography>Không có dữ liệu</Typography>
-            )}
-          </DialogContent>
-        </Dialog>
+      <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+        <p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
+          Danh sách sản phẩm
+        </p>
       </div>
+
+      <SearchForm
+        onSearch={handleSearch}
+        initialSearchTerm={search}
+        linkAdd="/quan-tri/san-pham/them-moi"
+      />
+
+      <MyTable2
+        rows={data?.metadata?.books || []}
+        columns={columns}
+        limit={limit}
+        count={data?.total || 0}
+        page={page}
+        loading={isLoading}
+        error={isError ? error?.message : ""}
+        onBackPage={() => setPage((prev) => Math.max(prev - 1, 1))}
+        onNextPage={() => setPage((prev) => prev + 1)}
+        onChangeLimit={(newLimit) => setLimit(newLimit)}
+      />
+
+      {isError && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
+          <Typography color="error">Error: {error?.message}</Typography>
+        </div>
+      )}
+
+      {/* Modal chi tiết sản phẩm */}
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogTitle>
+          Chi tiết sản phẩm
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          {selectedProduct ? (
+            <Box>
+              <Typography variant="h6">Thông tin cơ bản</Typography>
+              <Typography>
+                <strong>Tiêu đề:</strong> {selectedProduct.title}
+              </Typography>
+              <Typography>
+                <strong>Tác giả:</strong> {selectedProduct.author}
+              </Typography>
+              <Typography>
+                <strong>ISBN:</strong> {selectedProduct.isbn}
+              </Typography>
+              <Typography>
+                <strong>Giá:</strong> {selectedProduct.price.toLocaleString()}
+                VND
+              </Typography>
+              <Typography>
+                <strong>Giảm giá:</strong> {selectedProduct.discount}%
+              </Typography>
+              <Typography>
+                <strong>Nhà xuất bản:</strong> {selectedProduct.publisher}
+              </Typography>
+              <Typography>
+                <strong>Ngày xuất bản:</strong>{" "}
+                {new Date(selectedProduct.publicationDate).toLocaleDateString()}
+              </Typography>
+              <Typography>
+                <strong>Số lượng tồn kho:</strong> {selectedProduct.stock}
+              </Typography>
+
+              {/* Hiển thị ảnh đại diện */}
+              <Typography variant="h6" sx={{ mt: 2 }}>
+                Ảnh đại diện
+              </Typography>
+              <img
+                src={selectedProduct.coverImage}
+                alt="Ảnh đại diện"
+                style={{
+                  width: "200px",
+                  height: "auto",
+                  marginBottom: "20px",
+                }}
+              />
+
+              {/* Hiển thị mảng hình ảnh nếu có */}
+              <Typography variant="h6" sx={{ mt: 2 }}>
+                Hình ảnh sản phẩm
+              </Typography>
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+                {selectedProduct.images && selectedProduct.images.length > 0 ? (
+                  selectedProduct.images.map((src: string, idx: number) => (
+                    <img
+                      key={idx}
+                      src={src?.url}
+                      alt={`Hình ảnh ${idx + 1}`}
+                      style={{ width: "200px", height: "auto" }}
+                    />
+                  ))
+                ) : (
+                  <Typography>Không có hình ảnh</Typography>
+                )}
+              </Box>
+
+              <Typography variant="h6" sx={{ mt: 2 }}>
+                Mô tả
+              </Typography>
+              <Typography>{selectedProduct.description}</Typography>
+            </Box>
+          ) : (
+            <Typography>Không có dữ liệu</Typography>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
