@@ -23,8 +23,8 @@ const DashboardRoutes = [
       { path: "nguoi-dung", element: <UsersPage /> },
       { path: "danh-muc", element: <CategoriesPage /> },
       { path: "san-pham", element: <ProductsPage /> },
-      { path: "san-pham/chinh-sua/:id", element: <ProductsPage /> },
-      { path: "san-pham/them-moi", element: <ProductsPage /> },
+      { path: "san-pham/chinh-sua/:id", element: <FormAttr /> },
+      { path: "san-pham/them-moi", element: <FormAttr /> },
       { path: "binh-luan", element: <CommentsPage /> },
       { path: "tin-tuc", element: <BlogPage /> },
 
@@ -33,13 +33,6 @@ const DashboardRoutes = [
       { path: "ma-giam-gia/them-moi", element: <DiscountAdd /> },
     ],
   },
-  { path: "nguoi-dung/chinh-sua/:id", element: <UsersPage /> },
-
-  { path: "nguoi-dung", element: <UsersPage /> },
-  { path: "san-pham", element: <ProductsPage /> },
-  { path: "san-pham/them-moi", element: <FormAttr /> },
-  { path: "san-pham/chinh-sua/:id", element: <FormAttr /> },
-  { path: "binh-luan", element: <CommentsPage /> },
 ];
 
 export default DashboardRoutes;
