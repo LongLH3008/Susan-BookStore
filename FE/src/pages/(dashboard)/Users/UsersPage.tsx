@@ -1,114 +1,233 @@
+import React, { useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import PageLayout from "@/layouts/DashboardLayout";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Typography,
+  Tooltip,
+} from "@mui/material";
+import MyTable2 from "../components/table";
 import { useToast } from "@/common/hooks/useToast";
-import { deleteProduct, fetchUsers } from "@/services/product";
+import SearchForm from "../components/searchForm";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
-import { Typography } from "@mui/material";
-import Tooltip from "@mui/material/Tooltip";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import CloseIcon from "@mui/icons-material/Close";
 import { AxiosError } from "axios";
-import React, { useState } from "react";
-import MyTable2 from "../components/table";
+import { useNavigate } from "react-router-dom";
+import { getUsers } from "@/services/auth";
+import UnlockIcon from "@mui/icons-material/LockOpen";
+import LockIcon from "@mui/icons-material/Lock";
+
 const UsersPage: React.FC = () => {
-	const [page, setPage] = useState(1);
-	const [limit, setLimit] = useState(5);
-	const { toast } = useToast();
-	const { data, isLoading, isError, error, refetch } = useQuery({
-		queryKey: ["products"],
-		queryFn: () => fetchUsers(),
-	});
-	const { mutateAsync } = useMutation({
-		mutationFn: deleteProduct,
-		onSuccess: () => {
-			console.log("Xóa sản phẩm thành công");
-		},
-		onError: (error: AxiosError) => {
-			console.error("Lỗi khi xóa sản phẩm:", error.response?.data || error.message);
-		},
-	});
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const { toast } = useToast();
+  const nav = useNavigate();
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [open, setOpen] = useState(false);
 
-	const onDelete = async (id: string) => {
-		try {
-			await mutateAsync(id);
-		} catch (error) {
-			// Error handling is already done in onError of useMutation
-		}
-	};
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["users", limit, page],
+    queryFn: () => getUsers(),
+  });
 
-	const columns = React.useMemo(
-		() => [
-			{
-				headerName: "Avatar",
-				field: "user_avatar",
-			},
-			{
-				headerName: "Username",
-				field: "user_name",
-			},
-			{
-				headerName: "Role",
-				field: "user_role",
-			},
-			{
-				headerName: "Phone",
-				field: "user_phone_number",
-			},
-			{
-				headerName: "Thao tác",
-				field: "actions",
-				width: "110px",
-				cellRenderer: (row: any) => (
-					<>
-						{console.log(row._id)}
-						<Tooltip title="Chỉnh sửa">
-							<EditIcon />
-						</Tooltip>
-						<Tooltip title="Hiển thị chi tiết">
-							<InfoIcon />
-						</Tooltip>
-						<Tooltip title="Xóa">
-							<DeleteIcon onClick={() => onDelete(row._id)} />
-						</Tooltip>
-					</>
-				),
-			},
-		],
-		[]
-	);
+  const onEdit = (id: string) => {
+    nav(`chinh-sua/${id}`);
+  };
 
-	return (
-		<div className="p-0 h-[100%] dark:bg-gray-800">
-			<div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-				<p className="text-2xl font-bold text-gray-800 dark:text-gray-50">Products Page Dashboard</p>
-			</div>
+  const onShowDetail = (user: any) => {
+    setSelectedUser(user);
+    setOpen(true);
+  };
 
-			{/* <SearchForm onSearch={handleSearch} initialSearchTerm={search} /> */}
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedUser(null);
+  };
+  const onAddNew = () => {
+    nav("/nguoi-dung/them-moi");
+  };
+  const onLock = (id: any) => {};
+  const onUnlock = (id: any) => {};
+  const columns = React.useMemo(
+    () => [
+      {
+        headerName: "Avatar",
+        field: "user_avatar",
+        cellRenderer: (row: any) => (
+          <img
+            src={row.user_avatar || "default-avatar.png"} // Cung cấp ảnh mặc định nếu không có
+            alt="Avatar"
+            style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+          />
+        ),
+      },
+      {
+        headerName: "Tên người dùng",
+        field: "user_name",
+      },
+      {
+        headerName: "Email",
+        field: "user_email",
+      },
+      {
+        headerName: "Số điện thoại",
+        field: "user_phone_number",
+      },
+      {
+        headerName: "Vai trò",
+        field: "user_role",
+      },
+      {
+        headerName: "Thao tác",
+        field: "actions",
+        width: "150px",
+        cellRenderer: (row: any) => (
+          <>
+            <Tooltip title="Chỉnh sửa">
+              <IconButton onClick={() => onEdit(row._id)}>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Hiển thị chi tiết">
+              <IconButton onClick={() => onShowDetail(row)}>
+                <InfoIcon />
+              </IconButton>
+            </Tooltip>
+            {row.user_status !== "active" && (
+              <Tooltip title="Mở khóa tài khoản">
+                <IconButton onClick={() => onLock(row._id)}>
+                  <LockIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+            {row.user_status === "active" && (
+              <Tooltip title="Khóa tài khoản">
+                <IconButton onClick={() => onUnlock(row._id)}>
+                  <UnlockIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+          </>
+        ),
+      },
+    ],
+    []
+  );
 
-			<MyTable2
-				rows={data?.metadata?.allUsers || []}
-				columns={columns}
-				limit={limit}
-				count={data?.total || 0}
-				page={page}
-				loading={isLoading}
-				error={isError ? error?.message : ""}
-				onBackPage={() => setPage((prev) => Math.max(prev - 1, 1))}
-				onNextPage={() => setPage((prev) => prev + 1)}
-				onChangeLimit={(newLimit) => setLimit(newLimit)}
-			/>
-			{isError && (
-				<div
-					style={{
-						display: "flex",
-						justifyContent: "center",
-						padding: "20px",
-					}}
-				>
-					<Typography color="error">Error: {error?.message}</Typography>
-				</div>
-			)}
-		</div>
-	);
+  return (
+    <div className="p-0 sm:ml-64 h-[100%] dark:bg-gray-800">
+      <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+        <p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
+          Quản lý người dùng
+        </p>
+      </div>
+
+      <div className="flex justify-end mb-4">
+        <Button variant="contained" color="primary" onClick={onAddNew}>
+          Thêm mới
+        </Button>
+      </div>
+      <MyTable2
+        rows={data?.metadata?.allUsers || []}
+        columns={columns}
+        limit={limit}
+        count={data?.total || 0}
+        page={page}
+        loading={isLoading}
+        error={isError ? error?.message : ""}
+        onBackPage={() => setPage((prev) => Math.max(prev - 1, 1))}
+        onNextPage={() => setPage((prev) => prev + 1)}
+        onChangeLimit={(newLimit) => setLimit(newLimit)}
+      />
+      {isError && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
+          <Typography color="error">Error: {error?.message}</Typography>
+        </div>
+      )}
+
+      {/* Modal hiển thị chi tiết người dùng */}
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogTitle>
+          Chi tiết người dùng
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          {selectedUser ? (
+            <Box>
+              <Typography variant="h6">Thông tin cá nhân</Typography>
+              <Typography>
+                <strong>Tên người dùng:</strong> {selectedUser.user_name}
+              </Typography>
+              <Typography>
+                <strong>Email:</strong> {selectedUser.user_email}
+              </Typography>
+              <Typography>
+                <strong>Số điện thoại:</strong>{" "}
+                {selectedUser.user_phone_number || "Chưa cập nhật"}
+              </Typography>
+              <Typography>
+                <strong>Địa chỉ:</strong>{" "}
+                {selectedUser.user_address || "Chưa cập nhật"}
+              </Typography>
+              <Typography>
+                <strong>Giới tính:</strong>{" "}
+                {selectedUser.user_gender || "Chưa cập nhật"}
+              </Typography>
+              <Typography>
+                <strong>Vai trò:</strong> {selectedUser.user_role}
+              </Typography>
+              <Typography>
+                <strong>Trạng thái:</strong> {selectedUser.user_status}
+              </Typography>
+              <Typography>
+                <strong>Loại xác thực:</strong> {selectedUser.user_auth_type}
+              </Typography>
+              <Typography>
+                <strong>Điểm thưởng:</strong> {selectedUser.user_reward_points}
+              </Typography>
+              {/* Hiển thị ảnh đại diện */}
+              <Typography variant="h6" sx={{ mt: 2 }}>
+                Ảnh đại diện
+              </Typography>
+              <img
+                src={selectedUser.user_avatar || "default-avatar.png"}
+                alt="Ảnh đại diện"
+                style={{
+                  width: "200px",
+                  height: "200px",
+                  borderRadius: "50%",
+                  objectFit: "cover",
+                  marginBottom: "20px",
+                }}
+              />
+            </Box>
+          ) : (
+            <Typography>Không có dữ liệu</Typography>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
 };
 
 export default UsersPage;

@@ -1,5 +1,6 @@
 import { IProduct } from "@/common/interfaces/product";
 import { SendRequest } from "@/config";
+import { Book } from "@/schemas/product";
 
 type filter = {
   limit?: number;
@@ -47,6 +48,9 @@ export const getProducttById = async (_id: string) => {
 export const getProducttBySlug = async (slug: string) => {
   return await SendRequest("GET", `/books/slug/${slug}`);
 };
+export const editProduct = async (data: Book, _id: string) => {
+  return await SendRequest("PUT", `/books/${_id}`, data);
+};
 export const deleteProduct = async (id: string) => {
   try {
     console.log("Gọi API với ID:", id);
@@ -58,17 +62,14 @@ export const deleteProduct = async (id: string) => {
 };
 
 export const addProduct = async (data: IProduct) => {
-  try {
-    const response = await SendRequest("POST", `/books`, data);
-    if (!response.ok) {
-      const errorMessage = await response.text();
-      throw new Error(`Error adding product: ${errorMessage}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("Error adding product:", error);
-    throw error;
-  }
+  debugger;
+  const response = await SendRequest("POST", `/books`, data);
+  // if (!response.ok) {
+  //   const errorMessage = await response.text();
+  //   throw new Error(`Error adding product: ${errorMessage}`);
+  // }
+  console.log("response", response);
+  return response;
 };
 export const fetchComment = async () => {
   try {

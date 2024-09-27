@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { TextField, Button } from "@mui/material";
+import { Link } from "react-router-dom";
 
 interface SearchFormProps {
   onSearch: (searchTerm: string) => void;
   initialSearchTerm?: string;
+  linkAdd: string; // Prop cho link thêm mới
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({
   onSearch,
   initialSearchTerm = "",
+  linkAdd, // Nhận link từ props
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
 
@@ -27,7 +30,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           InputProps={{
-            className: "dark:text-white  ",
+            className: "dark:text-white",
             classes: {
               notchedOutline: "dark:border-white",
             },
@@ -48,14 +51,15 @@ const SearchForm: React.FC<SearchFormProps> = ({
         >
           Tìm kiếm
         </Button>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          className="ml-2 h-10 dark:text-white"
-        >
-          Thêm mới
-        </Button>
+        <Link to={linkAdd} style={{ textDecoration: "none" }}>
+          <Button
+            variant="contained"
+            color="primary"
+            className="ml-2 h-10 dark:text-white"
+          >
+            Thêm mới
+          </Button>
+        </Link>
       </div>
     </form>
   );
