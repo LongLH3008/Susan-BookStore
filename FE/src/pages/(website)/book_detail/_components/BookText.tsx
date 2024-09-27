@@ -164,7 +164,7 @@ const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
           </div>
           <div className="w-full">
             <Link to="/">
-              <button className="w-full py-4  bg-black border border-black text-white font-bold hover:border-[#00BFC5] hover:text-[#00BFC5] hover:bg-white">
+              <button className="w-full py-4 transition duration-150 bg-black border border-black text-white font-bold hover:border-[#00BFC5] hover:text-[#00BFC5] hover:bg-white">
                 Mua ngay
               </button>
             </Link>

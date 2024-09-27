@@ -1,6 +1,6 @@
 import { getProducttBySlug } from "@/services/product";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Breadcrumb from "../../../components/(website)/breadcrumb/breadcrumb";
 import BookImage from "./_components/BookImage";
 import BookText from "./_components/BookText";
@@ -9,13 +9,17 @@ import { CategoryProvider } from "@/common/hooks/useCategories";
 import NotFound404 from "../404NotFound";
 import { Skeleton } from "@mui/material";
 import SimilarProducts from "./_components/SimilarProducts";
+import { useEffect } from "react";
+import { transformation } from "leaflet";
 
 const BookDetail = () => {
   const { slug } = useParams();
+
   const { data, isError, isLoading } = useQuery({
-    queryKey: ["Book-detail"],
-    queryFn: () => getProducttBySlug(slug),
+    queryKey: ["Book-detail", slug],
+    queryFn: () => getProducttBySlug(slug as string),
     staleTime: 10000,
+    refetchOnWindowFocus: false, // Nếu không cần tự động refetch khi focus lại window
   });
   const detailProduct = data?.metadata;
   console.log(detailProduct);

@@ -63,6 +63,7 @@ export const ProductProvider = ({ children }: ProdContextProps) => {
     setProductDataFilter(productQuery?.data?.metadata);
   }, [productQuery?.data]);
 
+  console.log("productDataFilter", productDataFilter);
   useEffect(() => {
     if (features?.price) {
       updateFilter("minPrice", features.price.gte);
