@@ -1,7 +1,7 @@
 import * as icon from "@/common/assets/icon";
 import { useAuth, userState } from "@/common/hooks/useAuth";
 import { useToast } from "@/common/hooks/useToast";
-import { loginValidate } from "@/schemas/auth";
+import { loginValidate } from "@/common/schemas/auth";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -67,7 +67,7 @@ const Login = () => {
 									!errors.user_email
 										? "border-zinc-300 focus:ring-[0.8px] ring-black"
 										: "border-red-500 ring-0"
-								} 
+								}
                 text-zinc-900 block px-2.5 pb-2.5 pt-5 w-full text-sm outline-none  peer`}
 								placeholder=" "
 								{...register("user_email")}

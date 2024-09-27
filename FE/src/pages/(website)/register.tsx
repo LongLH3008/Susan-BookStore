@@ -1,6 +1,6 @@
 import { useAuth } from "@/common/hooks/useAuth";
 import { useToast } from "@/common/hooks/useToast";
-import { registerValidate } from "@/schemas/auth";
+import { registerValidate } from "@/common/schemas/auth";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";

@@ -1,6 +1,6 @@
 import { useAuth, userState } from "@/common/hooks/useAuth";
 import { useToast } from "@/common/hooks/useToast";
-import { changePassword } from "@/schemas/auth";
+import { changePassword } from "@/common/schemas/auth";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
