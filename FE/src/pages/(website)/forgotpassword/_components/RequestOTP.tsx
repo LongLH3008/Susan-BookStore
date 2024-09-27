@@ -1,6 +1,6 @@
 import { useAuth } from "@/common/hooks/useAuth";
 import { useToast } from "@/common/hooks/useToast";
-import { requestOTP } from "@/schemas/auth";
+import { requestOTP } from "@/common/schemas/auth";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

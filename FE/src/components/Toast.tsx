@@ -64,14 +64,10 @@ export function Toast() {
 					<div
 						className={`${
 							!show ? "-top-16 -z-50" : "top-16 z-50"
-						} w-2/3 duration-200 bg-white ease-in-out transition-all sm:w-1/2 lg:w-1/4 border shadow-xl fixed right-1/2 translate-x-1/2 rounded-sm p-4 flex justify-between gap-2 items-start flex-col`}
+						} w-2/3 duration-500 bg-white ease-in-out transition-all sm:w-1/2 lg:w-1/4 border shadow-xl fixed right-1/2 translate-x-1/2 rounded-sm p-4 flex justify-between gap-2 items-start flex-col`}
 					>
 						<div className="flex justify-between items-center">
-							<div
-								className={`inline-flex h-8 w-8 *:h-5 *:w-5 shrink-0 items-center justify-center ${color} rounded-sm`}
-							>
-								{icon}
-							</div>
+							<div className={`inline-flex h-8 w-8 *:h-5 *:w-5 shrink-0 items-center justify-center ${color} rounded-sm`}>{icon}</div>
 							<div className="ml-3 text-sm font-normal">{content}</div>
 						</div>
 						<div className="flex w-full justify-end items-center gap-1 text-[13px]">
@@ -97,17 +93,10 @@ export function Toast() {
 					} text-zinc-500 w-2/3 duration-200 bg-white ease-in-out transition-all sm:w-1/2 lg:w-1/4 border shadow-xl fixed right-1/2 translate-x-1/2 rounded-sm p-4 flex justify-between gap-2 items-center`}
 				>
 					<div className="flex justify-between items-center">
-						<div
-							className={`inline-flex h-8 w-8 *:h-5 *:w-5 shrink-0 items-center justify-center ${color} rounded-sm`}
-						>
-							{icon}
-						</div>
+						<div className={`inline-flex h-8 w-8 *:h-5 *:w-5 shrink-0 items-center justify-center ${color} rounded-sm`}>{icon}</div>
 						<div className="ml-3 text-sm font-normal">{content}</div>
 					</div>
-					<span
-						className="grid place-items-center self-end absolute top-0 right-0 p-2 cursor-pointer rounded-lg hover:bg-zinc-100"
-						onClick={close}
-					>
+					<span className="grid place-items-center self-end absolute top-0 right-0 p-2 cursor-pointer rounded-lg hover:bg-zinc-100" onClick={close}>
 						<IoClose />
 					</span>
 				</div>
