@@ -38,7 +38,7 @@ const Aside = (props: any) => {
 					<div className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md">
 						<i className="fa-solid fa-chart-simple"></i>
 						<span
-							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
 								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
 							}`}
 						>
@@ -47,13 +47,10 @@ const Aside = (props: any) => {
 					</div>
 				</Link>
 				<li className="">
-					<Link
-						to={"/quan-tri/nguoi-dung"}
-						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
-					>
+					<Link to={"/quan-tri/nguoi-dung"} className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md">
 						<i className="fa-solid fa-user"></i>
 						<span
-							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
 								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
 							}`}
 						>
@@ -62,13 +59,10 @@ const Aside = (props: any) => {
 					</Link>
 				</li>
 				<li className="">
-					<Link
-						to={"/quan-tri/danh-muc"}
-						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
-					>
+					<Link to={"/quan-tri/danh-muc"} className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md">
 						<i className="w-5 fa-solid fa-layer-group"></i>
 						<span
-							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
 								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
 							}`}
 						>
@@ -77,13 +71,10 @@ const Aside = (props: any) => {
 					</Link>
 				</li>
 				<li className="">
-					<Link
-						to={"/quan-tri/san-pham"}
-						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
-					>
+					<Link to={"/quan-tri/san-pham"} className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md">
 						<i className="fa-solid fa-boxes-stacked"></i>
 						<span
-							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
 								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
 							}`}
 						>
@@ -92,13 +83,10 @@ const Aside = (props: any) => {
 					</Link>
 				</li>
 				<li className="">
-					<Link
-						to={"/quan-tri/ma-giam-gia"}
-						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
-					>
+					<Link to={"/quan-tri/ma-giam-gia"} className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md">
 						<i className="fa-solid fa-ticket"></i>
 						<span
-							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
 								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
 							}`}
 						>
@@ -107,13 +95,10 @@ const Aside = (props: any) => {
 					</Link>
 				</li>
 				<li className="">
-					<Link
-						to={"/quan-tri/don-hang"}
-						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
-					>
+					<Link to={"/quan-tri/don-hang"} className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md">
 						<i className="fa-solid fa-cart-shopping"></i>
 						<span
-							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
 								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
 							}`}
 						>
@@ -122,13 +107,10 @@ const Aside = (props: any) => {
 					</Link>
 				</li>
 				<li className="">
-					<Link
-						to={"/quan-tri/tin-tuc"}
-						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
-					>
+					<Link to={"/quan-tri/tin-tuc"} className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md">
 						<i className="fa-solid fa-blog"></i>
 						<span
-							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
 								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
 							}`}
 						>
@@ -137,13 +119,10 @@ const Aside = (props: any) => {
 					</Link>
 				</li>
 				<li className="">
-					<Link
-						to={"/quan-tri/binh-luan"}
-						className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
-					>
+					<Link to={"/quan-tri/binh-luan"} className="flex items-center h-[60px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md">
 						<i className="fa-solid fa-comment"></i>
 						<span
-							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+							className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
 								resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
 							}`}
 						>
@@ -159,7 +138,7 @@ const Aside = (props: any) => {
 				>
 					<i className="fa-solid fa-power-off"></i>
 					<span
-						className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3  ease-in-out ${
+						className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
 							resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
 						}`}
 					>
@@ -170,13 +149,9 @@ const Aside = (props: any) => {
 					onClick={() => setResizeAside(!resizeAside)}
 					className="flex items-center h-[60px] px-5 relative cursor-pointer overflow-hidden bg-[rgba(0,0,0,0.9)] rounded-lg text-white"
 				>
-					<i
-						className={`fa-solid fa-chevron-left duration-700 ease-in-out ${
-							resizeAside && "rotate-180"
-						}`}
-					></i>
+					<i className={`fa-solid fa-chevron-left duration-700 ease-in-out ${resizeAside && "rotate-180"}`}></i>
 					<span
-						className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 right-3 text-sm ease-in-out ${
+						className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 text-sm ease-in-out ${
 							resizeAside ? "translate-x-[150%] opacity-0" : "translate-x-0 opacity-1"
 						}`}
 					>
