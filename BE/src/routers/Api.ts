@@ -50,6 +50,8 @@ router.get("/categories/:id", asyncHandler(CategoryController.getOne));
 router.post("/categories", asyncHandler(CategoryController.create));
 router.patch("/categories/:id", asyncHandler(CategoryController.update));
 router.delete("/categories/:id", asyncHandler(CategoryController.delete));
+router.patch("/categories/:id/active", asyncHandler(CategoryController.active));
+router.patch("/categories/:id/inactive", asyncHandler(CategoryController.inActive));
 //review
 router.post("/books/:bookId/reviews", asyncHandler(ReviewController.addReview));
 router.put("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.updateReview));
