@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   Button,
   Typography,
@@ -9,96 +9,159 @@ import {
   DialogContent,
   IconButton,
   Box,
+  Switch,
+  TextField,
 } from "@mui/material";
-
+import MyTable2 from "../components/table";
 import { useToast } from "@/common/hooks/useToast";
+
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
-import DeleteIcon from "@mui/icons-material/Delete";
 import CloseIcon from "@mui/icons-material/Close";
-import MyTable2 from "../components/table";
-import { deleteCategory, getCategories } from "@/services/categories";
+import { AxiosError } from "axios";
+import { useNavigate } from "react-router-dom";
+import SearchForm from "../components/searchForm";
+import {
+  active,
+  createCategory,
+  deleteCategory,
+  getCategories,
+  inactivect,
+  updateCategory,
+} from "@/services/categories";
+import CategoryForm from "./CategoryForm";
 
 const CategoriesPage: React.FC = () => {
-  const [open, setOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<any>(null);
-  const { toast } = useToast();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
+  const { toast } = useToast();
   const [search, setSearch] = useState<string>("");
 
-  // Lấy danh sách danh mục
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [open, setOpen] = useState(false);
+  const [openct, setOpenct] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [updatedCategoryName, setUpdatedCategoryName] = useState("");
+
+  const [selectedCategoryEdit, setSelectedCategoryEdit] = useState<any>(null);
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["categories", { page, limit, search }],
-    queryFn: () => getCategories({ page, limit, search }),
+    queryKey: ["categories", limit, page, search],
+    queryFn: () => getCategories({ limit, page, search }),
   });
 
-  const { mutateAsync } = useMutation({
+  const { mutateAsync: deleteMutate } = useMutation({
     mutationFn: deleteCategory,
     onSuccess: () => {
-      toast.success("Xóa danh mục thành công!");
-      refetch(); // Làm mới danh sách sau khi xóa
+      toast({
+        variant: data.status,
+        content: `Xóa danh mục thành công`,
+      });
+      refetch();
     },
-    onError: (error: any) => {
-      toast.error("Lỗi khi xóa danh mục: " + error.message);
+    onError: (err: AxiosError) => {
+      let message = "Lỗi khi xóa danh mục";
+      toast({
+        variant: err.status,
+        content: message,
+      });
     },
   });
 
-  const handleDelete = async (id: string) => {
-    await mutateAsync(id);
+  const onDelete = (category: any) => {
+    // console.log("Xóa danh mục với ID:", category);
+    setSelectedCategory(category);
+    setConfirmOpen(true);
   };
 
-  const handleShowDetail = (category: any) => {
+  const confirmDelete = async () => {
+    if (selectedCategory) {
+      await deleteMutate(selectedCategory.id);
+      setConfirmOpen(false);
+      setSelectedCategory(null);
+    }
+  };
+
+  const onEdit = (category: any) => {
+    setSelectedCategoryEdit(category);
+    setUpdatedCategoryName(category.category_name);
+    setOpenct(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setOpenct(false);
+    setSelectedCategoryEdit(null);
+  };
+  const handleToggleStatus = async (category: any) => {
+    if (category.is_active) {
+      await inactivect({ id: category.id, is_active: false });
+    } else {
+      await active({ id: category.id, is_active: true });
+    }
+    refetch();
+  };
+  const onShowDetail = (category: any) => {
     setSelectedCategory(category);
     setOpen(true);
   };
-
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedCategory(null);
-  };
-
   const columns = React.useMemo(
     () => [
-      { headerName: "Tên danh mục", field: "category_name" },
+      {
+        headerName: "Tên danh mục",
+        field: "category_name",
+      },
       {
         headerName: "Ảnh đại diện",
         field: "category_thumb",
         cellRenderer: (row: any) => (
           <img
             src={row.category_thumb}
-            alt="Thumbnail"
+            alt={row.category_thumb}
             style={{ width: "50px", height: "50px" }}
           />
         ),
       },
       {
+        headerName: "Trạng thái",
+        field: "is_active",
+        cellRenderer: (row: any) => (
+          <Box display="flex" alignItems="center">
+            <Switch
+              checked={row.is_active}
+              onChange={() => handleToggleStatus(row)}
+              color="primary"
+            />
+            <Typography>
+              {row.is_active ? "Kích hoạt" : "Vô hiệu hóa"}
+            </Typography>
+          </Box>
+        ),
+      },
+      {
         headerName: "Thao tác",
         field: "actions",
+        width: "110px",
         cellRenderer: (row: any) => (
           <>
             <Tooltip title="Chỉnh sửa">
-              <IconButton onClick={() => console.log("Edit:", row._id)}>
-                <EditIcon />
-              </IconButton>
+              <EditIcon onClick={() => onEdit(row)} />
             </Tooltip>
             <Tooltip title="Hiển thị chi tiết">
-              <IconButton onClick={() => handleShowDetail(row)}>
-                <InfoIcon />
-              </IconButton>
+              <InfoIcon onClick={() => onShowDetail(row)} />
             </Tooltip>
             <Tooltip title="Xóa">
-              <IconButton onClick={() => handleDelete(row._id)}>
-                <DeleteIcon />
-              </IconButton>
+              <DeleteIcon onClick={() => onDelete(row)} />
             </Tooltip>
           </>
         ),
       },
     ],
-    []
+    [onDelete]
   );
-
+  const onAdd = () => {
+    setSelectedCategoryEdit(null);
+    setOpenct(true);
+  };
   return (
     <>
       <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
@@ -108,21 +171,63 @@ const CategoriesPage: React.FC = () => {
       </div>
 
       <Button
+        className="float-right mt-10 mb-10"
         variant="contained"
         color="primary"
-        onClick={() => console.log("Add New Category")}
+        onClick={() => onAdd()}
       >
-        Thêm mới
+        Thêm mới danh mục
       </Button>
 
       <MyTable2
-        rows={data?.categories || []}
+        rows={data?.metadata || []}
         columns={columns}
+        limit={limit}
+        count={data?.total || 0}
+        page={page}
         loading={isLoading}
         error={isError ? error?.message : ""}
         onBackPage={() => setPage((prev) => Math.max(prev - 1, 1))}
         onNextPage={() => setPage((prev) => prev + 1)}
         onChangeLimit={(newLimit) => setLimit(newLimit)}
+      />
+
+      {isError && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "20px",
+          }}
+        >
+          <Typography color="error">Error: {error?.message}</Typography>
+        </div>
+      )}
+
+      <Dialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Xác nhận xóa</DialogTitle>
+        <DialogContent dividers>
+          <Typography>Bạn có chắc chắn muốn xóa danh mục này không?</Typography>
+        </DialogContent>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
+          <Button onClick={() => setConfirmOpen(false)}>Hủy</Button>
+          <Button onClick={confirmDelete} color="error" sx={{ ml: 1 }}>
+            Xóa
+          </Button>
+        </Box>
+      </Dialog>
+
+      <CategoryForm
+        id={selectedCategoryEdit ? selectedCategoryEdit.id : null}
+        selectedCategory={selectedCategoryEdit}
+        onClose={handleClose}
+        refetch={refetch}
+        open={openct}
       />
 
       {/* Modal chi tiết danh mục */}
@@ -140,14 +245,14 @@ const CategoriesPage: React.FC = () => {
         <DialogContent dividers>
           {selectedCategory ? (
             <Box>
-              <Typography variant="h6">Thông tin danh mục</Typography>
+              <Typography variant="h6">Thông tin cơ bản</Typography>
               <Typography>
                 <strong>Tên danh mục:</strong> {selectedCategory.category_name}
               </Typography>
               <img
                 src={selectedCategory.category_thumb}
-                alt="Thumbnail"
-                style={{ width: "200px", height: "auto" }}
+                alt="Ảnh đại diện"
+                style={{ width: "200px", height: "auto", marginBottom: "20px" }}
               />
             </Box>
           ) : (
