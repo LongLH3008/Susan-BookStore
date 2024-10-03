@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import PageLayout from "@/layouts/DashboardLayout";
 import {
   Button,
   Typography,
@@ -21,14 +20,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import { AxiosError } from "axios";
 import { useNavigate } from "react-router-dom";
 import SearchForm from "../components/searchForm";
-import DashboardLayout from "@/layouts/DashboardLayout";
 
 const ProductsPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const { toast } = useToast();
   const [search, setSearch] = useState<string>("");
-
+  const [confirmOpen, setConfirmOpen] = useState(false);
   // State lưu sản phẩm được chọn và trạng thái mở/đóng của modal chi tiết sản phẩm
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [open, setOpen] = useState(false);
@@ -46,35 +44,47 @@ const ProductsPage: React.FC = () => {
   const { mutateAsync } = useMutation({
     mutationFn: deleteProduct,
     onSuccess: () => {
-      console.log("Xóa sản phẩm thành công");
-      refetch(); // Refetch sau khi xóa thành công
+      setConfirmOpen(false);
+      toast({
+        variant: data.status,
+        content: `Xóa sản phẩm thành công`,
+      });
+
+      refetch();
     },
     onError: (error: AxiosError) => {
-      console.error(
-        "Lỗi khi xóa sản phẩm:",
-        error.response?.data || error.message
-      );
+      let message = "Lỗi khi xóa sản phẩm: ";
+      toast({
+        variant: error.status,
+        content: message + error.response?.data || error.message,
+      });
     },
   });
 
   const nav = useNavigate();
 
-  const onDelete = async (id: string) => {
-    await mutateAsync(id);
+  const onDelete = (product: any) => {
+    setSelectedProduct(product);
+    setConfirmOpen(true); // Mở modal xác nhận xóa
   };
 
+  const confirmDelete = async () => {
+    if (selectedProduct) {
+      await mutateAsync(selectedProduct._id); // Gọi hàm xóa sản phẩm
+    }
+  };
   const onEdit = (id: string) => {
     nav(`chinh-sua/${id}`);
   };
 
   const onShowDetail = (product: any) => {
-    setSelectedProduct(product); // Lưu trữ sản phẩm được chọn
-    setOpen(true); // Mở modal
+    setSelectedProduct(product);
+    setOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false); // Đóng modal
-    setSelectedProduct(null); // Xóa sản phẩm được chọn
+    setOpen(false);
+    setSelectedProduct(null);
   };
 
   const columns = React.useMemo(
@@ -115,7 +125,7 @@ const ProductsPage: React.FC = () => {
               <InfoIcon onClick={() => onShowDetail(row)} />
             </Tooltip>
             <Tooltip title="Xóa">
-              <DeleteIcon onClick={() => onDelete(row._id)} />
+              <DeleteIcon onClick={() => onDelete(row)} />
             </Tooltip>
           </>
         ),
@@ -162,7 +172,24 @@ const ProductsPage: React.FC = () => {
           <Typography color="error">Error: {error?.message}</Typography>
         </div>
       )}
-
+      {/* Modal xác nhận xóa sản phẩm */}
+      <Dialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Xác nhận xóa</DialogTitle>
+        <DialogContent dividers>
+          <Typography>Bạn có chắc chắn muốn xóa sản phẩm này không?</Typography>
+        </DialogContent>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
+          <Button onClick={() => setConfirmOpen(false)}>Hủy</Button>
+          <Button onClick={confirmDelete} color="error" sx={{ ml: 1 }}>
+            Xóa
+          </Button>
+        </Box>
+      </Dialog>
       {/* Modal chi tiết sản phẩm */}
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle>

@@ -47,6 +47,8 @@ router.get("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.de
 router.post("/categories", (0, utils_1.asyncHandler)(Category_controller_1.default.create));
 router.patch("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.update));
 router.delete("/categories/:id", (0, utils_1.asyncHandler)(Category_controller_1.default.delete));
+router.patch("/categories/:id/active", (0, utils_1.asyncHandler)(Category_controller_1.default.active));
+router.patch("/categories/:id/inactive", (0, utils_1.asyncHandler)(Category_controller_1.default.inActive));
 //review
 router.post("/books/:bookId/reviews", (0, utils_1.asyncHandler)(Review_controller_1.default.addReview));
 router.put("/books/:bookId/reviews/:userId", (0, utils_1.asyncHandler)(Review_controller_1.default.updateReview));
