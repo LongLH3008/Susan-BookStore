@@ -6,6 +6,7 @@ import Locals from "./Locals";
 import Passport from "./Passport";
 import { NextFunction, Request, Response } from 'express';
 import { exceptionHandler } from "../middlewares/ExceptionHandler";
+import { setupSwagger } from "./Swagger";
 
 
 class Express {
@@ -38,6 +39,7 @@ class Express {
     this.express.use((error: Error, req: Request, res: Response, next: NextFunction) => {
       exceptionHandler.handleError(error, req, res, next)
     })
+    setupSwagger(this.express)
 
 
 
