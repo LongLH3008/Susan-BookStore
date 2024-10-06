@@ -53,16 +53,6 @@ const Shop = () => {
     setCurrentPage(1);
   };
 
-  /* <option value="manual">Sản Phẩm Nổi bật</option>
-              <option value="best-selling">Sản Phẩm Bán chạy</option>
-              <option value="title-ascending">Thứ tự A-Z</option>
-              <option value="title-descending">Thứ tự Z-A</option>
-              <option value="price-ascending">Giá thấp đến cao</option>
-              <option value="price-descending">Giá cao đến thấp</option>
-              <option value="created-descending">Ngày mới đến cũ</option>
-              <option value="created-ascending">Ngày Cũ đến mới</option>
-              sort?: "ascByPrice" | "" | "ascByRating" | "descByRating" | "ascByTitle" | "descByTitle";
-              */
   const handleSortByChange = (event: any) => {
     const sortMapping: { [key: string]: string | undefined } = {
       "best-selling": "",

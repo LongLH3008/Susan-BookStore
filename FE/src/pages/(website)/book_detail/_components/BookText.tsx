@@ -20,11 +20,11 @@ const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
                 detailProduct?.price -
                   (detailProduct?.price * detailProduct?.discount) / 100
               )}
-              VND
+              đ
             </span>
             {detailProduct?.discount > 0 && (
               <span className="line-through ms-3 text-zinc-500">
-                {ConvertVNDString(detailProduct?.price)}VND
+                {ConvertVNDString(detailProduct?.price)} đ
               </span>
             )}
           </div>

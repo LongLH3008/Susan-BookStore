@@ -12,6 +12,7 @@ import UsersPage from "@/pages/(dashboard)/Users/UsersPage";
 import DashboardGuard from "./guards/dashboard.guard";
 import DiscountAdd from "@/pages/(dashboard)/Discount/discount.add";
 import FormAttr from "@/pages/(dashboard)/Products/FormAttr";
+import CreateBlog from "@/pages/(dashboard)/Blogs/CreateBlog";
 
 const DashboardRoutes = [
   {
@@ -27,6 +28,7 @@ const DashboardRoutes = [
       { path: "san-pham/them-moi", element: <FormAttr /> },
       { path: "binh-luan", element: <CommentsPage /> },
       { path: "tin-tuc", element: <BlogPage /> },
+      { path: "tin-tuc/them-moi", element: <CreateBlog /> },
 
       { path: "ma-giam-gia", element: <DiscountList /> },
       { path: "ma-giam-gia/:id", element: <DiscountEdit /> },
