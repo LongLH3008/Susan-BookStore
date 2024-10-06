@@ -237,6 +237,32 @@ const options = {
                     createdAt: { type: "string", format: "date-time", description: "Date and time when the review was created" },
                 }
             },
+            GiaoHangNhanhDto: {
+                type: 'object',
+                properties: {
+                    // Replace these example properties with the actual properties 
+                    // from your GiaoHangNhanhDto interface in BE/src/Services/dtos/GiaoHangNhanh.dto.ts
+                    // You'll likely need to adjust data types and descriptions as needed.
+                    shop_id: { type: 'string', description: 'Shop ID' },
+                    to_name: { type: 'string', description: 'Receiver name' },
+                    to_phone: { type: 'string', description: 'Receiver phone number' },
+                    to_address: { type: 'string', description: 'Receiver address' },
+                    service_id: { type: 'number', description: 'Giao Hang Nhanh service ID' }, // Adjust type if needed
+                    weight: { type: 'number', description: 'Package weight in grams' },
+                    length: { type: 'number', description: 'Package length in cm' },
+                    width: { type: 'number', description: 'Package width in cm' },
+                    height: { type: 'number', description: 'Package height in cm' },
+                    content: { type: 'string', description: 'Package content description' },
+                    to_ward_code: { type: 'string', description: 'Ward code of receiver address' },
+                    to_district_code: { type: 'string', description: 'District code of receiver address' },
+                    to_province_code: { type: 'string', description: 'Province code of receiver address' },
+                    insurance_value: { type: 'number', description: 'Insurance value for the shipment' }, // Adjust type if needed
+                    coupon_code: { type: 'string', description: 'Coupon code for discount (optional)' },
+                    note: { type: 'string', description: 'Additional note for the order (optional)' },
+                },
+            },
+
+
 
         }
     },

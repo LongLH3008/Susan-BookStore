@@ -28,7 +28,7 @@ const router = Router();
 // **User API**
 /**
  * @swagger
- * /api/users/google:
+ * /api/v1/users/google:
  *   post:
  *     summary: Create a user from Google account
  *     tags: [User]
@@ -74,7 +74,7 @@ router.post("/user-google", asyncHandler(UserController.createUserFromGoogle)); 
 // user-service-common
 /**
  * @swagger
- * /api/users:
+ * /api/v1/users:
  *   get:
  *     summary: Get all users
  *     tags: [User]
@@ -117,7 +117,7 @@ router.get("/user", asyncHandler(UserController.getAll)); // get all
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /api/v1/users/{id}:
  *   get:
  *     summary: Get user by ID
  *     tags: [User]
@@ -158,7 +158,7 @@ router.get("/user/:id", asyncHandler(UserController.getByUserId)); // get by id
 
 /**
  * @swagger
- * /api/users/type-auth/{type}:
+ * /api/v1/users/type-auth/{type}:
  *   get:
  *     summary: Get users by authentication type
  *     tags: [User]
@@ -196,7 +196,7 @@ router.get("/user/type-auth/:type", asyncHandler(UserController.getAllUserByType
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /api/v1/users/{id}:
  *   put:
  *     summary: Update user by ID
  *     tags: [User]
@@ -296,7 +296,7 @@ const authRouter = Router();
 
 /**
  * @swagger
- * /api/auth/login:
+ * /api/v1/auth/login:
  *   post:
  *     summary: Login using email and password
  *     tags: [Auth]
@@ -351,7 +351,7 @@ router.post("/auth/login", AuthLoginApiController.Login);
 
 /**
  * @swagger
- * /api/auth/logout:
+ * /api/v1/auth/logout:
  *   post:
  *     summary: Logout user
  *     tags: [Auth]
@@ -390,7 +390,7 @@ router.post("/auth/logout", AuthLoginApiController.Logout);
 
 /**
  * @swagger
- * /api/auth/refresh-token:
+ * /api/v1/auth/refresh-token:
  *   post:
  *     summary: Refresh access token
  *     tags: [Auth]
@@ -440,7 +440,7 @@ router.post("/auth/refresh-token", AuthLoginApiController.refreshToken);
 
 /**
  * @swagger
- * /api/auth/register:
+ * /api/v1/auth/register:
  *   post:
  *     summary: Register a new user
  *     tags: [Auth]
@@ -488,7 +488,7 @@ router.post("/auth/register", AuthRegisterApiController.Register);
 
 /**
  * @swagger
- * /api/auth/change-pw:
+ * /api/v1/auth/change-pw:
  *   post:
  *     summary: Change user password
  *     tags: [Auth]
@@ -553,7 +553,7 @@ router.post("/auth/change-pw", AuthChangeFwApiController.changePassword);
 
 /**
  * @swagger
- * /api/auth/request-otp:
+ * /api/v1/auth/request-otp:
  *   post:
  *     summary: Request OTP for password reset
  *     tags: [Auth]
@@ -602,7 +602,7 @@ router.post("/auth/request-otp", AuthForgotfwApiController.requestReset);
 
 /**
  * @swagger
- * /api/auth/check-otp:
+ * /api/v1/auth/check-otp:
  *   post:
  *     summary: Verify OTP for password reset
  *     tags: [Auth]
@@ -660,7 +660,7 @@ router.post("/auth/check-otp", AuthForgotfwApiController.verifyOTP);
 
 /**
  * @swagger
- * /api/auth/forgot-pw:
+ * /api/v1/auth/forgot-pw:
  *   post:
  *     summary: Reset user password using OTP
  *     tags: [Auth]
@@ -726,7 +726,7 @@ router.post("/auth/forgot-pw", AuthForgotfwApiController.resetPassword);
 
 /**
  * @swagger
- * /api/categories:
+ * /api/v1/categories:
  *   get:
  *     summary: Get all categories
  *     tags: [Category]
@@ -757,7 +757,7 @@ router.get("/categories", asyncHandler(CategoryController.getAll));
 
 /**
  * @swagger
- * /api/categories/{id}:
+ * /api/v1/categories/{id}:
  *   get:
  *     summary: Get category by ID
  *     tags: [Category]
@@ -800,7 +800,7 @@ router.get("/categories/:id", asyncHandler(CategoryController.getOne));
 
 /**
  * @swagger
- * /api/categories:
+ * /api/v1/categories:
  *   post:
  *     summary: Create a new category
  *     tags: [Category]
@@ -842,7 +842,7 @@ router.post("/categories", asyncHandler(CategoryController.create));
 
 /**
  * @swagger
- * /api/categories/{id}:
+ * /api/v1/categories/{id}:
  *   patch:
  *     summary: Update category by ID
  *     tags: [Category]
@@ -897,7 +897,7 @@ router.patch("/categories/:id", asyncHandler(CategoryController.update));
 
 /**
  * @swagger
- * /api/categories/{id}:
+ * /api/v1/categories/{id}:
  *   delete:
  *     summary: Delete category by ID
  *     tags: [Category]
@@ -935,7 +935,7 @@ router.delete("/categories/:id", asyncHandler(CategoryController.delete));
 
 /**
  * @swagger
- * /api/categories/{id}/active:
+ * /api/v1/categories/{id}/active:
  *   patch:
  *     summary: Activate category by ID
  *     tags: [Category]
@@ -979,7 +979,7 @@ router.patch("/categories/:id/active", asyncHandler(CategoryController.active));
 
 /**
  * @swagger
- * /api/categories/{id}/inactive:
+ * /api/v1/categories/{id}/inactive:
  *   patch:
  *     summary: Deactivate category by ID
  *     tags: [Category]
@@ -1023,7 +1023,7 @@ router.patch("/categories/:id/inactive", asyncHandler(CategoryController.inActiv
 
 /**
  * @swagger
- * /api/books/{bookId}/reviews:
+ * /api/v1/books/{bookId}/reviews:
  *   post:
  *     summary: Add a new review for a book
  *     tags: [Review]
@@ -1082,7 +1082,7 @@ router.post("/books/:bookId/reviews", asyncHandler(ReviewController.addReview));
 
 /**
  * @swagger
- * /api/books/{bookId}/reviews/{userId}:
+ * /api/v1/books/{bookId}/reviews/{userId}:
  *   put:
  *     summary: Update an existing review for a book
  *     tags: [Review]
@@ -1143,7 +1143,7 @@ router.put("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.updat
 
 /**
  * @swagger
- * /api/books/{bookId}/reviews/{userId}:
+ * /api/v1/books/{bookId}/reviews/{userId}:
  *   delete:
  *     summary: Delete a review by user ID
  *     tags: [Review]
@@ -1187,7 +1187,7 @@ router.delete("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.de
 
 /**
  * @swagger
- * /api/books/{bookId}/reviews:
+ * /api/v1/books/{bookId}/reviews:
  *   get:
  *     summary: Get reviews for a book
  *     tags: [Review]
@@ -1231,7 +1231,7 @@ router.get("/books/:bookId/reviews", asyncHandler(ReviewController.getReviews));
 
 /**
  * @swagger
- * /api/books/{bookId}/reviews/{userId}:
+ * /api/v1/books/{bookId}/reviews/{userId}:
  *   get:
  *     summary: Get review of a book by a specific user
  *     tags: [Review]
@@ -1279,7 +1279,7 @@ router.get("/books/:bookId/reviews/:userId", asyncHandler(ReviewController.getRe
 
 /**
  * @swagger
- * /api/books/reviews:
+ * /api/v1/books/reviews:
  *   get:
  *     summary: Get all reviews 
  *     tags: [Review]
@@ -1313,7 +1313,7 @@ router.get("/books/reviews", asyncHandler(ReviewController.getAllReviews));
 
 /**
  * @swagger
- * /api/books:
+ * /api/v1/books:
  *   get:
  *     summary: Get books by query parameters
  *     tags: [Book]
@@ -1372,7 +1372,7 @@ router.get("/books", asyncHandler(BookController.getByQuery));
 
 /**
  * @swagger
- * /api/books/{id}:
+ * /api/v1/books/{id}:
  *   get:
  *     summary: Get book by ID
  *     tags: [Book]
@@ -1414,7 +1414,7 @@ router.get("/books/:id", asyncHandler(BookController.getById));
 
 /**
  * @swagger
- * /api/books/slug/{slug}:
+ * /api/v1/books/slug/{slug}:
  *   get:
  *     summary: Get book by slug
  *     tags: [Book]
@@ -1458,7 +1458,7 @@ router.get("/books/slug/:slug", asyncHandler(BookController.getBySlug));
 
 /**
  * @swagger
- * /api/books:
+ * /api/v1/books:
  *   post:
  *     summary: Create a new book
  *     tags: [Book]
@@ -1626,7 +1626,7 @@ router.post("/books", asyncHandler(BookController.create));
 
 /**
  * @swagger
- * /api/books/{id}:
+ * /api/v1/books/{id}:
  *   put:
  *     summary: Update book by ID
  *     tags: [Book]
@@ -1801,7 +1801,7 @@ router.put("/books/:id", asyncHandler(BookController.updateOne));
 
 /**
  * @swagger
- * /api/books/{id}:
+ * /api/v1/books/{id}:
  *   delete:
  *     summary: Delete book by ID
  *     tags: [Book]
@@ -1839,7 +1839,7 @@ router.delete("/books/:id", asyncHandler(BookController.deleteOne));
 
 /**
  * @swagger
- * /api/books/{id}/unactive:
+ * /api/v1/books/{id}/unactive:
  *   patch:
  *     summary: Deactivate book by ID
  *     tags: [Book]
@@ -1881,7 +1881,7 @@ router.patch("/books/:id/unactive", asyncHandler(BookController.unActiveBook));
 
 /**
  * @swagger
- * /api/books/{id}/active:
+ * /api/v1/books/{id}/active:
  *   patch:
  *     summary: Activate book by ID
  *     tags: [Book]
@@ -1923,7 +1923,7 @@ router.patch("/books/:id/active", asyncHandler(BookController.activeBook));
 
 /**
  * @swagger
- * /api/books/category/{category_id}/discount:
+ * /api/v1/books/category/{category_id}/discount:
  *   patch:
  *     summary: Set discount for books in a specific category
  *     tags: [Book]
@@ -1980,7 +1980,7 @@ router.patch("/books/category/:category_id/discount", asyncHandler(BookControlle
 
 /**
  * @swagger
- * /api/books/discount:
+ * /api/v1/books/discount:
  *   patch:
  *     summary: Set discount for all books
  *     tags: [Book]
@@ -2024,7 +2024,7 @@ router.patch("/books/discount", asyncHandler(BookController.setDiscountToAll));
 
 /**
  * @swagger
- * /api/books/{id}/discount:
+ * /api/v1/books/{id}/discount:
  *   patch:
  *     summary: Set discount for a specific book
  *     tags: [Book]
@@ -2077,7 +2077,7 @@ router.patch("/books/:id/discount", asyncHandler(BookController.setDiscountByBoo
 
 /**
  * @swagger
- * /api/books/{id}/sold:
+ * /api/v1/books/{id}/sold:
  *   patch:
  *     summary: Update the sold number of a book
  *     tags: [Book]
@@ -2131,7 +2131,7 @@ router.patch("/books/:id/sold", asyncHandler(BookController.updateSoldNumber));
 // Blog API
 /**
  * @swagger
- * /api/blog/add:
+ * /api/v1/blog/add:
  *   post:
  *     summary: Create a new blog post
  *     tags: [Blog]
@@ -2187,7 +2187,7 @@ router.post("/blog/add", asyncHandler(BlogController.create));
 
 /**
  * @swagger
- * /api/blog:
+ * /api/v1/blog:
  *   get:
  *     summary: Get all blogs
  *     tags: [Blog]
@@ -2218,7 +2218,7 @@ router.post("/blog/views/:userId/:blogId", asyncHandler(BlogController.views));
 
 /**
  * @swagger
- * /api/blog/views/{userId}/{blogId}:
+ * /api/v1/blog/views/{userId}/{blogId}:
  *   post:
  *     summary: Increment view count for a blog
  *     tags: [Blog]
@@ -2270,7 +2270,7 @@ router.get("/blog", asyncHandler(BlogController.getAllBlogs));
 
 /**
  * @swagger
- * /api/blog/{id}:
+ * /api/v1/blog/{id}:
  *   get:
  *     summary: Get a blog by ID
  *     tags: [Blog]
@@ -2312,7 +2312,7 @@ router.get("/blog/:id", asyncHandler(BlogController.getOneBlog));
 
 /**
  * @swagger
- * /api/blog/{id}:
+ * /api/v1/blog/{id}:
  *   delete:
  *     summary: Delete a blog by ID
  *     tags: [Blog]
@@ -2350,7 +2350,7 @@ router.delete("/blog/:id", asyncHandler(BlogController.deleteBlog));
 
 /**
  * @swagger
- * /api/blog/update/{id}:
+ * /api/v1/blog/update/{id}:
  *   put:
  *     summary: Update a blog by ID
  *     tags: [Blog]
@@ -2420,7 +2420,7 @@ router.put("/blog/update/:id", asyncHandler(BlogController.updateBlog));
 
 /**
  * @swagger
- * /api/blog/addcomment/{blogId}:
+ * /api/v1/blog/addcomment/{blogId}:
  *   post:
  *     summary: Add a new comment to a blog
  *     tags: [Blog]
@@ -2499,7 +2499,7 @@ router.post("/blog/addcomment/:blogId", asyncHandler(BlogController.addComment))
 
 /**
  * @swagger
- * /api/blog/commentblog/{blogId}:
+ * /api/v1/blog/commentblog/{blogId}:
  *   get:
  *     summary: Get all comments for a blog
  *     tags: [Blog]
@@ -2543,7 +2543,7 @@ router.get("/blog/commentblog/:blogId", asyncHandler(BlogController.getComments)
 
 /**
  * @swagger
- * /api/blog/updatecommentBlog/{blogId}/{commentId}:
+ * /api/v1/blog/updatecommentBlog/{blogId}/{commentId}:
  *   put:
  *     summary: Update comment for a blog
  *     tags: [Blog]
@@ -2601,7 +2601,7 @@ router.put("/blog/updatecommentBlog/:blogId/:commentId", asyncHandler(BlogContro
 
 /**
  * @swagger
- * /api/blog/deletecommentBlog/{blogId}/{commentId}:
+ * /api/v1/blog/deletecommentBlog/{blogId}/{commentId}:
  *   delete:
  *     summary: Delete comment for a blog
  *     tags: [Blog]
@@ -2645,7 +2645,7 @@ router.delete("/blog/deletecommentBlog/:blogId/:commentId", asyncHandler(BlogCon
 
 /**
  * @swagger
- * /api/blog/likecomment/{blogId}/{commentId}:
+ * /api/v1/blog/likecomment/{blogId}/{commentId}:
  *   post:
  *     summary: Like a comment on a blog post
  *     tags: [Blog]
@@ -2703,7 +2703,7 @@ router.post("/blog/likecomment/:blogId/:commentId", asyncHandler(BlogController.
 
 /**
  * @swagger
- * /api/cart:
+ * /api/v1/cart:
  *   post:
  *     summary: Create a new cart
  *     tags: [Cart]
@@ -2742,7 +2742,7 @@ router.post("/cart", asyncHandler(CartController.create)); // create cart
 
 /**
  * @swagger
- * /api/cart/{user_id}:
+ * /api/v1/cart/{user_id}:
  *   get:
  *     summary: Get cart by user ID
  *     tags: [Cart]
@@ -2784,7 +2784,7 @@ router.get("/cart/:user_id", asyncHandler(CartController.getCartByOneUser)); // 
 
 /**
  * @swagger
- * /api/cart/addproduct/{user_id}:
+ * /api/v1/cart/addproduct/{user_id}:
  *   post:
  *     summary: Add a product to user's cart
  *     tags: [Cart]
@@ -2839,7 +2839,7 @@ router.post("/cart/addproduct/:user_id", asyncHandler(CartController.addProductT
 
 /**
  * @swagger
- * /api/cart/{user_id}/{product_id}:
+ * /api/v1/cart/{user_id}/{product_id}:
  *   delete:
  *     summary: Delete a product from user's cart
  *     tags: [Cart]
@@ -2883,7 +2883,7 @@ router.delete("/cart/:user_id/:product_id", asyncHandler(CartController.deletePr
 
 /**
  * @swagger
- * /api/cart/increment-quantity/{user_id}/{product_id}:
+ * /api/v1/cart/increment-quantity/{user_id}/{product_id}:
  *   get:
  *     summary: Increment quantity of a product in cart
  *     tags: [Cart]
@@ -2934,7 +2934,7 @@ router.get(
 
 /**
  * @swagger
- * /api/cart/decrement-quantity/{user_id}/{product_id}:
+ * /api/v1/cart/decrement-quantity/{user_id}/{product_id}:
  *   get:
  *     summary: Decrement quantity of a product in cart
  *     tags: [Cart]
@@ -2985,7 +2985,7 @@ router.get(
 
 /**
  * @swagger
- * /api/cart/select/{user_id}:
+ * /api/v1/cart/select/{user_id}:
  *   put:
  *     summary: Select products for checkout
  *     tags: [Cart]
@@ -3044,7 +3044,7 @@ router.put("/cart/select/:user_id", asyncHandler(CartController.selectProductToC
 
 /**
  * @swagger
- * /api/discounts:
+ * /api/v1/discounts:
  *   post:
  *     summary: Create a new discount
  *     tags: [Discount]
@@ -3134,17 +3134,520 @@ router.put("/cart/select/:user_id", asyncHandler(CartController.selectProductToC
  */
 
 router.post("/discounts", asyncHandler(DiscountController.create));
+
+/**
+ * @swagger
+ * /api/v1/discounts:
+ *   get:
+ *     summary: Get all discounts
+ *     tags: [Discount]
+ *     responses:
+ *       200:
+ *         description: List of discounts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/definitions/Discount'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.get("/discounts", asyncHandler(DiscountController.getAll));
+
+/**
+ * @swagger
+ * /api/v1/discounts/{id}:
+ *   put:
+ *     summary: Update a discount
+ *     tags: [Discount]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The discount ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/definitions/DiscountUpdateInputDTO'
+ *     responses:
+ *       200:
+ *         description: Discount updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/DiscountOutputDTO'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       404:
+ *         description: Discount not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.put("/discounts/:id", asyncHandler(DiscountController.update));
+
+
+/**
+ * @swagger
+ * /api/v1/discounts/{code}:
+ *   delete:
+ *     summary: Delete a discount by code
+ *     tags: [Discount]
+ *     parameters:
+ *       - in: path
+ *         name: code
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The discount code
+ *     responses:
+ *       200:
+ *         description: Discount deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Discount'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       404:
+ *         description: Discount not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.delete("/discounts/:code", asyncHandler(DiscountController.delete));
+
+
+/**
+ * @swagger
+ * /api/v1/discounts/book/{bookId}:
+ *   get:
+ *     summary: Get discounts for a specific book
+ *     tags: [Discount]
+ *     parameters:
+ *       - in: path
+ *         name: bookId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The book ID
+ *     responses:
+ *       200:
+ *         description: List of discounts for the book
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/definitions/Discount'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       404:
+ *         description: Book not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.get("/discounts/book/:bookId", asyncHandler(DiscountController.getDiscountsByBook));
+
+/**
+ * @swagger
+ * /api/v1/discounts/activate:
+ *   post:
+ *     summary: Activate a discount
+ *     tags: [Discount]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 description: The discount code
+ *     responses:
+ *       200:
+ *         description: Discount activated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Discount'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       404:
+ *         description: Discount not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.post("/discounts/activate", asyncHandler(DiscountController.activate));
+
+/**
+ * @swagger
+ * /api/v1/discounts/deactivate:
+ *   post:
+ *     summary: Deactivate a discount
+ *     tags: [Discount]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 description: The discount code
+ *     responses:
+ *       200:
+ *         description: Discount deactivated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Discount'
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       404:
+ *         description: Discount not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.post("/discounts/deactivate", asyncHandler(DiscountController.deactivate));
+
+/**
+ * @swagger
+ * /api/v1/discounts/cancel:
+ *   post:
+ *     summary: Cancel a discount for a user
+ *     tags: [Discount]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 description: The discount code
+ *               userId:
+ *                 type: string
+ *                 description: The user ID
+ *     responses:
+ *       200:
+ *         description: Discount cancelled successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: Success message
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       404:
+ *         description: Discount or user not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.post("/discounts/cancel", asyncHandler(DiscountController.cancelDiscount));
+
+/**
+ * @swagger
+ * /api/v1/discounts/amount:
+ *   post:
+ *     summary: Get discount amount for a list of products
+ *     tags: [Discount]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               products:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     product_id:
+ *                       type: string
+ *                       description: The product ID
+ *                     quantity:
+ *                       type: number
+ *                       description: The quantity of the product
+ *                     title:
+ *                       type: string
+ *                       description: The product title (optional)
+ *                     product_price:
+ *                       type: number
+ *                       format: float
+ *                       description: The product price
+ *                     code:
+ *                       type: string
+ *                       description: The discount code (optional)
+ *               userId:
+ *                 type: string
+ *                 description: The user ID
+ *     responses:
+ *       200:
+ *         description: Discount amount calculated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 total:
+ *                   type: number
+ *                   format: float
+ *                   description: The total price after discount
+ *                 subtotal:
+ *                   type: number
+ *                   format: float
+ *                   description: The subtotal price before discount
+ *                 discountAmount:
+ *                   type: number
+ *                   format: float
+ *                   description: The total discount amount
+ *                 discountAmountVoucher:
+ *                   type: number
+ *                   format: float
+ *                   description: The total discount amount from vouchers
+ *                 productsAfterDiscount:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       discount:
+ *                         type: number
+ *                         format: float
+ *                         description: The discount applied to this product
+ *                       product_id:
+ *                         type: string
+ *                         description: The product ID
+ *                       quantity:
+ *                         type: number
+ *                         description: The quantity of the product
+ *                       title:
+ *                         type: string
+ *                         description: The product title
+ *                       product_price:
+ *                         type: number
+ *                         format: float
+ *                         description: The product price
+ *                       code:
+ *                         type: string
+ *                         description: The discount code applied (optional)
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.post("/discounts/amount", asyncHandler(DiscountController.getDiscountAmount));
 
 //upload
+
+/**
+ * @swagger
+ * /api/v1/upload:
+ *   post:
+ *     summary: Upload multiple files
+ *     tags: [Upload]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               files:
+ *                 type: array
+ *                 description: Array of files to upload
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *     responses:
+ *       200:
+ *         description: Files uploaded successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 fileLinks:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                     description: URL of the uploaded file
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.post("/upload", upload.array("files", 10), asyncHandler(UploadController.upload));
+
+
+/**
+ * @swagger
+ * /api/v1/upload/delete:
+ *   post:
+ *     summary: Delete files from local storage by URL
+ *     tags: [Upload]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               urls:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: List of URLs to delete
+ *     responses:
+ *       200:
+ *         description: Files deleted successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 deletedFiles:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: List of successfully deleted URLs
+ *                 failedFiles:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ *                   description: List of URLs that failed to delete
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
+
 router.post("/upload/delete", asyncHandler(UploadController.delete));
 
 //checkoutAmount
@@ -3152,9 +3655,109 @@ router.post("/upload/delete", asyncHandler(UploadController.delete));
 
 //checkoutAmount 
 
+/**
+ * @swagger
+ * /api/v1/orders/checkout-review:
+ *   post:
+ *     summary: Get order review information
+ *     tags: [Order]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: The user ID
+ *               products:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     bookId:
+ *                       type: string
+ *                       description: The ID of the book
+ *                     quantity:
+ *                       type: number
+ *                       description: The quantity of the book
+ *                     code:
+ *                       type: string
+ *                       description: Discount code (optional)
+ *     responses:
+ *       200:
+ *         description: Order review information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 total:
+ *                   type: number
+ *                   format: float
+ *                   description: The total price of the order
+ *                 subtotal:
+ *                   type: number
+ *                   format: float
+ *                   description: The subtotal price of the order
+ *                 discountAmount:
+ *                   type: number
+ *                   format: float
+ *                   description: The total discount amount
+ *                 discountAmountVoucher:
+ *                   type: number
+ *                   format: float
+ *                   description: The total discount amount from voucher
+ *                 productsAfterDiscount:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       discount:
+ *                         type: number
+ *                         format: float
+ *                         description: Discount for this product
+ *                       product_id:
+ *                         type: string
+ *                         description: Product ID
+ *                       quantity:
+ *                         type: number
+ *                         description: Quantity
+ *                       title:
+ *                         type: string
+ *                         description: Title
+ *                       product_price:
+ *                         type: number
+ *                         format: float
+ *                         description: Product price
+ *                       code:
+ *                         type: string
+ *                         description: Discount code
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       404:
+ *         description: User or product not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview))
 
 // giao hàng nhanh 
+
 router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest))
 router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail))
 router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince))
@@ -3163,16 +3766,147 @@ router.post("/giao-hang-nhanh/preview-shipfee", asyncHandler(GiaoHangNhanhContro
 router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview));
 
 // giao hàng nhanh
-router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest));
-router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail));
-router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince));
+// router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest));
+// router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail));
+// router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince));
 
 // advanced search and similar books
 router.post("/search", asyncHandler(VectorSearchController.advancedSearch))
 router.post("/loaddata", asyncHandler(VectorSearchController.loadData))
 
 //payment\
+
+/**
+ * @swagger
+ * /api/v1/payment/bank-list:
+ *   get:
+ *     summary: Get a list of supported banks for VnPay
+ *     tags: [Payment]
+ *     responses:
+ *       200:
+ *         description: List of supported banks
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   bank_code:
+ *                     type: string
+ *                     description: Bank code
+ *                   bank_name:
+ *                     type: string
+ *                     description: Bank name
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.get("/payment/bank-list", asyncHandler(PaymentController.getBankList))
+
+/**
+ * @swagger
+ * /api/v1/payment/create-payment-url:
+ *   post:
+ *     summary: Generate a VnPay payment URL
+ *     tags: [Payment]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               amount:
+ *                 type: number
+ *                 format: float
+ *                 description: The payment amount
+ *               bankCode:
+ *                 type: string
+ *                 description: The bank code
+ *               orderInfo:
+ *                 type: object
+ *                 description: Order information (details depend on your implementation)
+ *     responses:
+ *       200:
+ *         description: Payment URL generated
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 paymentUrl:
+ *                   type: string
+ *                   description: The VnPay payment URL
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.post("/payment/create-payment-url", asyncHandler(PaymentController.getPaymentUrl))
+
+/**
+ * @swagger
+ * /api/v1/payment/verify-url:
+ *   post:
+ *     summary: Verify a VnPay payment URL
+ *     tags: [Payment]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               url:
+ *                 type: string
+ *                 description: The VnPay payment URL to verify
+ *     responses:
+ *       200:
+ *         description: Payment URL verification result
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   description: Indicates if the verification was successful
+ *                 message:
+ *                   type: string
+ *                   description: Verification message
+ *       400:
+ *         description: Bad request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/definitions/Error'
+ */
+
 router.post("/payment/verify-url", asyncHandler(PaymentController.verifyUrl))
 
