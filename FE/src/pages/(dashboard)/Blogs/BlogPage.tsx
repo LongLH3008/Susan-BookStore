@@ -1,153 +1,150 @@
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { IBlog } from "@/common/interfaces/blog";
+import { getBlogs } from "@/services/blog";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import InfoIcon from "@mui/icons-material/Info";
+import { CircularProgress, Tooltip, Typography } from "@mui/material";
+import Paper from "@mui/material/Paper";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { useQuery } from "@tanstack/react-query";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+
 const BlogPage = () => {
-	const { register, handleSubmit, setValue } = useForm();
-	const [showModal, setShowModal] = useState(false);
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["Blog"],
+    queryFn: () => getBlogs(),
+  });
 
-	return (
-		<div className="px-10 h-[100vh]">
-			<div className="flex flex-col items-center justify-center h-48 rounded bg-gray-50 dark:bg-gray-800">
-				<p className="text-2xl font-bold text-gray-800 dark:text-gray-50">Blog Page DashBoard</p>
-			</div>
-			<form className="max-w-sm mx-auto mb-4 w-100">
-				<div className="mb-5">
-					<label
-						htmlFor="title"
-						className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-					>
-						Title
-					</label>
-					<input
-						{...register("title")} // Đăng ký input với react-hook-form
-						type="text"
-						id="title"
-						className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-						placeholder="Title"
-						required
-					/>
-				</div>
+  const onEdit = (id: string) => {
+    console.log(id);
+  };
+  const onShowDetail = (blog: IBlog) => {
+    console.log(blog);
+  };
+  const onDelete = (id: string) => {
+    console.log(id);
+  };
+  const columns: GridColDef[] = [
+    { field: "blog_title", headerName: "Title", flex: 1 },
+    {
+      field: "blog_image",
+      headerName: "Image",
+      renderCell: (params) => (
+        <img
+          src={params.value}
+          alt={params.row.blog_title}
+          style={{ width: "100%", height: "auto" }}
+        />
+      ),
+      flex: 2,
+    },
+    {
+      field: "blog_tags",
+      headerName: "Tags",
+      flex: 3,
+    },
+    {
+      field: "active",
+      headerName: "Active",
+      renderCell: (params) => (
+        <>
+          <Tooltip title="Chỉnh sửa">
+            <EditIcon onClick={() => onEdit(params.row._id)} />
+          </Tooltip>
+          <Tooltip title="Hiển thị chi tiết">
+            <InfoIcon onClick={() => onShowDetail(params.row)} />
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <DeleteIcon onClick={() => onDelete(params.row._id)} />
+          </Tooltip>
+        </>
+      ),
+    },
+  ];
+  const handleSearch = (searchTerm: string) => {
+    setSearch(searchTerm);
+    refetch();
+  };
 
-				<div className="mb-5 w-full border-b-2 border-gray-900 py-4">
-					<label
-						htmlFor="title"
-						className="block  mb-2 text-sm font-medium text-gray-900 dark:text-white"
-					>
-						Title
-					</label>
-					<button
-						onClick={() => setShowModal(!showModal)}
-						data-modal-target="default-modal"
-						data-modal-toggle="default-modal"
-						className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-						type="button"
-					>
-						Show editor
-					</button>
-					<div
-						id="default-modal"
-						tabIndex={-1}
-						className={` ${
-							showModal ? "" : "hidden"
-						} overflow-y-auto overflow-x-hidden fixed mt-[10%] ml-[35%] top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full`}
-					>
-						<div className="relative p-4 w-full max-w-2xl max-h-full">
-							<div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-								<div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-									<h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-										Contents
-									</h3>
-									<button
-										onClick={() => setShowModal(!showModal)}
-										type="button"
-										className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-										data-modal-hide="default-modal"
-									>
-										<svg
-											className="w-3 h-3"
-											aria-hidden="true"
-											xmlns="http://www.w3.org/2000/svg"
-											fill="none"
-											viewBox="0 0 14 14"
-										>
-											<path
-												stroke="currentColor"
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="2"
-												d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-											/>
-										</svg>
-										<span className="sr-only">Close modal</span>
-									</button>
-								</div>
-								<div className="p-4 md:p-5 space-y-4">
-									<CKEditor
-										editor={ClassicEditor}
-										data="<p>Hello from CKEditor&nbsp;5!</p>"
-										onReady={(editor) => {
-											// You can store the "editor" and use when it is needed.
-											console.log("Editor is ready to use!", editor);
-										}}
-										onChange={(event) => {
-											console.log(event);
-										}}
-										onBlur={(event, editor) => {
-											console.log("Blur.", editor);
-										}}
-										onFocus={(event, editor) => {
-											console.log("Focus.", editor);
-										}}
-										config={{
-											toolbar: [
-												"heading",
-												"|",
-												"bold",
-												"italic",
-												"link",
-												"bulletedList",
-												"numberedList",
-												"blockQuote",
-												"|",
-												"insertTable",
-												"tableColumn",
-												"tableRow",
-												"mergeTableCells",
-												"|",
-												"undo",
-												"redo",
-											],
-											table: {
-												contentToolbar: [
-													"tableColumn",
-													"tableRow",
-													"mergeTableCells",
-												],
-											},
-										}}
-									/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<button
-					type="submit"
-					className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-				>
-					Create blog
-				</button>
-				<Link
-					to={"/"}
-					className="mx-4 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-				>
-					Preview
-				</Link>
-			</form>
-		</div>
-	);
+  const paginationModel = { page: 0, pageSize: 5 };
+
+  if (isLoading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", padding: 20 }}>
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Typography variant="h6" color="error">
+        Error loading blogs.
+      </Typography>
+    );
+  }
+
+  if (!data || !data.metadata || !Array.isArray(data.metadata)) {
+    return (
+      <Typography variant="h6" color="textSecondary">
+        No blogs available.
+      </Typography>
+    );
+  }
+
+  // Thêm thuộc tính `id` nếu dữ liệu không có sẵn
+  const rows = data.metadata.map((row: any, index: number) => ({
+    id: row._id || index, // Sử dụng _id nếu có, nếu không thì dùng index
+    ...row,
+  }));
+
+  return (
+    <>
+      <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
+        <p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
+          Danh sách tin tức
+        </p>
+      </div>
+      <div className="grid grid-cols-2 ">
+        <div className=""></div>
+        <div className="grid grid-cols-3 gap-8 my-4">
+          <form>
+            <div className="relative">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <FaMagnifyingGlass />
+              </div>
+              <input
+                type="search"
+                id="search"
+                className="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
+                placeholder="Search"
+                required
+              />
+            </div>
+          </form>
+          <Link
+            to={"/quan-tri/tin-tuc/them-moi"}
+            type="button"
+            className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
+          >
+            Thêm tin tức
+          </Link>
+        </div>
+      </div>
+
+      <Paper sx={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+          sx={{ border: 0 }}
+        />
+      </Paper>
+    </>
+  );
 };
 
 export default BlogPage;

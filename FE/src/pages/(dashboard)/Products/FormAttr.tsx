@@ -1,5 +1,3 @@
-import { Typography, Box } from "@mui/material";
-import React from "react";
 import ProductForm from "./productForm";
 
 const FormAttr = () => {

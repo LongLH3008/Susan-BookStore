@@ -2,6 +2,7 @@ import { ProductProvider } from "@/common/hooks/useProduct";
 import LayoutClient from "@/layouts/WebsiteLayout";
 import * as Website from "@/pages/(website)";
 import UserGuard from "./guards/user.guard";
+import CKEditorFullScreen from "@/pages/(dashboard)/Blogs/CreateBlog";
 
 const ClientRoutes = [
   {
@@ -26,6 +27,7 @@ const ClientRoutes = [
     ],
   },
   { path: "thanh-toan", element: <Website.Checkout /> },
+  { path: "abc", element: <CKEditorFullScreen /> },
 ];
 
 export default ClientRoutes;
