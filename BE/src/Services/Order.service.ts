@@ -142,6 +142,9 @@ class OrderService {
 
         const feeShip = output.data.service_fee + output.data.deliver_remote_areas_fee
 
+        console.log({ productsAfterDiscount })
+
+
         let payment
 
         if (paymentMethod === "COD") {
@@ -152,6 +155,7 @@ class OrderService {
                 date: new Date(),
             }
             shippingInput.cod_amount = total
+            shippingInput.payment_type_id = 2
         } else if (url && paymentMethod === "VNPAY") {
             payment = {
                 method: PaymentMethod.VNPAY,
@@ -160,7 +164,45 @@ class OrderService {
                 date: new Date(),
             }
             shippingInput.cod_amount = 0
+            shippingInput.payment_type_id = 1
+
         }
+
+        const insufficientStockProducts: any[] = [];
+        const productPromises = productsAfterDiscount.map(async (item: any) => {
+            const book = await Book.findById(item.bookId);
+
+            if (book!.stock < item.quantity) {
+                insufficientStockProducts.push({
+                    bookId: book!._id,
+                    title: book!.title,
+                    stock: book!.stock,
+                    requested: item.quantity,
+                });
+            }
+
+            return book;
+        });
+
+        const books = await Promise.all(productPromises);
+
+        if (insufficientStockProducts.length > 0) {
+            return {
+                success: false,
+                message: "Some products do not have enough stock",
+                products: insufficientStockProducts,
+            };
+        }
+
+        const bulkUpdateOperations = productsAfterDiscount.map((item: any) => ({
+            updateOne: {
+                filter: { _id: item.bookId },
+                update: { $inc: { stock: -item.quantity } },
+            },
+        }));
+
+        await Book.bulkWrite(bulkUpdateOperations);
+
 
         const newShipping = await GiaoHangNhanhService.CreateOrderGHN(shippingInput)
         const data: any = {
@@ -179,7 +221,6 @@ class OrderService {
             trackingNumber: newShipping.order_code
         }
 
-        console.log({ data })
         const newOrder = await this.createOrder(data)
 
         return newOrder
