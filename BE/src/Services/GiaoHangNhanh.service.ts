@@ -13,6 +13,9 @@ class GiaoHangNhanhService {
     static CreateOrderGHN = async (orderData: GiaoHangNhanhDto) => {
         try {
             // Gửi yêu cầu POST đến API của GHN
+            console.log({ orderData: orderData.items })
+
+
             const response = await axios.post(Locals.config().api_create_order_ghn, orderData, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -111,16 +114,16 @@ class GiaoHangNhanhService {
         const unitW: number = 453.592; // pound => gram
         try {
             // lấy danh sách sản phẩm muốn tính tiền ra 
-            const ListIdBooks = req.items.map(item => item.id);
+            const ListIdBooks = req.items.map(item => item.bookId);
             // lấy ra mảng sản phẩm 
             const ListBooks = await Book.find({ _id: { $in: ListIdBooks } })
 
             // tìm quyển sách nào có chiều tộng nhất 
             const ListWidth = ListBooks.map((book: IBookModel) => parseFloat(book.dimensions?.width as any) * unit)
-            const MaxWidth = Math.max(...ListWidth) // chiều rộng có đôh dài lớn nhất 
+            const MaxWidth = Math.max(...ListWidth) || 0// chiều rộng có đôh dài lớn nhất 
             // tìm quyển sách nào có chiều dài dài nhất 
             const ListHeight = ListBooks.map((book: IBookModel) => parseFloat(book.dimensions?.height as any) * unit)
-            const MaxHeight = Math.max(...ListHeight) // chiều dài lớn nhất 
+            const MaxHeight = Math.max(...ListHeight) || 0 // chiều dài lớn nhất 
             // cộng tổng độ dày của số sách 
             // mảng list ra dộ dày quyển sách và số lượng
             const ListThickness = ListBooks.map((book: IBookModel) => parseFloat(book.dimensions?.thickness as any) * unit)
@@ -135,16 +138,16 @@ class GiaoHangNhanhService {
                 ListItems.push({
                     name: ListBooks[i].title,
                     quantity: req.items[i].quantity,
-                    length: Math.ceil(parseFloat(ListBooks[i].dimensions?.height as any) * unit),
-                    weight: Math.ceil(parseFloat(ListBooks[i].weight?.value as any) * unitW),
-                    height: Math.ceil(ListThickness[i] * unit),
-                    width: Math.ceil(parseFloat(ListBooks[i].dimensions?.width as any) * unit)
+                    length: Math.ceil(parseFloat(ListBooks[i].dimensions?.height as any) * unit) || 10,
+                    weight: Math.ceil(parseFloat(ListBooks[i].weight?.value as any) * unitW) || 1,
+                    height: Math.ceil(ListThickness[i] * unit) || 10,
+                    width: Math.ceil(parseFloat(ListBooks[i].dimensions?.width as any) * unit) || 10
 
                 })
                 // độ dày 
-                TotalThickness += ListThickness[i] * req.items[i].quantity;
+                TotalThickness += ListThickness[i] * req.items[i].quantity || 0;
                 // khối lượng 
-                TotalWeight += (parseFloat(ListBooks[i].weight?.value as any) * unitW) * req.items[i].quantity
+                TotalWeight += (parseFloat(ListBooks[i].weight?.value as any) * unitW) * req.items[i].quantity || 0
                 // tổng tiền 
                 TotalPrice += parseFloat(ListBooks[i].price as any)
 
@@ -176,8 +179,8 @@ class GiaoHangNhanhService {
                 },
             })
             return {
-                input : body,
-                output : res.data
+                input: body,
+                output: res.data
             }
         } catch (error: any) {
             throw new BadRequestError(error)

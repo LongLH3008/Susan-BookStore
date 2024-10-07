@@ -36,6 +36,8 @@ export interface GiaoHangNhanhDto {
     pickup_time?: number,
     pick_shift?: number[]
     items: productItem[]
+    to_ward_code: string
+    to_district_id: String
 }
 
 interface productItem {
@@ -49,8 +51,7 @@ interface productItem {
     height: number
 }
 
-enum required_note 
-{
+enum required_note {
     CHOTHUHANG,
     CHOXEMHANGKHONGTHU,
     KHONGCHOXEMHANG
@@ -58,18 +59,17 @@ enum required_note
 
 
 export interface PreviewShipFee {
-    to_ward_code : string // Mã Phường xã người nhận hàng 
-    to_district_id : number // mã quận huyện người nhận hàng 
-    weight : number //khối lượng đơn hàng gram
-    length : number // chiều dài của đơn hàng 
-    width : number // chiều rộng đơn hàng 
-    height : number // chiều cao đơn hàng 
-    cod_value : number // tiền thu hộ người gửi 
-    items : Book[]
+    to_ward_code: string // Mã Phường xã người nhận hàng 
+    to_district_id: number // mã quận huyện người nhận hàng 
+    weight: number //khối lượng đơn hàng gram
+    length: number // chiều dài của đơn hàng 
+    width: number // chiều rộng đơn hàng 
+    height: number // chiều cao đơn hàng 
+    cod_value: number // tiền thu hộ người gửi 
+    items: Book[]
 }
 
-export interface Book 
-{
-    id : string,
-    quantity : number
+export interface Book {
+    bookId: string,
+    quantity: number
 }

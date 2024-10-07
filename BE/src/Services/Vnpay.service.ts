@@ -27,7 +27,7 @@ class VnpayService {
             this.cache.storeCache({
                 key: id,
                 val: JSON.stringify(orderInfo),
-                time: 60 * 60,
+                time: 60 * 60 * 60,
                 callback: () => {
                     console.log(`data ${id} da het han`)
                 }
@@ -57,6 +57,9 @@ class VnpayService {
         const paramsObject = Object.fromEntries(params.entries()) as ReturnQueryFromVNPay;
         const id = paramsObject.vnp_TxnRef
 
+
+        console.log(id)
+
         const verify = vnpay.verifyReturnUrl(paramsObject)
 
         if (!verify.isVerified) {
@@ -65,14 +68,14 @@ class VnpayService {
         if (!verify.isSuccess) {
             throw new BadRequestError('Đơn hàng thanh toán không thành công');
         }
-        const order = this.cache.getCache(id)
-        if (!order) throw new BadRequestError("Something went wrong!")
-        console.log(order)
-        //tao order tai day
-        
-        //tao xong xoa cache
+        const order = JSON.parse(this.cache.getCache(id))
+
         this.cache.delCache(id)
-        return {}
+
+        console.log({ order })
+        if (!order) throw new BadRequestError("Something went wrong!")
+
+        return { isValid: true, order }
     }
 
 

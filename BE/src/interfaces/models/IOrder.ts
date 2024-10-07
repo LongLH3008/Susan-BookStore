@@ -6,6 +6,7 @@ export enum OrderState {
 
 export interface IOrderProduct {
     bookId: mongoose.Types.ObjectId | string;
+    name:string
     title: string;
     quantity: number;
     price: number;
@@ -15,6 +16,11 @@ export interface IOrderProduct {
     total: number;
     discount_code?: string;
     discountAmountVoucher: number;
+    weight?: number;
+    height?: number;
+    width?: number;
+    length?: number
+    isbn?: string;
 }
 export interface IOrderShipping {
     street: string;
@@ -31,9 +37,8 @@ export interface IOrderPayment {
     date: Date;
 }
 export enum PaymentMethod {
-    CreditCard = "credit_card",
-    PayPal = "paypal",
-    Other = "other",
+    VNPAY = "VNPAY",
+    COD = "COD",
 }
 
 export enum PaymentStatus {

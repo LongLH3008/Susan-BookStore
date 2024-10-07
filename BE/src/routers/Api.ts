@@ -132,6 +132,8 @@ router.post("/upload/delete", asyncHandler(UploadController.delete));
 //checkoutAmount 
 
 router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview))
+router.post("/orders/checkout", asyncHandler(OrderController.handleCreateOrder))
+
 
 // giao hàng nhanh 
 router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest))

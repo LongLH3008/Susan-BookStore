@@ -11,6 +11,14 @@ class OrderController {
         }).send(res);
     }
 
+    static async handleCreateOrder(req: Request, res: Response): Promise<any> {
+
+        return new SuccessResponse({
+            message: "Review added successfully",
+            metadata: await OrderService.handleCreateOrder(req.body)
+        }).send(res);
+    }
+
 
 }
 

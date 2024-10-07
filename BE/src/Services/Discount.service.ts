@@ -22,6 +22,11 @@ interface BookItem {
     discount: number;
     title: string;
     code?: string;
+    weight?: number;
+    height?: number;
+    width?: number;
+    length?: number
+    isbn?: string;
 }
 
 export interface DiscountInput {
@@ -166,7 +171,7 @@ class DiscountService {
     static async getDiscountAmount2(data: DiscountInput) {
 
 
-
+        console.log("run in getDiscountAmount")
         const { products, userId } = data;
 
         let subtotal = products.reduce((acc: number, cur: BookItem) => {
@@ -178,7 +183,7 @@ class DiscountService {
 
         let discountAmountVoucher = 0;
 
-        const productsAfterDiscount: IOrderProduct[] = []
+        let productsAfterDiscount: IOrderProduct[] = []
 
         // const discountCache: { [code: string]: any } = {};
 
@@ -193,92 +198,140 @@ class DiscountService {
             // total
             // subtotal
             // title
+
             const { code } = product;
             const productAfterDiscount = { ...product, discountAmount: 0, discountAmountVoucher: 0, total: 0, subtotal: 0, title: product.title };
-            if (!code) continue;
+            if (!code) {
+                productAfterDiscount.subtotal = product.product_price * product.quantity;
+                productAfterDiscount.discountAmount = product.product_price * product.quantity * product.discount / 100
+                productAfterDiscount.total = productAfterDiscount.subtotal - productAfterDiscount.discountAmount;
+
+                productsAfterDiscount.push({
+                    bookId: product.product_id,
+                    title: product.title,
+                    name: product.title,
+                    quantity: product.quantity,
+                    price: product.product_price,
+                    discount: product.discount,
+                    discountAmountVoucher: productAfterDiscount.discountAmountVoucher,
+                    discountAmount: productAfterDiscount.discountAmount,
+                    total: productAfterDiscount.total,
+                    subtotal: productAfterDiscount.subtotal,
+                    isbn: product.isbn,
+                    length: product.length ? Math.round(product.length) : 0,
+                    width: product.width ? Math.round(product.width) : 0,
+                    weight: product.weight ? Math.round(product.weight) : 0,
+                    height: product.height ? Math.round(product.height) : 0
+
+                });
+            } else {
+                let foundDiscount = await Discount.findOne({ discount_code: code });
+                if (!foundDiscount) throw new BadRequestError("Mã giảm giá không tồn tại");
+                //     discountCache[code] = foundDiscount;
+                // }
+
+
+                const {
+                    discount_is_active,
+                    discount_start_date,
+                    discount_end_date,
+                    discount_min_order_value,
+                    discount_max_use_per_user,
+                    discount_value,
+                    discount_applies_to,
+                    discount_category_ids,
+                    discount_product_ids,
+                    discount_type,
+                    discount_stock,
+                } = foundDiscount;
+
+                if (!discount_is_active) throw new BadRequestError("Mã giảm giá không còn hoạt động");
+                if (!discount_stock) throw new BadRequestError("Mã giảm giá đã hết lượt sử dụng");
+                if (new Date() < new Date(discount_start_date) || new Date() > new Date(discount_end_date)) {
+                    throw new BadRequestError("Mã giảm giá đã hết hạn");
+                }
+
+                if (discount_min_order_value > 0 && subtotal < discount_min_order_value) {
+                    throw new BadRequestError("Giá trị đơn hàng chưa đủ để áp dụng mã giảm giá");
+                }
+
+                if (discount_max_use_per_user > 0) {
+                    const foundUser = await Discount.countDocuments({
+                        discount_code: code,
+                        discount_users_used: userId,
+                    });
+                    if (foundUser >= discount_max_use_per_user) {
+                        throw new BadRequestError("Bạn đã sử dụng hết số lần cho phép của mã giảm giá này");
+                    }
+                }
+
+                const foundBook = await Book.findById(product.product_id).lean();
+                if (!foundBook) throw new ResourceNotFoundError("Sách không tồn tại");
+
+                if (discount_applies_to === DiscountApplyTo.all) {
+                    const discountValue = discount_type === DiscountType.fix_amount
+                        ? discount_value
+                        : (discount_value * product.product_price * product.quantity) / 100;
+                    discountAmountVoucher += discountValue;
+                    productAfterDiscount.discountAmountVoucher = discountValue;
+
+                } else if (discount_applies_to === DiscountApplyTo.specific && discount_product_ids.includes(product.product_id)) {
+                    const discountValue = discount_type === DiscountType.fix_amount
+                        ? discount_value
+                        : (discount_value * product.product_price * product.quantity) / 100;
+                    discountAmountVoucher += discountValue;
+                    productAfterDiscount.discountAmountVoucher = discountValue;
+                } else if (discount_applies_to === DiscountApplyTo.category && foundBook.categories.some((category: string) => discount_category_ids.includes(category))) {
+                    const discountValue = discount_type === DiscountType.fix_amount
+                        ? discount_value
+                        : (discount_value * product.product_price * product.quantity) / 100;
+                    discountAmountVoucher += discountValue;
+                    productAfterDiscount.discountAmountVoucher = discountValue;
+                }
+
+                // discountCache[code].discount_users_used.push(userId);
+                // discountCache[code].discount_stock = discount_stock - 1;
+
+
+                // name: string, //*
+                // code: string, //*
+                // quantity: number, //*
+                // price: number,
+                // length: number,
+                // width: number,
+                // weight: number,
+                // height: number
+
+
+                productAfterDiscount.subtotal = product.product_price * product.quantity;
+                productAfterDiscount.discountAmount = product.product_price * product.quantity * product.discount / 100
+                productAfterDiscount.total = productAfterDiscount.subtotal - productAfterDiscount.discountAmount - productAfterDiscount.discountAmountVoucher;
+
+                productsAfterDiscount.push({
+                    bookId: product.product_id,
+                    title: product.title,
+                    name: product.title,
+                    quantity: product.quantity,
+                    price: product.product_price,
+                    discount: product.discount,
+                    discountAmountVoucher: productAfterDiscount.discountAmountVoucher,
+                    discountAmount: productAfterDiscount.discountAmount,
+                    total: productAfterDiscount.total,
+                    subtotal: productAfterDiscount.subtotal,
+                    isbn: product.isbn,
+                    length: product.length ? Math.round(product.length) : 0,
+                    width: product.width ? Math.round(product.width) : 0,
+                    weight: product.weight ? Math.round(product.weight) : 0,
+                    height: product.height ? Math.round(product.height) : 0
+
+                });
+            }
+
 
             // let foundDiscount = discountCache[code];
             // if (!foundDiscount) {
-            let foundDiscount = await Discount.findOne({ discount_code: code });
-            if (!foundDiscount) throw new BadRequestError("Mã giảm giá không tồn tại");
-            //     discountCache[code] = foundDiscount;
-            // }
 
-            const {
-                discount_is_active,
-                discount_start_date,
-                discount_end_date,
-                discount_min_order_value,
-                discount_max_use_per_user,
-                discount_value,
-                discount_applies_to,
-                discount_category_ids,
-                discount_product_ids,
-                discount_type,
-                discount_stock,
-            } = foundDiscount;
 
-            if (!discount_is_active) throw new BadRequestError("Mã giảm giá không còn hoạt động");
-            if (!discount_stock) throw new BadRequestError("Mã giảm giá đã hết lượt sử dụng");
-            if (new Date() < new Date(discount_start_date) || new Date() > new Date(discount_end_date)) {
-                throw new BadRequestError("Mã giảm giá đã hết hạn");
-            }
-
-            if (discount_min_order_value > 0 && subtotal < discount_min_order_value) {
-                throw new BadRequestError("Giá trị đơn hàng chưa đủ để áp dụng mã giảm giá");
-            }
-
-            if (discount_max_use_per_user > 0) {
-                const foundUser = await Discount.countDocuments({
-                    discount_code: code,
-                    discount_users_used: userId,
-                });
-                if (foundUser >= discount_max_use_per_user) {
-                    throw new BadRequestError("Bạn đã sử dụng hết số lần cho phép của mã giảm giá này");
-                }
-            }
-
-            const foundBook = await Book.findById(product.product_id).lean();
-            if (!foundBook) throw new ResourceNotFoundError("Sách không tồn tại");
-
-            if (discount_applies_to === DiscountApplyTo.all) {
-                const discountValue = discount_type === DiscountType.fix_amount
-                    ? discount_value
-                    : (discount_value * product.product_price * product.quantity) / 100;
-                discountAmountVoucher += discountValue;
-                productAfterDiscount.discountAmountVoucher = discountValue;
-
-            } else if (discount_applies_to === DiscountApplyTo.specific && discount_product_ids.includes(product.product_id)) {
-                const discountValue = discount_type === DiscountType.fix_amount
-                    ? discount_value
-                    : (discount_value * product.product_price * product.quantity) / 100;
-                discountAmountVoucher += discountValue;
-                productAfterDiscount.discountAmountVoucher = discountValue;
-            } else if (discount_applies_to === DiscountApplyTo.category && foundBook.categories.some((category: string) => discount_category_ids.includes(category))) {
-                const discountValue = discount_type === DiscountType.fix_amount
-                    ? discount_value
-                    : (discount_value * product.product_price * product.quantity) / 100;
-                discountAmountVoucher += discountValue;
-                productAfterDiscount.discountAmountVoucher = discountValue;
-            }
-
-            // discountCache[code].discount_users_used.push(userId);
-            // discountCache[code].discount_stock = discount_stock - 1;
-
-            productAfterDiscount.subtotal = product.product_price * product.quantity;
-            productAfterDiscount.discountAmount = product.product_price * product.quantity * product.discount / 100
-            productAfterDiscount.total = productAfterDiscount.subtotal - productAfterDiscount.discountAmount - productAfterDiscount.discountAmountVoucher;
-            productsAfterDiscount.push({
-                bookId: product.product_id,
-                title: product.title,
-                quantity: product.quantity,
-                price: product.product_price,
-                discount: product.discount,
-                discountAmountVoucher: productAfterDiscount.discountAmountVoucher,
-                discountAmount: productAfterDiscount.discountAmount,
-                total: productAfterDiscount.total,
-                subtotal: productAfterDiscount.subtotal,
-            });
         }
 
         // await Discount.bulkWrite(Object.values(discountCache).map((discount: any) => ({
@@ -290,6 +343,7 @@ class DiscountService {
         //         },
         //     },
         // })));
+
 
         return {
             productsAfterDiscount,
