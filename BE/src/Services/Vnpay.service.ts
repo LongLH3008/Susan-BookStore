@@ -5,6 +5,7 @@ import { BadRequestError } from '../cores/error.response';
 import { CreateOrderInputDTO } from './dtos/Order.dto';
 import Cache from '../providers/Cache';
 import { vnpay } from '../configs/Vnpay.config';
+import OrderService from './Order.service';
 
 class VnpayService {
 
@@ -18,6 +19,13 @@ class VnpayService {
         return bankList
     }
     public async creatPaymentUrl({ ip, amount, bankCode, orderInfo }: { ip: string, amount: number, bankCode: string, orderInfo: Partial<CreateOrderInputDTO> }) {
+
+        const products = orderInfo.products
+
+        if (products) {
+            await OrderService.checkStock(products as any)
+        }
+
         const expiredTime = new Date();
         expiredTime.setHours(expiredTime.getHours() + 1);
         const id = uuidv4()

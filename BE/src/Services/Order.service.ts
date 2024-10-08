@@ -142,40 +142,9 @@ class OrderService {
     }
 
 
-    static async createOrderByType({ output, paymentMethod, shippingInput, total, userId, customerInfo, productsAfterDiscount, url }: any) {
-
-        const feeShip = output.data.service_fee + output.data.deliver_remote_areas_fee
-
-        // console.log({ productsAfterDiscount })
-
-
-        let payment
-
-        console.log({paymentMethod,url})
-
-        if (paymentMethod === "COD") {
-            payment = {
-                method: PaymentMethod.COD,
-                amount: feeShip + total,
-                status: PaymentStatus.Processed,
-                date: new Date(),
-            }
-            shippingInput.cod_amount = total
-            shippingInput.payment_type_id = 2
-        } else if (url && (paymentMethod === "VNPAY")) {
-            payment = {
-                method: PaymentMethod.VNPAY,
-                amount: feeShip + total,
-                status: PaymentStatus.Processed,
-                date: new Date(),
-            }
-            shippingInput.cod_amount = 0
-            shippingInput.payment_type_id = 1
-
-        }
-
+    static async checkStock(products: { bookId: string }[]) {
         const insufficientStockProducts: any[] = [];
-        const productPromises = productsAfterDiscount.map(async (item: any) => {
+        const productPromises = products.map(async (item: any) => {
             const book = await Book.findById(item.bookId);
 
             if (book!.stock < item.quantity) {
@@ -199,6 +168,44 @@ class OrderService {
                 products: insufficientStockProducts,
             };
         }
+
+    }
+
+
+    static async createOrderByType({ output, paymentMethod, shippingInput, total, userId, customerInfo, productsAfterDiscount, url }: any) {
+
+        const feeShip = output.data.service_fee + output.data.deliver_remote_areas_fee
+
+        // console.log({ productsAfterDiscount })
+
+
+        let payment
+
+        console.log({ paymentMethod, url })
+
+        if (paymentMethod === "COD") {
+            payment = {
+                method: PaymentMethod.COD,
+                amount: feeShip + total,
+                status: PaymentStatus.Processed,
+                date: new Date(),
+            }
+            shippingInput.cod_amount = total
+            shippingInput.payment_type_id = 2
+        } else if (url && (paymentMethod === "VNPAY")) {
+            payment = {
+                method: PaymentMethod.VNPAY,
+                amount: feeShip + total,
+                status: PaymentStatus.Processed,
+                date: new Date(),
+            }
+            shippingInput.cod_amount = 0
+            shippingInput.payment_type_id = 1
+
+        }
+
+        await this.checkStock(productsAfterDiscount)
+
 
         const bulkUpdateOperations = productsAfterDiscount.map((item: any) => ({
             updateOne: {
@@ -248,6 +255,7 @@ class OrderService {
 
         if (paymentMethod === "VNPAY" && url) {
             const { isValid, order } = await vnpayService.verifyUrl(url)
+
             if (!isValid) {
 
                 throw new BadRequestError("Something went wrongs!")
