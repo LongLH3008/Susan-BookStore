@@ -133,7 +133,7 @@
  *                   phone:
  *                     type: string
  *                     description: Customer phone number
- *                     example: 0944444444
+ *                     example: "0944444444"
  *                   address:
  *                     type: string
  *                     description: Customer address

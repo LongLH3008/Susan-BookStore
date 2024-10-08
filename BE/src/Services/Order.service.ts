@@ -7,6 +7,7 @@ import DiscountService, { DiscountInput } from "./Discount.service";
 import { CheckoutReviewInputDTO, CreateOrderInputDTO, IOrderItem } from "./dtos/Order.dto";
 import GiaoHangNhanhService from "./GiaoHangNhanh.service";
 import { vnpayService } from "./Vnpay.service";
+import { v4 as uuidv4 } from 'uuid';
 
 
 type PaymentMethodInput = "COD" | "VNPAY"
@@ -91,13 +92,12 @@ class OrderService {
     ) {
 
         const { total, productsAfterDiscount } = await OrderService.checkOutReview({ userId, products })
-
         const shippingInput: any = {
-            payment_type_id: 1,
+            payment_type_id: 2,
             required_note: "KHONGCHOXEMHANG", // *
             return_district_id: 1717, // 
             return_ward_code: "220216",
-            client_order_code: "order-code",
+            client_order_code: "",
             from_name: "Susan shop", // tên người gủi 
             from_phone: "0999999999", // sdt người gửi 
             to_name: customerInfo.name, // tên ngườu nhận hàng *
@@ -111,11 +111,11 @@ class OrderService {
             length: 9999, // chiều dài đơn hàng (cm) max: 200*
             width: 9999,  // chiều rộng đơn hàng (cm) max 200*
             height: 9999, // chiều cao đơn hàng (cm) max 200*
-            service_id: 5, // 2: chuyển phát thương mại, 5 chuyển phát truyền thống *
+            service_id: 0, // 2: chuyển phát thương mại, 5 chuyển phát truyền thống *
             items: productsAfterDiscount,
             to_ward_code: customerInfo.wardCode,
             to_district_id: customerInfo.districtId,
-            service_type_id: 2,
+            service_type_id: 5,
             from_address: "Kim dong ",
             from_ward_name: "Xã Vĩnh Xá",
             from_district_name: "Huyện Kim Động",
@@ -123,6 +123,8 @@ class OrderService {
             return_phone: "0944444444",
 
         }
+
+
 
         const { output, input } = await GiaoHangNhanhService.FeeTotal(shippingInput)
 
@@ -142,7 +144,7 @@ class OrderService {
 
         const feeShip = output.data.service_fee + output.data.deliver_remote_areas_fee
 
-        console.log({ productsAfterDiscount })
+        // console.log({ productsAfterDiscount })
 
 
         let payment
@@ -203,6 +205,8 @@ class OrderService {
 
         await Book.bulkWrite(bulkUpdateOperations);
 
+
+        console.log({ shippingInput: shippingInput })
 
         const newShipping = await GiaoHangNhanhService.CreateOrderGHN(shippingInput)
         const data: any = {
