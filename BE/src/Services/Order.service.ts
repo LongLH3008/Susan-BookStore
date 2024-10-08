@@ -31,6 +31,8 @@ class OrderService {
         if (!user) {
             throw new ResourceNotFoundError("User not found");
         }
+
+
         const productPromises = products.map((book: IOrderItem) =>
             Book.findById(book.bookId)
         );
@@ -149,19 +151,21 @@ class OrderService {
 
         let payment
 
+        console.log({paymentMethod,url})
+
         if (paymentMethod === "COD") {
             payment = {
                 method: PaymentMethod.COD,
-                amount: feeShip,
+                amount: feeShip + total,
                 status: PaymentStatus.Processed,
                 date: new Date(),
             }
             shippingInput.cod_amount = total
             shippingInput.payment_type_id = 2
-        } else if (url && paymentMethod === "VNPAY") {
+        } else if (url && (paymentMethod === "VNPAY")) {
             payment = {
                 method: PaymentMethod.VNPAY,
-                amount: feeShip,
+                amount: feeShip + total,
                 status: PaymentStatus.Processed,
                 date: new Date(),
             }
@@ -250,6 +254,8 @@ class OrderService {
             }
 
             const { paymentMethod, userId, customerInfo, products } = order
+
+            console.log({ order })
 
             const { shippingInput, output, total, productsAfterDiscount } = await this.prepareOrderInput({ userId, customerInfo, products })
 
