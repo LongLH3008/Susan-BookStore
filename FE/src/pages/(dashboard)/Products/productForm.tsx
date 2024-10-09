@@ -232,135 +232,127 @@ const ProductForm: React.FC = () => {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
         autoComplete="off"
-        p={2}
+        p={3}
+        bgcolor="background.paper"
+        borderRadius={2}
+        boxShadow={3}
       >
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
           <FormControl fullWidth>
             <FormLabel>Tiêu đề</FormLabel>
             <TextField
               {...register("title", { required: "Tiêu đề là bắt buộc" })}
               error={!!errors?.title}
               helperText={errors?.title && errors.title.message}
-              margin="dense"
+              size="small"
             />
           </FormControl>
           <FormControl fullWidth>
             <FormLabel>Tác giả</FormLabel>
             <TextField
+              size="small"
               {...register("author", { required: "Tác giả là bắt buộc" })}
               error={!!errors?.author}
               helperText={errors?.author && errors.author.message}
-              margin="dense"
             />
           </FormControl>
           <FormControl fullWidth>
             <FormLabel>ISBN</FormLabel>
             <TextField
+              size="small"
               {...register("isbn", { required: "ISBN là bắt buộc" })}
               error={!!errors?.isbn}
               helperText={errors?.isbn && errors.isbn.message}
-              margin="dense"
             />
           </FormControl>
         </Box>
 
-        <FormControl fullWidth margin="dense">
-          <FormLabel>Mô tả</FormLabel>
-          <TextField
-            {...register("description", { required: "Mô tả là bắt buộc" })}
-            error={!!errors?.description}
-            helperText={errors?.description && errors.description.message}
-            multiline
-            rows={3}
-            margin="dense"
-          />
-        </FormControl>
-
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
           <FormControl fullWidth>
             <FormLabel>Giá</FormLabel>
             <TextField
+              size="small"
               {...register("price", { required: "Giá là bắt buộc" })}
               type="number"
               error={!!errors?.price}
               helperText={errors?.price && errors.price.message}
-              margin="dense"
             />
           </FormControl>
           <FormControl fullWidth>
             <FormLabel>Giảm giá</FormLabel>
             <TextField
+              size="small"
               {...register("discount", {
                 required: "Giảm giá là bắt buộc",
               })}
               type="number"
               error={!!errors?.discount}
               helperText={errors?.discount && errors.discount.message}
-              margin="dense"
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <FormLabel>Danh mục</FormLabel>
+            <Controller
+              name="categories"
+              control={control}
+              defaultValue={[]} // Đặt giá trị mặc định là mảng rỗng
+              rules={{ required: "Danh mục là bắt buộc" }} // Validation: bắt buộc phải chọn
+              render={({ field }) => (
+                <Autocomplete
+                  multiple
+                  options={options} // Các danh mục
+                  getOptionLabel={(option) => option.label} // Hiển thị tên của mỗi danh mục
+                  value={options.filter((option: any) =>
+                    field.value.includes(option.id)
+                  )}
+                  onChange={(_, newValue) => {
+                    const selectedIds = newValue.map((option) => option.id);
+                    field.onChange(selectedIds); // Cập nhật giá trị vào React Hook Form
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Chọn danh mục"
+                      placeholder="Tìm kiếm..."
+                      size="small"
+                      error={!!errors.categories}
+                      helperText={errors.categories?.message}
+                    />
+                  )}
+                />
+              )}
             />
           </FormControl>
         </Box>
 
-        <FormControl fullWidth margin="dense">
-          <Controller
-            name="categories"
-            control={control}
-            defaultValue={[]} // Đặt giá trị mặc định là mảng rỗng
-            rules={{ required: "Danh mục là bắt buộc" }} // Validation: bắt buộc phải chọn
-            render={({ field }) => (
-              <Autocomplete
-                multiple
-                options={options} // Các danh mục
-                getOptionLabel={(option) => option.label} // Hiển thị tên của mỗi danh mục
-                value={options.filter((option: any) =>
-                  field.value.includes(option.id)
-                )}
-                onChange={(_, newValue) => {
-                  const selectedIds = newValue.map((option) => option.id);
-                  field.onChange(selectedIds); // Cập nhật giá trị vào React Hook Form
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    variant="outlined"
-                    label="Chọn danh mục"
-                    placeholder="Tìm kiếm..."
-                    error={!!errors.categories}
-                    helperText={errors.categories?.message}
-                  />
-                )}
-              />
-            )}
-          />
-        </FormControl>
-
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
           <FormControl fullWidth>
             <FormLabel>Nhà xuất bản</FormLabel>
             <TextField
+              size="small"
               {...register("publisher", {
                 required: "Nhà xuất bản là bắt buộc",
               })}
               error={!!errors?.publisher}
               helperText={errors?.publisher && errors.publisher.message}
-              margin="dense"
             />
           </FormControl>
           <FormControl fullWidth>
             <FormLabel>Ngày xuất bản</FormLabel>
             <TextField
+              size="small"
               {...register("publicationDate", {
                 required: "Ngày xuất bản là bắt buộc",
               })}
               type="date"
               error={!!errors?.publicationDate}
               helperText={errors?.publicationDate?.message}
-              margin="dense"
             />
           </FormControl>
         </Box>
 
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
           <FormControl fullWidth>
             <FormLabel>Thẻ</FormLabel>
             <Controller
@@ -369,7 +361,7 @@ const ProductForm: React.FC = () => {
               render={({ field }) => (
                 <TextField
                   fullWidth
-                  margin="dense"
+                  size="small"
                   value={field?.value?.join(", ")}
                   onChange={(e) => {
                     const tagsArray = e.target.value
@@ -389,9 +381,9 @@ const ProductForm: React.FC = () => {
               {...register("language", {
                 required: "Ngôn ngữ là bắt buộc",
               })}
+              size="small"
               error={!!errors?.language}
               helperText={errors?.language && errors.language.message}
-              margin="dense"
             />
           </FormControl>
 
@@ -401,86 +393,114 @@ const ProductForm: React.FC = () => {
               {...register("numberOfPages", {
                 required: "Số trang là bắt buộc",
               })}
+              size="small"
               type="number"
               error={!!errors?.numberOfPages}
               helperText={errors?.numberOfPages && errors.numberOfPages.message}
-              margin="dense"
             />
           </FormControl>
         </Box>
-
-        <FormControl fullWidth margin="dense">
-          <Controller
-            name="format"
-            control={control}
-            defaultValue=""
-            rules={{ required: "Định dạng sách là bắt buộc" }}
-            render={({ field }) => (
-              <Autocomplete
-                {...field}
-                options={formats}
-                getOptionLabel={(option) => option.label}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Chọn định dạng sách"
-                    placeholder="Tìm kiếm..."
-                    error={!!errors.format}
-                    helperText={errors.format?.message}
-                  />
-                )}
-                onChange={(_, value) => field.onChange(value?.label)}
-                value={
-                  formats.find((option) => option.label === field.value) || null
-                }
-              />
-            )}
-          />
-        </FormControl>
+        <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
+          <FormControl fullWidth>
+            <FormLabel>Định dạng sách</FormLabel>
+            <Controller
+              name="format"
+              control={control}
+              defaultValue=""
+              rules={{ required: "Định dạng sách là bắt buộc" }}
+              render={({ field }) => (
+                <Autocomplete
+                  {...field}
+                  options={formats}
+                  getOptionLabel={(option) => option.label}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      size="small"
+                      label="Chọn định dạng sách"
+                      placeholder="Tìm kiếm..."
+                      error={!!errors.format}
+                      helperText={errors.format?.message}
+                    />
+                  )}
+                  onChange={(_, value) => field.onChange(value?.label)}
+                  value={
+                    formats.find((option) => option.label === field.value) ||
+                    null
+                  }
+                />
+              )}
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <FormLabel>Link ebook demo</FormLabel>
+            <TextField
+              {...register("ebookDemoLink", {
+                required: "Link ebook demo là bắt buộc", // Validation
+              })}
+              size="small"
+              error={!!errors?.ebookDemoLink}
+              helperText={errors?.ebookDemoLink && errors.ebookDemoLink.message}
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <FormLabel>Số lượng tồn kho</FormLabel>
+            <TextField
+              {...register("stock", {
+                required: "Số lượng tồn kho là bắt buộc",
+              })}
+              size="small"
+              type="number"
+              error={!!errors?.stock}
+              helperText={errors?.stock && errors.stock.message}
+            />
+          </FormControl>
+        </Box>
         <FormControl fullWidth>
-          <FormLabel>Link ebook demo</FormLabel>
+          <FormLabel>Mô tả</FormLabel>
           <TextField
-            {...register("ebookDemoLink", {
-              required: "Link ebook demo là bắt buộc", // Validation
-            })}
-            error={!!errors?.ebookDemoLink}
-            helperText={errors?.ebookDemoLink && errors.ebookDemoLink.message}
-            margin="dense"
-          />
-        </FormControl>
-        <FormControl fullWidth>
-          <FormLabel>Số lượng tồn kho</FormLabel>
-          <TextField
-            {...register("stock", {
-              required: "Số lượng tồn kho là bắt buộc",
-            })}
-            type="number"
-            error={!!errors?.stock}
-            helperText={errors?.stock && errors.stock.message}
-            margin="dense"
+            size="small"
+            {...register("description", { required: "Mô tả là bắt buộc" })}
+            error={!!errors?.description}
+            helperText={errors?.description && errors.description.message}
+            multiline
+            rows={3}
           />
         </FormControl>
         <Box mt={2}>
           <h3>Ảnh đại diện</h3>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleCoverImageChange}
-          />
-          {previewCoverImage && (
-            <img src={previewCoverImage} alt="Cover Preview" width="200" />
-          )}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleCoverImageChange}
+            />
+            {previewCoverImage && (
+              <img
+                src={previewCoverImage}
+                alt="Cover Preview"
+                style={{ maxWidth: "200px", borderRadius: "8px" }}
+              />
+            )}
+          </Box>
 
           <h3>Mảng hình ảnh</h3>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleProductImagesChange}
-          />
-          {previewImages.map((src, idx) => (
-            <img key={idx} src={src} alt={`Preview ${idx}`} width="200" />
-          ))}
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleProductImagesChange}
+            />
+            {previewImages.map((src, idx) => (
+              <img
+                key={idx}
+                src={src}
+                alt={`Preview ${idx}`}
+                style={{ maxWidth: "200px", borderRadius: "8px" }}
+              />
+            ))}
+          </Box>
         </Box>
 
         <Box mt={2}>

@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 interface SearchFormProps {
   onSearch: (searchTerm: string) => void;
   initialSearchTerm?: string;
-  linkAdd: string; // Prop cho link thêm mới
+  linkAdd?: string;
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({
   onSearch,
   initialSearchTerm = "",
-  linkAdd, // Nhận link từ props
+  linkAdd,
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
 
@@ -51,15 +51,17 @@ const SearchForm: React.FC<SearchFormProps> = ({
         >
           Tìm kiếm
         </Button>
-        <Link to={linkAdd} style={{ textDecoration: "none" }}>
-          <Button
-            variant="contained"
-            color="primary"
-            className="ml-2 h-10 dark:text-white"
-          >
-            Thêm mới
-          </Button>
-        </Link>
+        {linkAdd && (
+          <Link to={linkAdd} style={{ textDecoration: "none" }}>
+            <Button
+              variant="contained"
+              color="primary"
+              className="ml-2 h-10 dark:text-white"
+            >
+              Thêm mới
+            </Button>
+          </Link>
+        )}
       </div>
     </form>
   );

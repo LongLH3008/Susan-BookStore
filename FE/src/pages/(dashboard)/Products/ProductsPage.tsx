@@ -27,7 +27,6 @@ const ProductsPage: React.FC = () => {
   const { toast } = useToast();
   const [search, setSearch] = useState<string>("");
   const [confirmOpen, setConfirmOpen] = useState(false);
-  // State lưu sản phẩm được chọn và trạng thái mở/đóng của modal chi tiết sản phẩm
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [open, setOpen] = useState(false);
 
@@ -65,12 +64,12 @@ const ProductsPage: React.FC = () => {
 
   const onDelete = (product: any) => {
     setSelectedProduct(product);
-    setConfirmOpen(true); // Mở modal xác nhận xóa
+    setConfirmOpen(true);
   };
 
   const confirmDelete = async () => {
     if (selectedProduct) {
-      await mutateAsync(selectedProduct._id); // Gọi hàm xóa sản phẩm
+      await mutateAsync(selectedProduct._id);
     }
   };
   const onEdit = (id: string) => {
@@ -92,22 +91,26 @@ const ProductsPage: React.FC = () => {
       {
         headerName: "Tên sản phẩm",
         field: "title",
+        width: 300,
       },
       {
         headerName: "Giá sản phẩm",
         field: "price",
+        width: 300,
       },
       {
         headerName: "Tác giả",
         field: "author",
+        width: 300,
       },
       {
         headerName: "Ảnh đại diện",
         field: "coverImage",
-        cellRenderer: (row: any) => (
+        width: 300,
+        renderCell: (params: any) => (
           <img
-            src={row.coverImage}
-            alt={row.coverImage}
+            src={params.row.coverImage}
+            alt={params.row.coverImage}
             style={{ width: "50px", height: "50px" }}
           />
         ),
@@ -116,16 +119,17 @@ const ProductsPage: React.FC = () => {
         headerName: "Thao tác",
         field: "actions",
         width: "110px",
-        cellRenderer: (row: any) => (
+        width: 300,
+        renderCell: (params: any) => (
           <>
             <Tooltip title="Chỉnh sửa">
-              <EditIcon onClick={() => onEdit(row._id)} />
+              <EditIcon onClick={() => onEdit(params.row._id)} />
             </Tooltip>
             <Tooltip title="Hiển thị chi tiết">
-              <InfoIcon onClick={() => onShowDetail(row)} />
+              <InfoIcon onClick={() => onShowDetail(params.row)} />
             </Tooltip>
             <Tooltip title="Xóa">
-              <DeleteIcon onClick={() => onDelete(row)} />
+              <DeleteIcon onClick={() => onDelete(params.row)} />
             </Tooltip>
           </>
         ),
@@ -152,7 +156,7 @@ const ProductsPage: React.FC = () => {
         rows={data?.metadata?.books || []}
         columns={columns}
         limit={limit}
-        count={data?.total || 0}
+        count={data?.metadata?.total || 0}
         page={page}
         loading={isLoading}
         error={isError ? error?.message : ""}

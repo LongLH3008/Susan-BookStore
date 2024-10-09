@@ -1,17 +1,6 @@
 import React from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  CircularProgress,
-  Button,
-  Typography,
-  TextField,
-} from "@mui/material";
+import { Paper, CircularProgress, Typography } from "@mui/material";
+import { DataGrid, GridPaginationModel, GridSortModel } from "@mui/x-data-grid";
 
 interface MyTable2Props {
   rows: any[];
@@ -38,6 +27,35 @@ const MyTable2: React.FC<MyTable2Props> = ({
   onNextPage,
   onChangeLimit,
 }) => {
+  const [paginationModel, setPaginationModel] =
+    React.useState<GridPaginationModel>({
+      page: page - 1, // Chuyển từ 1-based sang 0-based để tương thích với DataGrid
+      pageSize: limit,
+    });
+
+  React.useEffect(() => {
+    setPaginationModel((prev) => ({
+      ...prev,
+      page: page - 1,
+      pageSize: limit,
+    }));
+  }, [page, limit]);
+
+  const handlePaginationChange = (newModel: GridPaginationModel) => {
+    if (newModel.pageSize !== limit) {
+      onChangeLimit(newModel.pageSize);
+    }
+    if (newModel.page + 1 !== page) {
+      if (newModel.page + 1 > page) {
+        onNextPage();
+      } else {
+        onBackPage();
+      }
+    }
+  };
+
+  const [sortModel, setSortModel] = React.useState<GridSortModel>([]);
+
   if (loading) {
     return (
       <div
@@ -60,70 +78,24 @@ const MyTable2: React.FC<MyTable2Props> = ({
 
   return (
     <Paper className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100">
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead className="bg-gray-100 dark:bg-gray-700">
-            <TableRow>
-              {columns?.map((column) => (
-                <TableCell
-                  key={column.field}
-                  style={{ width: column.width }}
-                  className="text-gray-900 dark:text-gray-100"
-                >
-                  {column.headerName}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows?.map((row, index) => (
-              <TableRow
-                key={row._id}
-                className="bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                {columns?.map((column) => (
-                  <TableCell
-                    key={column.field}
-                    className="text-gray-900 dark:text-gray-100"
-                  >
-                    {column.cellRenderer
-                      ? column.cellRenderer(row)
-                      : row[column.field]}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <div className="flex justify-between p-2 bg-gray-100 dark:bg-gray-700">
-          <Button
-            disabled={page === 1}
-            onClick={onBackPage}
-            className="text-gray-900 dark:text-gray-100"
-          >
-            Previous
-          </Button>
-          <span>
-            Page {page} of {Math.ceil(count / limit)}
-          </span>
-          <Button
-            disabled={rows.length < limit}
-            onClick={onNextPage}
-            className="text-gray-900 dark:text-gray-100"
-          >
-            Next
-          </Button>
-          <select
-            value={limit}
-            onChange={(e) => onChangeLimit(parseInt(e.target.value))}
-            className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-600"
-          >
-            <option value={5}>5</option>
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-          </select>
-        </div>
-      </TableContainer>
+      <div style={{ height: 400, width: "100%" }}>
+        <DataGrid
+          columns={columns}
+          rows={rows}
+          pagination
+          paginationModel={paginationModel}
+          pageSizeOptions={[5, 10, 20]}
+          rowCount={count}
+          paginationMode="server"
+          getRowId={(row) => row?._id || row?.id}
+          sortModel={sortModel}
+          checkboxSelection
+          sx={{ border: 0 }}
+          onSortModelChange={(newSortModel) => setSortModel(newSortModel)}
+          onPaginationModelChange={handlePaginationChange}
+          loading={loading}
+        />
+      </div>
     </Paper>
   );
 };

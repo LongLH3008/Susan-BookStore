@@ -114,6 +114,7 @@ router.post("/upload/delete", (0, utils_1.asyncHandler)(Upload_controller_1.defa
 //checkoutAmount
 //checkoutAmount 
 router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_Controller_1.default.checkoutReview));
+router.post("/orders/checkout", (0, utils_1.asyncHandler)(Order_Controller_1.default.handleCreateOrder));
 // giao hàng nhanh 
 router.post("/giao-hang-nhanh/create", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.CreateTest));
 router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.getDetail));
