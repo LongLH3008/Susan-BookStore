@@ -50,6 +50,10 @@ const CategoriesPage: React.FC = () => {
     queryFn: () => getCategories({ limit, page, search }),
   });
 
+  const handleSearch = (searchTerm: string) => {
+    setSearch(searchTerm);
+    refetch();
+  };
   const { mutateAsync: deleteMutate } = useMutation({
     mutationFn: deleteCategory,
     onSuccess: () => {
@@ -109,14 +113,16 @@ const CategoriesPage: React.FC = () => {
       {
         headerName: "Tên danh mục",
         field: "category_name",
+        width: 450,
       },
       {
         headerName: "Ảnh đại diện",
         field: "category_thumb",
-        cellRenderer: (row: any) => (
+        width: 450,
+        renderCell: (params: any) => (
           <img
-            src={row.category_thumb}
-            alt={row.category_thumb}
+            src={params.row.category_thumb}
+            alt={params.row.category_thumb}
             style={{ width: "50px", height: "50px" }}
           />
         ),
@@ -124,15 +130,16 @@ const CategoriesPage: React.FC = () => {
       {
         headerName: "Trạng thái",
         field: "is_active",
-        cellRenderer: (row: any) => (
+        width: 450,
+        renderCell: (params: any) => (
           <Box display="flex" alignItems="center">
             <Switch
-              checked={row.is_active}
-              onChange={() => handleToggleStatus(row)}
+              checked={params.row.is_active}
+              onChange={() => handleToggleStatus(params.row)}
               color="primary"
             />
             <Typography>
-              {row.is_active ? "Kích hoạt" : "Vô hiệu hóa"}
+              {params.row.is_active ? "Kích hoạt" : "Vô hiệu hóa"}
             </Typography>
           </Box>
         ),
@@ -140,17 +147,17 @@ const CategoriesPage: React.FC = () => {
       {
         headerName: "Thao tác",
         field: "actions",
-        width: "110px",
-        cellRenderer: (row: any) => (
+        width: 250,
+        renderCell: (params: any) => (
           <>
             <Tooltip title="Chỉnh sửa">
-              <EditIcon onClick={() => onEdit(row)} />
+              <EditIcon onClick={() => onEdit(params.row)} />
             </Tooltip>
             <Tooltip title="Hiển thị chi tiết">
-              <InfoIcon onClick={() => onShowDetail(row)} />
+              <InfoIcon onClick={() => onShowDetail(params.row)} />
             </Tooltip>
             <Tooltip title="Xóa">
-              <DeleteIcon onClick={() => onDelete(row)} />
+              <DeleteIcon onClick={() => onDelete(params.row)} />
             </Tooltip>
           </>
         ),
@@ -169,21 +176,22 @@ const CategoriesPage: React.FC = () => {
           Danh sách danh mục
         </p>
       </div>
-
-      <Button
-        className="float-right mt-10 mb-10"
-        variant="contained"
-        color="primary"
-        onClick={() => onAdd()}
-      >
-        Thêm mới danh mục
-      </Button>
-
+      <div className="flex items-center justify-end">
+        <SearchForm onSearch={handleSearch} />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onAdd}
+          className=" ml-2 h-10 dark:text-white"
+        >
+          Thêm mới
+        </Button>
+      </div>
       <MyTable2
         rows={data?.metadata || []}
         columns={columns}
         limit={limit}
-        count={data?.total || 0}
+        count={data?.metadata?.length || 0}
         page={page}
         loading={isLoading}
         error={isError ? error?.message : ""}

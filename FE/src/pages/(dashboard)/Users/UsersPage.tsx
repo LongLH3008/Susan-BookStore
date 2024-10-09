@@ -61,9 +61,10 @@ const UsersPage: React.FC = () => {
       {
         headerName: "Avatar",
         field: "user_avatar",
-        cellRenderer: (row: any) => (
+        width: 300,
+        renderCell: (params: any) => (
           <img
-            src={row.user_avatar || "default-avatar.png"} // Cung cấp ảnh mặc định nếu không có
+            src={params.row.user_avatar || "default-avatar.png"} // Cung cấp ảnh mặc định nếu không có
             alt="Avatar"
             style={{ width: "50px", height: "50px", borderRadius: "50%" }}
           />
@@ -72,40 +73,44 @@ const UsersPage: React.FC = () => {
       {
         headerName: "Tên người dùng",
         field: "user_name",
+        width: 300,
       },
       {
         headerName: "Email",
         field: "user_email",
+        width: 300,
       },
       {
         headerName: "Số điện thoại",
         field: "user_phone_number",
+        width: 300,
       },
       {
         headerName: "Vai trò",
         field: "user_role",
+        width: 300,
       },
       {
         headerName: "Thao tác",
         field: "actions",
         width: "150px",
-        cellRenderer: (row: any) => (
+        renderCell: (params: any) => (
           <>
             <Tooltip title="Hiển thị chi tiết">
-              <IconButton onClick={() => onShowDetail(row)}>
+              <IconButton onClick={() => onShowDetail(params.row)}>
                 <InfoIcon />
               </IconButton>
             </Tooltip>
-            {row.user_status !== "active" && (
+            {params.row.user_status !== "active" && (
               <Tooltip title="Mở khóa tài khoản">
-                <IconButton onClick={() => onLock(row._id)}>
+                <IconButton onClick={() => onLock(params.row._id)}>
                   <LockIcon />
                 </IconButton>
               </Tooltip>
             )}
-            {row.user_status === "active" && (
+            {params.row.user_status === "active" && (
               <Tooltip title="Khóa tài khoản">
-                <IconButton onClick={() => onUnlock(row._id)}>
+                <IconButton onClick={() => onUnlock(params.row._id)}>
                   <UnlockIcon />
                 </IconButton>
               </Tooltip>
@@ -125,11 +130,11 @@ const UsersPage: React.FC = () => {
         </p>
       </div>
 
-      <div className="flex justify-end mb-4">
+      {/* <div className="flex justify-end mb-4">
         <Button variant="contained" color="primary" onClick={onAddNew}>
           Thêm mới
         </Button>
-      </div>
+      </div> */}
       <MyTable2
         rows={data?.metadata?.allUsers || []}
         columns={columns}

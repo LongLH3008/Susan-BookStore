@@ -10,7 +10,9 @@ export const getCategoryById = async (_id: string) => {
 };
 
 export const getCategories = async (arg: filter) => {
-  const params = `?page=${arg.page ?? ""}&limit=${arg.limit ?? ""}`;
+  const params = `?page=${arg.page ?? ""}&limit=${
+    arg.limit ?? ""
+  }&search=${encodeURIComponent(arg.search ?? "")}`;
   return await SendRequest("GET", `categories/${params}`);
 };
 export const deleteCategory = async (id: string) => {
