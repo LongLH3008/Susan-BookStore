@@ -151,7 +151,6 @@ router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince));
 // advanced search and similar books
 router.post("/search", asyncHandler(VectorSearchController.advancedSearch))
 router.post("/loaddata", asyncHandler(VectorSearchController.loadData))
-
 //payment\
 router.get("/payment/bank-list", asyncHandler(PaymentController.getBankList))
 router.post("/payment/create-payment-url", asyncHandler(PaymentController.getPaymentUrl))
