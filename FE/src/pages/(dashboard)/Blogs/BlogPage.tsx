@@ -36,18 +36,17 @@ const BlogPage = () => {
     onSuccess: () => {
       setConfirmOpen(false);
       toast({
-        variant: data.status,
+        variant: "success",
         content: `Xóa sản phẩm thành công`,
       });
-
       refetch();
     },
     onError: (error: AxiosError) => {
       setConfirmOpen(false);
       let message = "Lỗi khi xóa sản phẩm: ";
       toast({
-        variant: error.status,
-        content: message + error.response?.data || error.message,
+        variant: error.response?.status || "error",
+        content: message + (error.response?.data || error.message),
       });
     },
   });

@@ -9,11 +9,11 @@ import SkeletonProduct from "@/components/(website)/Skeleton/skeletonProduct";
 const HomeProducts = () => {
   const { productQuery, updateFilter } = useProduct();
   const { CategoryQuery, setLimit } = useCategory();
-  const [color, setColor] = useState("670600d43fe0f93d6ef4f204");
+  const [color, setColor] = useState("670600d43fe0f93d6ef4f1ff");
 
   useEffect(() => {
     setLimit(4);
-    updateFilter("category_ids", "670600d43fe0f93d6ef4f204");
+    updateFilter("category_ids", "670600d43fe0f93d6ef4f1ff");
   }, [setLimit]);
   return (
     <div className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] mb-[80px] min-[968px]:mb-[100px]">

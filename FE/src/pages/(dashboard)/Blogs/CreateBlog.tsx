@@ -198,29 +198,29 @@ const CreateBlog = () => {
     });
   };
 
-  const { mutateAsync } = !id
+  const { mutateAsync, isPending } = !id
     ? useMutation({
         mutationFn: (data: IBlog) => createBlog(data),
         onSuccess: (data: any) => {
-          nav("/quan-tri/san-pham");
+          nav("/quan-tri/tin-tuc");
           toast({
             variant: data.status,
             content: `Thêm tin tức thành công`,
           });
         },
-        onError: (err: any) => handleError(err, "thêm"),
+        onError: (err: any) => handleError(err, "Thêm"),
       })
     : useMutation({
         mutationFn: ({ data, id }: { data: IBlog; id: string }) =>
           updateBlog(data, id),
         onSuccess: (data: any) => {
-          nav("/quan-tri/san-pham");
+          nav("/quan-tri/tin-tuc");
           toast({
             variant: data.status,
             content: `Cập nhật tin tức thành công`,
           });
         },
-        onError: (err: any) => handleError(err, "cập nhật"),
+        onError: (err: any) => handleError(err, "Cập nhật"),
       });
 
   const onSubmit: SubmitHandler<IBlog> = async (data: IBlog) => {
@@ -228,6 +228,7 @@ const CreateBlog = () => {
       let coverImageUrl = "";
       data.blog_content = editorData;
       data.blog_tags = inputs;
+
       if (selectedCoverImage) {
         const coverImageFormData = new FormData();
         coverImageFormData.append("files", selectedCoverImage);
@@ -241,23 +242,22 @@ const CreateBlog = () => {
 
         data.blog_image = coverImageUrl;
       }
-      if (id) {
-        delete data?._id;
+      const updatedData = {
+        ...blog?.metadata,
+        ...data,
+      };
 
-        delete data?.blog_slug;
-        delete data?.blog_views;
-        delete data?.viewedBy;
-        delete data?.createdAt;
-        delete data?.updatedAt;
-        delete data?.blog_slug;
-        delete data?.__v;
-      }
-      console.log("data", data);
-      id ? await mutateAsync(data, id) : await mutateAsync(data);
+      console.log("updatedData", updatedData);
+      id ? await mutateAsync({ data, id }) : await mutateAsync(data);
     } catch (error) {
+      toast({
+        variant: "error",
+        content: `Lỗi khi gửi form: ${error?.message}`,
+      });
       console.error("Lỗi khi gửi form:", error);
     }
   };
+
   return (
     <>
       <div className="p-5 flex justify-between items-center bg-white shadow-sm rounded-lg">

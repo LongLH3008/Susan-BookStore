@@ -1,6 +1,7 @@
 import { IBlog } from "@/common/interfaces/blog";
 import { FormatDate } from "@/components/formatDate";
 import { getUsers } from "@/services/auth";
+import { Tooltip } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -25,9 +26,16 @@ const Blog = ({ dataBlog }: Props) => {
     return <div>Loading...</div>;
   }
   return (
-    <div className="relative flex flex-col justify-between h-[425px]">
+    <div
+      key={dataBlog?._id}
+      className="relative flex flex-col justify-between h-[425px]"
+    >
       <div className="flex justify-center items-center overflow-hidden h-[222px]">
-        <img src={dataBlog?.blog_image} alt="" className="w-full h-full" />
+        <img
+          src={dataBlog?.blog_image}
+          alt=""
+          className="w-full h-full object-cover"
+        />
         {/* Time  */}
         <span className="absolute top-[6%] left-[6%] rounded-full w-[70px] h-[70px] bg-white flex flex-col justify-center items-center">
           <p className="text-[#929292] font-[500]">Jan</p>
@@ -35,18 +43,20 @@ const Blog = ({ dataBlog }: Props) => {
         </span>
       </div>
       <div className="flex flex-col justify-between h-[182px]">
-        <Link
-          to={"/tin-tuc/" + dataBlog?.blog_slug}
-          state={{ from: location.pathname }}
-          className="hover:text-[#00BFC5] text-zinc-700 font-semibold text-[18px]"
-        >
-          {dataBlog?.blog_title}
-        </Link>
+        <Tooltip title={dataBlog?.blog_title}>
+          <Link
+            to={"/tin-tuc/" + dataBlog?.blog_slug}
+            state={{ from: location.pathname }}
+            className="hover:text-[#00BFC5] text-zinc-700 font-semibold text-[18px] truncate"
+          >
+            {dataBlog?.blog_title}
+          </Link>
+        </Tooltip>
         <p className="text-[#9d9d9d] text-[14px]">
           <span className="text-[#333]">{FormatDate(dataBlog?.createdAt)}</span>{" "}
           _ by: <span>{author?.user_name}</span>
         </p>
-        <p className="text-[#707070] text-[14px] truncate ">
+        <p className="text-[#707070] text-[14px] overflow-hidden text-ellipsis line-clamp-2 ">
           {dataBlog?.blog_content}
         </p>
         <Link

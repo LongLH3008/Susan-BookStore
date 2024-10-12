@@ -38,7 +38,9 @@ const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
         </div>
         <hr className="w-full h-[1px] mx-auto my-10 bg-gray-400 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
         <div className="*:text-[#747474]">
-          <p>{detailProduct?.description}</p>
+          <p className="overflow-hidden text-ellipsis line-clamp-2">
+            {detailProduct?.description}
+          </p>
           <table className="border border-[#747474] my-5 *:p-5 w-full">
             <tbody className="*:border-b-2 *:border-[#747474] *:divide-[#747474] *:divide-x-2 ">
               <tr className="*:p-3 ">
@@ -114,7 +116,9 @@ const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
 
             <div className="relative flex items-center max-w-[8rem]  ">
               <button
-                onClick={() => setQuantity(Number(quantity) - 1)}
+                onClick={() => {
+                  quantity >= 1 && setQuantity(Number(quantity) - 1);
+                }}
                 type="button"
                 id="decrement-button"
                 data-input-counter-decrement="quantity-input"
@@ -154,11 +158,8 @@ const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
               </Link>
             </div>
             <div className="flex *:px-6 h-16 items-center border-[3px] *:text-[#000] hover:text-[#00BFC5] *:text-xl">
-              <Link to="/" className="border-r-2 hover:text-[#00BFC5]">
+              <Link to="/" className=" hover:text-[#00BFC5]">
                 <i className="fa-solid fa-heart"></i>
-              </Link>
-              <Link to="/" className="hover:text-[#00BFC5]">
-                <i className="fa-solid fa-sliders"></i>
               </Link>
             </div>
           </div>

@@ -7,6 +7,7 @@ import useProductContext, {
 } from "../../../common/context/ContextProduct";
 import ProductFeatures from "./features";
 import { StarRating } from "../StarRating/StarRating";
+import { Tooltip } from "@mui/material";
 
 type Props = {
   dataProduct: IProduct;
@@ -83,13 +84,15 @@ const ProdContent = ({ dataProduct }: Props) => {
               <StarRating rating={5} />
             )}
           </div>
-          <Link
-            to="/book_detail"
-            state={{ from: location.pathname }}
-            className="text-zinc-700 text-[15px] font-semibold"
-          >
-            {dataProduct?.title}
-          </Link>
+          <Tooltip title={dataProduct?.title}>
+            <Link
+              to="/book_detail"
+              state={{ from: location.pathname }}
+              className="text-zinc-700 text-[15px] font-semibold truncate"
+            >
+              {dataProduct?.title}
+            </Link>
+          </Tooltip>
           <p className="text-zinc-500">{dataProduct?.author}</p>
           <div>
             <span className="text-[16px] text-[#00BFC5] font-semibold">
