@@ -16,10 +16,6 @@ const blogValidationSchema = joi.object({
   blog_tags: joi.array().items(joi.string()).required().messages({
     "any.required": "Nhãn bài viết là bắt buộc",
   }),
-  blog_slug: joi.string().required().messages({
-    "string.empty": "Slug là bắt buộc",
-    "any.required": "Trường 'Slug' là bắt buộc",
-  }),
   blog_image: joi.string().required().messages({
     "string.empty": "Ảnh bài viết là bắt buộc",
     "any.required": "Trường 'Ảnh bài viết' là bắt buộc",

@@ -81,6 +81,7 @@ router.post("/blog/add", asyncHandler(BlogController.create));
 router.post("/blog/views/:userId/:blogId", asyncHandler(BlogController.views));
 router.get("/blog", asyncHandler(BlogController.getAllBlogs));
 router.get("/blog/:id", asyncHandler(BlogController.getOneBlog));
+router.get("/blog/by/:slug", asyncHandler(BlogController.getBlogsBySlug));
 router.delete("/blog/:id", asyncHandler(BlogController.deleteBlog));
 router.put("/blog/update/:id", asyncHandler(BlogController.updateBlog));
 //blogcomment

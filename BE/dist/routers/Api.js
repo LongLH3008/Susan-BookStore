@@ -77,6 +77,7 @@ router.post("/blog/add", (0, utils_1.asyncHandler)(blog_controller_1.default.cre
 router.post("/blog/views/:userId/:blogId", (0, utils_1.asyncHandler)(blog_controller_1.default.views));
 router.get("/blog", (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlogs));
 router.get("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.getOneBlog));
+router.get("/blog/by/:slug", (0, utils_1.asyncHandler)(blog_controller_1.default.getBlogsBySlug));
 router.delete("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.deleteBlog));
 router.put("/blog/update/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.updateBlog));
 //blogcomment

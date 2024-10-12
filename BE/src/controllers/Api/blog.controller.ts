@@ -37,6 +37,16 @@ class BlogController {
     }).send(res);
   }
 
+  static async getBlogsBySlug(req: Request, res: Response): Promise<any> {
+    const slug = req.params.slug;
+    const logBlog = await BlogService.getBlogBySlug({ slug });
+
+    return new SuccessResponse({
+      message: "Get blog successfully",
+      metadata: logBlog,
+    }).send(res);
+  }
+
   static async getOneBlog(req: Request, res: Response): Promise<any> {
     const id = req.params.id;
     const blog = await BlogService.getBlogById({ id });

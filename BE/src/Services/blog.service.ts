@@ -16,8 +16,9 @@ class BlogService {
       validate(blogSchema, data);
       const foundBlog = await Blog.findOne({ blog_title: data.blog_title });
       if (foundBlog) throw new ConflictError("This blog already exists");
-
+      data.blog_slug = data.blog_title.replace(/\s+/g, "-").toLowerCase();
       const newBlog = await Blog.create(data);
+
       return newBlog;
     } catch (error: any) {
       // Log the error for debugging
@@ -25,6 +26,13 @@ class BlogService {
       throw new ValidationError(error.message || "Validation error occurred.");
     }
   }
+
+  static async getBlogBySlug({ slug }: { slug: string }) {
+    const blog = await Blog.findOne({ blog_slug: slug });
+    if (!blog) throw new ResourceNotFoundError("This blog not found");
+    return blog;
+  }
+  
   static async incrementViews(blogId: string, userId: any) {
     const blog = await Blog.findById(blogId);
 
