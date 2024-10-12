@@ -1,6 +1,4 @@
 import { Accordion } from "flowbite-react";
-import ItemInCheckout from "./ItemInCheckout";
-
 
 type Props = {};
 
@@ -13,9 +11,9 @@ const ResponsiveCheckoutProducts = (props: Props) => {
 						Your Order Summary - <span className="font-500">$ 55.00</span>
 					</Accordion.Title>
 					<Accordion.Content className="p-0 border-0 py-10">
+						{/* <ItemInCheckout />
 						<ItemInCheckout />
-						<ItemInCheckout />
-						<ItemInCheckout />
+						<ItemInCheckout /> */}
 						<div className="w-full mt-10 flex flex-col gap-2 *:flex *:justify-between *:items-center">
 							<div className="text-zinc-700 text-[14px] font-[500]">
 								<p>Subtotal</p>

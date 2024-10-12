@@ -1,7 +1,7 @@
 import { useToast } from "@/common/hooks/useToast";
 import { ToastVariant } from "@/common/interfaces/toast";
 import { IVoucher } from "@/common/interfaces/voucher";
-import { getAllVoucher, voucherService } from "@/services/voucher";
+import { getAllVoucher, voucherService } from "@/services/voucher.service";
 import { useQuery } from "@tanstack/react-query";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";

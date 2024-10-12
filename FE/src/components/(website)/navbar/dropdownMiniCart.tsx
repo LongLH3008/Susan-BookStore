@@ -3,7 +3,7 @@ import { userState } from "@/common/hooks/useAuth";
 import { useCart } from "@/common/hooks/useCart";
 import { ConvertVNDString } from "@/common/shared/round-number";
 import { CustomDropDownMiniCart } from "@/common/ui/CustomDropDownNavbar";
-import { getCartByUser } from "@/services/cart";
+import { getCartByUser } from "@/services/cart.service";
 import { useQuery } from "@tanstack/react-query";
 import { Dropdown } from "flowbite-react";
 import { useState } from "react";
@@ -16,10 +16,17 @@ const ItemMiniCart = ({ data, amount, remove }: { data: any; amount: number; rem
 				<img className="" src={data.coverImage} alt="" />
 			</span>
 			<div className="ps-[15px] col-span-5 flex flex-col justify-center overflow-hidden relative">
-				<Link to={`/book-detail/${data.slug}`} state={{ from: location.pathname }} className="text-[12px] text-wrap hover:text-[#00BFC5]">
+				<Link
+					to={`/book-detail/${data.slug}`}
+					state={{ from: location.pathname }}
+					className="text-[12px] text-wrap hover:text-[#00BFC5]"
+				>
 					{data.title}
 				</Link>
-				<span className="absolute right-0 top-1/4 hover:text-[#00BFC5]" onClick={() => remove(data._id)}>
+				<span
+					className="absolute right-0 top-1/4 hover:text-[#00BFC5]"
+					onClick={() => remove(data._id)}
+				>
 					<i className="fa-solid fa-xmark"></i>
 				</span>
 				<div className="text-[14px] ml-1">
@@ -29,8 +36,14 @@ const ItemMiniCart = ({ data, amount, remove }: { data: any; amount: number; rem
 						<span>{ConvertVNDString(data.price)}</span>
 					) : (
 						<>
-							<span className="ml-1">{ConvertVNDString(Math.round(data.price * ((100 - data.discount) / 100) * 100) / 100)}</span>
-							<span className="ml-1 line-through text-[13px] text-[#00bfc5]">{ConvertVNDString(data.price)}</span>
+							<span className="ml-1">
+								{ConvertVNDString(
+									Math.round(data.price * ((100 - data.discount) / 100) * 100) / 100
+								)}
+							</span>
+							<span className="ml-1 line-through text-[13px] text-[#00bfc5]">
+								{ConvertVNDString(data.price)}
+							</span>
 						</>
 					)}
 				</div>
@@ -49,19 +62,30 @@ const MiniCart = () => {
 		queryFn: async () => await getCartByUser(id),
 	});
 
-	console.log(cart);
-
 	const removeProduct = (product_id: string) => {
 		onAction({ user_id: id, product_id });
 	};
 
-	const subtotal = cart?.metadata.cart_products.reduce((acc: number, item: any) => acc + item.product_id.price * item.product_quantity, 0);
-	const discountArr = cart?.metadata.cart_products.filter((item: any) => item.product_id.discount > 0 && item);
-	const discount = discountArr?.reduce((acc: number, item: any) => acc + (item.product_id.discount / 100) * item.product_id.price * item.product_quantity, 0);
+	const subtotal = cart?.metadata.cart_products.reduce(
+		(acc: number, item: any) => acc + item.product_id.price * item.product_quantity,
+		0
+	);
+	const discountArr = cart?.metadata?.cart_products.filter(
+		(item: any) => Math.abs(item.product_id.discount) > 0 && item
+	);
+	const discount = discountArr?.reduce(
+		(acc: number, item: any) =>
+			acc + (Math.abs(item.product_id.discount) / 100) * item.product_id.price * item.product_quantity,
+		0
+	);
 
 	return (
 		<div className="relative">
-			<span onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)} className="max-[1000px]:hidden h-full flex items-center relative">
+			<span
+				onMouseEnter={() => setOpen(true)}
+				onMouseLeave={() => setOpen(false)}
+				className="max-[1000px]:hidden h-full flex items-center relative"
+			>
 				<img className="w-[38px] max-[1000px]:w-[20px]" src={icon.miniCart} alt="" />
 				<p id="amount_books_in_miniCart" className="text-[#00BFC5] absolute bottom-1/2 -right-2">
 					{cart?.metadata.cart_products.length}
@@ -77,24 +101,39 @@ const MiniCart = () => {
 						<>
 							<div className="text-zinc-600 w-full pb-5 grid gap-y-5 border-b overscrollHidden overflow-y-scroll scroll-smooth max-h-[200px]">
 								{cart?.metadata.cart_products.map((item: any, index: number) => (
-									<ItemMiniCart key={index} data={item.product_id} amount={item.product_quantity} remove={removeProduct} />
+									<ItemMiniCart
+										key={index}
+										data={item.product_id}
+										amount={item.product_quantity}
+										remove={removeProduct}
+									/>
 								))}
 							</div>
 							<ul className="py-5 border-b *:flex *:justify-between *:items-center *:py-2 *:text-zinc-800">
 								<li className="text-[12px]">
 									<p>Tạm tính :</p>
-									<span className="font-semibold">{ConvertVNDString(subtotal)}</span>
+									<span className="font-semibold">
+										{ConvertVNDString(subtotal)}
+									</span>
 								</li>
 								<li className="text-[12px]">
 									<p>Giảm giá :</p>
-									<span className="font-semibold">- {ConvertVNDString(discount)}</span>
+									<span className="font-semibold">
+										- {ConvertVNDString(discount)}
+									</span>
 								</li>
 								<li>
 									<p>Tổng cộng :</p>
-									<span className="font-semibold">{ConvertVNDString((subtotal ?? 0) - (discount ?? 0))}</span>
+									<span className="font-semibold">
+										{ConvertVNDString((subtotal ?? 0) - (discount ?? 0))}
+									</span>
 								</li>
 							</ul>
-							<Link onClick={() => setOpen(false)} to={"/gio-hang"} state={{ from: location.pathname }}>
+							<Link
+								onClick={() => setOpen(false)}
+								to={"/gio-hang"}
+								state={{ from: location.pathname }}
+							>
 								<button className="mt-5 border-2 text-[13px] font-semibold border-zinc-900 w-full uppercase h-[55px] hover:bg-zinc-900 hover:text-white">
 									chi tiết giỏ hàng
 								</button>

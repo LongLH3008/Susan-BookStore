@@ -1,7 +1,7 @@
 import { useToast } from "@/common/hooks/useToast";
 import { IBlog } from "@/common/interfaces/blog";
 import { BlogValidate } from "@/common/schemas/blog";
-import { createBlog, getBlogById, updateBlog } from "@/services/blog";
+import { createBlog, getBlogById, updateBlog } from "@/services/blog.service";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { joiResolver } from "@hookform/resolvers/joi";
@@ -232,7 +232,6 @@ const CreateBlog = () => {
       if (selectedCoverImage) {
         const coverImageFormData = new FormData();
         coverImageFormData.append("files", selectedCoverImage);
-
         const coverImageResponse = await axios.post(
           "http://localhost:5000/api/v1/upload",
           coverImageFormData

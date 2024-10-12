@@ -1,4 +1,4 @@
-import * as CartService from "@/services/cart";
+import * as CartService from "@/services/cart.service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SubmitHandler } from "react-hook-form";
 import { ToastVariant } from "../interfaces/toast";
@@ -50,9 +50,9 @@ export const useCart = ({ action, onSuccess, onError }: useCart) => {
 				onError(
 					error.response
 						? {
-								status: "ERROR",
-								message: error.response.data.message ?? error.response.data.error,
-						  }
+							status: "ERROR",
+							message: error.response.data.message ?? error.response.data.error,
+						}
 						: { status: "LOST_CONNECT", message: error.message }
 				);
 		},

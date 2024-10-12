@@ -1,6 +1,7 @@
 import { useToast } from "@/common/hooks/useToast";
 import { IBlog } from "@/common/interfaces/blog";
-import { deleteBlog, getBlogs } from "@/services/blog";
+import { ToastVariant } from "@/common/interfaces/toast";
+import { deleteBlog, getBlogs } from "@/services/blog.service";
 import InfoIcon from "@mui/icons-material/Info";
 import {
   Box,
@@ -15,6 +16,7 @@ import {
 import Paper from "@mui/material/Paper";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
