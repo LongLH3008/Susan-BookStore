@@ -23,6 +23,7 @@ const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Con
 const GiaoHangNhanhTest_controller_1 = __importDefault(require("../controllers/Api/GiaoHangNhanhTest.controller"));
 const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.controller"));
 const vectorSearch_controller_1 = __importDefault(require("../controllers/Api/vectorSearch.controller"));
+const banner_controler_1 = __importDefault(require("../controllers/Api/banner.controler"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -129,4 +130,11 @@ router.post("/loaddata", (0, utils_1.asyncHandler)(vectorSearch_controller_1.def
 router.get("/payment/bank-list", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getBankList));
 router.post("/payment/create-payment-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getPaymentUrl));
 router.post("/payment/verify-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.verifyUrl));
+//banner
+router.post("/create/banner", (0, utils_1.asyncHandler)(banner_controler_1.default.create));
+router.get("/GetAll/banner/inAdmin", (0, utils_1.asyncHandler)(banner_controler_1.default.GetAllBannerInAdmin));
+router.get("/GetbyBanner/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.GetByBannerId));
+router.delete("/DeleteBanner/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.deleteBanner));
+router.put("/UpdateBanner/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.updateBanner));
+router.get("/GetByBanner/client/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.GetbyidwithClient));
 exports.default = router;

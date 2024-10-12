@@ -4,7 +4,6 @@ import BlogService from "../../Services/blog.service";
 import { SuccessResponse } from "../../cores/succes.response";
 import mongoose from "mongoose";
 import { ValidationError } from "../../cores/error.response";
-import User from "../../models/User.model";
 
 class BlogController {
   static async create(req: Request, res: Response): Promise<any> {

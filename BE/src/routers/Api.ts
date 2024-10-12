@@ -20,6 +20,7 @@ import OrderController from "../controllers/Api/Order.Controller";
 import GiaoHangNhanhController from "../controllers/Api/GiaoHangNhanhTest.controller";
 import PaymentController from "../controllers/Api/Vnpay.controller";
 import VectorSearchController from "../controllers/Api/vectorSearch.controller";
+import BannerControler from "../controllers/Api/banner.controler"
 
 
 const router = Router();
@@ -152,5 +153,13 @@ router.post("/loaddata", asyncHandler(VectorSearchController.loadData))
 router.get("/payment/bank-list", asyncHandler(PaymentController.getBankList))
 router.post("/payment/create-payment-url", asyncHandler(PaymentController.getPaymentUrl))
 router.post("/payment/verify-url", asyncHandler(PaymentController.verifyUrl))
+
+//banner
+router.post("/create/banner", asyncHandler(BannerControler.create))
+router.get("/GetAll/banner/inAdmin", asyncHandler(BannerControler.GetAllBannerInAdmin))
+router.get("/GetbyBanner/:id", asyncHandler(BannerControler.GetByBannerId))
+router.delete("/DeleteBanner/:id", asyncHandler(BannerControler.deleteBanner))
+router.put("/UpdateBanner/:id", asyncHandler(BannerControler.updateBanner))
+router.get("/GetByBanner/client/:id", asyncHandler(BannerControler.GetbyidwithClient))
 
 export default router;
