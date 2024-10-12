@@ -1,8 +1,7 @@
 import { useToast } from "@/common/hooks/useToast";
 import { Book, Image } from "@/common/schemas/product";
-
-import { getCategories } from "@/services/categories";
-import { addProduct, editProduct, getProducttById } from "@/services/product";
+import { getCategories } from "@/services/categories.service";
+import { addProduct, editProduct, getProducttById } from "@/services/product.service";
 import {
   Autocomplete,
   Box,

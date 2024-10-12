@@ -6,7 +6,7 @@ import {
 } from "@/common/interfaces/voucher";
 import { voucherValidate } from "@/common/schemas/voucher";
 import CustomFloatingField from "@/components/(website)/floatingfield/CustomFloatingField";
-import { voucherService } from "@/services/voucher";
+import { voucherService } from "@/services/voucher.service";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

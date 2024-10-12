@@ -1,4 +1,3 @@
-import { authMiddleware, checkAdmin } from './../middlewares/AuthMiddleware';
 import { Router } from "express";
 import AuthChangeFwApiController from "../controllers/Api/Auth/ChangePassword";
 import AuthForgotfwApiController from "../controllers/Api/Auth/ForgotPassword";
@@ -9,15 +8,15 @@ import CategoryController from "../controllers/Api/Category.controller";
 import BlogController from "../controllers/Api/blog.controller";
 import { asyncHandler } from "../utils";
 // import OrderController from "../controllers/Api/Order.Controller";
-import CartController from "../controllers/Api/Cart.controller";
-import UserController from "../controllers/Api/User.controller";
-import DiscountController from "../controllers/Api/Discount.controller";
 import { upload } from "../configs/multer.config";
-import UploadController from "../controllers/Api/Upload.controller";
 import BookController from "../controllers/Api/Book.controller";
-import ReviewController from "../controllers/Api/Review.controller";
-import OrderController from "../controllers/Api/Order.Controller";
+import CartController from "../controllers/Api/Cart.controller";
+import DiscountController from "../controllers/Api/Discount.controller";
 import GiaoHangNhanhController from "../controllers/Api/GiaoHangNhanhTest.controller";
+import OrderController from "../controllers/Api/Order.Controller";
+import ReviewController from "../controllers/Api/Review.controller";
+import UploadController from "../controllers/Api/Upload.controller";
+import UserController from "../controllers/Api/User.controller";
 import PaymentController from "../controllers/Api/Vnpay.controller";
 import VectorSearchController from "../controllers/Api/vectorSearch.controller";
 import BannerControler from "../controllers/Api/banner.controler"
@@ -131,13 +130,13 @@ router.post("/upload/delete", asyncHandler(UploadController.delete));
 //checkoutAmount
 
 
-//checkoutAmount 
+//checkoutAmount
 
 router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview))
 router.post("/orders/checkout", asyncHandler(OrderController.handleCreateOrder))
 
 
-// giao hàng nhanh 
+// giao hàng nhanh
 router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest))
 router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail))
 router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince))

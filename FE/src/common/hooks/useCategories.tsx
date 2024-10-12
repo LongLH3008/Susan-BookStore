@@ -1,4 +1,4 @@
-import { getCategories } from "@/services/categories";
+import { getCategories } from "@/services/categories.service";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { createContext, useContext, useState } from "react";
 
