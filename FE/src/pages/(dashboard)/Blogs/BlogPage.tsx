@@ -1,29 +1,72 @@
+import { useToast } from "@/common/hooks/useToast";
 import { IBlog } from "@/common/interfaces/blog";
-import { getBlogs } from "@/services/blog";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import { deleteBlog, getBlogs } from "@/services/blog";
 import InfoIcon from "@mui/icons-material/Info";
-import { CircularProgress, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useQuery } from "@tanstack/react-query";
-import { FaMagnifyingGlass } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { FiEdit } from "react-icons/fi";
+import { IoMdAdd } from "react-icons/io";
+import { MdDeleteOutline } from "react-icons/md";
+import { Link, useNavigate } from "react-router-dom";
 
 const BlogPage = () => {
-  const { data, isLoading, isError } = useQuery({
+  const nav = useNavigate();
+  const { toast } = useToast();
+  const [selectedBlog, setSelectedBlog] = useState<IBlog | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["Blog"],
     queryFn: () => getBlogs(),
   });
 
+  const { mutateAsync } = useMutation({
+    mutationFn: deleteBlog,
+    onSuccess: () => {
+      setConfirmOpen(false);
+      toast({
+        variant: data.status,
+        content: `Xóa sản phẩm thành công`,
+      });
+
+      refetch();
+    },
+    onError: (error: AxiosError) => {
+      setConfirmOpen(false);
+      let message = "Lỗi khi xóa sản phẩm: ";
+      toast({
+        variant: error.status,
+        content: message + error.response?.data || error.message,
+      });
+    },
+  });
+
   const onEdit = (id: string) => {
+    nav(`chinh-sua/${id}`);
     console.log(id);
   };
   const onShowDetail = (blog: IBlog) => {
     console.log(blog);
   };
-  const onDelete = (id: string) => {
-    console.log(id);
+  const confirmDelete = async () => {
+    if (selectedBlog) {
+      await mutateAsync(selectedBlog._id!);
+    }
+  };
+  const onDelete = (blog: IBlog) => {
+    setSelectedBlog(blog);
+    setConfirmOpen(true);
   };
   const columns: GridColDef[] = [
     { field: "blog_title", headerName: "Title", flex: 1 },
@@ -31,11 +74,7 @@ const BlogPage = () => {
       field: "blog_image",
       headerName: "Image",
       renderCell: (params) => (
-        <img
-          src={params.value}
-          alt={params.row.blog_title}
-          style={{ width: "100%", height: "auto" }}
-        />
+        <img src={params.value} alt={params.row.blog_title} className=" h-20" />
       ),
       flex: 2,
     },
@@ -49,23 +88,37 @@ const BlogPage = () => {
       headerName: "Active",
       renderCell: (params) => (
         <>
-          <Tooltip title="Chỉnh sửa">
-            <EditIcon onClick={() => onEdit(params.row._id)} />
-          </Tooltip>
-          <Tooltip title="Hiển thị chi tiết">
-            <InfoIcon onClick={() => onShowDetail(params.row)} />
-          </Tooltip>
-          <Tooltip title="Xóa">
-            <DeleteIcon onClick={() => onDelete(params.row._id)} />
-          </Tooltip>
+          <div className="flex gap-3  items-center ">
+            <Tooltip title="Chỉnh sửa">
+              <span
+                onClick={() => onEdit(params.row._id)}
+                className="size-10 border text-lg text-zinc-400 hover:border-[#00bfc5] hover:text-[#00bfc5] cursor-pointer font-light grid place-content-center"
+              >
+                <FiEdit />
+              </span>
+            </Tooltip>
+            <Tooltip title="Hiển thị chi tiết">
+              <span
+                onClick={() => onShowDetail(params.row)}
+                className="size-10 border text-lg text-zinc-400 hover:border-[#00bfc5] hover:text-[#00bfc5] cursor-pointer font-light grid place-content-center"
+              >
+                <InfoIcon />
+              </span>
+            </Tooltip>
+            <Tooltip title="Xóa">
+              <span
+                onClick={() => onDelete(params.row)}
+                className="size-10 border text-2xl text-zinc-400 hover:border-red-500 hover:text-red-500 cursor-pointer font-light grid place-content-center"
+              >
+                <MdDeleteOutline />
+              </span>
+            </Tooltip>
+          </div>
         </>
       ),
+      width: 200,
     },
   ];
-  const handleSearch = (searchTerm: string) => {
-    setSearch(searchTerm);
-    refetch();
-  };
 
   const paginationModel = { page: 0, pageSize: 5 };
 
@@ -93,56 +146,69 @@ const BlogPage = () => {
     );
   }
 
-  // Thêm thuộc tính `id` nếu dữ liệu không có sẵn
-  const rows = data.metadata.map((row: any, index: number) => ({
-    id: row._id || index, // Sử dụng _id nếu có, nếu không thì dùng index
+  const rows = data.metadata.map((row: IBlog, index: number) => ({
+    id: row._id || index,
     ...row,
   }));
 
   return (
     <>
-      <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-        <p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
-          Danh sách tin tức
-        </p>
-      </div>
-      <div className="grid grid-cols-2 ">
-        <div className=""></div>
-        <div className="grid grid-cols-3 gap-8 my-4">
-          <form>
-            <div className="relative">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <FaMagnifyingGlass />
-              </div>
-              <input
-                type="search"
-                id="search"
-                className="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-                placeholder="Search"
-                required
-              />
-            </div>
-          </form>
-          <Link
-            to={"/quan-tri/tin-tuc/them-moi"}
-            type="button"
-            className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
-          >
-            Thêm tin tức
-          </Link>
+      <div className="rounded-lg shadow-sm bg-white p-5 flex justify-between items-center">
+        <div className="flex items-center gap-3">
+          <i className="fa-solid fa-blog"></i>
+          <h2 className={`text-xl font-[500]`}>Tin Tức</h2>
         </div>
+        <Link
+          to={"/quan-tri/tin-tuc/them-moi"}
+          className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
+        >
+          <IoMdAdd />
+        </Link>
       </div>
 
-      <Paper sx={{ height: 400, width: "100%" }}>
+      <Paper
+        sx={{
+          height: "67vh",
+          maxHeight: "calc(100vh-300px)",
+          width: "100%",
+          marginTop: "100px",
+          overflowY: "auto",
+        }}
+      >
         <DataGrid
           rows={rows}
           columns={columns}
           initialState={{ pagination: { paginationModel } }}
           pageSizeOptions={[5, 10]}
+          getRowHeight={() => "auto"}
           checkboxSelection
-          sx={{ border: 0 }}
+          sx={{
+            border: 0,
+            "& .MuiDataGrid-cell": {
+              display: "flex",
+              alignItems: "center",
+              padding: "10px",
+            },
+          }}
         />
       </Paper>
+      <Dialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Xác nhận xóa</DialogTitle>
+        <DialogContent dividers>
+          <Typography>Bạn có chắc chắn muốn xóa tin tức này không?</Typography>
+        </DialogContent>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
+          <Button onClick={() => setConfirmOpen(false)}>Hủy</Button>
+          <Button onClick={confirmDelete} color="error" sx={{ ml: 1 }}>
+            Xóa
+          </Button>
+        </Box>
+      </Dialog>
     </>
   );
 };

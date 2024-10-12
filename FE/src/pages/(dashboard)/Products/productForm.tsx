@@ -151,6 +151,8 @@ const ProductForm: React.FC = () => {
         delete data?.slug;
         delete data?.__v;
       }
+      console.log(data);
+
       id ? await mutateAsync({ data, id }) : await mutateAsync(data);
     } catch (error) {
       console.error("Lỗi khi gửi form:", error);
