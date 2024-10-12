@@ -8,10 +8,11 @@ export const getBlogById = async (_id: string) => {
 export const getBlogs = async () => {
   return await SendRequest("GET", `blog`);
 };
+
 export const deleteBlog = async (id: string) => {
   console.log(id);
 
-  return await SendRequest("DELETE", `blog/`, id);
+  return await SendRequest("DELETE", `blog/${id}`);
 };
 
 export const createBlog = async (blog: IBlog) => {
@@ -21,7 +22,6 @@ export const createBlog = async (blog: IBlog) => {
 
 export const updateBlog = async (blog: IBlog, id: string) => {
   console.log("id", id);
-
   const response = await SendRequest("PUT", `blog/update/${id}`, blog);
   return response;
 };

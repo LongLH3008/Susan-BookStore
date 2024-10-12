@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 
 const Bookservice = ({ detailProduct }: { detailProduct: IProduct }) => {
   const [tab, setTab] = useState<string>("Description");
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const [writeReview, setWriteReview] = useState<boolean>(false);
   return (
     <>
@@ -41,9 +43,31 @@ const Bookservice = ({ detailProduct }: { detailProduct: IProduct }) => {
           <div
             className={`${
               tab !== "Description" ? "hidden" : ""
-            } text-[#646464] leading-loose`}
+            } text-[#646464] leading-loose `}
           >
-            <p>{detailProduct?.description}</p>
+            <p
+              className={`${
+                !isExpanded && "overflow-hidden text-ellipsis line-clamp-4"
+              }`}
+            >
+              {detailProduct?.description}
+            </p>
+            <span
+              onClick={() => setIsExpanded(true)}
+              className={`${
+                isExpanded ? "hidden" : ""
+              } font-bold hover:underline cursor-pointer`}
+            >
+              Xem thêm
+            </span>
+            <span
+              onClick={() => setIsExpanded(false)}
+              className={`${
+                !isExpanded ? "hidden" : ""
+              } font-bold hover:underline cursor-pointer`}
+            >
+              Thu gọn
+            </span>
           </div>
           {/* Reviews */}
           <div className={`${tab !== "Reviews" ? "hidden" : ""}`}>

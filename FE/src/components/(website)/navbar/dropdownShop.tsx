@@ -4,6 +4,7 @@ import useCategory from "@/common/hooks/useCategories";
 import useMegaMenu from "@/common/hooks/useMegaMenu";
 import { ICategory } from "@/common/interfaces/category";
 import { IProduct } from "@/common/interfaces/product";
+import { Skeleton } from "@mui/material";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -43,45 +44,82 @@ const DropdownShop = () => {
               <h3 className="text-zinc-800 uppercase font-semibold my-2">
                 thể loại
               </h3>
-              {CategoryQuery?.data?.metadata?.map((category: ICategory) => (
-                <Link to={"/"} className="hover:text-[#00CFB5]">
-                  {category?.category_name}
-                </Link>
-              ))}
+              {Array.isArray(CategoryQuery?.data?.metadata) &&
+              CategoryQuery?.data?.metadata.length === 0 ? (
+                <>
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                </>
+              ) : (
+                CategoryQuery?.data?.metadata?.map((category: ICategory) => (
+                  <Link to={"/"} className="hover:text-[#00CFB5] truncate">
+                    {category?.category_name}
+                  </Link>
+                ))
+              )}
             </div>
             <div className="">
               <h3 className="text-zinc-800 uppercase font-semibold my-2 ">
                 tác giả
               </h3>
-              {author.slice(0, 4).map((aut: string) => (
-                <Link to={"/"} className="hover:text-[#00CFB5]">
-                  {aut}
-                </Link>
-              ))}
+              {Array.isArray(author) && author.length === 0 ? (
+                <>
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                </>
+              ) : (
+                author.slice(0, 4).map((aut: string) => (
+                  <Link to={"/"} className="hover:text-[#00CFB5] truncate">
+                    {aut}
+                  </Link>
+                ))
+              )}
             </div>
             <div className="">
               <h3 className="text-zinc-800 uppercase font-semibold my-2 ">
                 nhà xuất bản
               </h3>
 
-              {Publishers.slice(0, 4).map((Publ: string) => (
-                <Link to={"/"} className="hover:text-[#00CFB5]">
-                  {Publ}
-                </Link>
-              ))}
+              {Array.isArray(Publishers) && Publishers.length === 0 ? (
+                <>
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                </>
+              ) : (
+                Publishers.slice(0, 4).map((Publ: string) => (
+                  <Link to={"/"} className="hover:text-[#00CFB5] truncate">
+                    {Publ}
+                  </Link>
+                ))
+              )}
             </div>
             <div className="border-none">
               <h3 className="text-zinc-800 uppercase font-semibold my-2">
                 bán chạy
               </h3>
-              {BestSeller.slice(0, 4).map((product: IProduct) => (
-                <Link
-                  to={"/san-pham/" + product.slug}
-                  className="hover:text-[#00CFB5]"
-                >
-                  {product.title}
-                </Link>
-              ))}
+              {Array.isArray(BestSeller) && BestSeller.length === 0 ? (
+                <>
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="100%" />
+                </>
+              ) : (
+                BestSeller.slice(0, 4).map((product: IProduct) => (
+                  <Link
+                    to={"/san-pham/" + product.slug}
+                    className="hover:text-[#00CFB5] truncate"
+                  >
+                    {product.title}
+                  </Link>
+                ))
+              )}
             </div>
           </div>
           <Link to={"/cua-hang"}>

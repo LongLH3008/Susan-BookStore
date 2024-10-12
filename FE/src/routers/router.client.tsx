@@ -3,6 +3,7 @@ import LayoutClient from "@/layouts/WebsiteLayout";
 import * as Website from "@/pages/(website)";
 import UserGuard from "./guards/user.guard";
 import CKEditorFullScreen from "@/pages/(dashboard)/Blogs/CreateBlog";
+import { BlogProvider } from "@/common/hooks/useBlog";
 
 const ClientRoutes = [
   {
@@ -10,7 +11,10 @@ const ClientRoutes = [
     element: <UserGuard children={<LayoutClient />} />,
     children: [
       { path: "", element: <ProductProvider children={<Website.Home />} /> },
-      { path: "tin-tuc", element: <Website.Blog /> },
+      {
+        path: "tin-tuc",
+        element: <BlogProvider children={<Website.Blog />} />,
+      },
       { path: "tin-tuc/:slug", element: <Website.BlogDetail /> },
       {
         path: "san-pham/:slug",
