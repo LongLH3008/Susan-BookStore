@@ -1,4 +1,4 @@
-import { getBlogs } from "@/services/blog";
+import { getBlogs } from "@/services/blog.service";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { createContext, useContext } from "react";
 
