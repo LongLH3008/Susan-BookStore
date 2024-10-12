@@ -1,7 +1,11 @@
 import { useToast } from "@/common/hooks/useToast";
 import { Book, Image } from "@/common/schemas/product";
 import { getCategories } from "@/services/categories.service";
-import { addProduct, editProduct, getProducttById } from "@/services/product.service";
+import {
+  addProduct,
+  editProduct,
+  getProducttById,
+} from "@/services/product.service";
 import {
   Autocomplete,
   Box,
@@ -273,42 +277,64 @@ const ProductForm: React.FC = () => {
             <FormLabel>Giá</FormLabel>
             <TextField
               size="small"
-              {...register("price", { required: "Giá là bắt buộc" })}
+              {...register("price", {
+                required: "Giá là bắt buộc",
+                valueAsNumber: true, // Chuyển đổi giá trị nhập vào thành số
+                min: {
+                  value: 0,
+                  message: "Giá phải lớn hơn hoặc bằng 0",
+                },
+                max: {
+                  value: 10000000,
+                  message: "Giá không được vượt quá 10,000,000",
+                },
+              })}
               type="number"
               error={!!errors?.price}
               helperText={errors?.price && errors.price.message}
             />
           </FormControl>
+
           <FormControl fullWidth>
             <FormLabel>Giảm giá</FormLabel>
             <TextField
               size="small"
               {...register("discount", {
                 required: "Giảm giá là bắt buộc",
+                valueAsNumber: true,
+                min: {
+                  value: 0,
+                  message: "Giảm giá phải lớn hơn hoặc bằng 0",
+                },
+                max: {
+                  value: 100,
+                  message: "Giảm giá không được vượt quá 100%",
+                },
               })}
               type="number"
               error={!!errors?.discount}
               helperText={errors?.discount && errors.discount.message}
             />
           </FormControl>
+
           <FormControl fullWidth>
             <FormLabel>Danh mục</FormLabel>
             <Controller
               name="categories"
               control={control}
-              defaultValue={[]} // Đặt giá trị mặc định là mảng rỗng
-              rules={{ required: "Danh mục là bắt buộc" }} // Validation: bắt buộc phải chọn
+              defaultValue={[]}
+              rules={{ required: "Danh mục là bắt buộc" }}
               render={({ field }) => (
                 <Autocomplete
                   multiple
-                  options={options} // Các danh mục
-                  getOptionLabel={(option) => option.label} // Hiển thị tên của mỗi danh mục
+                  options={options}
+                  getOptionLabel={(option) => option.label}
                   value={options.filter((option: any) =>
                     field.value.includes(option.id)
                   )}
                   onChange={(_, newValue) => {
                     const selectedIds = newValue.map((option) => option.id);
-                    field.onChange(selectedIds); // Cập nhật giá trị vào React Hook Form
+                    field.onChange(selectedIds);
                   }}
                   renderInput={(params) => (
                     <TextField
