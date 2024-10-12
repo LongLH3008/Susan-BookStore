@@ -1,4 +1,4 @@
-import { fetchProducts } from "@/services/product";
+import { fetchProducts } from "@/services/product.service";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useState } from "react";
 

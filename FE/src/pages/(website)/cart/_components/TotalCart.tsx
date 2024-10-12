@@ -46,10 +46,10 @@ export default function TotalCart({ dataCart }: { dataCart: ICart[] }) {
 		(acc: number, item: any) => acc + item.product_id.price * item.product_quantity,
 		0
 	);
-	const discountArr = cart_select?.filter((item: any) => item.product_id.discount > 0 && item);
+	const discountArr = cart_select?.filter((item: any) => Math.abs(item.product_id.discount) > 0 && item);
 	const discount = discountArr?.reduce(
 		(acc: number, item: any) =>
-			acc + (item.product_id.discount / 100) * item.product_id.price * item.product_quantity,
+			acc + (Math.abs(item.product_id.discount) / 100) * item.product_id.price * item.product_quantity,
 		0
 	);
 

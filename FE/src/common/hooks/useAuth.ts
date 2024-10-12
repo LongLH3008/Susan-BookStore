@@ -1,4 +1,4 @@
-import { changePassword, checkOTP, confirmNewPassword, login, logout, register, requestOTP } from "@/services/auth";
+import { changePassword, checkOTP, confirmNewPassword, login, logout, register, requestOTP } from "@/services/auth.service";
 import { useMutation } from "@tanstack/react-query";
 import { SubmitHandler } from "react-hook-form";
 import { create } from "zustand";
@@ -88,9 +88,9 @@ export const useAuth = ({ action, onSuccess, onError }: useAuth) => {
 				onError(
 					error.response
 						? {
-								status: ToastVariant.ERROR,
-								message: error.response.data.message ?? error.response.data.error,
-						  }
+							status: ToastVariant.ERROR,
+							message: error.response.data.message ?? error.response.data.error,
+						}
 						: { status: ToastVariant.LOST_CONNECT, message: "Lỗi kết nối máy chủ" }
 				);
 		},

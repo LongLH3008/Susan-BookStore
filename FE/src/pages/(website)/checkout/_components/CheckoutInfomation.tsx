@@ -2,6 +2,7 @@ import Contact from "./Contact";
 import Delivery from "./Delivery";
 import Payment from "./Payment";
 import ShippingMethod from "./ShippingMethod";
+import Voucher from "./Voucher";
 
 type Props = {};
 
@@ -11,6 +12,7 @@ const CheckoutInfomation = (props: Props) => {
 			<form action="" className="w-full h-full p-[33px] max-[1000px]:pr-0 pl-0 flex flex-col gap-[33px]">
 				<Contact />
 				<Delivery />
+				<Voucher />
 				<ShippingMethod />
 				<Payment />
 				<button
