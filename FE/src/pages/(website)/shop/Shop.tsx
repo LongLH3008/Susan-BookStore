@@ -6,7 +6,6 @@ import Breadcrumb from "../../../components/(website)/breadcrumb/breadcrumb.tsx"
 import Left from "./_components/Fillter.tsx";
 import Nav from "./_components/Headershop.tsx";
 import Right from "./_components/Productshop.tsx";
-import { IProduct } from "@/common/interfaces/product.ts";
 
 const Shop = () => {
   const [viewMode, setViewMode] = useState("md:w-1/3 sm:w-1/2");
@@ -55,7 +54,7 @@ const Shop = () => {
 
   const handleSortByChange = (event: any) => {
     const sortMapping: { [key: string]: string | undefined } = {
-      "best-selling": "",
+      "best-selling": "descByRating",
       "title-ascending": "ascByTitle",
       "title-descending": "descByTitle",
       "price-ascending": "ascByPrice",

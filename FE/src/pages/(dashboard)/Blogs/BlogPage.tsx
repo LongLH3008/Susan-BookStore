@@ -1,7 +1,8 @@
 import { useToast } from "@/common/hooks/useToast";
 import { IBlog } from "@/common/interfaces/blog";
-import { ToastVariant } from "@/common/interfaces/toast";
+import BlogItem from "@/pages/(website)/blog_detail/_components/BlogItem";
 import { deleteBlog, getBlogs } from "@/services/blog.service";
+import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
 import {
   Box,
@@ -10,6 +11,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  IconButton,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -28,6 +30,7 @@ const BlogPage = () => {
   const { toast } = useToast();
   const [selectedBlog, setSelectedBlog] = useState<IBlog | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["Blog"],
     queryFn: () => getBlogs(),
@@ -52,13 +55,18 @@ const BlogPage = () => {
       });
     },
   });
-
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedBlog(null);
+  };
   const onEdit = (id: string) => {
     nav(`chinh-sua/${id}`);
-    console.log(id);
+    // console.log(id);
   };
   const onShowDetail = (blog: IBlog) => {
     console.log(blog);
+    setSelectedBlog(blog);
+    setOpen(true);
   };
   const confirmDelete = async () => {
     if (selectedBlog) {
@@ -193,6 +201,8 @@ const BlogPage = () => {
           }}
         />
       </Paper>
+
+      {/* confirm detele */}
       <Dialog
         open={confirmOpen}
         onClose={() => setConfirmOpen(false)}
@@ -209,6 +219,22 @@ const BlogPage = () => {
             Xóa
           </Button>
         </Box>
+      </Dialog>
+      {/* blog detail */}
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogTitle>
+          Chi tiết tin tức
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <BlogItem dataBlog={selectedBlog} />
+        </DialogContent>
       </Dialog>
     </>
   );

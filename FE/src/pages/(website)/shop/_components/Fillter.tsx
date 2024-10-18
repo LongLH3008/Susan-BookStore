@@ -67,27 +67,27 @@ const Left = ({ filterValues, handleFilterProduct }: Prob) => {
 
   //data filter
   const sidebarItems = [
-    {
-      id: 2,
-      title: "Trạng thái",
-      open: openItem.includes(2),
-      items: [
-        {
-          type: "checkbox",
-          name: "availability",
-          value: 1,
-          label: "Còn hàng",
-          count: 34,
-        },
-        {
-          type: "checkbox",
-          name: "availability",
-          value: 0,
-          label: "Hết hàng",
-          count: 18,
-        },
-      ],
-    },
+    // {
+    //   id: 2,
+    //   title: "Trạng thái",
+    //   open: openItem.includes(2),
+    //   items: [
+    //     {
+    //       type: "checkbox",
+    //       name: "availability",
+    //       value: 1,
+    //       label: "Còn hàng",
+    //       count: 34,
+    //     },
+    //     {
+    //       type: "checkbox",
+    //       name: "availability",
+    //       value: 0,
+    //       label: "Hết hàng",
+    //       count: 18,
+    //     },
+    //   ],
+    // },
     {
       id: 3,
       title: "Loại sách",
@@ -100,18 +100,18 @@ const Left = ({ filterValues, handleFilterProduct }: Prob) => {
         count: 3,
       })),
     },
-    {
-      id: 4,
-      title: "Tác giả",
-      open: openItem.includes(4),
-      items: author.map((au) => ({
-        type: "checkbox",
-        name: "author",
-        value: au,
-        label: au,
-        count: 3,
-      })),
-    },
+    // {
+    //   id: 4,
+    //   title: "Tác giả",
+    //   open: openItem.includes(4),
+    //   items: author.map((au) => ({
+    //     type: "checkbox",
+    //     name: "author",
+    //     value: au,
+    //     label: au,
+    //     count: 3,
+    //   })),
+    // },
   ];
 
   return (
@@ -201,15 +201,15 @@ const Left = ({ filterValues, handleFilterProduct }: Prob) => {
                 </button>
               </div>
               {item.open && (
-                <div className="sidebar-body widget-collapse-hide">
-                  <div className="filter-value-counter flex justify-between items-center">
+                <div className="sidebar-body widget-collapse-hide mt-3">
+                  {/* <div className="filter-value-counter flex justify-between items-center">
                     <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
                       Đã chọn
                     </span>
                     <button className="underline hover:text-[#00BFC5]">
                       Làm mới
                     </button>
-                  </div>
+                  </div> */}
                   <ul className="checkbox-container categories-list">
                     {item.items.map((subItem: any, index: any) => (
                       <li key={index}>

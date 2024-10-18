@@ -5,7 +5,6 @@ import Blog from "../../../../components/(website)/blog/blog";
 
 const BlogItem = () => {
   const { DataBlogs } = useBlog();
-  console.log("blog", DataBlogs);
 
   return (
     <>
