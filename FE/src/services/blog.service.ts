@@ -4,7 +4,9 @@ import { SendRequest } from "@/config";
 export const getBlogById = async (_id: string) => {
   return await SendRequest("GET", `blog/${_id}`);
 };
-
+export const getBlogBySlug = async (slug: string) => {
+  return await SendRequest("GET", `blog/by/${slug}`);
+};
 export const getBlogs = async () => {
   return await SendRequest("GET", `blog`);
 };

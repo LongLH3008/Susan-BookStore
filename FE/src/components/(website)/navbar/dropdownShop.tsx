@@ -66,10 +66,10 @@ const DropdownShop = () => {
               </h3>
               {Array.isArray(author) && author.length === 0 ? (
                 <>
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="90%" />
+                  <Skeleton variant="text" width="90%" />
+                  <Skeleton variant="text" width="90%" />
+                  <Skeleton variant="text" width="90%" />
                 </>
               ) : (
                 author.slice(0, 4).map((aut: string) => (
@@ -86,10 +86,10 @@ const DropdownShop = () => {
 
               {Array.isArray(Publishers) && Publishers.length === 0 ? (
                 <>
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="90%" />
+                  <Skeleton variant="text" width="90%" />
+                  <Skeleton variant="text" width="90%" />
+                  <Skeleton variant="text" width="90%" />
                 </>
               ) : (
                 Publishers.slice(0, 4).map((Publ: string) => (
@@ -105,10 +105,10 @@ const DropdownShop = () => {
               </h3>
               {Array.isArray(BestSeller) && BestSeller.length === 0 ? (
                 <>
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
-                  <Skeleton variant="text" width="100%" />
+                  <Skeleton variant="text" width="90%" />
+                  <Skeleton variant="text" width="90%" />
+                  <Skeleton variant="text" width="90%" />
+                  <Skeleton variant="text" width="90%" />
                 </>
               ) : (
                 BestSeller.slice(0, 4).map((product: IProduct) => (

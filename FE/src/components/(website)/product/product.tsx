@@ -93,7 +93,7 @@ const ProdContent = ({ dataProduct }: Props) => {
               {dataProduct?.title}
             </Link>
           </Tooltip>
-          <p className="text-zinc-500">{dataProduct?.author}</p>
+          <p className="text-zinc-500 truncate">{dataProduct?.author}</p>
           <div>
             <span className="text-[16px] text-[#00BFC5] font-semibold">
               {ConvertVNDString(

@@ -15,7 +15,10 @@ const ClientRoutes = [
         path: "tin-tuc",
         element: <BlogProvider children={<Website.Blog />} />,
       },
-      { path: "tin-tuc/:slug", element: <Website.BlogDetail /> },
+      {
+        path: "tin-tuc/:slug",
+        element: <BlogProvider children={<Website.BlogDetail />} />,
+      },
       {
         path: "san-pham/:slug",
         element: <ProductProvider children={<Website.BookDetail />} />,

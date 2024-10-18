@@ -23,7 +23,7 @@ const SimilarProducts = ({ category }: { category: string[] }) => {
       </h2>
       <div className="grid min-[500px]:grid-cols-2 md:grid-cols-3 min-[1100px]:grid-cols-4 gap-[30px] mb-10">
         {productQuery?.isLoading ? (
-          Array.from({ length: 8 }).map((_, index) => (
+          Array.from({ length: 4 }).map((_, index) => (
             <SkeletonProduct index={index} />
           ))
         ) : productQuery?.data?.metadata?.books.length !== 0 ? (

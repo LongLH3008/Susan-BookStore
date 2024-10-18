@@ -29,14 +29,6 @@ const Bookservice = ({ detailProduct }: { detailProduct: IProduct }) => {
           >
             Đánh giá
           </button>
-          <button
-            onClick={() => setTab("Comments")}
-            className={`${
-              tab == "Comments" ? "text-gray-900" : "text-gray-300"
-            } font-bold  text-xl px-4 hover:text-gray-900`}
-          >
-            Bình luận
-          </button>
         </div>
         <div className=" my-14">
           {/* Description */}

@@ -1,16 +1,17 @@
 import { useToast } from "@/common/hooks/useToast";
-import { IBlog } from "@/common/interfaces/blog";
+import { IBlogFrom } from "@/common/interfaces/blog";
 import { BlogValidate } from "@/common/schemas/blog";
+import { Authentication } from "@/common/shared/authentication";
 import { createBlog, getBlogById, updateBlog } from "@/services/blog.service";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { joiResolver } from "@hookform/resolvers/joi";
+import { CircularProgress } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
-import { MdAdd, MdHorizontalRule } from "react-icons/md";
 
 import { Link, useNavigate, useParams } from "react-router-dom";
 
@@ -27,18 +28,14 @@ interface TypeCKEDITOR {
   };
 }
 const CreateBlog = () => {
-  const MAX_INPUTS = 5;
+  // const MAX_INPUTS = 5;
+  const payload = Authentication();
+
   const { id } = useParams<{ id: string }>();
 
   const { toast } = useToast();
   const nav = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IBlog>({
-    resolver: joiResolver(BlogValidate),
-  });
+
   const [selectedCoverImage, setSelectedCoverImage] = useState<File | null>(
     null
   );
@@ -48,7 +45,7 @@ const CreateBlog = () => {
 
   const [editorData, setEditorData] = useState("");
 
-  const [inputs, setInputs] = useState<string[]>([""]);
+  // const [inputs, setInputs] = useState<string[]>([""]);
 
   //lấy tin tức theo id
 
@@ -61,6 +58,22 @@ const CreateBlog = () => {
     queryFn: () => getBlogById(id!),
     enabled: !!id,
   });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<IBlogFromFrom>({
+    resolver: joiResolver(BlogValidate),
+  });
+
+  //setValue
+  useEffect(() => {
+    if (blog?.metadata) {
+      setValue("blog_title", blog?.metadata.blog_title);
+      setValue("blog_tags", blog?.metadata.blog_tags);
+    }
+  }, [blog?.metadata]);
   // console.log(blog?.metadata.blog_content);
   useEffect(() => {
     if (blog?.metadata?.blog_content) {
@@ -164,32 +177,33 @@ const CreateBlog = () => {
     },
   };
   //thêm input tag
-  const handleAddInput = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (inputs.length < MAX_INPUTS) {
-      setInputs([...inputs, ""]);
-    }
-  };
+  // const handleAddInput = (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   if (inputs.length < MAX_INPUTS) {
+  //     setInputs([...inputs, ""]);
+  //   }
+  // };
   //xóa thẻ
-  const handleRemoveInput = (
-    index: number,
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault();
-    if (inputs.length > 1) {
-      const newInputs = inputs.filter((_, i) => i !== index);
-      setInputs(newInputs);
-    }
-  };
+  // const handleRemoveInput = (
+  //   index: number,
+  //   e: React.MouseEvent<HTMLButtonElement>
+  // ) => {
+  //   e.preventDefault();
+  //   if (inputs.length > 1) {
+  //     const newInputs = inputs.filter((_, i) => i !== index);
+  //     setInputs(newInputs);
+  //   }
+  // };
   //lấy dữ liệu tag
-  const handleInputChange = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const newInputs = [...inputs];
-    newInputs[index] = event.target.value;
-    setInputs(newInputs);
-  };
+  // const handleInputChange = (
+  //   index: number,
+  //   event: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const newInputs = [...inputs];
+  //   newInputs[index] = event.target.value;
+  //   setInputs(newInputs);
+  // };
+  //thông báo lỗi khi submit
   const handleError = (err: any, action: string) => {
     const messages = `Lỗi khi ${action} sản phẩm: `;
     toast({
@@ -200,7 +214,7 @@ const CreateBlog = () => {
 
   const { mutateAsync, isPending } = !id
     ? useMutation({
-        mutationFn: (data: IBlog) => createBlog(data),
+        mutationFn: (data: IBlogFrom) => createBlog(data),
         onSuccess: (data: any) => {
           nav("/quan-tri/tin-tuc");
           toast({
@@ -211,7 +225,7 @@ const CreateBlog = () => {
         onError: (err: any) => handleError(err, "Thêm"),
       })
     : useMutation({
-        mutationFn: ({ data, id }: { data: IBlog; id: string }) =>
+        mutationFn: ({ data, id }: { data: IBlogFrom; id: string }) =>
           updateBlog(data, id),
         onSuccess: (data: any) => {
           nav("/quan-tri/tin-tuc");
@@ -223,11 +237,17 @@ const CreateBlog = () => {
         onError: (err: any) => handleError(err, "Cập nhật"),
       });
 
-  const onSubmit: SubmitHandler<IBlog> = async (data: IBlog) => {
+  const onSubmit: SubmitHandler<IBlogFrom> = async (data: IBlogFrom) => {
     try {
       let coverImageUrl = "";
       data.blog_content = editorData;
-      data.blog_tags = inputs;
+      // data.blog_tags = inputs;
+      data.blog_author = payload?.id ?? "default_author";
+
+      if (data.blog_tags && typeof data.blog_tags === "string") {
+        const tags = data.blog_tags?.split(",").map((tag) => tag.trim());
+        data.blog_tags = tags;
+      }
 
       if (selectedCoverImage) {
         const coverImageFormData = new FormData();
@@ -237,16 +257,19 @@ const CreateBlog = () => {
           coverImageFormData
         );
         coverImageUrl = coverImageResponse.data.metadata.fileLinks[0];
-        console.log("coverImageUrl", coverImageUrl);
+        // console.log("coverImageUrl", coverImageUrl);
 
         data.blog_image = coverImageUrl;
       }
-      const updatedData = {
-        ...blog?.metadata,
-        ...data,
-      };
+      let updatedData = data;
+      if (blog?.metadata) {
+        updatedData = {
+          ...blog?.metadata,
+          ...data,
+        };
+      }
 
-      console.log("updatedData", updatedData);
+      // console.log("updatedData", updatedData);
       id ? await mutateAsync({ data, id }) : await mutateAsync(data);
     } catch (error) {
       toast({
@@ -276,156 +299,152 @@ const CreateBlog = () => {
           </Link>
         </div>
       </div>{" "}
-      {/* form */}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-full  grid grid-cols-4 gap-8 mt-[100px]">
-          <div className="w-full col-span-3 *:mb-6">
-            <div>
-              <label
-                htmlFor="blog_title"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Tiêu đề :<span className="text-sm text-red-500">*</span>
-              </label>
-
-              <input
-                type="text"
-                id="blog_title"
-                className={` ${
-                  errors.blog_title && "border-red-700"
-                } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 `}
-                placeholder="John"
-                {...register("blog_title")}
-                defaultValue={
-                  blog?.metadata?.blog_title && blog.metadata.blog_title
-                }
-              />
-              {errors.blog_title && (
-                <span className="text-red-700  text-sm ">
-                  {errors.blog_title?.message}
-                </span>
-              )}
-            </div>
-
-            <div>
-              <label
-                htmlFor="first_name"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Nội dung :
-              </label>
-
-              <CKEditor
-                editor={ClassicEditor}
-                data={editorData}
-                config={configCKEditor}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  setEditorData(data);
-                }}
-              />
-            </div>
-            <button
-              type="submit"
-              className="border px-6 py-3 border-gray-500 rounded-lg hover:border-[#00bfc5] hover:text-[#00bfc5] "
-            >
-              submit
-            </button>
-            <button
-              type="reset"
-              className="border px-6 py-3 border-gray-500 rounded-lg hover:border-[#00bfc5] hover:text-[#00bfc5] "
-            >
-              Reset
-            </button>
-          </div>
-          <div className="col-span-1 *:mb-6">
-            <div>
-              <label
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                htmlFor="small_size"
-              >
-                Ảnh bìa :
-              </label>
-              <input
-                accept="image/*"
-                onChange={handleCoverImageChange}
-                className="block w-full mb-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50  focus:outline-none "
-                id="small_size"
-                type="file"
-              />
-              {previewCoverImage && (
-                <img src={previewCoverImage} alt="Cover Preview" width="200" />
-              )}
-            </div>
-            <div>
-              <label
-                htmlFor="blog_author"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Tên tác giả :<span className="text-sm text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                id="blog_author"
-                className={`${
-                  errors.blog_author && "border-red-700"
-                } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 `}
-                placeholder="John"
-                defaultValue={
-                  blog?.metadata?.blog_author && blog.metadata.blog_author
-                }
-                {...register("blog_author")}
-              />
-              {errors.blog_author && (
-                <span className="text-red-700 text-sm ">
-                  {errors.blog_author?.message}
-                </span>
-              )}
-            </div>
-            <div className="w-full flex flex-col  justify-center">
-              <label
-                htmlFor="blog_tags"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Tên thẻ sách :
-              </label>
-              <div className="w-full flex items-center ">
-                <div className="flex flex-col  justify-center ">
-                  {inputs.map((input, index) => (
-                    <div className="flex items-center mb-3">
-                      <input
-                        key={index}
-                        defaultValue={input}
-                        onChange={(e) => {
-                          handleInputChange(index, e);
-                        }}
-                        type="text"
-                        id="blog_tags"
-                        className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5  "
-                      />
-                      <button
-                        className="border hover:border-red-700 hover:text-red-700 text-xl ms-2 p-1 flex justify-center items-center rounded-full "
-                        onClick={(e) => handleRemoveInput(index, e)}
-                        disabled={inputs.length <= 1}
-                      >
-                        <MdHorizontalRule />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-
-                <button
-                  className="border p-1 hover:border-[#00bfc5] hover:text-[#00bfc5] flex text-xl justify-center items-center rounded-full ms-4"
-                  onClick={(e) => handleAddInput(e)}
-                  disabled={inputs.length >= MAX_INPUTS}
+      {/* content */}
+      {isLoading ? (
+        <div className="flex items-center justify-center mt-[20vh]">
+          <CircularProgress />
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="w-full  grid grid-cols-4 gap-8 mt-[100px]">
+            <div className="w-full col-span-3 *:mb-6">
+              <div>
+                <label
+                  htmlFor="blog_title"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  <MdAdd />
-                </button>
+                  Tiêu đề :<span className="text-sm text-red-500">*</span>
+                </label>
+
+                <input
+                  type="text"
+                  id="blog_title"
+                  className={` ${
+                    errors.blog_title && "border-red-700"
+                  } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 `}
+                  placeholder="Tiêu đề"
+                  {...register("blog_title")}
+                />
+                {errors.blog_title && (
+                  <span className="text-red-700  text-sm ">
+                    {errors.blog_title?.message}
+                  </span>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="first_name"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Nội dung :
+                </label>
+
+                <CKEditor
+                  editor={ClassicEditor}
+                  data={editorData}
+                  config={configCKEditor}
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    setEditorData(data);
+                  }}
+                />
+              </div>
+              <button
+                type="submit"
+                className="border px-6 py-3 border-gray-500 rounded-lg hover:border-[#00bfc5] hover:text-[#00bfc5] "
+              >
+                submit
+              </button>
+              <button
+                type="reset"
+                className="border px-6 py-3 border-gray-500 rounded-lg hover:border-[#00bfc5] hover:text-[#00bfc5] "
+              >
+                Reset
+              </button>
+            </div>
+            <div className="col-span-1 *:mb-6">
+              <div>
+                <label
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  htmlFor="small_size"
+                >
+                  Ảnh bìa :
+                </label>
+                <input
+                  accept="image/*"
+                  onChange={handleCoverImageChange}
+                  className="block w-full mb-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50  focus:outline-none "
+                  id="small_size"
+                  type="file"
+                />
+                {previewCoverImage && (
+                  <img
+                    src={previewCoverImage}
+                    alt="Cover Preview"
+                    width="200"
+                  />
+                )}
+              </div>
+
+              <div className="w-full flex flex-col  justify-center">
+                <label
+                  htmlFor="blog_tags"
+                  className="block mb-2 text-sm font-medium text-gray-900 "
+                >
+                  Tên thẻ sách :
+                </label>
+                <input
+                  type="text"
+                  id="blog_tags"
+                  className={`  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 `}
+                  placeholder="Tag1 , tag 2 , tag 3 , ..."
+                  {...register("blog_tags")}
+                />
+                {errors.blog_tags && (
+                  <span className="text-red-600">
+                    {errors.blog_tags.message}
+                  </span>
+                )}
+                {/* <div className="w-full flex items-center ">
+                  <div className="flex flex-col  justify-center ">
+                    {inputs.map((input, index) => (
+                      <div className="flex items-center mb-3">
+                        <input
+                          key={index}
+                          defaultValue={input}
+                          onChange={(e) => {
+                            handleInputChange(index, e);
+                          }}
+                          type="text"
+                          id="blog_tags"
+                          className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5  "
+                        />
+                        <button
+                          className="border hover:border-red-700 hover:text-red-700 text-xl ms-2 p-1 flex justify-center items-center rounded-full "
+                          onClick={(e) => handleRemoveInput(index, e)}
+                          disabled={inputs.length <= 1}
+                        >
+                          <MdHorizontalRule />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button
+                    className="border p-1 hover:border-[#00bfc5] hover:text-[#00bfc5] flex text-xl justify-center items-center rounded-full ms-4"
+                    onClick={(e) => handleAddInput(e)}
+                    disabled={inputs.length >= MAX_INPUTS}
+                  >
+                    <MdAdd />
+                  </button>
+                </div> */}
               </div>
             </div>
           </div>
-        </div>
-      </form>
+        </form>
+      )}
+      {/* form */}
       <style>
         {`
           .ck-editor__editable_inline {

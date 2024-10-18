@@ -84,8 +84,8 @@ const Nav = ({
               <option value="title-descending">Thứ tự Z-A</option>
               <option value="price-ascending">Giá thấp đến cao</option>
               <option value="price-descending">Giá cao đến thấp</option>
-              <option value="created-descending">Ngày mới đến cũ</option>
-              <option value="created-ascending">Ngày Cũ đến mới</option>
+              {/* <option value="created-descending">Ngày mới đến cũ</option>
+              <option value="created-ascending">Ngày Cũ đến mới</option> */}
             </select>
           </div>
         </div>
