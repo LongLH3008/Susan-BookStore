@@ -172,10 +172,17 @@ class BookService {
       const skip = (page - 1) * limit;
       const foundBooks = await Promise.all(
         arrTitle.map(async (title: string) => {
-          const foundBook = await Book.findOne({
-            title: title,
-            isActive: true,
-          });
+          const foundBook = await Book.findOne(
+            { $or: [
+              {
+                title: title,
+                isActive: true
+              },
+              {
+                author: title,
+                isActive: true
+              }
+            ]});
           return foundBook;
         })
       );
