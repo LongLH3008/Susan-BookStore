@@ -131,6 +131,7 @@ router.get("/get-province", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controll
 router.post("/searchbook", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearchBooks));
 router.post("/search", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearchKeywords));
 router.post("/loaddata", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.loadData));
+router.post("/suggestedbook", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.suggestedBooks));
 //payment\
 router.get("/payment/bank-list", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getBankList));
 router.post("/payment/create-payment-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getPaymentUrl));

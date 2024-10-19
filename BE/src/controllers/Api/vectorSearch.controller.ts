@@ -30,27 +30,27 @@ export default class VectorSearchController {
     }
   }
 
-  // static async suggestedBooks(req: Request, res: Response): Promise<any> {
-  //   try {
-  //     const fireworksData = await new FireworksService().getData(req.body);
-  //     const query = {
-  //       vector: fireworksData?.data[0]?.embedding,
-  //       limit: 4,
-  //       with_payload: true,
-  //     };
+  static async suggestedBooks(req: Request, res: Response): Promise<any> {
+    try {
+      const fireworksData = await new FireworksService().getData(req.body);
+      const query = {
+        vector: fireworksData?.data[0]?.embedding,
+        limit: 4,
+        with_payload: true,
+      };
 
-  //     const qdrantResponse = await new QdrantService().searchProductByQdrant(query);
-  //     const arrList = qdrantResponse.map((res:any) => res.payload.object)
+      const qdrantResponse = await new QdrantService().searchProductByQdrant(query);
+      const arrList = qdrantResponse.map((res:any) => res.payload.object)
 
-  //     const { page = 1, limit = 10 } = req.query;
-  //     return new SuccessResponse({
-  //       message: "Get books successfully",
-  //       metadata: await BookService.getBookByNameArray(arrList,{ page: Number(page), limit: Number(limit) })
-  //     }).send(res);
-  //   } catch (error: any) {
-  //     res.status(500).json({ error: error.message });
-  //   }
-  // }
+      const page = 1, limit = 4;
+      return new SuccessResponse({
+        message: "Get books successfully",
+        metadata: await BookService.getBookByNameArray(arrList,{ page: Number(page), limit: Number(limit) })
+      }).send(res);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 
   static async advancedSearchKeywords(req: Request, res: Response): Promise<any> {
     try {

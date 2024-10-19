@@ -153,6 +153,7 @@ router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince));
 router.post("/searchbook", asyncHandler(VectorSearchController.advancedSearchBooks))
 router.post("/search", asyncHandler(VectorSearchController.advancedSearchKeywords))
 router.post("/loaddata", asyncHandler(VectorSearchController.loadData))
+router.post("/suggestedbook", asyncHandler(VectorSearchController.suggestedBooks))
 //payment\
 router.get("/payment/bank-list", asyncHandler(PaymentController.getBankList))
 router.post("/payment/create-payment-url", asyncHandler(PaymentController.getPaymentUrl))
