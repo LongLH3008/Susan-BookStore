@@ -6,7 +6,8 @@ import Breadcrumb from "../../../components/(website)/breadcrumb/breadcrumb.tsx"
 import Left from "./_components/Fillter.tsx";
 import Nav from "./_components/Headershop.tsx";
 import Right from "./_components/Productshop.tsx";
-
+import { useLocation } from "react-router-dom";
+import { getBooksByKeyword } from "@/services/search.service";
 const Shop = () => {
   const [viewMode, setViewMode] = useState("md:w-1/3 sm:w-1/2");
   const [itemsToShow, setItemsToShow] = useState(10);
@@ -19,6 +20,38 @@ const Shop = () => {
     productType: [],
     author: [],
   });
+  const location = useLocation();
+
+  const getQueryParams = () => {
+    const queryParams = new URLSearchParams(location.search);
+    return {
+      q: queryParams.get("q") || "", 
+      c: queryParams.get("c") || ""  
+    };
+  };
+
+  const [query, setQuery] = useState(getQueryParams().q);
+  const [cate, setCate] = useState(getQueryParams().c);
+  const [books, setBooks] = useState([]);
+  const getBooks = async () => {
+    try {
+      const data = await getBooksByKeyword({
+        input: query,
+        model: "nomic-ai/nomic-embed-text-v1.5",
+        dimensions: 512
+      });
+      setBooks(data);
+      } catch (error) {
+      console.error("Error fetching books:", error);
+
+    }
+  }
+
+  useEffect(() => {
+    getBooks()
+  },[])
+  console.log(books);
+
 
   const { productQuery, updateFilter, productDataFilter, setFeature } = useProduct();
   const totalItems = productQuery?.data?.metadata?.total;
@@ -90,6 +123,7 @@ const Shop = () => {
   //   }
   // }, [filterValues, productQuery]);
 
+
   return (
     <>
       <Breadcrumb title="Shop" />
@@ -115,7 +149,8 @@ const Shop = () => {
             </MegeMenuProvider>
           </CategoryProvider>
 
-          <Right
+          
+            <Right
             dataProduct={productDataFilter}
             totalItems={totalItems}
             itemsToShow={itemsToShow}
@@ -123,6 +158,7 @@ const Shop = () => {
             onPageChange={setCurrentPage}
             viewMode={viewMode}
           />
+          
         </div>
       </div>
     </>

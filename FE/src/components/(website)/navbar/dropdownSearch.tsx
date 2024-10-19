@@ -3,7 +3,7 @@ import { customModalSearch } from "@/common/ui/CustomModalSearch";
 import { Modal } from "flowbite-react";
 import { useEffect, useReducer, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getKeywords } from "../../../services/search.service";
 interface SearchForm {
   search: string;
@@ -22,16 +22,21 @@ type SearchAction =
 
 const ResultKeyword = ({ suggestedKeywords }: { suggestedKeywords: string[] }) => {
 
+  const navigate = useNavigate();
   return (
     <div>
       {suggestedKeywords ? suggestedKeywords?.map((keyword: string, index: number) => (
-        <Link
-          to={"/cua-hang?q=" + keyword}
-          className="w-full h-auto block p-2 border-b border-gray-200"
+        <p
+    
+          className="w-full h-auto block p-2 border-b border-gray-200 hover:bg-zinc-800 hover:text-white cursor-pointer"
           key={index}
+          onClick={() => {
+            navigate("/cua-hang?q=" + keyword)
+            location.reload();
+          }}
         >
           {keyword}
-        </Link>
+        </p>
       )) : <div>Not found.</div>}
     </div>
   );
@@ -64,11 +69,13 @@ const DropdownSearch = () => {
   useEffect(() => {
     setOpenModal(false);
   }, [location]);
-
+  const navigate = useNavigate();
   const { register, handleSubmit } = useForm<SearchForm>();
 
   const onSubmit = (data: SearchForm) => {
-    console.log(data.search);
+    // location.reload();
+
+    navigate("/cua-hang?q=" + data.search, {replace: false});
   };
 
   const fetchSuggestedKeywords = async (keyword: string) => {
