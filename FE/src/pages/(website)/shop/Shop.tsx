@@ -9,7 +9,7 @@ import Right from "./_components/Productshop.tsx";
 
 const Shop = () => {
   const [viewMode, setViewMode] = useState("md:w-1/3 sm:w-1/2");
-  const [itemsToShow, setItemsToShow] = useState(6);
+  const [itemsToShow, setItemsToShow] = useState(10);
   // const [sortBy, setSortBy] = useState("manual");
   const [currentPage, setCurrentPage] = useState(1);
   // const [dataProducts, setDataProducts] = useState<IProduct[] | []>([]);
@@ -20,10 +20,8 @@ const Shop = () => {
     author: [],
   });
 
-  const { productQuery, updateFilter, productDataFilter, setFeature } =
-    useProduct();
+  const { productQuery, updateFilter, productDataFilter, setFeature } = useProduct();
   const totalItems = productQuery?.data?.metadata?.total;
-  console.log("Hihi", productDataFilter);
 
   useEffect(() => {
     updateFilter("limit", itemsToShow);

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Product from "../../../../components/(website)/product/product";
 import Pagination from "./pagination";
 import SkeletonProduct from "@/components/(website)/Skeleton/skeletonProduct";
-
+import { useLocation } from "react-router-dom";
 type Props = {
   dataProduct: dataProductProb | undefined;
   totalItems: number;
@@ -22,8 +22,12 @@ const Right = ({
   onPageChange,
   viewMode,
 }: Props) => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const query = queryParams.get("q"); 
+
   const { productQuery, updateFilter } = useProduct();
-  // console.log(data?.metadata);
+    
   useEffect(() => {
     updateFilter("page", currentPage);
   }, [currentPage]);

@@ -60,7 +60,7 @@ const Nav = ({
               value={itemsToShow}
               onChange={handleItemsToShowChange}
             >
-              {Array.from({ length: 18 }, (_, i) => i + 3).map((value) => (
+              {Array.from({ length: 4 }, (_, i) => (i+1)*10).map((value) => (
                 <option key={value} value={value}>
                   {value}
                 </option>
