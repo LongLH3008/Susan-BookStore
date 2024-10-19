@@ -1,11 +1,10 @@
 import * as icon from "@/common/assets/icon";
 import { customModalSearch } from "@/common/ui/CustomModalSearch";
-import axios from "axios";
 import { Modal } from "flowbite-react";
 import { useEffect, useReducer, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation } from "react-router-dom";
-
+import { getKeywords } from "../../../services/search.service";
 interface SearchForm {
   search: string;
 }
@@ -74,11 +73,12 @@ const DropdownSearch = () => {
 
   const fetchSuggestedKeywords = async (keyword: string) => {
     try {
-      const {data} = await axios.post(`http://localhost:5000/api/v1/search`,{
-        "input": keyword,
-        "model": "nomic-ai/nomic-embed-text-v1.5",
-        "dimensions": 512
-      });     
+   
+      const data = await getKeywords({
+        input: keyword,
+        model: "nomic-ai/nomic-embed-text-v1.5",
+        dimensions: 512
+      });
       
       dispatch({ type: 'SET_SUGGESTED_KEYWORDS', payload: data });
       
