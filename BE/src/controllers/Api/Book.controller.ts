@@ -33,6 +33,7 @@ class BookController {
     }).send(res);
   }
 
+
   static async updateOne(req: Request, res: Response): Promise<any> {
     const { id } = req.params;
     return new SuccessResponse({
