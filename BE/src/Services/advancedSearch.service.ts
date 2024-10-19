@@ -37,7 +37,7 @@ export class QdrantService {
   public async searchProductByQdrant(query: any): Promise<any> {
     try {
       const { data } = await axios.post(
-        `${this.baseUrl}/collections/products/points/search`,
+        `${this.baseUrl}/collections/keywords/points/search`,
         {
           ...query,
         },
@@ -57,7 +57,7 @@ export class QdrantService {
   public async addProductToQdrant(points: any): Promise<any> {
     try {
       const { data } = await axios.put(
-        `${this.baseUrl}/collections/products/points`,
+        `${this.baseUrl}/collections/keywords/points`,
         {
           points: points,
         },
