@@ -128,7 +128,8 @@ router.post("/giao-hang-nhanh/create", (0, utils_1.asyncHandler)(GiaoHangNhanhTe
 router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.getDetail));
 router.get("/get-province", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.GetProvince));
 // advanced search and similar books
-router.post("/search", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearch));
+router.post("/searchbook", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearchBooks));
+router.post("/search", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearchKeywords));
 router.post("/loaddata", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.loadData));
 //payment\
 router.get("/payment/bank-list", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getBankList));

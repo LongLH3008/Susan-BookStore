@@ -150,7 +150,8 @@ router.post("/chi-tiet-don-hang", asyncHandler(GiaoHangNhanhController.getDetail
 router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince));
 
 // advanced search and similar books
-router.post("/search", asyncHandler(VectorSearchController.advancedSearch))
+router.post("/searchbook", asyncHandler(VectorSearchController.advancedSearchBooks))
+router.post("/search", asyncHandler(VectorSearchController.advancedSearchKeywords))
 router.post("/loaddata", asyncHandler(VectorSearchController.loadData))
 //payment\
 router.get("/payment/bank-list", asyncHandler(PaymentController.getBankList))
