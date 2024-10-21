@@ -86,7 +86,7 @@ const ProdContent = ({ dataProduct }: Props) => {
           </div>
           <Tooltip title={dataProduct?.title}>
             <Link
-              to="/book_detail"
+              to={"/san-pham/" + dataProduct?.slug}
               state={{ from: location.pathname }}
               className="text-zinc-700 text-[15px] font-semibold truncate"
             >

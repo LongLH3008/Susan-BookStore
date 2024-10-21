@@ -30,11 +30,10 @@ export const MegeMenuProvider = ({ children }: ProdMegaMenuProbs) => {
     staleTime: 5000,
   });
   const Books = data?.data?.metadata?.books || [];
-  const author = Books?.map((book: IProduct) => book.author) // Lấy author từ từng sản phẩm
-    ?.filter(
-      (author: string, index: number, self: any) =>
-        author && self.indexOf(author) === index
-    );
+  const author = Books?.map((book: IProduct) => book.author)?.filter(
+    (author: string, index: number, self: any) =>
+      author && self.indexOf(author) === index
+  );
 
   const Publishers = Books?.map(
     (publisher: IProduct) => publisher.publisher

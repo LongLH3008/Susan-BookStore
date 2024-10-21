@@ -5,8 +5,8 @@ import useMegaMenu from "@/common/hooks/useMegaMenu";
 import { ICategory } from "@/common/interfaces/category";
 import { IProduct } from "@/common/interfaces/product";
 import { Skeleton } from "@mui/material";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const DropdownShop = () => {
   const { CategoryQuery } = useCategory();
@@ -21,6 +21,7 @@ const DropdownShop = () => {
   const handleMouseLeave = () => {
     setIsModalOpen(false);
   };
+
   return (
     <>
       <Link
@@ -53,11 +54,16 @@ const DropdownShop = () => {
                   <Skeleton variant="text" width="100%" />
                 </>
               ) : (
-                CategoryQuery?.data?.metadata?.map((category: ICategory) => (
-                  <Link to={"/"} className="hover:text-[#00CFB5] truncate">
-                    {category?.category_name}
-                  </Link>
-                ))
+                CategoryQuery?.data?.metadata
+                  ?.slice(0, 4)
+                  ?.map((category: ICategory) => (
+                    <Link
+                      to={"/cua-hang?q=" + category?.category_name}
+                      className="hover:text-[#00CFB5] truncate"
+                    >
+                      {category?.category_name}
+                    </Link>
+                  ))
               )}
             </div>
             <div className="">
@@ -73,7 +79,10 @@ const DropdownShop = () => {
                 </>
               ) : (
                 author.slice(0, 4).map((aut: string) => (
-                  <Link to={"/"} className="hover:text-[#00CFB5] truncate">
+                  <Link
+                    to={"/cua-hang?q=" + aut}
+                    className="hover:text-[#00CFB5] truncate"
+                  >
                     {aut}
                   </Link>
                 ))
@@ -93,7 +102,10 @@ const DropdownShop = () => {
                 </>
               ) : (
                 Publishers.slice(0, 4).map((Publ: string) => (
-                  <Link to={"/"} className="hover:text-[#00CFB5] truncate">
+                  <Link
+                    to={"/cua-hang?q=" + Publ}
+                    className="hover:text-[#00CFB5] truncate"
+                  >
                     {Publ}
                   </Link>
                 ))

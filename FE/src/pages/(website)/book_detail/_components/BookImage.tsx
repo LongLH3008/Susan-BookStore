@@ -73,7 +73,7 @@ const BookImage = ({ coverImage, Image }: imageProb) => {
             {Image?.map((image: Image) => (
               <SwiperSlide key={image?._id}>
                 <div
-                  className="border border-gray-200"
+                  className="border border-gray-200 cursor-pointer"
                   onClick={() => handleImageClick(image?.url)}
                 >
                   <img
