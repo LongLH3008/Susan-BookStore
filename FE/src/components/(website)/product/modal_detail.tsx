@@ -73,16 +73,16 @@ const ModalDetail = () => {
                     </span>
                   )}
                 </div>
-                <p className="text-[#707070] text-[14px] mt-3">
+                <p className="text-[#707070] text-[14px] mt-3 overflow-hidden text-ellipsis  line-clamp-8">
                   {selectedProduct.description}
                 </p>
-                <select className="mt-2 border border-gray-300 text-gray-900 text-sm rounded-sm ring-0 outline-none focus:border-zinc-500 block w-full p-2.5 ">
+                {/* <select className="mt-2 border border-gray-300 text-gray-900 text-sm rounded-sm ring-0 outline-none focus:border-zinc-500 block w-full p-2.5 ">
                   <option defaultValue="">Choose a value</option>
                   <option value="US">United States</option>
                   <option value="CA">Canada</option>
                   <option value="FR">France</option>
                   <option value="DE">Germany</option>
-                </select>
+                </select> */}
                 <div className="mt-5 flex justify-between sm:justify-start gap-10">
                   <div className="relative grid grid-cols-3 w-[100px] border">
                     <button
