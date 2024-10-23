@@ -8,7 +8,6 @@ import Product from "../../../../components/(website)/product/product";
 import Pagination from "./pagination";
 
 type Props = {
-  dataProduct: dataProductProb | undefined;
   totalItems: number;
   itemsToShow: number;
   currentPage: number;
@@ -17,7 +16,6 @@ type Props = {
 };
 
 const Right = ({
-  dataProduct,
   totalItems,
   itemsToShow,
   currentPage,
@@ -50,6 +48,7 @@ const Right = ({
       console.error("Error fetching books:", error);
     }
   };
+  console.log("books", books);
 
   useEffect(() => {
     getBooks();
@@ -66,19 +65,28 @@ const Right = ({
         <div className="flex flex-wrap -mx-4 ">
           {!(query && query.length > 0)
             ? productQuery?.isLoading
-              ? Array.from({ length: 8 }).map((_, index) => (
-                  <SkeletonProduct index={index} />
-                ))
-              : dataProduct?.books?.map((product: IProduct) => (
+              ? Array.from({ length: 6 }).map((_, index) => (
                   <div
-                    key={product._id}
+                    key={index}
                     className={`${
                       viewMode ? viewMode : " md:w-1/3 sm:w-1/2 "
                     } px-4 mt-5`}
                   >
-                    <Product dataProduct={product} />{" "}
+                    <SkeletonProduct />
                   </div>
                 ))
+              : productQuery?.data?.metadata?.books?.map(
+                  (product: IProduct) => (
+                    <div
+                      key={product._id}
+                      className={`${
+                        viewMode ? viewMode : " md:w-1/3 sm:w-1/2 "
+                      } px-4 mt-5`}
+                    >
+                      <Product dataProduct={product} />{" "}
+                    </div>
+                  )
+                )
             : books?.metadata?.books?.map((product: IProduct) => (
                 <div
                   key={product._id}
@@ -95,6 +103,7 @@ const Right = ({
           itemsPerPage={itemsToShow}
           currentPage={currentPage}
           onPageChange={onPageChange}
+          totalSearch={books}
         />
       </div>
     </>
