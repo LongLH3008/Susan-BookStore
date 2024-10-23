@@ -15,22 +15,22 @@ const Shop = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterValues, setFilterValues] = useState({
     price: { gte: 0, lte: 1100000 },
-    availability: [],
+    // availability: [],
     productType: [],
-    author: [],
+    // author: [],
   });
   const location = useLocation();
-  // const prevLocation = useRef(location.pathname);
-  // useEffect(() => {
-  //   // Kiểm tra nếu URL hiện tại khác với URL trước đó
-  //   if (prevLocation.current !== location.pathname) {
-  //     // Cập nhật URL mới vào ref để kiểm soát lần sau
-  //     prevLocation.current = location.pathname;
+  const prevLocation = useRef(location.pathname);
+  useEffect(() => {
+    // Kiểm tra nếu URL hiện tại khác với URL trước đó
+    if (prevLocation.current !== location.pathname) {
+      // Cập nhật URL mới vào ref để kiểm soát lần sau
+      prevLocation.current = location.pathname;
 
-  //     // Reload trang
-  //     window.location.reload();
-  //   }
-  // }, [location]);
+      // Reload trang
+      window.location.reload();
+    }
+  }, [location]);
 
   const getQueryParams = () => {
     const queryParams = new URLSearchParams(location.search);
@@ -125,7 +125,6 @@ const Shop = () => {
           </CategoryProvider>
 
           <Right
-            dataProduct={productDataFilter}
             totalItems={totalItems}
             itemsToShow={itemsToShow}
             currentPage={currentPage}
