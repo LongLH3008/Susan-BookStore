@@ -9,6 +9,7 @@ export const getAllVoucher = async () => {
 };
 
 const createVoucher = async (arg: IVoucher) => {
+	console.log(arg);
 	return await SendRequest("POST", "discounts", arg);
 };
 
