@@ -1,6 +1,6 @@
 import { IProduct } from "@/common/interfaces/product";
+import { Book } from "@/common/schemas/product";
 import { SendRequest } from "@/config";
-import { Book } from "@/schemas/product";
 
 type filter = {
   limit?: number;
@@ -8,12 +8,12 @@ type filter = {
   search?: string;
   category_ids?: string;
   sort?:
-    | "ascByPrice"
-    | "descByPrice"
-    | "ascByRating"
-    | "descByRating"
-    | "ascByTitle"
-    | "descByTitle";
+  | "ascByPrice"
+  | "descByPrice"
+  | "ascByRating"
+  | "descByRating"
+  | "ascByTitle"
+  | "descByTitle";
   minPrice?: number;
   maxPrice?: number;
   minRating?: number;

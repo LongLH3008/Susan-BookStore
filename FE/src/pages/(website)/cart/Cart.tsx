@@ -1,6 +1,6 @@
 import { userState } from "@/common/hooks/useAuth";
 import Breadcrumb from "@/components/(website)/breadcrumb/breadcrumb";
-import { getCartByUser } from "@/services/cart";
+import { getCartByUser } from "@/services/cart.service";
 import { useQuery } from "@tanstack/react-query";
 import CartProducts from "./_components/CartProduct";
 import TotalCart from "./_components/TotalCart";

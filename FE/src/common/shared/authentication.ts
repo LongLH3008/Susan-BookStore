@@ -2,7 +2,7 @@ import { jwtDecode } from "jwt-decode";
 
 export const Authentication = () => {
 	const accessToken = localStorage.getItem("accessToken");
-	console.log(accessToken);
+	// console.log(accessToken);
 
 	if (!accessToken) return;
 	try {

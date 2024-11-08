@@ -4,7 +4,6 @@ import BlogService from "../../Services/blog.service";
 import { SuccessResponse } from "../../cores/succes.response";
 import mongoose from "mongoose";
 import { ValidationError } from "../../cores/error.response";
-import User from "../../models/User.model";
 
 class BlogController {
   static async create(req: Request, res: Response): Promise<any> {
@@ -35,6 +34,16 @@ class BlogController {
     return new SuccessResponse({
       message: "Blog views incremented successfully",
       metadata: blog,
+    }).send(res);
+  }
+
+  static async getBlogsBySlug(req: Request, res: Response): Promise<any> {
+    const slug = req.params.slug;
+    const logBlog = await BlogService.getBlogBySlug({ slug });
+
+    return new SuccessResponse({
+      message: "Get blog successfully",
+      metadata: logBlog,
     }).send(res);
   }
 

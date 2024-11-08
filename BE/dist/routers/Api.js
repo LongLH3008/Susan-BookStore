@@ -12,17 +12,18 @@ const Category_controller_1 = __importDefault(require("../controllers/Api/Catego
 const blog_controller_1 = __importDefault(require("../controllers/Api/blog.controller"));
 const utils_1 = require("../utils");
 // import OrderController from "../controllers/Api/Order.Controller";
-const Cart_controller_1 = __importDefault(require("../controllers/Api/Cart.controller"));
-const User_controller_1 = __importDefault(require("../controllers/Api/User.controller"));
-const Discount_controller_1 = __importDefault(require("../controllers/Api/Discount.controller"));
 const multer_config_1 = require("../configs/multer.config");
-const Upload_controller_1 = __importDefault(require("../controllers/Api/Upload.controller"));
 const Book_controller_1 = __importDefault(require("../controllers/Api/Book.controller"));
-const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
-const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
+const Cart_controller_1 = __importDefault(require("../controllers/Api/Cart.controller"));
+const Discount_controller_1 = __importDefault(require("../controllers/Api/Discount.controller"));
 const GiaoHangNhanhTest_controller_1 = __importDefault(require("../controllers/Api/GiaoHangNhanhTest.controller"));
+const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
+const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
+const Upload_controller_1 = __importDefault(require("../controllers/Api/Upload.controller"));
+const User_controller_1 = __importDefault(require("../controllers/Api/User.controller"));
 const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.controller"));
 const vectorSearch_controller_1 = __importDefault(require("../controllers/Api/vectorSearch.controller"));
+const banner_controler_1 = __importDefault(require("../controllers/Api/banner.controler"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -76,6 +77,7 @@ router.post("/blog/add", (0, utils_1.asyncHandler)(blog_controller_1.default.cre
 router.post("/blog/views/:userId/:blogId", (0, utils_1.asyncHandler)(blog_controller_1.default.views));
 router.get("/blog", (0, utils_1.asyncHandler)(blog_controller_1.default.getAllBlogs));
 router.get("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.getOneBlog));
+router.get("/blog/by/:slug", (0, utils_1.asyncHandler)(blog_controller_1.default.getBlogsBySlug));
 router.delete("/blog/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.deleteBlog));
 router.put("/blog/update/:id", (0, utils_1.asyncHandler)(blog_controller_1.default.updateBlog));
 //blogcomment
@@ -112,10 +114,10 @@ router.post("/discounts/amount", (0, utils_1.asyncHandler)(Discount_controller_1
 router.post("/upload", multer_config_1.upload.array("files", 10), (0, utils_1.asyncHandler)(Upload_controller_1.default.upload));
 router.post("/upload/delete", (0, utils_1.asyncHandler)(Upload_controller_1.default.delete));
 //checkoutAmount
-//checkoutAmount 
+//checkoutAmount
 router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_Controller_1.default.checkoutReview));
 router.post("/orders/checkout", (0, utils_1.asyncHandler)(Order_Controller_1.default.handleCreateOrder));
-// giao hàng nhanh 
+// giao hàng nhanh
 router.post("/giao-hang-nhanh/create", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.CreateTest));
 router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.getDetail));
 router.get("/get-province", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.GetProvince));
@@ -126,10 +128,19 @@ router.post("/giao-hang-nhanh/create", (0, utils_1.asyncHandler)(GiaoHangNhanhTe
 router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.getDetail));
 router.get("/get-province", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.GetProvince));
 // advanced search and similar books
-router.post("/search", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearch));
+router.post("/searchbook", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearchBooks));
+router.post("/search", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearchKeywords));
 router.post("/loaddata", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.loadData));
+router.post("/suggestedbook", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.suggestedBooks));
 //payment\
 router.get("/payment/bank-list", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getBankList));
 router.post("/payment/create-payment-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getPaymentUrl));
 router.post("/payment/verify-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.verifyUrl));
+//banner
+router.post("/create/banner", (0, utils_1.asyncHandler)(banner_controler_1.default.create));
+router.get("/GetAll/banner/inAdmin", (0, utils_1.asyncHandler)(banner_controler_1.default.GetAllBannerInAdmin));
+router.get("/GetbyBanner/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.GetByBannerId));
+router.delete("/DeleteBanner/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.deleteBanner));
+router.put("/UpdateBanner/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.updateBanner));
+router.get("/GetByBanner/client/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.GetbyidwithClient));
 exports.default = router;
