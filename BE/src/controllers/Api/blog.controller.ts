@@ -15,7 +15,7 @@ class BlogController {
   }
 
   static async getAllBlogs(req: Request, res: Response): Promise<any> {
-    const blogs = await BlogService.getAllBlogs();
+    const blogs = await BlogService.getAllBlogs(req.query);
     return new SuccessResponse({
       message: "Get all blogs successfully",
       metadata: blogs,

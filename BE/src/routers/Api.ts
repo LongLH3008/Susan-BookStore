@@ -166,4 +166,5 @@ router.delete("/DeleteBanner/:id", asyncHandler(BannerControler.deleteBanner))
 router.put("/UpdateBanner/:id", asyncHandler(BannerControler.updateBanner))
 router.get("/GetByBanner/client/:id", asyncHandler(BannerControler.GetbyidwithClient))
 
+
 export default router;

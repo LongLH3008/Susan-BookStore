@@ -8,8 +8,9 @@ import Blog from "../models/Blog.model";
 import { validate } from "../schemas";
 import blogSchema from "../schemas/blog.schema";
 import { deleteNullObject } from "../utils";
-import { BlogDTO } from "./dtos/Blog.dto";
+import { BlogDTO, BlogQueryDto, BlogQueryResponseDto } from "./dtos/Blog.dto";
 import { IComment } from "../interfaces/models/IBlog";
+import Book from "../models/Book.model";
 class BlogService {
   static async create(data: BlogDTO) {
     try {
@@ -32,7 +33,7 @@ class BlogService {
     if (!blog) throw new ResourceNotFoundError("This blog not found");
     return blog;
   }
-  
+
   static async incrementViews(blogId: string, userId: any) {
     const blog = await Blog.findById(blogId);
 
@@ -47,10 +48,27 @@ class BlogService {
     return blog;
   }
 
-  static async getAllBlogs() {
-    const blogs = await Blog.find({}).lean();
-    return blogs;
+  static async getAllBlogs(query: BlogQueryDto): Promise<BlogQueryResponseDto> {
+    const { page = 1, limit= 6, search} = query;
+    let skip: number = (page - 1) * limit;
+    const searchCondition : Record<string, any> = {}
+    if(search && search.trim() !== "") {
+      searchCondition.blog_title = { $regex: search, $options: "i" };
+    }
+    let blog : BlogDTO[]  = [];
+    if(limit == 0) {
+      blog = await Book.find(searchCondition).lean();
+    }
+    blog = await Blog.find(searchCondition).skip(skip).limit(limit).lean();
+    const total = await Blog.countDocuments();
+    return {
+      data : blog as BlogDTO[],
+      total,
+      page,
+      limit
+    }
   }
+
 
   static async getBlogById({ id }: { id: string }) {
     const blog = await Blog.findOne({ _id: id });
@@ -158,7 +176,7 @@ class BlogService {
       throw new ValidationError("Invalid blog or comment ID");
     }
 
-    const blog : any = await Blog.findById(blogId);
+    const blog: any = await Blog.findById(blogId);
     if (!blog) throw new ResourceNotFoundError("Blog not found");
 
     const comment = blog.blog_comments.id(commentId);
