@@ -1,25 +1,25 @@
-import React, { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  Button,
-  Typography,
-  Tooltip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  Box,
-} from "@mui/material";
-import MyTable2 from "../components/table";
 import { useToast } from "@/common/hooks/useToast";
-import { deleteProduct, fetchProducts } from "@/services/product";
+import { deleteProduct, fetchProducts } from "@/services/product.service";
+import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
-import CloseIcon from "@mui/icons-material/Close";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchForm from "../components/searchForm";
+import MyTable2 from "../components/table";
 
 const ProductsPage: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -91,22 +91,22 @@ const ProductsPage: React.FC = () => {
       {
         headerName: "Tên sản phẩm",
         field: "title",
-        width: 300,
+        flex: 5,
       },
       {
         headerName: "Giá sản phẩm",
         field: "price",
-        width: 300,
+        flex: 4,
       },
       {
         headerName: "Tác giả",
         field: "author",
-        width: 300,
+        flex: 5,
       },
       {
         headerName: "Ảnh đại diện",
         field: "coverImage",
-        width: 300,
+        flex: 3,
         renderCell: (params: any) => (
           <img
             src={params.row.coverImage}
@@ -119,7 +119,7 @@ const ProductsPage: React.FC = () => {
         headerName: "Thao tác",
         field: "actions",
         width: "110px",
-        width: 300,
+        flex: 3,
         renderCell: (params: any) => (
           <>
             <Tooltip title="Chỉnh sửa">

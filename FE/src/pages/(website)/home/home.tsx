@@ -8,6 +8,7 @@ import HomeProducts from "./_components/home_products";
 import LatestBlogs from "./_components/latest_blogs";
 import LatestProducts from "./_components/latest_products";
 import Home_review from "./_components/home_review";
+import { BlogProvider } from "@/common/hooks/useBlog";
 
 const Home = () => {
   return (
@@ -42,7 +43,9 @@ const Home = () => {
 
       {/* đánh giá */}
       <Home_review />
-      <LatestBlogs />
+      <BlogProvider>
+        <LatestBlogs />
+      </BlogProvider>
       <Subcribe />
     </>
   );

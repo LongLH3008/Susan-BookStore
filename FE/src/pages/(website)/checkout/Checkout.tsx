@@ -17,7 +17,7 @@ const Checkout = () => {
 		<>
 			<nav className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] flex justify-between items-center h-[67px] border-b border-zinc-300">
 				<Link to={"/"}>
-					<p className="text-[21px] font-semibold">Susan Bookstore</p>
+					<p className="text-[21px] font-semibold">Susan</p>
 				</Link>
 				<Link
 					to={"/gio-hang"}

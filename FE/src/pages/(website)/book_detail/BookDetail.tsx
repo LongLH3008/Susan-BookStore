@@ -1,16 +1,14 @@
-import { getProducttBySlug } from "@/services/product";
+import { CategoryProvider } from "@/common/hooks/useCategories";
+import { getProducttBySlug } from "@/services/product.service";
+import { Skeleton } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Breadcrumb from "../../../components/(website)/breadcrumb/breadcrumb";
+import NotFound404 from "../404NotFound";
 import BookImage from "./_components/BookImage";
 import BookText from "./_components/BookText";
 import Bookservice from "./_components/Bookservice";
-import { CategoryProvider } from "@/common/hooks/useCategories";
-import NotFound404 from "../404NotFound";
-import { Skeleton } from "@mui/material";
 import SimilarProducts from "./_components/SimilarProducts";
-import { useEffect } from "react";
-import { transformation } from "leaflet";
 
 const BookDetail = () => {
   const { slug } = useParams();
@@ -22,7 +20,7 @@ const BookDetail = () => {
     refetchOnWindowFocus: false, // Nếu không cần tự động refetch khi focus lại window
   });
   const detailProduct = data?.metadata;
-  console.log(detailProduct);
+  // console.log(detailProduct);
 
   if (isError) return <NotFound404 />;
   return (

@@ -1,5 +1,5 @@
 import { useToast } from "@/common/hooks/useToast";
-import { deleteProduct, fetchUsers } from "@/services/product";
+import { deleteProduct, fetchUsers } from "@/services/product.service";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";

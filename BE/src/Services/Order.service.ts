@@ -219,7 +219,7 @@ class OrderService {
 
         console.log({ shippingInput: shippingInput })
 
-        const newShipping = await GiaoHangNhanhService.CreateOrderGHN(shippingInput)
+        //const newShipping = await GiaoHangNhanhService.CreateOrderGHN(shippingInput)
         const data: any = {
             userId,
             shipping: {
@@ -233,7 +233,7 @@ class OrderService {
             payment,
             products: productsAfterDiscount,
             total: total + feeShip,
-            trackingNumber: newShipping.order_code
+            trackingNumber: `code_test_demo`
         }
 
         const newOrder = await this.createOrder(data)

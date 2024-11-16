@@ -12,15 +12,15 @@ const Category_controller_1 = __importDefault(require("../controllers/Api/Catego
 const blog_controller_1 = __importDefault(require("../controllers/Api/blog.controller"));
 const utils_1 = require("../utils");
 // import OrderController from "../controllers/Api/Order.Controller";
-const Cart_controller_1 = __importDefault(require("../controllers/Api/Cart.controller"));
-const User_controller_1 = __importDefault(require("../controllers/Api/User.controller"));
-const Discount_controller_1 = __importDefault(require("../controllers/Api/Discount.controller"));
 const multer_config_1 = require("../configs/multer.config");
-const Upload_controller_1 = __importDefault(require("../controllers/Api/Upload.controller"));
 const Book_controller_1 = __importDefault(require("../controllers/Api/Book.controller"));
-const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
-const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
+const Cart_controller_1 = __importDefault(require("../controllers/Api/Cart.controller"));
+const Discount_controller_1 = __importDefault(require("../controllers/Api/Discount.controller"));
 const GiaoHangNhanhTest_controller_1 = __importDefault(require("../controllers/Api/GiaoHangNhanhTest.controller"));
+const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
+const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
+const Upload_controller_1 = __importDefault(require("../controllers/Api/Upload.controller"));
+const User_controller_1 = __importDefault(require("../controllers/Api/User.controller"));
 const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.controller"));
 const vectorSearch_controller_1 = __importDefault(require("../controllers/Api/vectorSearch.controller"));
 const banner_controler_1 = __importDefault(require("../controllers/Api/banner.controler"));
@@ -114,10 +114,10 @@ router.post("/discounts/amount", (0, utils_1.asyncHandler)(Discount_controller_1
 router.post("/upload", multer_config_1.upload.array("files", 10), (0, utils_1.asyncHandler)(Upload_controller_1.default.upload));
 router.post("/upload/delete", (0, utils_1.asyncHandler)(Upload_controller_1.default.delete));
 //checkoutAmount
-//checkoutAmount 
+//checkoutAmount
 router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_Controller_1.default.checkoutReview));
 router.post("/orders/checkout", (0, utils_1.asyncHandler)(Order_Controller_1.default.handleCreateOrder));
-// giao hàng nhanh 
+// giao hàng nhanh
 router.post("/giao-hang-nhanh/create", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.CreateTest));
 router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.getDetail));
 router.get("/get-province", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.GetProvince));
@@ -128,8 +128,10 @@ router.post("/giao-hang-nhanh/create", (0, utils_1.asyncHandler)(GiaoHangNhanhTe
 router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.getDetail));
 router.get("/get-province", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.GetProvince));
 // advanced search and similar books
-router.post("/search", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearch));
+router.post("/searchbook", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearchBooks));
+router.post("/search", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.advancedSearchKeywords));
 router.post("/loaddata", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.loadData));
+router.post("/suggestedbook", (0, utils_1.asyncHandler)(vectorSearch_controller_1.default.suggestedBooks));
 //payment\
 router.get("/payment/bank-list", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getBankList));
 router.post("/payment/create-payment-url", (0, utils_1.asyncHandler)(Vnpay_controller_1.default.getPaymentUrl));

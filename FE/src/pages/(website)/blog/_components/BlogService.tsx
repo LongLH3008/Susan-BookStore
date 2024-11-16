@@ -1,22 +1,32 @@
-import React from "react";
+import useBlog from "@/common/hooks/useBlog";
+import { IBlog } from "@/common/interfaces/blog";
+import { FormatDate } from "@/components/formatDate";
+import { Skeleton } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const BlogService = () => {
+  const { DataBlogs } = useBlog();
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+
+  const blogMontn = DataBlogs?.data?.metadata.filter((data: IBlog) => {
+    const createdAt = new Date(data.createdAt!);
+    return (
+      createdAt.getMonth() + 1 === currentMonth &&
+      createdAt.getFullYear() === currentYear
+    );
+  });
+
   return (
     <>
       <div className="lg:grid-cols-1 divide-y divide-gray-200">
         {/* Search */}
         <div className="search pb-10 ">
           <h3 className="font-semibold text-xl text-[#292929] max-lg:mt-16">
-            Search
+            Tìm kiếm
           </h3>
           <form className=" mx-auto mt-5">
-            <label
-              htmlFor="default-search"
-              className="mb-4 text-sm font-medium text-gray-900 sr-only dark:text-white"
-            >
-              Search
-            </label>
             <div className="relative">
               <input
                 type="search"
@@ -49,128 +59,79 @@ const BlogService = () => {
           </form>
         </div>
         {/* End Search */}
-        {/* Custom Menu */}
-        <div className="customMenu py-10  ">
-          <h3 className="text-xl font-semibold mb-5 text-[#292929]">
-            Custom Menu
-          </h3>
-          <ul className="*:my-4 *:text-[#707070]">
-            <li>
-              <Link className="hover:text-[#00BFC5]" to="/">
-                About Us
-              </Link>
-            </li>
-            <li>
-              <Link className="hover:text-[#00BFC5]" to="/">
-                Our Office
-              </Link>
-            </li>
-            <li>
-              <Link className="hover:text-[#00BFC5]" to="/">
-                Delivery
-              </Link>
-            </li>
-            <li>
-              <Link className="hover:text-[#00BFC5]" to="/">
-                Our Store
-              </Link>
-            </li>
-            <li>
-              <Link className="hover:text-[#00BFC5]" to="/">
-                Guarantee
-              </Link>
-            </li>{" "}
-            <li>
-              <Link className="hover:text-[#00BFC5]" to="/">
-                Buy Gift
-              </Link>
-            </li>
-          </ul>
-        </div>
-        {/* End Custom Menu */}
+
         {/* Recent Post */}
         <div className="recentPost py-10  ">
-          <h3 className="text-xl font-semibold text-[#292929]">Recent Post</h3>
+          <h3 className="text-xl font-semibold text-[#292929]">
+            Bài đăng gần đây
+          </h3>
           <div className="*:py-5">
-            <div className="flex">
-              <div className="">
-                <Link to="/">
-                  <img
-                    className="w-[91px] mr-2 hover:border-[3px] border-[#00BFC5]"
-                    src="https://susan-demo.myshopify.com/cdn/shop/articles/reading-books-might-help-you-live-longer-according-to-new-research-1_medium.jpg?v=1567855567"
-                    alt=""
-                  />
-                </Link>
-              </div>
-              <Link to="/" className="">
-                <h4 className="font-semibold 2xl:max-w-[170px] lg:max-w-[100px]   sm:overflow-hidden sm:truncate text-[13px] text-[#292929] hover:text-[#00BFC5]">
-                  Testing has a signficant info number of benefits
-                </h4>
-                <p className="text-[#707070] text-xs ">Jan 25, 2022</p>
-              </Link>
-            </div>
+            {DataBlogs?.isLoading
+              ? Array.from({ length: 4 }).map((_, index) => (
+                  <div key={index} className="flex *:me-2">
+                    <Skeleton
+                      variant="rectangular"
+                      width="91px"
+                      height="45px"
+                    />
+                    <Skeleton variant="text" width="80%" height={24} />
+                  </div>
+                ))
+              : DataBlogs?.data?.metadata
+                  .slice()
+                  ?.reverse()
+                  .slice(0, 3)
+                  ?.map((blog: IBlog) => (
+                    <div className="flex">
+                      <div className="">
+                        <Link to={"/tin-tuc/" + blog?.blog_slug}>
+                          <img
+                            className="w-[91px] h-[45px] mr-2 object-cover border-[1px] hover:border-[#00BFC5]"
+                            src={blog?.blog_image}
+                            alt={blog?.blog_title}
+                          />
+                        </Link>
+                      </div>
+                      <Link to={"/tin-tuc/" + blog?.blog_slug} className="">
+                        <h4 className="font-semibold 2xl:max-w-[170px] lg:max-w-[100px]   sm:overflow-hidden sm:truncate text-[13px] text-[#292929] hover:text-[#00BFC5]">
+                          {blog?.blog_title}
+                        </h4>
+                        <p className="text-[#707070] text-xs ">
+                          {FormatDate(blog?.createdAt)}
+                        </p>
+                      </Link>
+                    </div>
+                  ))}
           </div>
         </div>
         {/* End Recent Post */}
         {/* Archive */}
         <div className="Archive py-10  ">
-          <h3 className="text-xl font-semibold text-[#292929] mb-5">Archive</h3>
+          <h3 className="text-xl font-semibold text-[#292929] mb-5">Lưu trữ</h3>
           <ul className="*:text-[#707070] *:my-2">
-            <li className="font-bold">January 2022</li>
-            <li>
-              <Link className="hover:text-[#00BFC5]" to="/">
-                Testing has a signficant info number of benefits
-              </Link>
+            <li className="font-bold">
+              Tháng {currentMonth} {currentYear}
             </li>
-            <li>
-              <Link className="hover:text-[#00BFC5]" to="/">
-                International activities of the Frankfurt Book
-              </Link>
-            </li>
-            <li>
-              <Link className="hover:text-[#00BFC5]" to="/">
-                Reading has a signficant info number of benefits
-              </Link>
-            </li>
-            <li>
-              <Link className="hover:text-[#00BFC5]" to="/">
-                The London Book Fair is to be packed with exciting
-              </Link>
-            </li>
+            {Array.isArray(blogMontn) && blogMontn.length == 0 ? (
+              <Skeleton variant="text" width="100%" height={24} />
+            ) : (
+              <ul>
+                {blogMontn?.map((blog: IBlog) => (
+                  <li key={blog._id}>
+                    {" "}
+                    <Link
+                      to={`/tin-tuc/${blog?.blog_slug}`}
+                      className="hover:text-[#00BFC5] truncate"
+                    >
+                      {blog?.blog_title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </ul>
         </div>
         {/* End Archive */}
-        {/* Tags */}
-        <div className="tags py-10 ">
-          <h3 className="text-xl font-semibold text-[#292929] mb-5">Tags</h3>
-          <div className="flex flex-wrap">
-            <Link
-              to="/"
-              className="text-gray-900 hover:text-white border border-gray-200 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
-            >
-              Book
-            </Link>
-            <Link
-              to="/"
-              className="text-gray-900 hover:text-white border border-gray-200 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
-            >
-              Library
-            </Link>
-            <Link
-              to="/"
-              className="text-gray-900 hover:text-white border border-gray-200 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
-            >
-              Notebook
-            </Link>
-            <Link
-              to="/"
-              className="text-gray-900 hover:text-white border border-gray-200 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"
-            >
-              Pen
-            </Link>
-          </div>
-        </div>
-        {/* End Tags */}
       </div>
     </>
   );

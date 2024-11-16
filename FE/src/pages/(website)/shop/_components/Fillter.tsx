@@ -1,22 +1,21 @@
 import useCategory from "@/common/hooks/useCategories";
 import useMegaMenu from "@/common/hooks/useMegaMenu";
-import useProduct from "@/common/hooks/useProduct";
 import { ICategory } from "@/common/interfaces/category";
 import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
 
 interface FilterProb {
   price: { gte: number; lte: number };
-  availability: string[];
+  // availability: string[];
   productType: string[];
-  author: string[];
+  // author: string[];
 }
 interface Prob {
   handleFilterProduct: any;
   filterValues: FilterProb;
 }
 const Left = ({ filterValues, handleFilterProduct }: Prob) => {
-  const [openItem, setOpenItem] = useState<number[]>([]);
+  const [openItem, setOpenItem] = useState<number[]>([1, 2]);
   const { CategoryQuery, setLimit } = useCategory();
 
   const { author } = useMegaMenu();
@@ -64,55 +63,6 @@ const Left = ({ filterValues, handleFilterProduct }: Prob) => {
     event.preventDefault();
     toggleItem(index);
   };
-
-  //data filter
-  const sidebarItems = [
-    {
-      id: 2,
-      title: "Trạng thái",
-      open: openItem.includes(2),
-      items: [
-        {
-          type: "checkbox",
-          name: "availability",
-          value: 1,
-          label: "Còn hàng",
-          count: 34,
-        },
-        {
-          type: "checkbox",
-          name: "availability",
-          value: 0,
-          label: "Hết hàng",
-          count: 18,
-        },
-      ],
-    },
-    {
-      id: 3,
-      title: "Loại sách",
-      open: openItem.includes(3),
-      items: CategoryQuery?.data?.metadata?.map((item: ICategory) => ({
-        type: "checkbox",
-        name: "productType",
-        value: item.id,
-        label: item.category_name,
-        count: 3,
-      })),
-    },
-    {
-      id: 4,
-      title: "Tác giả",
-      open: openItem.includes(4),
-      items: author.map((au) => ({
-        type: "checkbox",
-        name: "author",
-        value: au,
-        label: au,
-        count: 3,
-      })),
-    },
-  ];
 
   return (
     <div className="lg:col-span-3 order-last lg:order-first ">
@@ -188,62 +138,51 @@ const Left = ({ filterValues, handleFilterProduct }: Prob) => {
               </div>
             )}
           </div>
-          {sidebarItems.map((item) => (
-            <div className="blog-sidebar" key={item.id}>
-              <div className="flex justify-between items-center">
-                <h5 className="title widget-collapse-show">{item.title}</h5>
-                <button onClick={(event) => handleToggle(item.id, event)}>
-                  {item.open ? (
-                    <MdKeyboardArrowDown className="w-5 h-5" />
-                  ) : (
-                    <MdKeyboardArrowRight className="w-5 h-5" />
-                  )}
-                </button>
-              </div>
-              {item.open && (
-                <div className="sidebar-body widget-collapse-hide">
-                  <div className="filter-value-counter flex justify-between items-center">
-                    <span className="filter-value-selected border border-dashed border-gray-500 rounded-full px-2 inline-block my-3">
-                      Đã chọn
-                    </span>
-                    <button className="underline hover:text-[#00BFC5]">
-                      Làm mới
-                    </button>
-                  </div>
-                  <ul className="checkbox-container categories-list">
-                    {item.items.map((subItem: any, index: any) => (
+
+          <div className="blog-sidebar">
+            <div className="flex justify-between items-center">
+              <h5 className="title widget-collapse-show">Loại sách </h5>
+              <button onClick={(event) => handleToggle(2, event)}>
+                {openItem.includes(2) ? (
+                  <MdKeyboardArrowDown className="w-5 h-5" />
+                ) : (
+                  <MdKeyboardArrowRight className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+            {openItem.includes(2) && (
+              <div className="sidebar-body widget-collapse-hide mt-3">
+                <ul className="checkbox-container categories-list">
+                  {CategoryQuery?.data?.metadata.map(
+                    (ca: ICategory, index: number) => (
                       <li key={index}>
                         <div className="custom-control custom-checkbox hover:text-[#00BFC5]">
                           <input
-                            type={subItem.type}
-                            name={subItem.name}
-                            defaultValue={subItem.value}
-                            id={`Filter-${item.title
-                              .toLowerCase()
-                              .replace(/\s+/g, "-")}-${index + 1}`}
+                            type="checkbox"
+                            name="productType"
+                            defaultValue={ca?.id}
+                            id={ca?.id}
                             className="custom-control-input"
                             onChange={handleChange}
                           />
                           <label
-                            htmlFor={`Filter-${item.title
-                              .toLowerCase()
-                              .replace(/\s+/g, "-")}-${index + 1}`}
+                            htmlFor={ca?.id}
                             className="custom-control-label px-2"
                           >
-                            {subItem.label}{" "}
-                            <span className="count_value float-end">
-                              ({subItem.count})
-                            </span>
+                            {ca?.category_name}{" "}
+                            {/* <span className="count_value float-end">
+                                ({subItem.count})
+                              </span> */}
                           </label>
                           <span className="checkmark" />
                         </div>
                       </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          ))}
+                    )
+                  )}
+                </ul>
+              </div>
+            )}
+          </div>
         </form>
       </div>
     </div>
