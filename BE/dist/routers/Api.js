@@ -123,6 +123,9 @@ router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_co
 router.get("/get-province", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.GetProvince));
 router.post("/giao-hang-nhanh/preview-shipfee", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.PreviewShipFee));
 router.post("/orders/checkout-review", (0, utils_1.asyncHandler)(Order_Controller_1.default.checkoutReview));
+router.get("/orders/search-trackingNumber", (0, utils_1.asyncHandler)(Order_Controller_1.default.SearchOrderCode));
+router.get("/orders/GetAllOrderOfClientWithUser", (0, utils_1.asyncHandler)(Order_Controller_1.default.listOrderClient));
+router.get("/orders/GetAllOrderOfAdmin", (0, utils_1.asyncHandler)(Order_Controller_1.default.listOrderAdmin));
 // giao hàng nhanh
 router.post("/giao-hang-nhanh/create", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.CreateTest));
 router.post("/chi-tiet-don-hang", (0, utils_1.asyncHandler)(GiaoHangNhanhTest_controller_1.default.getDetail));

@@ -143,6 +143,10 @@ router.get("/get-province", asyncHandler(GiaoHangNhanhController.GetProvince))
 router.post("/giao-hang-nhanh/preview-shipfee", asyncHandler(GiaoHangNhanhController.PreviewShipFee))
 
 router.post("/orders/checkout-review", asyncHandler(OrderController.checkoutReview));
+router.get("/orders/search-trackingNumber", asyncHandler(OrderController.SearchOrderCode));
+router.get("/orders/GetAllOrderOfClientWithUser", asyncHandler(OrderController.listOrderClient));
+router.get("/orders/GetAllOrderOfAdmin", asyncHandler(OrderController.listOrderAdmin));
+
 
 // giao hàng nhanh
 router.post("/giao-hang-nhanh/create", asyncHandler(GiaoHangNhanhController.CreateTest));
