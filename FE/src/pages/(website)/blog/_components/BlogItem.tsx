@@ -13,7 +13,7 @@ const BlogItem = () => {
           ? Array.from({ length: 6 }).map((_, index) => (
               <LoadingBlog index={index} />
             ))
-          : DataBlogs?.data?.metadata?.map((blog: IBlog) => (
+          : DataBlogs?.data?.metadata?.data?.map((blog: IBlog) => (
               <Blog dataBlog={blog} />
             ))}
       </div>

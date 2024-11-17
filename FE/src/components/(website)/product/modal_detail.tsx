@@ -6,13 +6,10 @@ import { Modal } from "flowbite-react";
 import { useState } from "react";
 import useProductContext from "../../../common/context/ContextProduct";
 
-// type Props = {};
-
 const ModalDetail = () => {
   const { detailModal, featuresProduct, AddToCart } = useProductContext();
   const selectedProduct = useProductStore((state) => state.selectedProduct);
   const { clearSelectedProduct } = useProductStore();
-  // console.log(selectedProduct);
 
   const [amount, setAmount] = useState<number>(1);
 
@@ -73,16 +70,16 @@ const ModalDetail = () => {
                     </span>
                   )}
                 </div>
-                <p className="text-[#707070] text-[14px] mt-3 overflow-hidden text-ellipsis  line-clamp-8">
+                <p className="text-gray-400">
+                  Số lượng :
+                  {selectedProduct?.stock == 0
+                    ? "Hết hàng "
+                    : " " + selectedProduct?.stock}
+                </p>
+                <p className="text-[#707070] text-[14px] mt-3 overflow-hidden text-ellipsis  line-clamp-6">
                   {selectedProduct.description}
                 </p>
-                {/* <select className="mt-2 border border-gray-300 text-gray-900 text-sm rounded-sm ring-0 outline-none focus:border-zinc-500 block w-full p-2.5 ">
-                  <option defaultValue="">Choose a value</option>
-                  <option value="US">United States</option>
-                  <option value="CA">Canada</option>
-                  <option value="FR">France</option>
-                  <option value="DE">Germany</option>
-                </select> */}
+
                 <div className="mt-5 flex justify-between sm:justify-start gap-10">
                   <div className="relative grid grid-cols-3 w-[100px] border">
                     <button
@@ -132,7 +129,7 @@ const ModalDetail = () => {
                     onClick={AddProductToCart}
                     className="px-[25px] py-[8px] bg-zinc-900 hover:bg-zinc-600 text-white"
                   >
-                    Add to Cart
+                    Thêm giỏ hàng
                   </button>
                 </div>
                 {amount >= 10 && (

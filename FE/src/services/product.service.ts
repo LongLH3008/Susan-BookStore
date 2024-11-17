@@ -57,7 +57,7 @@ export const deleteProduct = async (id: string) => {
 };
 
 export const addProduct = async (data: IProduct) => {
-  debugger;
+
   const response = await SendRequest("POST", `/books`, data);
   // if (!response.ok) {
   //   const errorMessage = await response.text();

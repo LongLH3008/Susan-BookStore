@@ -10,7 +10,7 @@ const BlogService = () => {
   const currentMonth = currentDate.getMonth() + 1;
   const currentYear = currentDate.getFullYear();
 
-  const blogMontn = DataBlogs?.data?.metadata.filter((data: IBlog) => {
+  const blogMontn = DataBlogs?.data?.metadata?.data?.filter((data: IBlog) => {
     const createdAt = new Date(data.createdAt!);
     return (
       createdAt.getMonth() + 1 === currentMonth &&
@@ -77,7 +77,7 @@ const BlogService = () => {
                     <Skeleton variant="text" width="80%" height={24} />
                   </div>
                 ))
-              : DataBlogs?.data?.metadata
+              : DataBlogs?.data?.metadata?.data
                   .slice()
                   ?.reverse()
                   .slice(0, 3)
@@ -112,7 +112,7 @@ const BlogService = () => {
             <li className="font-bold">
               Tháng {currentMonth} {currentYear}
             </li>
-            {Array.isArray(blogMontn) && blogMontn.length == 0 ? (
+            {!Array.isArray(blogMontn) && blogMontn.length == 0 ? (
               <Skeleton variant="text" width="100%" height={24} />
             ) : (
               <ul>
@@ -121,9 +121,9 @@ const BlogService = () => {
                     {" "}
                     <Link
                       to={`/tin-tuc/${blog?.blog_slug}`}
-                      className="hover:text-[#00BFC5] truncate"
+                      className="hover:text-[#00BFC5] "
                     >
-                      {blog?.blog_title}
+                      <p className="truncate">{blog?.blog_title}</p>
                     </Link>
                   </li>
                 ))}

@@ -1,5 +1,10 @@
 import * as icon from "@/common/assets/icon";
 import * as img from "@/common/assets/img";
+import { IReview } from "@/common/interfaces/review";
+import { getUsers } from "@/services/auth.service";
+import { getReviews } from "@/services/review.service";
+import { CircularProgress } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
@@ -33,6 +38,35 @@ export const SlideBookPrev = () => {
 };
 
 const Home_review = () => {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["Review All"],
+    queryFn: () => getReviews(),
+  });
+  const { data: Users } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => getUsers(),
+  });
+  const findUserById = (userId: string) => {
+    if (!Array.isArray(Users?.metadata?.allUsers)) return null;
+    return Users?.metadata?.allUsers.find((user: IUser) => user._id === userId);
+  };
+  // Lọc ra các review không phải mảng rỗng
+  const nonEmptyReviews = data?.metadata?.reviews
+    .filter((item: any) => item?.reviews?.length > 0)
+    .flatMap((item: any) => item.reviews);
+  // console.log(nonEmptyReviews);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center">
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
   return (
     <>
       <section
@@ -51,43 +85,37 @@ const Home_review = () => {
           modules={[Autoplay, Navigation, Pagination]}
           className="mySwiper h-full w-9/12 "
         >
-          <SwiperSlide>
-            <div className="w-8/12 z-10 flex flex-col justify-between items-center m-auto *:py-2 ">
-              <img
-                className="w-[85px] h-[100px] object-cover"
-                src={img.AuthorCta}
-                alt=""
-              />
-              <p className="text-[14px] text-center leading-7 text-zinc-500">
-                "Sách là cánh cổng đến những thế giới vô tận , noi trí tưởng
-                tượng ngự trị tối cao và kiến thức không có giới hạn . Hãy để
-                trí tuệ của mọi thời đại và sự sáng tạo của các tác giả hướng
-                dẫn tâm trí và tinh thần của bạn. Hãy mở một cuốn sách ngay hôm
-                nay và mở khóa những kho báu đang chờ đợi bên trong!"
-              </p>
-              <img src={icon.iconCta} alt="" />
-              <p className="tracking-[6px] font-semibold text-[14px]">
-                Nidesss Cooper
-              </p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide>
-            <div className="w-8/12 z-10 flex flex-col justify-between items-center m-auto *:py-2">
-              <img
-                className="w-[85px] h-[100px] object-cover"
-                src={img.AuthorCta}
-                alt=""
-              />
-              <p className="text-[14px] text-center leading-7 text-zinc-500">
-                "Sách là cánh cổng đến những thế giới vô tận , noi trí tưởng
-                tượng ngự trị tối cao và kiến thức không có giới hạn "
-              </p>
-              <img src={icon.iconCta} alt="" />
-              <p className="tracking-[6px] font-semibold text-[14px]">
-                Nidesss Cooper
-              </p>
-            </div>
-          </SwiperSlide>
+          {nonEmptyReviews.length === 0 ? (
+            <SwiperSlide className="flex items-center justify-center">
+              <CircularProgress />
+            </SwiperSlide>
+          ) : (
+            nonEmptyReviews?.map((review: IReview) => {
+              const user = findUserById(review?.userId);
+              return (
+                <SwiperSlide key={review?._id}>
+                  <div className="w-8/12 z-10 flex flex-col justify-between items-center m-auto *:py-2 ">
+                    <img
+                      className="w-[85px] h-[100px] object-cover"
+                      src={
+                        user?.user_avatar ||
+                        "https://i.pinimg.com/736x/0d/64/98/0d64989794b1a4c9d89bff571d3d5842.jpg"
+                      }
+                      alt={user?.user_name}
+                    />
+                    <p className="text-[14px] text-center leading-7 text-zinc-500">
+                      "{review?.comment}"
+                    </p>
+                    <img src={icon.iconCta} alt="" />
+                    <p className="tracking-[6px] font-semibold text-[14px]">
+                      {user?.user_name}
+                    </p>
+                  </div>
+                </SwiperSlide>
+              );
+            })
+          )}
+
           <SlideBookNext />
           <SlideBookPrev />
         </Swiper>
