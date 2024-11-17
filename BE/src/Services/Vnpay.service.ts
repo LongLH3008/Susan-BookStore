@@ -1,11 +1,11 @@
 
-import { ProductCode, VnpLocale, dateFormat, Bank, ReturnQueryFromVNPay } from 'vnpay';
 import { v4 as uuidv4 } from 'uuid';
-import { BadRequestError } from '../cores/error.response';
-import { CreateOrderInputDTO } from './dtos/Order.dto';
-import Cache from '../providers/Cache';
+import { Bank, ProductCode, ReturnQueryFromVNPay, VnpLocale, dateFormat } from 'vnpay';
 import { vnpay } from '../configs/Vnpay.config';
+import { BadRequestError } from '../cores/error.response';
+import Cache from '../providers/Cache';
 import OrderService from './Order.service';
+import { CreateOrderInputDTO } from './dtos/Order.dto';
 
 class VnpayService {
 
@@ -49,7 +49,7 @@ class VnpayService {
             vnp_TxnRef: id,
             vnp_OrderInfo: "tao don hang",
             vnp_OrderType: ProductCode.Books_Newspapers_Magazines,
-            vnp_ReturnUrl: 'http://localhost:3000/vnpay-return',
+            vnp_ReturnUrl: 'http://localhost:5173/vnpay-return',
             vnp_Locale: VnpLocale.VN,
             vnp_CreateDate: dateFormat(new Date()),
             vnp_ExpireDate: dateFormat(expiredTime),

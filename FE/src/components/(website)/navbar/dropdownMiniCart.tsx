@@ -11,11 +11,12 @@ import { Link } from "react-router-dom";
 
 const ItemMiniCart = ({ data, amount, remove }: { data: any; amount: number; remove: (product_id: string) => any }) => {
 	return (
-		<div className="grid grid-cols-7 h-[80px]">
+		<div className="grid grid-cols-7 min-h-[80px]">
 			<span className="col-span-2 flex justify-center items-center overflow-hidden border">
+				)
 				<img className="" src={data.coverImage} alt="" />
 			</span>
-			<div className="ps-[15px] col-span-5 flex flex-col justify-center overflow-hidden relative">
+			<div className="ps-[15px] col-span-5 flex flex-col justify-center overflow-hidden pr-2 relative">
 				<Link
 					to={`/book-detail/${data.slug}`}
 					state={{ from: location.pathname }}
@@ -32,13 +33,15 @@ const ItemMiniCart = ({ data, amount, remove }: { data: any; amount: number; rem
 				<div className="text-[14px] ml-1">
 					<span className="">{amount}</span>
 					<span className="mx-1">x</span>
-					{data.discount == 0 ? (
+					{Math.abs(data.discount) == 0 ? (
 						<span>{ConvertVNDString(data.price)}</span>
 					) : (
 						<>
 							<span className="ml-1">
 								{ConvertVNDString(
-									Math.round(data.price * ((100 - data.discount) / 100) * 100) / 100
+									Math.round(
+										data.price * ((100 - Math.abs(data.discount)) / 100) * 100
+									) / 100
 								)}
 							</span>
 							<span className="ml-1 line-through text-[13px] text-[#00bfc5]">
@@ -95,11 +98,11 @@ const MiniCart = () => {
 				<div
 					onMouseEnter={() => setOpen(true)}
 					onMouseLeave={() => setOpen(false)}
-					className={`w-[320px] -right-1/4 translate-x-1/4 absolute top-[110%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
+					className={`w-[370px] -right-1/4 translate-x-1/4 absolute top-[110%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
 				>
 					{cart?.metadata.cart_products.length && cart.metadata.cart_products.length > 0 ? (
 						<>
-							<div className="text-zinc-600 w-full pb-5 grid gap-y-5 border-b overscrollHidden overflow-y-scroll scroll-smooth max-h-[200px]">
+							<div className="text-zinc-600 w-full pb-5 grid gap-y-5 border-b cart_scroll pr-3 overflow-y-scroll scroll-smooth max-h-[200px]">
 								{cart?.metadata.cart_products.map((item: any, index: number) => (
 									<ItemMiniCart
 										key={index}

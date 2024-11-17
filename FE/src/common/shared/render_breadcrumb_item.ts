@@ -21,6 +21,12 @@ export const handleBreadCrumbItemURL = (url: string) => {
 		case "/thanh-toan":
 			item = "Thanh toán";
 			break;
+		case "/don-hang":
+			item = "Đơn hàng";
+			break;
+		case "/tra-cuu-don-hang":
+			item = "Tra cứu đơn hàng";
+			break;
 		// ...
 
 		case "/dang-nhap":

@@ -1,39 +1,13 @@
-import { userState } from "@/common/hooks/useAuth";
-import { useToast } from "@/common/hooks/useToast";
+import { CheckoutContext } from "@/common/context/ContextCheckout";
 import { ConvertVNDString } from "@/common/shared/round-number";
-import { getCartByUser } from "@/services/cart.service";
-import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import ItemInCheckout from "./ItemInCheckout";
 
 const CheckoutProducts = () => {
-	const { id } = userState();
-	const { toast } = useToast();
-	const nav = useNavigate();
+	const { data: cart } = useContext(CheckoutContext);
 
-	const { data } = useQuery({
-		queryKey: ["cart"],
-		queryFn: async () => await getCartByUser(id),
-	});
-
-	const cart = data?.metadata.cart_products.filter((item: ICart) => item.selected);
-	if (!cart) {
-		// toast({
-		// 	variant: ToastVariant.CONFIRM,
-		// 	content: "Chưa có sản phẩm được chọn",
-		// 	// cancel: () => nav("/cua-hang"),
-		// 	// cancelTextButton: "Tiếp tục mua hàng",
-		// 	// confirm: () => nav("gio-hang"),
-		// 	// confirmTextButton: "Quay lại giỏ hàng",
-		// });
-	}
-	const subtotal = data?.metadata.cart_products.reduce(
-		(acc: number, item: any) => acc + item.product_id.price * item.product_quantity,
-		0
-	);
-	const discountArr = data?.metadata.cart_products.filter(
-		(item: any) => Math.abs(item.product_id.discount) > 0 && item
-	);
+	const subtotal = cart?.reduce((acc: number, item: any) => acc + item.product_id.price * item.product_quantity, 0);
+	const discountArr = cart?.filter((item: any) => Math.abs(item.product_id.discount) > 0 && item);
 	const discount = discountArr?.reduce(
 		(acc: number, item: any) =>
 			acc + (Math.abs(item.product_id.discount) / 100) * item.product_id.price * item.product_quantity,

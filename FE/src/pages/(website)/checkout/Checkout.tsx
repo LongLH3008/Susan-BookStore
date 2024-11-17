@@ -1,20 +1,26 @@
 import * as icon from "@/common/assets/icon";
-import { userState } from "@/common/hooks/useAuth";
-import { useEffect } from "react";
+import { CheckoutProvider } from "@/common/context/ContextCheckout";
 import { Link } from "react-router-dom";
 import CheckoutInfomation from "./_components/CheckoutInfomation";
 import CheckoutProducts from "./_components/CheckoutProducts";
 import ResponsiveCheckoutProducts from "./_components/ResponsiveCheckoutProducts";
 
 const Checkout = () => {
-	const { AuthorUser } = userState();
+	// const { AuthorUser } = userState();
 
-	useEffect(() => {
-		AuthorUser();
-	}, []);
+	// useEffect(() => {
+	// 	AuthorUser();
+	// }, []);
+
+	// const { id } = userState();
+
+	// const { data } = useQuery({
+	// 	queryKey: ["cart"],
+	// 	queryFn: async () => await getCartByUser(id),
+	// });
 
 	return (
-		<>
+		<CheckoutProvider>
 			<nav className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] flex justify-between items-center h-[67px] border-b border-zinc-300">
 				<Link to={"/"}>
 					<p className="text-[21px] font-semibold">Susan</p>
@@ -32,7 +38,7 @@ const Checkout = () => {
 				<CheckoutInfomation />
 				<CheckoutProducts />
 			</div>
-		</>
+		</CheckoutProvider>
 	);
 };
 
