@@ -33,11 +33,13 @@ const Blog = ({ dataBlog }: Props) => {
       className="relative flex flex-col justify-between h-[425px]"
     >
       <div className="flex justify-center items-center overflow-hidden h-[222px]">
-        <img
-          src={dataBlog?.blog_image}
-          alt=""
-          className="w-full h-full object-cover"
-        />
+        <Link to={"/tin-tuc/" + dataBlog?.blog_slug}>
+          <img
+            src={dataBlog?.blog_image}
+            alt=""
+            className="w-full h-full object-cover"
+          />
+        </Link>
         {/* Time  */}
         <span className="absolute top-[6%] left-[6%] rounded-full w-[70px] h-[70px] bg-white flex flex-col justify-center items-center">
           <p className="text-[#929292] font-[500]">Jan</p>

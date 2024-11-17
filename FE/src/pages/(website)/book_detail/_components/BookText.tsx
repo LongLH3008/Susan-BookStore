@@ -1,3 +1,5 @@
+import useProductContext from "@/common/context/ContextProduct";
+import { userState } from "@/common/hooks/useAuth";
 import useCategory from "@/common/hooks/useCategories";
 import { ICategory } from "@/common/interfaces/category";
 import { IProduct } from "@/common/interfaces/product";
@@ -8,8 +10,24 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
-  const [quantity, setQuantity] = useState<number>(0);
+  const { AddToCart } = useProductContext();
+  const [quantity, setQuantity] = useState<number>(1);
   const { CategoryQuery } = useCategory();
+
+  const { id } = userState();
+
+  const AddProductToCart = () => {
+    AddToCart({
+      product_id: detailProduct?._id as string,
+      user_id: id,
+      product_quantity: quantity,
+    });
+  };
+  // console.log("ahcas ", {
+  //   product_id: detailProduct?._id as string,
+  //   user_id: id,
+  //   product_quantity: quantity,
+  // });
 
   return (
     <>
@@ -30,8 +48,11 @@ const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
               </span>
             )}
           </div>
-          {/* <p>SKU: 9911</p> */}
-          <p>Số lượng : {detailProduct?.stock}</p>
+          <p className="text-gray-400">ISBN: {detailProduct?.isbn}</p>
+          <p>
+            Số lượng :{" "}
+            {detailProduct?.stock == 0 ? "Hết hàng " : detailProduct?.stock}
+          </p>
           {detailProduct?.rating ? (
             <StarRating rating={detailProduct?.rating} />
           ) : (
@@ -70,6 +91,11 @@ const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
 
                 <td> {FormatfullDate(detailProduct?.publicationDate)}</td>
               </tr>
+              <tr className="*:p-3 ">
+                <td>Số trang </td>
+
+                <td> {detailProduct?.numberOfPages}</td>
+              </tr>
             </tbody>
           </table>
 
@@ -100,25 +126,36 @@ const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
                   onChange={(e) => setQuantity(Number(e.target.value))}
                 />
                 <button
-                  onClick={() => setQuantity(Number(quantity) + 1)}
+                  onClick={() =>
+                    quantity < 10 &&
+                    quantity < detailProduct?.stock &&
+                    setQuantity(Number(quantity) + 1)
+                  }
                   type="button"
                   id="increment-button"
                   data-input-counter-increment="quantity-input"
-                  className={`bg-gray-100 text-2xl hover:bg-gray-200 border border-gray-300  w-36 h-16 focus:ring-gray-100  focus:ring-2 focus:outline-none`}
+                  className={`bg-gray-100 text-sm hover:bg-gray-200 border border-gray-300  w-36 h-16 focus:ring-gray-100  focus:ring-2 focus:outline-none`}
                 >
-                  +
+                  <i
+                    className={`fa-solid fa-plus duration-200 ${
+                      quantity >= 10 && "rotate-45 text-red-500"
+                    }`}
+                  ></i>
                 </button>
               </div>
             </div>
             <div className="flex items-center  border-[3px] border-[#00BFC5] hover:border-[#000] px-9 h-16 ">
-              <Link to="/" className=" flex">
+              <button
+                onClick={() => AddProductToCart()}
+                className=" flex items-center"
+              >
                 <img
                   className="w-[20px] me-1"
                   src="/src/common/assets/icon/nav_miniCart_icon.png"
                   alt=""
                 />{" "}
                 Thêm giỏ hàng
-              </Link>
+              </button>
             </div>
             <div className="flex *:px-6 h-16 items-center border-[3px] *:text-[#000] hover:text-[#00BFC5] *:text-xl">
               <Link to="/" className=" hover:text-[#00BFC5]">
@@ -126,6 +163,14 @@ const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
               </Link>
             </div>
           </div>
+          {quantity >= 10 && (
+            <p className="text-red-500 text-sm mb-3">
+              Số lương trong giỏ hàng đã đạt tối đa cho phép
+            </p>
+          )}
+          {quantity >= detailProduct.stock && (
+            <p className="text-red-500 text-sm mb-3">Sản phẩm đã hết</p>
+          )}
           <div className="w-full">
             <Link to="/">
               <button className="w-full py-4 transition duration-150 bg-black border border-black text-white font-bold hover:border-[#00BFC5] hover:text-[#00BFC5] hover:bg-white">
@@ -133,7 +178,7 @@ const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
               </button>
             </Link>
           </div>
-          <div className="my-10">
+          {/* <div className="my-10">
             <h3 className="font-bold text-black">CHIA SẺ SẢN PHẨM NÀY</h3>
             <div className="flex justify-start my-5  *:mr-4 ">
               <i className="hover:text-white text-[#1de1f2] fa-brands fa-twitter border hover:bg-[#1de1f2] p-3 "></i>
@@ -141,7 +186,7 @@ const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
               <i className="hover:text-white text-[#dd5245] fa-brands fa-google border hover:bg-[#dd5245] p-3 "></i>
               <i className="hover:text-white text-[#bd081b] fa-brands fa-pinterest border hover:bg-[#bd081b] p-3 "></i>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

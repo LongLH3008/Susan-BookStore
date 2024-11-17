@@ -22,7 +22,7 @@ const LatestBlogs = (props: Props) => {
           ? Array.from({ length: 6 }).map((_, index) => (
               <LoadingBlog index={index} />
             ))
-          : DataBlogs?.data?.metadata
+          : DataBlogs?.data?.metadata?.data
               ?.sort(() => 0.5 - Math.random())
               ?.slice(0, 3)
               ?.map((blog: IBlog) => <Blog dataBlog={blog} />)}

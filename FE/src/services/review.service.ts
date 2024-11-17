@@ -1,4 +1,3 @@
-import { IBlog } from "@/common/interfaces/blog";
 import { IReview } from "@/common/interfaces/review";
 import { SendRequest } from "@/config";
 

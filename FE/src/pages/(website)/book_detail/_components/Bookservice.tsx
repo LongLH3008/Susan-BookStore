@@ -1,13 +1,14 @@
+import { useToast } from "@/common/hooks/useToast";
 import { IProduct } from "@/common/interfaces/product";
+import { IReview } from "@/common/interfaces/review";
 import { Authentication } from "@/common/shared/authentication";
 import Comment from "@/components/(website)/comment/comment";
 import { createReview, getReviewByIdBook } from "@/services/review.service";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Button,
   Dialog,
   DialogActions,
-  DialogContent,
-  DialogContentText,
   DialogTitle,
   IconButton,
   Rating,
@@ -15,17 +16,14 @@ import {
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { SyntheticEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import CloseIcon from "@mui/icons-material/Close";
-import { IReview } from "@/common/interfaces/review";
-import { useToast } from "@/common/hooks/useToast";
+import { Link } from "react-router-dom";
 
 interface NotiLogin {
   open: any;
   handleClose: any;
 }
+
 const ModalLogin = ({ open, handleClose }: NotiLogin) => {
-  // co;
   return (
     <>
       <Dialog
@@ -49,12 +47,7 @@ const ModalLogin = ({ open, handleClose }: NotiLogin) => {
         >
           <CloseIcon />
         </IconButton>
-        {/* <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending
-            anonymous location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent> */}
+
         <DialogActions>
           <Button onClick={handleClose} className="text-red-700">
             Thoát
@@ -104,6 +97,8 @@ const Bookservice = ({ detailProduct }: { detailProduct: IProduct }) => {
         content: `Thêm đánh giá thành công`,
       });
       refetch();
+      setRating(3);
+      setReview("");
     },
     onError: (err: any) => {
       const messages = `Lỗi khi thêm đánh giá: `;

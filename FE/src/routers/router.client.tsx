@@ -4,6 +4,7 @@ import * as Website from "@/pages/(website)";
 import UserGuard from "./guards/user.guard";
 import CKEditorFullScreen from "@/pages/(dashboard)/Blogs/CreateBlog";
 import { BlogProvider } from "@/common/hooks/useBlog";
+import { ProdContextProvider } from "@/common/context/ContextProduct";
 
 const ClientRoutes = [
   {
@@ -21,7 +22,13 @@ const ClientRoutes = [
       },
       {
         path: "san-pham/:slug",
-        element: <ProductProvider children={<Website.BookDetail />} />,
+        element: (
+          <ProdContextProvider>
+            <ProductProvider>
+              <Website.BookDetail />
+            </ProductProvider>
+          </ProdContextProvider>
+        ),
       },
       { path: "gio-hang", element: <Website.Cart /> },
       {

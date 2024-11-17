@@ -7,21 +7,29 @@ export default function MainPage() {
       {/* <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
 				<p className="text-2xl font-bold text-gray-800 dark:text-gray-50">Main DashBoard</p>
 			</div> */}
-      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
         <li className="flex justify-center">
           <CardBoard
             icon={"fa-regular fa-user"}
-            title={"User"}
+            title={"Tổng doanh thu"}
             amount={100}
-            color={"bg-red-600"}
+            color={"bg-[#3681ab] "}
           />
         </li>
         <li className="flex justify-center">
           <CardBoard
             icon={"fa-solid fa-layer-group"}
-            title={"Categories"}
+            title={"Tổng số đơn hàng"}
             amount={10}
-            color={"bg-green-600"}
+            color={"bg-[#989bbe]"}
+          />
+        </li>
+        <li className="flex justify-center">
+          <CardBoard
+            icon={"fa-solid fa-boxes-stacked"}
+            title={"Tổng số sách đã bán"}
+            amount={100}
+            color={"bg-[#7fbbb2]"}
           />
         </li>
         <li className="flex justify-center">
@@ -29,15 +37,7 @@ export default function MainPage() {
             icon={"fa-solid fa-boxes-stacked"}
             title={"Products"}
             amount={100}
-            color={"bg-yellow-600"}
-          />
-        </li>
-        <li className="flex justify-center">
-          <CardBoard
-            icon={"fa-solid fa-boxes-stacked"}
-            title={"Products"}
-            amount={100}
-            color={"bg-yellow-600"}
+            color={"bg-[#6e7753]"}
           />
         </li>
         <li className="flex justify-center">
@@ -45,7 +45,7 @@ export default function MainPage() {
             icon={"fa-solid fa-cart-shopping"}
             title={"Orders"}
             amount={100}
-            color={"bg-blue-600"}
+            color={"bg-blue-500"}
           />
         </li>
       </ul>
