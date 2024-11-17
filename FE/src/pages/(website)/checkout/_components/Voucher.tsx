@@ -40,7 +40,9 @@ const Voucher = (props: Props) => {
 			<div
 				onMouseLeave={() => setChooseVoucher({ choose: chooseVoucher.choose, open: false })}
 				className={`${
-					chooseVoucher.open ? "h-fit opacity-100 translate-y-0" : "h-0 opacity-0 -translate-y-1"
+					chooseVoucher.open
+						? "h-[30dvh] opacity-100 translate-y-0"
+						: "h-0 opacity-0 -translate-y-1"
 				} flex flex-col p-2 duration-500 ease-in-out pr-[2px] border rounded-md overflow-hidden border-[#222] gap-1`}
 			>
 				<input
@@ -52,6 +54,7 @@ const Voucher = (props: Props) => {
 				<div className="border-t border-zinc-300 pt-2 mt-1 relative h-[25dvh] flex flex-col *:p-3 *:text-sm text-zinc-500 *:cursor-pointer *:border-b overflow-hidden overflow-y-scroll">
 					{Array.from([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map((e: any, index: number) => (
 						<div
+							key={index}
 							onClick={() =>
 								setChooseVoucher({
 									choose:

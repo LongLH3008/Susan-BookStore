@@ -29,7 +29,6 @@ import {
 } from "./dtos/SearchOrderCodeRequest";
 import GiaoHangNhanhService from "./GiaoHangNhanh.service";
 import { vnpayService } from "./Vnpay.service";
-import { v4 as uuidv4 } from "uuid";
 
 type PaymentMethodInput = "COD" | "VNPAY";
 
@@ -66,7 +65,7 @@ class OrderService {
 
     const discountAmountInput: DiscountInput = {
       products: products.map((book: IOrderItem, index) => ({
-        discount: productsFound[index]?.discount || 0,
+        discount: Math.abs(productsFound[index]?.discount as number) || 0,
         product_id: book.bookId,
         quantity: book.quantity,
         title: productsFound[index]?.title || "",
@@ -249,6 +248,15 @@ class OrderService {
 
     console.log({ shippingInput: shippingInput });
 
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let randomCode = '';
+
+    for (let i = 0; i < 9; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      randomCode += characters[randomIndex];
+    }
+
+
     //const newShipping = await GiaoHangNhanhService.CreateOrderGHN(shippingInput)
     const data: any = {
       userId,
@@ -263,7 +271,7 @@ class OrderService {
       payment,
       products: productsAfterDiscount,
       total: total + feeShip,
-      trackingNumber: `code_test_demo`,
+      trackingNumber: randomCode.toUpperCase(),
     };
 
     const newOrder = await this.createOrder(data);
@@ -332,7 +340,7 @@ class OrderService {
   ): Promise<SearchOrderCodeReponse> {
     const { search } = query;
     const searchCondition: Record<string, any> = {};
-    const fieldsToSelect = "_id trackingNumber total state";
+    const fieldsToSelect = "_id userId products trackingNumber total state createdAt";
     if (search && search.trim() !== "") {
       searchCondition.trackingNumber = { $regex: search, $options: "i" };
     }
@@ -376,25 +384,25 @@ class OrderService {
   ): Promise<GetAllOrderWithPaginateForAdminResponse> {
     try {
       const { page = 1, limit = 10, search } = query;
-  
+
       // Validate và parse limit
       const parsedLimit = parseInt(limit.toString(), 10);
       if (isNaN(parsedLimit) || parsedLimit <= 0) {
         throw new Error("Invalid limit value");
       }
-  
+
       // Tính skip cho pagination
       const skip = (page - 1) * parsedLimit;
-  
+
       // Xây dựng điều kiện tìm kiếm
       const searchCondition: Record<string, any> = {};
       if (search && search.trim() !== "") {
         searchCondition.trackingNumber = { $regex: search, $options: "i" };
       }
-  
-      const fieldsToSelect = 
+
+      const fieldsToSelect =
         "_id userId products shipping payment trackingNumber total state createdAt";
-  
+
       // Lấy orders
       let orders: GetAllOrderWithPaginateForAdminData[] = await Order.find(searchCondition)
         .select(fieldsToSelect)
@@ -402,28 +410,28 @@ class OrderService {
         .skip(skip)
         .limit(parsedLimit)
         .lean();
-  
+
       // Lấy danh sách userIds duy nhất
       const userIds = [...new Set(orders.map(order => order.userId))];
-  
+
       // Lấy thông tin users
       const users = await User.find({ _id: { $in: userIds } })
         .select('_id user_email username')
         .lean();
-  
+
       // Tạo map để mapping nhanh user info
       const userMap = new Map(users.map(user => [user._id.toString(), user]));
-  
+
       // Thêm thông tin user vào orders
       orders = orders.map(order => ({
         ...order,
         user_name: userMap.get(order.userId.toString())?.user_name || '',
         user_email: userMap.get(order.userId.toString())?.user_email || '',
       }));
-  
+
       // Đếm tổng số orders theo điều kiện tìm kiếm
       const total = await Order.countDocuments(searchCondition);
-  
+
       return {
         data: orders,
         total,

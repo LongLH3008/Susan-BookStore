@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-	font-family: "Open Sans";
+	font-family: "Open Sans" sans-serif;
 }
 z .poppins {
 	font-family: Poppins;
@@ -59,4 +59,11 @@ z .poppins {
 	width: 6px;
 	/* Độ rộng của thanh cuộn ngang */
 	height: 6px;
+}
+
+.cart_scroll::-webkit-scrollbar {
+	width: 3px;
+}
+.cart_scroll::-webkit-scrollbar-thumb {
+	@apply bg-zinc-400;
 }

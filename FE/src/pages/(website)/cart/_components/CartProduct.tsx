@@ -41,9 +41,9 @@ export default function CartProducts({ dataCart, user_id }: { dataCart: ICart[];
 	};
 
 	return (
-		<div className="overflow-hidden overscrollHidden overflow-y-scroll min-[1000px]:col-span-3 min-[1000px]:pr-[30px] flex flex-col justify-between gap-3">
+		<div className="overflow-hidden overscrollHidden overflow-y-scroll min-[1000px]:col-span-3 min-[1000px]:pr-1 flex flex-col justify-between gap-3">
 			{dataCart?.length && dataCart.length > 0 ? (
-				<div className="h-[50vh] flex flex-col gap-8 overflow-hidden overflow-y-scroll overscrollHidden mb-5 scroll-smooth">
+				<div className="h-[50vh] flex flex-col gap-8 overflow-hidden overflow-y-scroll cart_scroll pr-5 mb-5 scroll-smooth">
 					{dataCart.map((item: ICart, index: number) => (
 						<ItemCart
 							key={index}

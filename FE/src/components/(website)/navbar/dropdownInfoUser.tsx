@@ -100,6 +100,13 @@ const DropdownInfoUser = (props: Props) => {
 							onMouseLeave={() => setOpen(false)}
 						>
 							<Link
+								to="/tra-cuu-don-hang"
+								state={{ from: location.pathname }}
+								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
+							>
+								Tra cứu đơn hàng
+							</Link>
+							<Link
 								to="/dang-nhap"
 								state={{ from: location.pathname }}
 								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"

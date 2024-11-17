@@ -1,21 +1,64 @@
+import { CheckoutContext } from "@/common/context/ContextCheckout";
 import CustomFloatingField from "@/components/(website)/floatingfield/CustomFloatingField";
-import { useForm } from "react-hook-form";
+import { getAllCity, getAllDistrict, getWards } from "@/services/location.service";
+import { useQuery } from "@tanstack/react-query";
+import { useContext, useState } from "react";
 
-type Props = {};
+const Delivery = () => {
+	const { form } = useContext(CheckoutContext);
+	const [locationInfo, setLocationInfo] = useState<any>({ district: [], ward: [] });
 
-const Delivery = (props: Props) => {
-	const { register } = useForm();
+	const { data: city } = useQuery({
+		queryKey: ["city"],
+		queryFn: async () => await getAllCity(),
+	});
+
+	const getDistrict = async (province_id: number) => {
+		const { data } = await getAllDistrict(province_id);
+		const province = city.data.find((item: any) => item.ProvinceID == province_id);
+		form.setValue("province", province.ProvinceName);
+		if (form.getValues("district") !== "") form.setValues("district", "");
+		if (form.getValues("ward") !== "") form.setValues("ward", "");
+		setLocationInfo({ ward: [], district: data });
+		form.trigger("city");
+	};
+
+	const getWard = async (district_id: number) => {
+		const { data } = await getWards(district_id);
+		const district = locationInfo.district.find((item: any) => item.DistrictID == district_id);
+		form.setValue("district", district.DistrictName);
+		setLocationInfo({ ...locationInfo, ward: data });
+		form.trigger("district");
+	};
+
+	const chooseWard = (wardCode: string) => {
+		console.log(wardCode, locationInfo.ward);
+		const ward = locationInfo.ward.find((item: any) => item.WardCode == wardCode.toString());
+		form.setValue("ward", ward.WardName);
+		form.trigger("ward");
+	};
+
 	return (
 		<div className="relative flex flex-col gap-4">
+			<input type="hidden" {...form.register("province")} />
+			<input type="hidden" {...form.register("district")} />
+			<input type="hidden" {...form.register("ward")} />
+
 			<p className="text-[16px] font-semibold">Thông tin vận chuyển</p>
 			<div className="grid grid-cols-3 gap-3">
-				<div className="relative">
-					<select className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer">
-						<option defaultValue="">Chọn</option>
-						<option value="US">United States</option>
-						<option value="CA">Canada</option>
-						<option value="FR">France</option>
-						<option value="DE">Germany</option>
+				<div className="relative flex flex-col gap-1">
+					<select
+						defaultValue=""
+						aria-placeholder="Chọn"
+						onChange={(e) => getDistrict(e.target.value as any)}
+						className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
+					>
+						{city &&
+							city.data.map((item: any, index: number) => (
+								<option key={index} value={item.ProvinceID}>
+									{item.ProvinceName}
+								</option>
+							))}
 					</select>
 					<label
 						htmlFor="country"
@@ -23,14 +66,24 @@ const Delivery = (props: Props) => {
 					>
 						Tỉnh / thành phố
 					</label>
+					<span className="text-[12px] text-red-600">
+						{form.formState.errors.province?.message}
+					</span>
 				</div>
-				<div className="relative">
-					<select className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer">
-						<option defaultValue="">Chọn</option>
-						<option value="US">United States</option>
-						<option value="CA">Canada</option>
-						<option value="FR">France</option>
-						<option value="DE">Germany</option>
+				<div className="relative flex flex-col gap-1">
+					<select
+						defaultValue=""
+						aria-placeholder="Chọn"
+						{...form.register("districtId")}
+						onChange={(e) => getWard(e.target.value as any)}
+						className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
+					>
+						{locationInfo.district.length > 0 &&
+							locationInfo.district.map((item: any, index: number) => (
+								<option key={index} value={item.DistrictID}>
+									{item.DistrictName}
+								</option>
+							))}
 					</select>
 					<label
 						htmlFor="country"
@@ -38,14 +91,24 @@ const Delivery = (props: Props) => {
 					>
 						Quận / huyện
 					</label>
+					<span className="text-[12px] text-red-600">
+						{form.formState.errors.district?.message}
+					</span>
 				</div>
-				<div className="relative">
-					<select className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer">
-						<option defaultValue="">Chọn</option>
-						<option value="US">United States</option>
-						<option value="CA">Canada</option>
-						<option value="FR">France</option>
-						<option value="DE">Germany</option>
+				<div className="relative flex flex-col gap-1">
+					<select
+						defaultValue=""
+						aria-placeholder="Chọn"
+						{...form.register("wardCode")}
+						onChange={(e) => chooseWard(e.target.value.toString() as any)}
+						className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
+					>
+						{locationInfo.ward.length > 0 &&
+							locationInfo.ward.map((item: any, index: number) => (
+								<option key={index} value={item.WardCode}>
+									{item.WardName}
+								</option>
+							))}
 					</select>
 					<label
 						htmlFor="country"
@@ -53,16 +116,18 @@ const Delivery = (props: Props) => {
 					>
 						Phường / xã
 					</label>
+					<span className="text-[12px] text-red-600">{form.formState.errors.ward?.message}</span>
 				</div>
 			</div>
 			<CustomFloatingField
 				rounded
 				floating
-				register={register}
-				field="firstname_checkout"
+				register={form.register}
+				field="address"
 				label="Địa chỉ chi tiết"
 				required
-				message="Invalid Name"
+				error={form.formState.errors.address}
+				message={form.formState.errors.address?.message}
 			/>
 		</div>
 	);

@@ -1,3 +1,4 @@
+import { debounce } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export default function ItemCart({
@@ -17,6 +18,11 @@ export default function ItemCart({
 }) {
 	const { product_quantity } = data;
 	const { coverImage, title, slug, author, _id, stock } = data.product_id;
+
+	const Increase = debounce(() => {
+		if (product_quantity + 1 > 10) return;
+		inc(_id);
+	}, 500);
 
 	return (
 		<div
@@ -38,10 +44,10 @@ export default function ItemCart({
 					{title}
 				</Link>
 				<p className="text-[12px] text-zinc-500">{author}</p>
-				{product_quantity == 10 && (
+				{product_quantity + 1 > 10 && (
 					<p className="text-[12px] text-red-500">Số lượng đã đạt tối đa cho phép</p>
 				)}
-				{product_quantity == stock && <p className="text-[12px] text-red-500">Sản phẩm đã hết</p>}
+				{product_quantity + 1 > stock && <p className="text-[12px] text-red-500">Sản phẩm đã hết</p>}
 			</span>
 			<div className="md:col-span-2 flex justify-between items-center border text-[15px]">
 				<span
@@ -55,10 +61,10 @@ export default function ItemCart({
 				<p>{product_quantity}</p>
 				<button
 					type="button"
-					disabled={product_quantity == 10}
-					onClick={() => product_quantity < stock && inc(_id)}
+					disabled={product_quantity + 1 > 10 || product_quantity + 1 > stock}
+					onClick={() => Increase()}
 					className={`p-2 cursor-pointer duration-200 ${
-						product_quantity == 10 || product_quantity == stock ? "text-red-500 rotate-45" : ""
+						product_quantity >= 10 || product_quantity >= stock ? "text-red-500 rotate-45" : ""
 					}`}
 				>
 					+

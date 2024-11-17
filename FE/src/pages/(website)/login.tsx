@@ -46,7 +46,7 @@ const Login = () => {
 	return (
 		<>
 			<Breadcrumb title="Đăng nhập" />
-			<div className="xl:px-[11.5%] 2xl:px-[17.5%] h-fit flex justify-center *:h-full py-[100px]">
+			<div className="xl:px-[11.5%] text-zinc-100 2xl:px-[17.5%] h-fit flex justify-center *:h-full py-[100px] bg-zinc-700">
 				<div className="w-[540px] h-full bg-[#f3f3f3] flex flex-col justify-between items-center px-[40px] py-[37px]">
 					<p className="text-[30px] leading-[36px] font-medium text-[#333]">Đăng nhập</p>
 					<p className="text-[#666] text-[15px] leading-[15px]">

@@ -13,6 +13,7 @@ type Props = {
 	required?: boolean;
 	rounded?: boolean;
 	disabled?: boolean;
+	onchange?: (arg: any) => boolean;
 	register: UseFormRegister<any>;
 };
 
