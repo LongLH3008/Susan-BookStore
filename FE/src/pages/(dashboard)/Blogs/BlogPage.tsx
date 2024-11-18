@@ -1,7 +1,8 @@
+import useBlog from "@/common/hooks/useBlog";
 import { useToast } from "@/common/hooks/useToast";
 import { IBlog } from "@/common/interfaces/blog";
 import BlogItem from "@/pages/(website)/blog_detail/_components/BlogItem";
-import { deleteBlog, getBlogs } from "@/services/blog.service";
+import { deleteBlog } from "@/services/blog.service";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
 import {
@@ -17,7 +18,7 @@ import {
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useState } from "react";
 import { FiEdit } from "react-icons/fi";
@@ -27,14 +28,13 @@ import { Link, useNavigate } from "react-router-dom";
 
 const BlogPage = () => {
   const nav = useNavigate();
+  const { DataBlogs } = useBlog();
   const { toast } = useToast();
   const [selectedBlog, setSelectedBlog] = useState<IBlog | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["Blog"],
-    queryFn: () => getBlogs(),
-  });
+
+  // console.log("DataBlogs", DataBlogs?.data?.metadata?.data);
 
   const { mutateAsync } = useMutation({
     mutationFn: deleteBlog,
@@ -44,11 +44,11 @@ const BlogPage = () => {
         variant: "success",
         content: `Xóa sản phẩm thành công`,
       });
-      refetch();
+      DataBlogs.refetch();
     },
     onError: (error: AxiosError) => {
       setConfirmOpen(false);
-      let message = "Lỗi khi xóa sản phẩm: ";
+      const message = "Lỗi khi xóa sản phẩm: ";
       toast({
         variant: error.response?.status || "error",
         content: message + (error.response?.data || error.message),
@@ -78,10 +78,10 @@ const BlogPage = () => {
     setConfirmOpen(true);
   };
   const columns: GridColDef[] = [
-    { field: "blog_title", headerName: "Title", flex: 1 },
+    { field: "blog_title", headerName: "Tiêu đề", flex: 1 },
     {
       field: "blog_image",
-      headerName: "Image",
+      headerName: "Ảnh tin tức",
       renderCell: (params) => (
         <img src={params.value} alt={params.row.blog_title} className=" h-20" />
       ),
@@ -89,12 +89,12 @@ const BlogPage = () => {
     },
     {
       field: "blog_tags",
-      headerName: "Tags",
+      headerName: "Thẻ",
       flex: 3,
     },
     {
       field: "active",
-      headerName: "Active",
+      headerName: "Hành động",
       renderCell: (params) => (
         <>
           <div className="flex gap-3  items-center ">
@@ -131,7 +131,7 @@ const BlogPage = () => {
 
   const paginationModel = { page: 0, pageSize: 5 };
 
-  if (isLoading) {
+  if (DataBlogs.isLoading) {
     return (
       <div style={{ display: "flex", justifyContent: "center", padding: 20 }}>
         <CircularProgress />
@@ -139,7 +139,7 @@ const BlogPage = () => {
     );
   }
 
-  if (isError) {
+  if (DataBlogs.isError) {
     return (
       <Typography variant="h6" color="error">
         Error loading blogs.
@@ -147,7 +147,11 @@ const BlogPage = () => {
     );
   }
 
-  if (!data || !data.metadata || !Array.isArray(data.metadata)) {
+  if (
+    !DataBlogs.data ||
+    !DataBlogs.data.metadata.data ||
+    !Array.isArray(DataBlogs.data.metadata.data)
+  ) {
     return (
       <Typography variant="h6" color="textSecondary">
         No blogs available.
@@ -155,14 +159,16 @@ const BlogPage = () => {
     );
   }
 
-  const rows = data.metadata.map((row: IBlog, index: number) => ({
-    id: row._id || index,
-    ...row,
-  }));
+  const rows = DataBlogs.data.metadata.data.map(
+    (row: IBlog, index: number) => ({
+      id: row._id || index,
+      ...row,
+    })
+  );
 
   return (
     <>
-      <div className="rounded-lg shadow-sm bg-white p-5 flex justify-between items-center">
+      <div className="rounded-lg shadow-sm bg-white p-5 mb-[50px] flex justify-between items-center">
         <div className="flex items-center gap-3">
           <i className="fa-solid fa-blog"></i>
           <h2 className={`text-xl font-[500]`}>Tin Tức</h2>
@@ -180,7 +186,6 @@ const BlogPage = () => {
           height: "67vh",
           maxHeight: "calc(100vh-300px)",
           width: "100%",
-          marginTop: "100px",
           overflowY: "auto",
         }}
       >
@@ -188,7 +193,7 @@ const BlogPage = () => {
           rows={rows}
           columns={columns}
           initialState={{ pagination: { paginationModel } }}
-          pageSizeOptions={[5, 10]}
+          pageSizeOptions={[5, 10, 20]}
           getRowHeight={() => "auto"}
           checkboxSelection
           sx={{

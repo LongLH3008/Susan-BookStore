@@ -18,6 +18,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios"; // Sử dụng axios để gửi request upload
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { FaArrowRightFromBracket } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 import { useNavigate, useParams } from "react-router-dom";
 
 const ProductForm: React.FC = () => {
@@ -226,12 +228,23 @@ const ProductForm: React.FC = () => {
 
   return (
     <>
-      <Box className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-        <p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
-          {id ? "Chỉnh sửa sản phẩm" : "Thêm mới sản phẩm"}
-        </p>
-      </Box>
-
+      <div className="p-5 flex justify-between items-center bg-white shadow-sm rounded-lg mb-[50px]">
+        <div className="flex items-center gap-3">
+          <i className="fa-solid fa-ticket"></i>
+          <h2 className={`text-xl font-[500]`}>
+            {!id ? "Thêm" : "Sửa"} sản phẩm
+          </h2>
+        </div>
+        <div className="flex items-center gap-2">
+          <Link
+            to={"/quan-tri/san-pham/"}
+            type="reset"
+            className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
+          >
+            <FaArrowRightFromBracket />
+          </Link>
+        </div>
+      </div>
       <Box
         component="form"
         onSubmit={handleSubmit(onSubmit)}
