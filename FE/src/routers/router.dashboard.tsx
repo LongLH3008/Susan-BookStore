@@ -13,6 +13,7 @@ import FormAttr from "@/pages/(dashboard)/Products/FormAttr";
 import ProductsPage from "@/pages/(dashboard)/Products/ProductsPage";
 import UsersPage from "@/pages/(dashboard)/Users/UsersPage";
 import DashboardGuard from "./guards/dashboard.guard";
+import { BlogProvider } from "@/common/hooks/useBlog";
 
 const DashboardRoutes = [
   {
@@ -20,14 +21,14 @@ const DashboardRoutes = [
     element: <DashboardGuard children={<DashboardLayout />} />,
     children: [
       { path: "", element: <MainPage /> },
-      { path: "don-hang", element: <OrdersPage /> },
+      { path: "don-hang", element: <BlogProvider children={<OrdersPage />} /> },
       { path: "nguoi-dung", element: <UsersPage /> },
       { path: "danh-muc", element: <CategoriesPage /> },
       { path: "san-pham", element: <ProductsPage /> },
       { path: "san-pham/chinh-sua/:id", element: <FormAttr /> },
       { path: "san-pham/them-moi", element: <FormAttr /> },
       { path: "binh-luan", element: <CommentsPage /> },
-      { path: "tin-tuc", element: <BlogPage /> },
+      { path: "tin-tuc", element: <BlogProvider children={<BlogPage />} /> },
       { path: "tin-tuc/them-moi", element: <CreateBlog /> },
       { path: "tin-tuc/chinh-sua/:id", element: <CreateBlog /> },
 

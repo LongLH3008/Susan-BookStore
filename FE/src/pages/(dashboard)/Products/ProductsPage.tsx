@@ -20,6 +20,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SearchForm from "../components/searchForm";
 import MyTable2 from "../components/table";
+import { Link } from "react-router-dom";
+import { IoMdAdd } from "react-icons/io";
 
 const ProductsPage: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -140,10 +142,17 @@ const ProductsPage: React.FC = () => {
 
   return (
     <>
-      <div className="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-        <p className="text-2xl font-bold text-gray-800 dark:text-gray-50">
-          Danh sách sản phẩm
-        </p>
+      <div className="rounded-lg shadow-sm bg-white p-5 flex justify-between items-center mb-[50px]">
+        <div className="flex items-center gap-3">
+          <i className="fa-solid fa-boxes-stacked"></i>
+          <h2 className={`text-xl font-[500]`}>Sản phẩm</h2>
+        </div>
+        <Link
+          to={"/quan-tri/san-pham/them-moi"}
+          className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
+        >
+          <IoMdAdd />
+        </Link>
       </div>
 
       <SearchForm

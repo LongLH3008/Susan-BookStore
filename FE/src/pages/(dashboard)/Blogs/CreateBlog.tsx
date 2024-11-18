@@ -282,7 +282,7 @@ const CreateBlog = () => {
 
   return (
     <>
-      <div className="p-5 flex justify-between items-center bg-white shadow-sm rounded-lg">
+      <div className="p-5 flex justify-between items-center bg-white shadow-sm rounded-lg mb-[50px]">
         <div className="flex items-center gap-3">
           <i className="fa-solid fa-ticket"></i>
           <h2 className={`text-xl font-[500]`}>
@@ -301,12 +301,12 @@ const CreateBlog = () => {
       </div>{" "}
       {/* content */}
       {isLoading ? (
-        <div className="flex items-center justify-center mt-[20vh]">
+        <div className="flex items-center justify-center ">
           <CircularProgress />
         </div>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="w-full  grid grid-cols-4 gap-8 mt-[100px]">
+          <div className="w-full  grid grid-cols-4 gap-8 ">
             <div className="w-full col-span-3 *:mb-6">
               <div>
                 <label
