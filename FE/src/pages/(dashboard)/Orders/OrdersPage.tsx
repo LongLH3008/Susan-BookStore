@@ -1,6 +1,10 @@
 import useBlog from "@/common/hooks/useBlog";
+import useOrder from "@/common/hooks/useOrder";
 import { useToast } from "@/common/hooks/useToast";
 import { IBlog } from "@/common/interfaces/blog";
+import { IOrder, IProductOrrder } from "@/common/interfaces/checkout";
+import { ConvertVNDString } from "@/common/shared/round-number";
+import { formatDateTime } from "@/components/formatDate";
 import BlogItem from "@/pages/(website)/blog_detail/_components/BlogItem";
 import { deleteBlog } from "@/services/blog.service";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,7 +16,10 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -20,6 +27,7 @@ import Paper from "@mui/material/Paper";
 import { DataGrid, GridColDef, GridOverlay } from "@mui/x-data-grid";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { Select } from "flowbite-react";
 import { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
@@ -28,7 +36,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const OrdersPage = () => {
   const nav = useNavigate();
-  const { DataBlogs } = useBlog();
+  const { DataOrders } = useOrder();
   const { toast } = useToast();
   const [selectedBlog, setSelectedBlog] = useState<IBlog | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -59,6 +67,9 @@ const OrdersPage = () => {
     setOpen(false);
     setSelectedBlog(null);
   };
+  const handleChange = (event) => {
+    console.log(event.target.value);
+  };
   const onEdit = (id: string) => {
     nav(`chinh-sua/${id}`);
     // console.log(id);
@@ -78,60 +89,107 @@ const OrdersPage = () => {
     setConfirmOpen(true);
   };
   const columns: GridColDef[] = [
-    { field: "blog_title", headerName: "Title", flex: 1 },
+    { field: "_id", headerName: "ID", width: 100 },
     {
-      field: "blog_image",
-      headerName: "Image",
-      renderCell: (params) => (
-        <img src={params.value} alt={params.row.blog_title} className=" h-20" />
-      ),
-      flex: 2,
+      field: "trackingNumber",
+      headerName: "VC",
+      width: 100,
     },
     {
-      field: "blog_tags",
-      headerName: "Tags",
-      flex: 3,
+      field: "user_name",
+      headerName: "Khách Hàng",
+      // renderCell: (params) => (
+      //   <img src={params.value} alt={params.row.blog_title} className=" h-20" />
+      // ),
+      width: 200,
+    },
+    {
+      field: "street",
+      headerName: "Tỉnh Thành",
+      width: 100,
+    },
+    {
+      field: "city",
+      headerName: "Quận Huyện",
+      width: 100,
+    },
+    {
+      field: "total",
+      headerName: "Phí VC",
+      renderCell: (params) => <p>{ConvertVNDString(25000)} đ</p>,
+      width: 100,
+    },
+    {
+      field: "createdAt",
+      headerName: "Tạo lúc",
+      renderCell: (params) => (
+        <p>{formatDateTime(params.row.createdAt, "time")}</p>
+      ),
+      width: 100,
+    },
+    {
+      field: "total",
+      headerName: "Tổng Tiền",
+      renderCell: (params) => <p>{ConvertVNDString(params.row.total)} đ</p>,
+      width: 100,
+    },
+    {
+      field: "products",
+      headerName: "Sản Phẩm",
+      renderCell: (params) => {
+        if (params.row.products.length <= 1) {
+          return (
+            <p>
+              {params.row.products[0]?.title} x{" "}
+              {params.row.products[0]?.quantity}
+            </p>
+          );
+        } else {
+          const productTitles = params.row.products
+            .map((product: IProductOrrder) => (
+              <p>
+                {product.title} x {product?.quantity}
+              </p>
+            ))
+            .join(", ");
+          return (
+            <Tooltip title={productTitles} placement="right-start">
+              <Button>Nhiều sản phẩm</Button>
+            </Tooltip>
+          );
+        }
+      },
+      width: 500,
     },
     {
       field: "active",
-      headerName: "Active",
+      headerName: "Trạng thái",
       renderCell: (params) => (
         <>
-          <div className="flex gap-3  items-center ">
-            <Tooltip title="Chỉnh sửa">
-              <span
-                onClick={() => onEdit(params.row._id)}
-                className="size-10 border text-lg text-zinc-400 hover:border-[#00bfc5] hover:text-[#00bfc5] cursor-pointer font-light grid place-content-center"
-              >
-                <FiEdit />
-              </span>
-            </Tooltip>
-            <Tooltip title="Hiển thị chi tiết">
-              <span
-                onClick={() => onShowDetail(params.row)}
-                className="size-10 border text-lg text-zinc-400 hover:border-[#00bfc5] hover:text-[#00bfc5] cursor-pointer font-light grid place-content-center"
-              >
-                <InfoIcon />
-              </span>
-            </Tooltip>
-            <Tooltip title="Xóa">
-              <span
-                onClick={() => onDelete(params.row)}
-                className="size-10 border text-2xl text-zinc-400 hover:border-red-500 hover:text-red-500 cursor-pointer font-light grid place-content-center"
-              >
-                <MdDeleteOutline />
-              </span>
-            </Tooltip>
-          </div>
+          <FormControl fullWidth>
+            <InputLabel id="status-select-label">Trạng thái</InputLabel>
+            <Select
+              labelId="status-select-label"
+              id="status-select"
+              value={status}
+              label="Trạng thái"
+              onChange={handleChange}
+            >
+              <MenuItem value={100}>Đang đóng hàng</MenuItem>
+              <MenuItem value={300}>Đang giao hàng</MenuItem>
+              <MenuItem value={200}>Đã nhận</MenuItem>
+            </Select>
+          </FormControl>
         </>
       ),
       width: 200,
+      // pinned: 'right'
     },
   ];
 
   const paginationModel = { page: 0, pageSize: 5 };
 
-  if (DataBlogs.isLoading) {
+  if (DataOrders.isLoading) {
     return (
       <div style={{ display: "flex", justifyContent: "center", padding: 20 }}>
         <CircularProgress />
@@ -139,7 +197,7 @@ const OrdersPage = () => {
     );
   }
 
-  if (DataBlogs.isError) {
+  if (DataOrders.isError) {
     return (
       <Typography variant="h6" color="error">
         Lỗi tải dữ liệu đơn hàng.
@@ -148,9 +206,8 @@ const OrdersPage = () => {
   }
 
   if (
-    !DataBlogs.data ||
-    !DataBlogs.data.metadata.data ||
-    !Array.isArray(DataBlogs.data.metadata.data)
+    !DataOrders.data.metadata.data ||
+    !Array.isArray(DataOrders.data.metadata.data)
   ) {
     return (
       <Typography variant="h6" color="textSecondary">
@@ -159,14 +216,15 @@ const OrdersPage = () => {
     );
   }
 
-  //   const rows = DataBlogs.data.metadata.data.map(
-  //     (row: IBlog, index: number) => ({
-  //       id: row._id || index,
-  //       ...row,
-  //     })
-  //   );
+  const rows = DataOrders.data.metadata.data.map((row: IOrder) => ({
+    id: row._id,
+    street: row.shipping.street,
+    city: row.shipping.city,
 
-  const rows: any[] = [];
+    ...row,
+  }));
+  console.log("rows", rows);
+
   return (
     <>
       <div className="rounded-lg shadow-sm bg-white p-5 flex justify-between items-center mb-[50px]">
@@ -204,6 +262,13 @@ const OrdersPage = () => {
               alignItems: "center",
               padding: "10px",
             },
+            "& .MuiDataGrid-columnHeader[data-field='active'], & .MuiDataGrid-cell[data-field='active']":
+              {
+                position: "sticky",
+                right: 0,
+                zIndex: 1,
+                backgroundColor: "white",
+              },
           }}
         />
       </Paper>

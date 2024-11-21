@@ -14,6 +14,7 @@ import ProductsPage from "@/pages/(dashboard)/Products/ProductsPage";
 import UsersPage from "@/pages/(dashboard)/Users/UsersPage";
 import DashboardGuard from "./guards/dashboard.guard";
 import { BlogProvider } from "@/common/hooks/useBlog";
+import { OrderProvider } from "@/common/hooks/useOrder";
 
 const DashboardRoutes = [
   {
@@ -21,7 +22,10 @@ const DashboardRoutes = [
     element: <DashboardGuard children={<DashboardLayout />} />,
     children: [
       { path: "", element: <MainPage /> },
-      { path: "don-hang", element: <BlogProvider children={<OrdersPage />} /> },
+      {
+        path: "don-hang",
+        element: <OrderProvider children={<OrdersPage />} />,
+      },
       { path: "nguoi-dung", element: <UsersPage /> },
       { path: "danh-muc", element: <CategoriesPage /> },
       { path: "san-pham", element: <ProductsPage /> },
