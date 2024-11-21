@@ -1,9 +1,31 @@
 import { SendRequest } from "@/config";
 
-export const getOrderByUser = async (arg: { userId: string, page?: number, limit?: number }) => {
-    return await SendRequest('GET', `/orders/GetAllOrderOfClientWithUser?userId=${arg.userId}&page=${arg.page ?? 1}&limit=${arg.limit ?? 10}`);
-}
+export const getOrderByUser = async (arg: {
+  userId: string;
+  page?: number;
+  limit?: number;
+}) => {
+  return await SendRequest(
+    "GET",
+    `/orders/GetAllOrderOfClientWithUser?userId=${arg.userId}&page=${
+      arg.page ?? 1
+    }&limit=${arg.limit ?? 10}`
+  );
+};
+export const getAllOrder = async (arg: {
+  search: string;
+  page?: number;
+  limit?: number;
+}) => {
+  return await SendRequest(
+    "GET",
+    `/orders/GetAllOrderOfAdmin?page=${arg.page}&limit=${arg.limit}&search=${arg.search}`
+  );
+};
 
 export const searchOrderByTrackingNumber = async (trackingNumber: string) => {
-    return await SendRequest('GET', `/orders/search-trackingNumber?search=${trackingNumber}`)
-}
+  return await SendRequest(
+    "GET",
+    `/orders/search-trackingNumber?search=${trackingNumber}`
+  );
+};
