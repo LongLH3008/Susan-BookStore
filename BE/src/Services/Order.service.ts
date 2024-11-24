@@ -8,6 +8,7 @@ import Order from "../models/Order.model";
 import User from "../models/User.model";
 import DiscountService, { DiscountInput } from "./Discount.service";
 import {
+  detailOrderData,
   GetAllOrderWithPaginateForAdminData,
   GetAllOrderWithPaginateForAdminRequest,
   GetAllOrderWithPaginateForAdminResponse,
@@ -95,7 +96,7 @@ class OrderService {
       discountAmountVoucher,
       productsAfterDiscount,
     };
-  } 
+  }
   static async createOrder(data: CreateOrderInputDTO) {
     const { userId, shipping, payment, products, total, trackingNumber } = data;
 
@@ -376,49 +377,54 @@ class OrderService {
   ): Promise<GetAllOrderWithPaginateForAdminResponse> {
     try {
       const { page = 1, limit = 10, search } = query;
-  
+
       // Validate và parse limit
       const parsedLimit = parseInt(limit.toString(), 10);
       if (isNaN(parsedLimit) || parsedLimit <= 0) {
         throw new Error("Invalid limit value");
       }
-  
+
       // Tính skip cho pagination
       const skip = (page - 1) * parsedLimit;
-  
+
       // Xây dựng điều kiện tìm kiếm
       const searchCondition: Record<string, any> = {};
       if (search && search.trim() !== "") {
         searchCondition.trackingNumber = { $regex: search, $options: "i" };
       }
-  
-      const fieldsToSelect = 
+
+      const fieldsToSelect =
         "_id userId products shipping payment trackingNumber total state createdAt";
-  
+
       // Lấy orders
-      let orders: GetAllOrderWithPaginateForAdminData[] = await Order.find(searchCondition)
+      let orders: GetAllOrderWithPaginateForAdminData[] = await Order.find(
+        searchCondition
+      )
         .select(fieldsToSelect)
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(parsedLimit)
         .lean();
-  
+
       // Lấy danh sách userIds duy nhất
-      const userIds = [...new Set(orders.map(order => order.userId))];
-  
+      const userIds = [...new Set(orders.map((order) => order.userId))];
+
       // Lấy thông tin users
       const users = await User.find({ _id: { $in: userIds } })
-        .select('_id user_email username')
+        .select("_id user_email user_name user_avatar user_phone_number")
         .lean();
-  
+
       // Tạo map để mapping nhanh user info
-      const userMap = new Map(users.map(user => [user._id.toString(), user]));
-  
+      const userMap = new Map(users.map((user) => [user._id.toString(), user]));
+
       // Thêm thông tin user vào orders
-      orders = orders.map(order => ({
+      orders = orders.map((order) => ({
         ...order,
-        user_name: userMap.get(order.userId.toString())?.user_name || '',
-        user_email: userMap.get(order.userId.toString())?.user_email || '',
+        user_name: userMap.get(order.userId.toString())?.user_name || "",
+        user_email: userMap.get(order.userId.toString())?.user_email || "",
+        user_avatar: userMap.get(order.userId.toString())?.user_avatar || "",
+        user_phone_number:
+          userMap.get(order.userId.toString())?.user_phone_number || "",
       }));
       // Đếm tổng số orders theo điều kiện tìm kiếm
       const total = await Order.countDocuments(searchCondition);
@@ -432,6 +438,45 @@ class OrderService {
       throw error;
     }
   }
+
+  // detail order
+  static async DetailOrder(
+    id: string
+  ): Promise<detailOrderData> {
+    try {
+      // Tìm order theo id
+      const order: detailOrderData | null = await Order.findById(id)
+        .select("_id userId products shipping payment trackingNumber total state createdAt")
+        .lean();
+  
+      if (!order) {
+        throw new ResourceNotFoundError("Order not found");
+      }
+  
+      // Lấy danh sách userIds (trong trường hợp có nhiều hơn 1 order, xử lý như phần getall)
+      const userIds = [order.userId]; // Chỉ có 1 order nên userIds chứa 1 phần tử
+  
+      // Truy vấn thông tin người dùng từ danh sách userIds
+      const users = await User.find({ _id: { $in: userIds } })
+        .select("_id user_email user_name user_avatar user_phone_number")
+        .lean();
+  
+      // Tạo map để ánh xạ nhanh thông tin người dùng
+      const userMap = new Map(users.map((user) => [user._id.toString(), user]));
+  
+      // Thêm thông tin người dùng vào order
+      order.user_name = userMap.get(order.userId.toString())?.user_name || "";
+      order.user_email = userMap.get(order.userId.toString())?.user_email || "";
+      order.user_avatar = userMap.get(order.userId.toString())?.user_avatar || "";
+      order.user_phone_number =
+        userMap.get(order.userId.toString())?.user_phone_number || "";
+  
+      return order;
+    } catch (error) {
+      throw error;
+    }
+  }
+  
 }
 
 export default OrderService;
