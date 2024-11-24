@@ -15,6 +15,8 @@ import UsersPage from "@/pages/(dashboard)/Users/UsersPage";
 import DashboardGuard from "./guards/dashboard.guard";
 import { BlogProvider } from "@/common/hooks/useBlog";
 import { OrderProvider } from "@/common/hooks/useOrder";
+import BannerPage from "@/pages/(dashboard)/Banner/BannerPage";
+import { BannerProvider } from "@/common/hooks/useBanner";
 
 const DashboardRoutes = [
   {
@@ -27,6 +29,10 @@ const DashboardRoutes = [
         element: <OrderProvider children={<OrdersPage />} />,
       },
       { path: "nguoi-dung", element: <UsersPage /> },
+      {
+        path: "anh-quang-cao",
+        element: <BannerProvider children={<BannerPage />} />,
+      },
       { path: "danh-muc", element: <CategoriesPage /> },
       { path: "san-pham", element: <ProductsPage /> },
       { path: "san-pham/chinh-sua/:id", element: <FormAttr /> },

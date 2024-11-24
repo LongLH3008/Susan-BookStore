@@ -3,12 +3,15 @@ import { deleteProduct, fetchUsers } from "@/services/product.service";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
-import { Typography } from "@mui/material";
+import { Avatar, Typography } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
 import MyTable2 from "../components/table";
+import { getInitials } from "@/components/getInitials";
+import { FiEdit } from "react-icons/fi";
+import { MdDeleteOutline } from "react-icons/md";
 const CommentsPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
@@ -29,6 +32,7 @@ const CommentsPage: React.FC = () => {
       );
     },
   });
+  console.log("data?.metadata?.allUsers", data?.metadata?.allUsers);
 
   const onDelete = async (id: string) => {
     try {
@@ -41,39 +45,70 @@ const CommentsPage: React.FC = () => {
   const columns = React.useMemo(
     () => [
       {
-        headerName: "Avatar",
-        field: "user_avatar",
-      },
-      {
         headerName: "Username",
         field: "user_name",
+        renderCell: (params: any) => (
+          <div className="flex items-center space-x-2">
+            {params.row.user_avatar ? (
+              <Avatar alt={params.row.user_name} src={params.row.user_avatar} />
+            ) : (
+              <Avatar className="bg-green-900">
+                {getInitials(params.row.user_name)}
+              </Avatar>
+            )}
+            <p>{params.row.user_name}</p>
+          </div>
+        ),
+        // flex: 1,
+        width: 400,
       },
+
       {
         headerName: "Role",
         field: "user_role",
+        flex: 2,
       },
       {
         headerName: "Phone",
         field: "user_phone_number",
+        flex: 3,
       },
       {
         headerName: "Thao tác",
         field: "actions",
         width: "110px",
-        cellRenderer: (row: any) => (
+        renderCell: (params: any) => (
           <>
-            {console.log(row._id)}
-            <Tooltip title="Chỉnh sửa">
-              <EditIcon />
-            </Tooltip>
-            <Tooltip title="Hiển thị chi tiết">
-              <InfoIcon />
-            </Tooltip>
-            <Tooltip title="Xóa">
-              <DeleteIcon onClick={() => onDelete(row._id)} />
-            </Tooltip>
+            {/* {console.log(params.row._id)} */}
+            <div className="flex gap-3  items-center ">
+              <Tooltip title="Chỉnh sửa">
+                <span
+                  // onClick={() => onEdit(params.row._id)}
+                  className="size-10 border text-lg text-zinc-400 hover:border-[#00bfc5] hover:text-[#00bfc5] cursor-pointer font-light grid place-content-center"
+                >
+                  <FiEdit />
+                </span>
+              </Tooltip>
+              <Tooltip title="Hiển thị chi tiết">
+                <span
+                  // onClick={() => onShowDetail(params.row)}
+                  className="size-10 border text-lg text-zinc-400 hover:border-[#00bfc5] hover:text-[#00bfc5] cursor-pointer font-light grid place-content-center"
+                >
+                  <InfoIcon />
+                </span>
+              </Tooltip>
+              <Tooltip title="Xóa">
+                <span
+                  onClick={() => onDelete(params.row)}
+                  className="size-10 border text-2xl text-zinc-400 hover:border-red-500 hover:text-red-500 cursor-pointer font-light grid place-content-center"
+                >
+                  <MdDeleteOutline />
+                </span>
+              </Tooltip>
+            </div>
           </>
         ),
+        flex: 4,
       },
     ],
     []

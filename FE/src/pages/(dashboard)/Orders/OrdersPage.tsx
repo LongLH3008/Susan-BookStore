@@ -1,35 +1,30 @@
-import useBlog from "@/common/hooks/useBlog";
 import useOrder from "@/common/hooks/useOrder";
 import { useToast } from "@/common/hooks/useToast";
 import { IBlog } from "@/common/interfaces/blog";
 import { IOrder, IProductOrrder } from "@/common/interfaces/checkout";
 import { ConvertVNDString } from "@/common/shared/round-number";
 import { formatDateTime } from "@/components/formatDate";
+import { getInitials } from "@/components/getInitials";
 import BlogItem from "@/pages/(website)/blog_detail/_components/BlogItem";
 import { deleteBlog } from "@/services/blog.service";
 import CloseIcon from "@mui/icons-material/Close";
-import InfoIcon from "@mui/icons-material/Info";
 import {
+  Avatar,
   Box,
   Button,
   CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
-  FormControl,
   IconButton,
-  InputLabel,
-  MenuItem,
   Tooltip,
   Typography,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import { DataGrid, GridColDef, GridOverlay } from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { Select } from "flowbite-react";
 import { useState } from "react";
-import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
@@ -41,8 +36,15 @@ const OrdersPage = () => {
   const [selectedBlog, setSelectedBlog] = useState<IBlog | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [open, setOpen] = useState(false);
+  const [backgroundColor, setBackgroundColor] = useState("white");
 
-  //   console.log("DataBlogs", DataBlogs?.data?.metadata?.data);
+  const handleOption = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOption = event.target.value;
+    console.log("selectedOption", selectedOption);
+
+    setBackgroundColor(selectedOption);
+  };
+  console.log("backgroundColor", backgroundColor);
 
   const { mutateAsync } = useMutation({
     mutationFn: deleteBlog,
@@ -84,12 +86,28 @@ const OrdersPage = () => {
       await mutateAsync(selectedBlog._id!);
     }
   };
+
   const onDelete = (blog: IBlog) => {
     setSelectedBlog(blog);
     setConfirmOpen(true);
   };
+  const getBackgroundColor = (state) => {
+    switch (state) {
+      case "pending":
+        return "#08979c";
+      case "confirmed":
+        return "#1d4ed8";
+      case "shipped":
+        return "#fbbf24";
+      case "received":
+        return "#10b981";
+      case "cancelled":
+        return "#b91c1c";
+      default:
+        return "transparent";
+    }
+  };
   const columns: GridColDef[] = [
-    { field: "_id", headerName: "ID", width: 100 },
     {
       field: "trackingNumber",
       headerName: "VC",
@@ -98,40 +116,25 @@ const OrdersPage = () => {
     {
       field: "user_name",
       headerName: "Khách Hàng",
-      // renderCell: (params) => (
-      //   <img src={params.value} alt={params.row.blog_title} className=" h-20" />
-      // ),
+      renderCell: (params) => {
+        const { user_name, avatar } = params.row;
+
+        if (!user_name) {
+          return <p className="text-red-600">Chưa điền tên</p>;
+        }
+
+        return (
+          <div className="flex items-center space-x-2">
+            {avatar ? (
+              <Avatar alt={user_name} src={avatar} />
+            ) : (
+              <Avatar>{getInitials(user_name)}</Avatar>
+            )}
+            <p>{user_name}</p>
+          </div>
+        );
+      },
       width: 200,
-    },
-    {
-      field: "street",
-      headerName: "Tỉnh Thành",
-      width: 100,
-    },
-    {
-      field: "city",
-      headerName: "Quận Huyện",
-      width: 100,
-    },
-    {
-      field: "total",
-      headerName: "Phí VC",
-      renderCell: (params) => <p>{ConvertVNDString(25000)} đ</p>,
-      width: 100,
-    },
-    {
-      field: "createdAt",
-      headerName: "Tạo lúc",
-      renderCell: (params) => (
-        <p>{formatDateTime(params.row.createdAt, "time")}</p>
-      ),
-      width: 100,
-    },
-    {
-      field: "total",
-      headerName: "Tổng Tiền",
-      renderCell: (params) => <p>{ConvertVNDString(params.row.total)} đ</p>,
-      width: 100,
     },
     {
       field: "products",
@@ -161,29 +164,79 @@ const OrdersPage = () => {
       },
       width: 500,
     },
+
+    {
+      field: "ship",
+      headerName: "Phí VC",
+      renderCell: (params) => <p>{ConvertVNDString(25000)} đ</p>,
+      width: 100,
+    },
+    {
+      field: "createdAt",
+      headerName: "Tạo lúc",
+      renderCell: (params) => (
+        <p>{formatDateTime(params.row.createdAt, "time")}</p>
+      ),
+      width: 100,
+    },
+    {
+      field: "total",
+      headerName: "Tổng Tiền",
+      renderCell: (params) => <p>{ConvertVNDString(params.row.total)} đ</p>,
+      width: 100,
+    },
+
     {
       field: "active",
       headerName: "Trạng thái",
-      renderCell: (params) => (
-        <>
-          <FormControl fullWidth>
-            <InputLabel id="status-select-label">Trạng thái</InputLabel>
-            <Select
-              labelId="status-select-label"
-              id="status-select"
-              value={status}
-              label="Trạng thái"
-              onChange={handleChange}
+      renderCell: (params) => {
+        return (
+          <select
+            id="small"
+            className="block w-full p-1 mb-6 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:border-blue-500 "
+            value={params.row.state}
+            style={{
+              backgroundColor: getBackgroundColor(params.row.state),
+              color: "#fff",
+            }}
+            onChange={handleOption}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <option
+              value="pending"
+              style={{ backgroundColor: "#08979c", color: "white" }}
+              // {params?.row?.state === "pending" ? "selected" : ""}
             >
-              <MenuItem value={100}>Đang đóng hàng</MenuItem>
-              <MenuItem value={300}>Đang giao hàng</MenuItem>
-              <MenuItem value={200}>Đã nhận</MenuItem>
-            </Select>
-          </FormControl>
-        </>
-      ),
+              Mới
+            </option>
+            <option
+              value="confirmed"
+              style={{ backgroundColor: "#1d4ed8", color: "white" }}
+            >
+              Đã xác nhận
+            </option>
+            <option
+              value="shipped"
+              style={{ backgroundColor: "#fbbf24", color: "black" }}
+            >
+              Đang gửi hàng
+            </option>
+            <option
+              value="received"
+              style={{ backgroundColor: "#10b981", color: "white" }}
+            >
+              Đã nhận
+            </option>
+            <option
+              value="cancelled"
+              style={{ backgroundColor: "#b91c1c", color: "white" }}
+            >
+              Hủy
+            </option>
+          </select>
+        );
+      },
       width: 200,
-      // pinned: 'right'
     },
   ];
 
@@ -232,12 +285,14 @@ const OrdersPage = () => {
           <i className="fa-solid fa-cart-shopping"></i>
           <h2 className={`text-xl font-[500]`}>Đơn hàng</h2>
         </div>
-        <Link
-          to={"/quan-tri/tin-tuc/them-moi"}
-          className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
-        >
-          <IoMdAdd />
-        </Link>
+        <div className="">
+          <button
+            onClick={() => console.log("jcksnc")}
+            className="size-10 bg-red-700 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
+          >
+            <MdDeleteOutline />
+          </button>
+        </div>
       </div>
 
       <Paper

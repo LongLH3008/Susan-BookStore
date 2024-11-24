@@ -1,8 +1,9 @@
+import { CategoryProvider } from "@/common/hooks/useCategories";
 import { useToast } from "@/common/hooks/useToast";
+import BookImage from "@/pages/(website)/book_detail/_components/BookImage";
+import BookText from "@/pages/(website)/book_detail/_components/BookText";
 import { deleteProduct, fetchProducts } from "@/services/product.service";
 import CloseIcon from "@mui/icons-material/Close";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
 import {
   Box,
@@ -17,11 +18,13 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { FiEdit } from "react-icons/fi";
+import { IoMdAdd } from "react-icons/io";
+import { MdDeleteOutline } from "react-icons/md";
+import { Link, useNavigate } from "react-router-dom";
 import SearchForm from "../components/searchForm";
 import MyTable2 from "../components/table";
-import { Link } from "react-router-dom";
-import { IoMdAdd } from "react-icons/io";
+import { DataGrid } from "@mui/x-data-grid";
 
 const ProductsPage: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -31,6 +34,7 @@ const ProductsPage: React.FC = () => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [open, setOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["books", limit, page, search],
@@ -41,6 +45,7 @@ const ProductsPage: React.FC = () => {
     setSearch(searchTerm);
     refetch();
   };
+  console.log("selectedProduct", selectedProduct);
 
   const { mutateAsync } = useMutation({
     mutationFn: deleteProduct,
@@ -93,22 +98,22 @@ const ProductsPage: React.FC = () => {
       {
         headerName: "Tên sản phẩm",
         field: "title",
-        flex: 5,
+        width: 200,
       },
       {
         headerName: "Giá sản phẩm",
         field: "price",
-        flex: 4,
+        flex: 2,
       },
       {
         headerName: "Tác giả",
         field: "author",
-        flex: 5,
+        flex: 3,
       },
       {
         headerName: "Ảnh đại diện",
         field: "coverImage",
-        flex: 3,
+        flex: 4,
         renderCell: (params: any) => (
           <img
             src={params.row.coverImage}
@@ -121,23 +126,40 @@ const ProductsPage: React.FC = () => {
         headerName: "Thao tác",
         field: "actions",
         width: "110px",
-        flex: 3,
+        flex: 5,
         renderCell: (params: any) => (
           <>
-            <Tooltip title="Chỉnh sửa">
-              <EditIcon onClick={() => onEdit(params.row._id)} />
-            </Tooltip>
-            <Tooltip title="Hiển thị chi tiết">
-              <InfoIcon onClick={() => onShowDetail(params.row)} />
-            </Tooltip>
-            <Tooltip title="Xóa">
-              <DeleteIcon onClick={() => onDelete(params.row)} />
-            </Tooltip>
+            <div className="flex gap-3  items-center ">
+              <Tooltip title="Chỉnh sửa">
+                <span
+                  onClick={() => onEdit(params.row._id)}
+                  className="size-10 border text-lg text-zinc-400 hover:border-[#00bfc5] hover:text-[#00bfc5] cursor-pointer font-light grid place-content-center"
+                >
+                  <FiEdit />
+                </span>
+              </Tooltip>
+              <Tooltip title="Hiển thị chi tiết">
+                <span
+                  onClick={() => onShowDetail(params.row)}
+                  className="size-10 border text-lg text-zinc-400 hover:border-[#00bfc5] hover:text-[#00bfc5] cursor-pointer font-light grid place-content-center"
+                >
+                  <InfoIcon />
+                </span>
+              </Tooltip>
+              <Tooltip title="Xóa">
+                <span
+                  onClick={() => onDelete(params.row)}
+                  className="size-10 border text-2xl text-zinc-400 hover:border-red-500 hover:text-red-500 cursor-pointer font-light grid place-content-center"
+                >
+                  <MdDeleteOutline />
+                </span>
+              </Tooltip>
+            </div>
           </>
         ),
       },
     ],
-    [onDelete]
+    []
   );
 
   return (
@@ -155,11 +177,11 @@ const ProductsPage: React.FC = () => {
         </Link>
       </div>
 
-      <SearchForm
+      {/* <SearchForm
         onSearch={handleSearch}
         initialSearchTerm={search}
         linkAdd="/quan-tri/san-pham/them-moi"
-      />
+      /> */}
 
       <MyTable2
         rows={data?.metadata?.books || []}
@@ -217,73 +239,46 @@ const ProductsPage: React.FC = () => {
         </DialogTitle>
         <DialogContent dividers>
           {selectedProduct ? (
-            <Box>
-              <Typography variant="h6">Thông tin cơ bản</Typography>
-              <Typography>
-                <strong>Tiêu đề:</strong> {selectedProduct.title}
-              </Typography>
-              <Typography>
-                <strong>Tác giả:</strong> {selectedProduct.author}
-              </Typography>
-              <Typography>
-                <strong>ISBN:</strong> {selectedProduct.isbn}
-              </Typography>
-              <Typography>
-                <strong>Giá:</strong> {selectedProduct.price.toLocaleString()}
-                VND
-              </Typography>
-              <Typography>
-                <strong>Giảm giá:</strong> {selectedProduct.discount}%
-              </Typography>
-              <Typography>
-                <strong>Nhà xuất bản:</strong> {selectedProduct.publisher}
-              </Typography>
-              <Typography>
-                <strong>Ngày xuất bản:</strong>{" "}
-                {new Date(selectedProduct.publicationDate).toLocaleDateString()}
-              </Typography>
-              <Typography>
-                <strong>Số lượng tồn kho:</strong> {selectedProduct.stock}
-              </Typography>
-
-              {/* Hiển thị ảnh đại diện */}
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                Ảnh đại diện
-              </Typography>
-              <img
-                src={selectedProduct.coverImage}
-                alt="Ảnh đại diện"
-                style={{
-                  width: "200px",
-                  height: "auto",
-                  marginBottom: "20px",
-                }}
-              />
-
-              {/* Hiển thị mảng hình ảnh nếu có */}
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                Hình ảnh sản phẩm
-              </Typography>
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-                {selectedProduct.images && selectedProduct.images.length > 0 ? (
-                  selectedProduct.images.map((src: string, idx: number) => (
-                    <img
-                      key={idx}
-                      src={src?.url}
-                      alt={`Hình ảnh ${idx + 1}`}
-                      style={{ width: "200px", height: "auto" }}
-                    />
-                  ))
-                ) : (
-                  <Typography>Không có hình ảnh</Typography>
-                )}
-              </Box>
-
-              <Typography variant="h6" sx={{ mt: 2 }}>
-                Mô tả
-              </Typography>
-              <Typography>{selectedProduct.description}</Typography>
-            </Box>
+            <div className="">
+              <div className="grid lg:grid-cols-2 my-14 gap-8">
+                <BookImage
+                  coverImage={selectedProduct?.coverImage}
+                  Image={selectedProduct?.images}
+                />
+                <CategoryProvider>
+                  <BookText detailProduct={selectedProduct} isCard={true} />
+                </CategoryProvider>
+              </div>
+              <div className={` text-[#646464] leading-loose `}>
+                <p
+                  className={`${
+                    !isExpanded && "overflow-hidden text-ellipsis line-clamp-4"
+                  }`}
+                >
+                  <span className="font-semibold text-gray-700 ">
+                    {" "}
+                    Mô tả :{" "}
+                  </span>
+                  {selectedProduct?.description}
+                </p>
+                <span
+                  onClick={() => setIsExpanded(true)}
+                  className={`${
+                    isExpanded ? "hidden" : ""
+                  } font-bold hover:underline cursor-pointer`}
+                >
+                  Xem thêm
+                </span>
+                <span
+                  onClick={() => setIsExpanded(false)}
+                  className={`${
+                    !isExpanded ? "hidden" : ""
+                  } font-bold hover:underline cursor-pointer`}
+                >
+                  Thu gọn
+                </span>
+              </div>
+            </div>
           ) : (
             <Typography>Không có dữ liệu</Typography>
           )}

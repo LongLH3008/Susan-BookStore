@@ -1,5 +1,6 @@
 import { useToast } from "@/common/hooks/useToast";
 import {
+  Avatar,
   Box,
   Dialog,
   DialogContent,
@@ -19,12 +20,11 @@ import LockIcon from "@mui/icons-material/Lock";
 import UnlockIcon from "@mui/icons-material/LockOpen";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { getInitials } from "@/components/getInitials";
 
 const UsersPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
-  const { toast } = useToast();
-  const nav = useNavigate();
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [open, setOpen] = useState(false);
 
@@ -33,9 +33,9 @@ const UsersPage: React.FC = () => {
     queryFn: () => getUsers(),
   });
 
-  const onEdit = (id: string) => {
-    nav(`chinh-sua/${id}`);
-  };
+  // const onEdit = (id: string) => {
+  //   nav(`chinh-sua/${id}`);
+  // };
 
   const onShowDetail = (user: any) => {
     setSelectedUser(user);
@@ -46,9 +46,9 @@ const UsersPage: React.FC = () => {
     setOpen(false);
     setSelectedUser(null);
   };
-  const onAddNew = () => {
-    nav("/nguoi-dung/them-moi");
-  };
+  // const onAddNew = () => {
+  //   nav("/nguoi-dung/them-moi");
+  // };
   const onLock = (id: any) => {};
   const onUnlock = (id: any) => {};
   const columns = React.useMemo(
@@ -56,39 +56,41 @@ const UsersPage: React.FC = () => {
       {
         headerName: "Avatar",
         field: "user_avatar",
-        width: 300,
-        renderCell: (params: any) => (
-          <img
-            src={params.row.user_avatar || "default-avatar.png"} // Cung cấp ảnh mặc định nếu không có
-            alt="Avatar"
-            style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-          />
-        ),
+        width: 200,
+        renderCell: (params: any) => {
+          // console.log(params.row);
+
+          !params?.row.user_avatar || params?.row.user_avatar === "" ? (
+            <Avatar>{getInitials(params.row.user_name)}</Avatar>
+          ) : (
+            <Avatar alt={params.row.user_name} src={params.row.user_avatar} />
+          );
+        },
       },
       {
         headerName: "Tên người dùng",
         field: "user_name",
-        width: 300,
+        flex: 2,
       },
       {
         headerName: "Email",
         field: "user_email",
-        width: 300,
+        flex: 3,
       },
       {
         headerName: "Số điện thoại",
         field: "user_phone_number",
-        width: 300,
+        flex: 4,
       },
       {
         headerName: "Vai trò",
         field: "user_role",
-        width: 300,
+        flex: 5,
       },
       {
         headerName: "Thao tác",
         field: "actions",
-        width: "150px",
+        flex: 6,
         renderCell: (params: any) => (
           <>
             <Tooltip title="Hiển thị chi tiết">
@@ -126,11 +128,6 @@ const UsersPage: React.FC = () => {
         </div>
       </div>
 
-      {/* <div className="flex justify-end mb-4">
-        <Button variant="contained" color="primary" onClick={onAddNew}>
-          Thêm mới
-        </Button>
-      </div> */}
       <MyTable2
         rows={data?.metadata?.allUsers || []}
         columns={columns}
