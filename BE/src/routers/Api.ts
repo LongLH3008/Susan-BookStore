@@ -232,6 +232,10 @@ router.get(
   "/orders/GetAllOrderOfAdmin",
   asyncHandler(OrderController.listOrderAdmin)
 );
+router.get(
+  "/orders/detail-order/:id",
+  asyncHandler(OrderController.DetailOrder)
+)
 
 // giao hàng nhanh
 router.post(

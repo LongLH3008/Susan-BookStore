@@ -37,6 +37,12 @@ class OrderController {
       metadata: await OrderService.ListOrderPaginateAdmin(req.query),
     }).send(res);
   }
+  // detail order
+  static async DetailOrder(req: Request, res: Response): Promise<any> {
+    return new SuccessResponse({
+      metadata: await OrderService.DetailOrder(req.params.id),
+    }).send(res);
+  }
 }
 
 export default OrderController;
