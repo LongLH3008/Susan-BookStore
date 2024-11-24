@@ -3,7 +3,6 @@ import mongoose from "mongoose"
 export enum UserStatus {
     active = "active",
     block = "block",
-    pending = "pending"
 }
 
 export enum UserRole {

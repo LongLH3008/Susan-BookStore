@@ -95,7 +95,7 @@ class OrderService {
       discountAmountVoucher,
       productsAfterDiscount,
     };
-  }
+  } 
   static async createOrder(data: CreateOrderInputDTO) {
     const { userId, shipping, payment, products, total, trackingNumber } = data;
 
@@ -420,10 +420,8 @@ class OrderService {
         user_name: userMap.get(order.userId.toString())?.user_name || '',
         user_email: userMap.get(order.userId.toString())?.user_email || '',
       }));
-  
       // Đếm tổng số orders theo điều kiện tìm kiếm
       const total = await Order.countDocuments(searchCondition);
-  
       return {
         data: orders,
         total,

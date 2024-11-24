@@ -29,6 +29,7 @@ const router = (0, express_1.Router)();
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
 // user-service-common
 router.get("/user", (0, utils_1.asyncHandler)(User_controller_1.default.getAll)); // get all
+router.put("/user/udpate/status/:id", (0, utils_1.asyncHandler)(User_controller_1.default.updateUserStatus)); // update status user
 router.get("/user/:id", (0, utils_1.asyncHandler)(User_controller_1.default.getByUserId)); // get by id
 router.get("/user/type-auth/:type", (0, utils_1.asyncHandler)(User_controller_1.default.getAllUserByTypeAuth)); // get by type auth
 router.put("/user/:id", (0, utils_1.asyncHandler)(User_controller_1.default.updateUser));
