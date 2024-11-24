@@ -248,14 +248,13 @@ class OrderService {
 
     console.log({ shippingInput: shippingInput });
 
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let randomCode = '';
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let randomCode = "";
 
     for (let i = 0; i < 9; i++) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       randomCode += characters[randomIndex];
     }
-
 
     //const newShipping = await GiaoHangNhanhService.CreateOrderGHN(shippingInput)
     const data: any = {
@@ -340,7 +339,8 @@ class OrderService {
   ): Promise<SearchOrderCodeReponse> {
     const { search } = query;
     const searchCondition: Record<string, any> = {};
-    const fieldsToSelect = "_id userId products trackingNumber total state createdAt";
+    const fieldsToSelect =
+      "_id userId products trackingNumber total state createdAt";
     if (search && search.trim() !== "") {
       searchCondition.trackingNumber = { $regex: search, $options: "i" };
     }
@@ -404,7 +404,9 @@ class OrderService {
         "_id userId products shipping payment trackingNumber total state createdAt";
 
       // Lấy orders
-      let orders: GetAllOrderWithPaginateForAdminData[] = await Order.find(searchCondition)
+      let orders: GetAllOrderWithPaginateForAdminData[] = await Order.find(
+        searchCondition
+      )
         .select(fieldsToSelect)
         .sort({ createdAt: -1 })
         .skip(skip)
@@ -412,26 +414,25 @@ class OrderService {
         .lean();
 
       // Lấy danh sách userIds duy nhất
-      const userIds = [...new Set(orders.map(order => order.userId))];
+      const userIds = [...new Set(orders.map((order) => order.userId))];
 
       // Lấy thông tin users
       const users = await User.find({ _id: { $in: userIds } })
-        .select('_id user_email username')
+        .select("_id user_email username")
         .lean();
 
       // Tạo map để mapping nhanh user info
-      const userMap = new Map(users.map(user => [user._id.toString(), user]));
+      const userMap = new Map(users.map((user) => [user._id.toString(), user]));
 
       // Thêm thông tin user vào orders
-      orders = orders.map(order => ({
+      orders = orders.map((order) => ({
         ...order,
-        user_name: userMap.get(order.userId.toString())?.user_name || '',
-        user_email: userMap.get(order.userId.toString())?.user_email || '',
+        user_name: userMap.get(order.userId.toString())?.user_name || "",
+        user_email: userMap.get(order.userId.toString())?.user_email || "",
       }));
 
       // Đếm tổng số orders theo điều kiện tìm kiếm
       const total = await Order.countDocuments(searchCondition);
-
       return {
         data: orders,
         total,

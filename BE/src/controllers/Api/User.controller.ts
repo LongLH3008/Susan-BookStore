@@ -47,6 +47,16 @@ class UserController {
       metadata: (await UserService.updateUser(req.params.id, req.body)) as any,
     }).send(res);
   }
+
+  static async updateUserStatus(req: Request | any, res: Response) {
+    return new SuccessResponse({
+      message: "Upadate user status successFully !",
+      metadata: (await UserService.updateUserStatus(
+        req.params.id,
+        req.body.user_status
+      )) as any,
+    }).send(res);
+  }
 }
 
 export default UserController;

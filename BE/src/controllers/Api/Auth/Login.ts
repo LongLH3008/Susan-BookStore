@@ -10,10 +10,14 @@ class Login {
     public static async Login(req: any, res: any): Promise<any> {
         try {
             const { user_email, user_password } = req.body;
+            
             validate(loginSchema, { user_email, user_password });
             const user: any = await User.findOne({ user_email: user_email });
             if (!user) {
                 return res.status(401).json({ message: "Invalid email or password" });
+            }
+            if (user.user_status !== "active") {
+                return res.status(403).json({ message: "Your account is disabled. Please contact support." }); // hihi / hì hì 
             }
 
             const comparePW = await bcrypt.compare(user_password, user.user_password);
