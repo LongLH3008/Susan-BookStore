@@ -6,19 +6,6 @@ import CheckoutProducts from "./_components/CheckoutProducts";
 import ResponsiveCheckoutProducts from "./_components/ResponsiveCheckoutProducts";
 
 const Checkout = () => {
-	// const { AuthorUser } = userState();
-
-	// useEffect(() => {
-	// 	AuthorUser();
-	// }, []);
-
-	// const { id } = userState();
-
-	// const { data } = useQuery({
-	// 	queryKey: ["cart"],
-	// 	queryFn: async () => await getCartByUser(id),
-	// });
-
 	return (
 		<CheckoutProvider>
 			<nav className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] flex justify-between items-center h-[67px] border-b border-zinc-300">

@@ -1,3 +1,4 @@
+import { IBankingPayment, ICaclCheckout } from "@/common/interfaces/checkout";
 import { SendRequest } from "@/config";
 
 export const getListBank = async () => {

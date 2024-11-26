@@ -58,7 +58,7 @@ export default function TotalCart({ dataCart }: { dataCart: ICart[] }) {
 		const quantity = Number(item?.product_quantity);
 
 		const calc = acc + (discountPercent / 100) * price * quantity;
-		return calc.toFixed() as any;
+		return Math.round(calc);
 	}, 0);
 
 	return (

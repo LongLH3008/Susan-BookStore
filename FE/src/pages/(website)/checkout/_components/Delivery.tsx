@@ -59,6 +59,9 @@ const Delivery = () => {
 									{item.ProvinceName}
 								</option>
 							))}
+						<option value="" defaultChecked>
+							Chọn
+						</option>
 					</select>
 					<label
 						htmlFor="country"
@@ -84,6 +87,9 @@ const Delivery = () => {
 									{item.DistrictName}
 								</option>
 							))}
+						<option value="" defaultChecked>
+							Chọn
+						</option>
 					</select>
 					<label
 						htmlFor="country"
@@ -109,6 +115,9 @@ const Delivery = () => {
 									{item.WardName}
 								</option>
 							))}
+						<option value="" defaultChecked>
+							Chọn
+						</option>
 					</select>
 					<label
 						htmlFor="country"

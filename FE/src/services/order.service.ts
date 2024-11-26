@@ -7,8 +7,7 @@ export const getOrderByUser = async (arg: {
 }) => {
   return await SendRequest(
     "GET",
-    `/orders/GetAllOrderOfClientWithUser?userId=${arg.userId}&page=${
-      arg.page ?? 1
+    `/orders/GetAllOrderOfClientWithUser?userId=${arg.userId}&page=${arg.page ?? 1
     }&limit=${arg.limit ?? 10}`
   );
 };

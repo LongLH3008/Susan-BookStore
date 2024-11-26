@@ -3,8 +3,6 @@ import { searchOrderByTrackingNumber } from "@/services/order.service";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-type Props = {};
-
 const CheckoutSuccess = () => {
 	const { code } = useParams();
 	const nav = useNavigate();
