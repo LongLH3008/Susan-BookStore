@@ -4,7 +4,7 @@ import { useContext } from "react";
 import ItemInCheckout from "./ItemInCheckout";
 
 const CheckoutProducts = () => {
-	const { data: cart } = useContext(CheckoutContext);
+	const { data: cart, feeShip } = useContext(CheckoutContext);
 
 	const subtotal = cart?.reduce((acc: number, item: any) => acc + item.product_id.price * item.product_quantity, 0);
 	const discountArr = cart?.filter((item: any) => Math.abs(item.product_id.discount) > 0 && item);
@@ -32,7 +32,7 @@ const CheckoutProducts = () => {
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
 					<p>Phí vận chuyển</p>
-					<p>17.000 đ</p>
+					<p>{ConvertVNDString(feeShip)} đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
 					<p>Mã giảm giá</p>
@@ -42,7 +42,7 @@ const CheckoutProducts = () => {
 					<p>Tổng cộng</p>
 					<p>
 						<span className="text-[13px] text-zinc-400 mr-1">VND</span>
-						<span>{ConvertVNDString(subtotal - discount + 17000)} đ</span>
+						<span>{ConvertVNDString(subtotal - discount + feeShip)} đ</span>
 					</p>
 				</div>
 			</div>

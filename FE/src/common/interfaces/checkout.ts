@@ -64,3 +64,9 @@ export interface IBankingPayment {
   bankCode: string;
   orderInfo: { products: product[] };
 }
+
+export interface FeeShip {
+  to_ward_code: string;
+  to_district_id: number
+  items: [{ bookId: string, quantity: number }]
+}

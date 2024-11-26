@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 
 const Delivery = () => {
-	const { form } = useContext(CheckoutContext);
+	const { form, data, calcFeeShip, setFeeShip } = useContext(CheckoutContext);
 	const [locationInfo, setLocationInfo] = useState<any>({ district: [], ward: [] });
 
 	const { data: city } = useQuery({
@@ -14,11 +14,14 @@ const Delivery = () => {
 	});
 
 	const getDistrict = async (province_id: number) => {
+		setFeeShip(0);
 		const { data } = await getAllDistrict(province_id);
 		const province = city.data.find((item: any) => item.ProvinceID == province_id);
 		form.setValue("province", province.ProvinceName);
-		if (form.getValues("district") !== "") form.setValues("district", "");
-		if (form.getValues("ward") !== "") form.setValues("ward", "");
+		form.resetField("district");
+		form.resetField("districtId");
+		form.resetField("ward");
+		form.resetField("wardCode");
 		setLocationInfo({ ward: [], district: data });
 		form.trigger("city");
 	};
@@ -27,15 +30,27 @@ const Delivery = () => {
 		const { data } = await getWards(district_id);
 		const district = locationInfo.district.find((item: any) => item.DistrictID == district_id);
 		form.setValue("district", district.DistrictName);
+		form.resetField("ward");
+		form.resetField("wardCode");
 		setLocationInfo({ ...locationInfo, ward: data });
 		form.trigger("district");
 	};
 
-	const chooseWard = (wardCode: string) => {
-		console.log(wardCode, locationInfo.ward);
+	const chooseWard = async (wardCode: string) => {
 		const ward = locationInfo.ward.find((item: any) => item.WardCode == wardCode.toString());
 		form.setValue("ward", ward.WardName);
 		form.trigger("ward");
+
+		const to_ward_code = form.getValues("wardCode");
+		const to_district_id = form.getValues("districtId");
+
+		if (to_ward_code !== "" && to_district_id !== "") {
+			const items = data.map((item: ICart) => ({
+				bookId: item.product_id,
+				quantity: item.product_quantity,
+			}));
+			await calcFeeShip({ items, to_district_id: Number(to_district_id), to_ward_code });
+		}
 	};
 
 	return (

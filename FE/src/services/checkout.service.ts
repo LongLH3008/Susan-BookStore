@@ -1,4 +1,4 @@
-import { IBankingPayment, ICaclCheckout } from "@/common/interfaces/checkout";
+import { FeeShip, IBankingPayment, ICaclCheckout } from "@/common/interfaces/checkout";
 import { SendRequest } from "@/config";
 
 export const getListBank = async () => {
@@ -19,4 +19,8 @@ export const bankingPayment = async (args: IBankingPayment) => {
 
 export const checkBankingSuccess = async (url: string) => {
     return await SendRequest('POST', '/payment/verify-url', { url });
+}
+
+export const checkFeeShip = async (arg: FeeShip) => {
+    return await SendRequest('POST', '/giao-hang-nhanh/preview-shipfee', arg)
 }
