@@ -252,6 +252,7 @@ class OrderService {
     const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let randomCode = "";
 
+
     for (let i = 0; i < 9; i++) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       randomCode += characters[randomIndex];
@@ -458,35 +459,35 @@ class OrderService {
       const order: detailOrderData | null = await Order.findById(id)
         .select("_id userId products shipping payment trackingNumber total state createdAt")
         .lean();
-  
+
       if (!order) {
         throw new ResourceNotFoundError("Order not found");
       }
-  
+
       // Lấy danh sách userIds (trong trường hợp có nhiều hơn 1 order, xử lý như phần getall)
       const userIds = [order.userId]; // Chỉ có 1 order nên userIds chứa 1 phần tử
-  
+
       // Truy vấn thông tin người dùng từ danh sách userIds
       const users = await User.find({ _id: { $in: userIds } })
         .select("_id user_email user_name user_avatar user_phone_number")
         .lean();
-  
+
       // Tạo map để ánh xạ nhanh thông tin người dùng
       const userMap = new Map(users.map((user) => [user._id.toString(), user]));
-  
+
       // Thêm thông tin người dùng vào order
       order.user_name = userMap.get(order.userId.toString())?.user_name || "";
       order.user_email = userMap.get(order.userId.toString())?.user_email || "";
       order.user_avatar = userMap.get(order.userId.toString())?.user_avatar || "";
       order.user_phone_number =
         userMap.get(order.userId.toString())?.user_phone_number || "";
-  
+
       return order;
     } catch (error) {
       throw error;
     }
   }
-  
+
 }
 
 export default OrderService;

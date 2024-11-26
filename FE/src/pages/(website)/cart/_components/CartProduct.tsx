@@ -1,8 +1,10 @@
+import { userState } from "@/common/hooks/useAuth";
 import { useCart } from "@/common/hooks/useCart";
 import { Link } from "react-router-dom";
 import ItemCart from "./ItemCart";
 
 export default function CartProducts({ dataCart, user_id }: { dataCart: ICart[]; user_id: string }) {
+	const { id } = userState();
 	const { onAction: Remove } = useCart({ action: "REMOVE" });
 	const { onAction: IncreaseAmount } = useCart({ action: "INCREASE" });
 	const { onAction: DecreaseAmount } = useCart({ action: "DECREASE" });
@@ -77,7 +79,7 @@ export default function CartProducts({ dataCart, user_id }: { dataCart: ICart[];
 				</Link>
 				{dataCart?.filter((item: TCartSelectItem) => item.selected == true).length > 0 && (
 					<Link
-						to={"/thanh-toan"}
+						to={`/thanh-toan/${id}`}
 						state={{ from: location.pathname }}
 						className="hover:bg-zinc-700"
 					>

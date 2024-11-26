@@ -1,10 +1,10 @@
-type product = {
+export type product = {
   bookId: string;
   quantity: number;
   code: null | string;
 };
 
-interface ICheckout {
+export interface ICheckout {
   userId: string;
   paymentMethod: "COD";
   name: string;
@@ -54,12 +54,12 @@ export interface IOrder {
   user_name: string;
   user_email: string;
 }
-interface ICaclCheckout {
+export interface ICaclCheckout {
   userId: string;
   products: product[];
 }
 
-interface IBankingPayment {
+export interface IBankingPayment {
   amount: number;
   bankCode: string;
   orderInfo: { products: product[] };
