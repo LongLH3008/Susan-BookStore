@@ -263,7 +263,7 @@ const Bookservice = ({ detailProduct }: { detailProduct: IProduct }) => {
             {/* Bài review */}
             {!isLoading ? (
               <div className="">
-                <form className="max-w-[170px] my-5">
+                {/* <form className="max-w-[170px] my-5">
                   <select
                     id="countries"
                     className=" border-0 text-gray-900 text-sm rounded-lg focus:ring-yellow-300 focus:border-yellow-300 block w-full p-2 "
@@ -272,7 +272,7 @@ const Bookservice = ({ detailProduct }: { detailProduct: IProduct }) => {
                     <option value="highest-rating">Xếp hạng cao nhất</option>
                     <option value="lowest-rating">Xếp hạng thấp nhất</option>
                   </select>
-                </form>
+                </form> */}
                 <div className="max-h-[400px] overflow-y-scroll">
                   <h4 className="text-xl font-semibold mb-5">
                     {reviewIdBook?.metadata?.totalReviews} Bình Luận

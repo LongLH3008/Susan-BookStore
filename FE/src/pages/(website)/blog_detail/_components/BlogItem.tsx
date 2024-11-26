@@ -55,19 +55,16 @@ const BlogItem = ({ dataBlog }: { dataBlog: IBlog | null }) => {
           id="tags "
           className="my-7 border-t-2 border-b-2 py-2 border-[#e0e0e0]"
         >
-          <p className="text-[#999999] text-[17px] ">
+          <p className="flex items-end text-[#999999] text-[17px] ">
             Thẻ sách :
             {Array.isArray(dataBlog?.blog_tags)
               ? dataBlog?.blog_tags?.map((tag, index) => (
-                  <pattern key={index}>
-                    <Link
-                      to="/"
-                      className="italic hover:text-[#00BFC5] text-gray-900 text-[13px] ms-1"
-                    >
+                  <span key={index}>
+                    <span className="italic hover:text-[#00BFC5] text-gray-900 text-[13px] ms-1">
                       {tag}
-                    </Link>
+                    </span>
                     {index < dataBlog.blog_tags.length - 1 && ", "}
-                  </pattern>
+                  </span>
                 ))
               : dataBlog?.blog_tags}
           </p>
