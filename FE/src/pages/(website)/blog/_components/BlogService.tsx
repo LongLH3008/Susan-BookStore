@@ -48,9 +48,9 @@ const BlogService = () => {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                   />
                 </svg>
@@ -112,7 +112,7 @@ const BlogService = () => {
             <li className="font-bold">
               Tháng {currentMonth} {currentYear}
             </li>
-            {!Array.isArray(blogMontn) && blogMontn.length == 0 ? (
+            {!Array.isArray(blogMontn) || blogMontn.length == 0 ? (
               <Skeleton variant="text" width="100%" height={24} />
             ) : (
               <ul>
