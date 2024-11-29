@@ -13,10 +13,7 @@ const bannerImageSchema = new mongoose.Schema({
 });
 const bannerSchema = new mongoose.Schema<IBannerModel>(
   {
-    banner_Title: { type: String, required: true },
     banner_Images: { type: [bannerImageSchema], required: true },
-    advertisement_images: { type: [String], required: true },
-    banner_Description: { type: String, required: true },
     is_active: { type: Boolean, default: true },
   },
   {
