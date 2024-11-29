@@ -8,8 +8,8 @@ import { BannerDTO } from "./dtos/Banner.dto";
 class BannerService {
     static async Create(data : BannerDTO) {
         try {
-            validate(bannerValidateSchema, data);
-            const checkBanner = await banners.findOne({banner_Title : data.banner_Title})
+            // validate(bannerValidateSchema, data);
+            const checkBanner = await banners.findOne({banner_Images : data.banner_Images});
             if(checkBanner) {
                 throw new ConflictError("this banner title already exists");
             }

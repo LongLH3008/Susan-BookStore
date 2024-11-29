@@ -24,6 +24,7 @@ const User_controller_1 = __importDefault(require("../controllers/Api/User.contr
 const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.controller"));
 const vectorSearch_controller_1 = __importDefault(require("../controllers/Api/vectorSearch.controller"));
 const banner_controler_1 = __importDefault(require("../controllers/Api/banner.controler"));
+const bannerSale_controller_1 = __importDefault(require("../controllers/Api/bannerSale.controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -148,4 +149,11 @@ router.get("/GetbyBanner/:id", (0, utils_1.asyncHandler)(banner_controler_1.defa
 router.delete("/DeleteBanner/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.deleteBanner));
 router.put("/UpdateBanner/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.updateBanner));
 router.get("/GetByBanner/client/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.GetbyidwithClient));
+// banner sale
+router.post("/create/banner-sale", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.create));
+router.get("/GetbyBanner-sale/:id", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.GetByBannerSaleId));
+router.get("/GetAll/banner-sale/inAdmin", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.GetAllBannerInAdmin));
+router.delete("/DeleteBanner-sale/:id", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.deleteBanner));
+router.put("/UpdateBanner-sale/:id", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.updateBanner));
+router.get("/GetByBanner-sale/client/:id", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.GetbyidwithClient));
 exports.default = router;

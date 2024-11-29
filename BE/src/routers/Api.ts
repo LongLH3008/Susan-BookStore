@@ -20,6 +20,7 @@ import UserController from "../controllers/Api/User.controller";
 import PaymentController from "../controllers/Api/Vnpay.controller";
 import VectorSearchController from "../controllers/Api/vectorSearch.controller";
 import BannerControler from "../controllers/Api/banner.controler";
+import BannerSaleControler from "../controllers/Api/bannerSale.controller";
 
 const router = Router();
 
@@ -28,7 +29,10 @@ router.post("/user-google", asyncHandler(UserController.createUserFromGoogle)); 
 
 // user-service-common
 router.get("/user", asyncHandler(UserController.getAll)); // get all
-router.put("/user/udpate/status/:id", asyncHandler(UserController.updateUserStatus));// update status user
+router.put(
+  "/user/udpate/status/:id",
+  asyncHandler(UserController.updateUserStatus)
+); // update status user
 router.get("/user/:id", asyncHandler(UserController.getByUserId)); // get by id
 router.get(
   "/user/type-auth/:type",
@@ -235,7 +239,7 @@ router.get(
 router.get(
   "/orders/detail-order/:id",
   asyncHandler(OrderController.DetailOrder)
-)
+);
 
 // giao hàng nhanh
 router.post(
@@ -282,6 +286,28 @@ router.put("/UpdateBanner/:id", asyncHandler(BannerControler.updateBanner));
 router.get(
   "/GetByBanner/client/:id",
   asyncHandler(BannerControler.GetbyidwithClient)
+);
+// banner sale
+router.post("/create/banner-sale", asyncHandler(BannerSaleControler.create));
+router.get(
+  "/GetbyBanner-sale/:id",
+  asyncHandler(BannerSaleControler.GetByBannerSaleId)
+);
+router.get(
+  "/GetAll/banner-sale/inAdmin",
+  asyncHandler(BannerSaleControler.GetAllBannerInAdmin)
+);
+router.delete(
+  "/DeleteBanner-sale/:id",
+  asyncHandler(BannerSaleControler.deleteBanner)
+);
+router.put(
+  "/UpdateBanner-sale/:id",
+  asyncHandler(BannerSaleControler.updateBanner)
+);
+router.get(
+  "/GetByBanner-sale/client/:id",
+  asyncHandler(BannerSaleControler.GetbyidwithClient)
 );
 
 export default router;
