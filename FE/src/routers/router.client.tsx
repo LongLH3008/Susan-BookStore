@@ -36,6 +36,7 @@ const ClientRoutes = [
 		],
 	},
 	{ path: "thanh-toan/:id", element: <Website.Checkout /> },
+	{ path: "thanh-toan", element: <Website.Checkout /> },
 	{ path: "vnpay-return", element: <Website.BankingReturn /> },
 	{ path: "thanh-toan-thanh-cong/:code", element: <Website.CheckoutSuccess /> },
 	{ path: "abc", element: <CKEditorFullScreen /> },

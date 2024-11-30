@@ -1,9 +1,8 @@
-import { Link } from "react-router-dom";
 import { IBlog } from "@/common/interfaces/blog";
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getUsers } from "@/services/auth.service";
 import { FormatDate } from "@/components/formatDate";
+import { getUsers } from "@/services/auth.service";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 const BlogItem = ({ dataBlog }: { dataBlog: IBlog | null }) => {
   const [author, setAuthor] = useState<IUser | null>(null);
@@ -69,6 +68,12 @@ const BlogItem = ({ dataBlog }: { dataBlog: IBlog | null }) => {
               : dataBlog?.blog_tags}
           </p>
         </div>
+        {/* <div className="flex justify-center mb-10 *:mx-2 ">
+          <i className="hover:text-white text-[#1de1f2] fa-brands fa-twitter border hover:bg-[#1de1f2] p-3 rounded-full"></i>
+          <i className="hover:text-white text-[#526faf] fa-brands fa-facebook-f border hover:bg-[#526faf] py-3 px-4  rounded-full"></i>
+          <i className="hover:text-white text-[#dd5245] fa-brands fa-google border hover:bg-[#dd5245] p-3 rounded-full"></i>
+          <i className="hover:text-white text-[#bd081b] fa-brands fa-pinterest border hover:bg-[#bd081b] p-3 rounded-full"></i>
+        </div> */}
       </div>
     </>
   );

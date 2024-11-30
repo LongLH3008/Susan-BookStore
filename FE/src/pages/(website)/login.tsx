@@ -1,4 +1,3 @@
-import * as icon from "@/common/assets/icon";
 import { useAuth, userState } from "@/common/hooks/useAuth";
 import { useToast } from "@/common/hooks/useToast";
 import { loginValidate } from "@/common/schemas/auth";
@@ -46,7 +45,7 @@ const Login = () => {
 	return (
 		<>
 			<Breadcrumb title="Đăng nhập" />
-			<div className="xl:px-[11.5%] text-zinc-100 2xl:px-[17.5%] h-fit flex justify-center *:h-full py-[100px] bg-zinc-700">
+			<div className="xl:px-[11.5%] text-zinc-100 2xl:px-[17.5%] h-fit flex justify-center *:h-full py-[100px]">
 				<div className="w-[540px] h-full bg-[#f3f3f3] flex flex-col justify-between items-center px-[40px] py-[37px]">
 					<p className="text-[30px] leading-[36px] font-medium text-[#333]">Đăng nhập</p>
 					<p className="text-[#666] text-[15px] leading-[15px]">
@@ -128,13 +127,13 @@ const Login = () => {
 						>
 							Đăng nhập
 						</button>
-						<button
+						{/* <button
 							type="submit"
 							className="max-[500px]:w-full text-black border border-zinc-400 duration-200 :bg-black hover:text-white bg-white py-[10px] px-[25px] flex justify-center gap-2"
 						>
 							<img src={icon.ggIcon} width={20} alt="" /> Đăng nhập với Google
-						</button>
-						<div className="flex flex-wrap justify-center min-[500px]:justify-between min-[500px]:items-start">
+						</button> */}
+						<div className="flex flex-wrap text-zinc-600 justify-center min-[500px]:justify-between min-[500px]:items-start">
 							<Link to="/quen-mat-khau" className=" pt-1">
 								Quên mật khẩu
 							</Link>
