@@ -1,24 +1,27 @@
 import { userState } from "@/common/hooks/useAuth";
 import { CategoryProvider } from "@/common/hooks/useCategories";
+import { useLocalStorageCart } from "@/common/hooks/useLocalStorageCart";
 import { MegeMenuProvider } from "@/common/hooks/useMegaMenu";
 import { ProductProvider } from "@/common/hooks/useProduct";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ScrollToTop from "../scrolltotop/scrolltoptop";
 import DropdownInfoUser from "./dropdownInfoUser";
-import DropdownMiniCart from "./dropdownMiniCart";
 import DropdownSearch from "./dropdownSearch";
 import DropdownShop from "./dropdownShop";
+import DropdownMiniCart from "./miniCart/MiniCart";
 import ResponsiveSidebar from "./responsiveSidebar";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
 	const [scroll, setScroll] = useState(0);
-	const { AuthorUser } = userState();
+	const { AuthorUser, id } = userState();
+	const { getCart } = useLocalStorageCart();
 
 	useEffect(() => {
 		AuthorUser();
+		if (id == "") getCart();
 		const handleScroll = () => {
 			if (window.scrollY < 100) {
 				setScroll(window.scrollY);
@@ -35,9 +38,9 @@ const Navbar = (props: Props) => {
 			${scroll < 5 && "h-[68px] lg:h-[95px] duration-0"}
 
 			${scroll > 5 && scroll < 50 && "h-0 -top-20"}
-			${scroll > 50 && "h-[68px] shadow-sm border-0 top-0 bg-[rgba(255,255,255,0.85)] opacity-100"}
+			${scroll > 50 && "h-[68px] shadow-sm border-0 top-0 opacity-100"}
 
-			fixed ease-in duration-500 z-30 w-full`}
+			fixed ease-in duration-500 z-30 w-full overflow-hidden hover:overflow-visible bg-white`}
 			>
 				<nav className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] max-[1000px]:h-[68px] h-full text-[14px] grid grid-cols-2 lg:grid-cols-9 border-b">
 					<Link id="logo_header" className="col-span-1 flex items-center h-full" to={"/"}>

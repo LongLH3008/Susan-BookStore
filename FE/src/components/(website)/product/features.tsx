@@ -1,10 +1,13 @@
 import { userState } from "@/common/hooks/useAuth";
+import { useLocalStorageCart } from "@/common/hooks/useLocalStorageCart";
+import { IProduct } from "@/common/interfaces/product";
 import { useState } from "react";
 import useProductContext from "../../../common/context/ContextProduct";
 import ModalDetail from "./modal_detail";
 
-const ProductFeatures = ({ product_id }: { product_id: string }) => {
+const ProductFeatures = ({ product }: { product: IProduct }) => {
 	const { featuresProduct, AddToCart } = useProductContext();
+	const { add } = useLocalStorageCart();
 
 	const [loading, setLoading] = useState<Boolean>(false);
 	const [like, setLike] = useState<Boolean>(false);
@@ -26,7 +29,11 @@ const ProductFeatures = ({ product_id }: { product_id: string }) => {
 
 	const AddProductToCart = () => {
 		loadCart();
-		AddToCart({ product_id, user_id: id, product_quantity: 1 });
+		if (id) {
+			AddToCart({ product_id: product._id, user_id: id, product_quantity: 1 });
+		} else {
+			add(product);
+		}
 	};
 
 	return (
@@ -37,14 +44,19 @@ const ProductFeatures = ({ product_id }: { product_id: string }) => {
 		>
 			<div className="grid grid-cols-3 w-full h-full *:border-r *:grid *:place-items-center *:cursor-pointer *:text-zinc-700">
 				<div className="" role="status">
-					<div onClick={AddProductToCart} className="flex items-center gap-1 text-red-500">
-						!
-						<i
-							className={`${
-								loading ? "hidden" : "block"
-							} hover:text-[#00BFC5] fa-solid fa-bag-shopping`}
-						></i>
-					</div>
+					{product.stock > 0 ? (
+						<div onClick={AddProductToCart} className="flex items-center gap-1">
+							<i
+								className={`${
+									loading ? "hidden" : "block"
+								} hover:text-[#00BFC5] fa-solid fa-bag-shopping`}
+							></i>
+						</div>
+					) : (
+						<div className="flex items-center gap-1 text-red-500">
+							!<i className={`fa-solid fa-bag-shopping`}></i>
+						</div>
+					)}
 					<svg
 						aria-hidden="true"
 						className={`${
