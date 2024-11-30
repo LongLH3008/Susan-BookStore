@@ -9,11 +9,11 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import MyTable2 from "../components/table";
 
-import { getUsers } from "@/services/auth.service";
+import { getUsers, UpdateStatus } from "@/services/auth.service";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
 import LockIcon from "@mui/icons-material/Lock";
@@ -27,12 +27,35 @@ const UsersPage: React.FC = () => {
   const [limit, setLimit] = useState(5);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [open, setOpen] = useState(false);
-
+  const { toast } = useToast();
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["users", limit, page],
     queryFn: () => getUsers(),
   });
 
+  const { mutate } = useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: { user_status: string };
+    }) => UpdateStatus(id, payload),
+    onSuccess: (data: any) => {
+      toast({
+        variant: data.status,
+        content: `Thao tác thành công`,
+      });
+      refetch();
+    },
+    onError: (error: any) => {
+      const message = "Lỗi Thao tác : ";
+      toast({
+        variant: error.response?.status || "error",
+        content: message + (error.response?.data || error.message),
+      });
+    },
+  });
   // const onEdit = (id: string) => {
   //   nav(`chinh-sua/${id}`);
   // };
@@ -46,11 +69,19 @@ const UsersPage: React.FC = () => {
     setOpen(false);
     setSelectedUser(null);
   };
-  // const onAddNew = () => {
-  //   nav("/nguoi-dung/them-moi");
-  // };
-  const onLock = (id: any) => {};
-  const onUnlock = (id: any) => {};
+
+  const onLock = (id: string) => {
+    const payload = {
+      user_status: "active",
+    };
+    mutate({ id, payload });
+  };
+  const onUnlock = (id: string) => {
+    const payload = {
+      user_status: "block",
+    };
+    mutate({ id, payload });
+  };
   const columns = React.useMemo(
     () => [
       {

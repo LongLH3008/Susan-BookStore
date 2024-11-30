@@ -57,3 +57,10 @@ export const loginByGoogle = () => {
 export const getUsers = async () => {
   return await SendRequest("GET", "user");
 };
+
+export const UpdateStatus = async (
+  id: string,
+  payload: { user_status: string }
+) => {
+  return await SendRequest("PUT", "user/udpate/status/" + id, payload);
+};
