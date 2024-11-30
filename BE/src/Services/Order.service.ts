@@ -123,6 +123,7 @@ class OrderService {
                 await foundCode.save()
             }
         }
+        if (!userId && code) throw new ResourceNotFoundError("ban can dang nhap de suu dung code");
 
 
         const newOrder = await Order.create({
