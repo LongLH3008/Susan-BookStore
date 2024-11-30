@@ -6,7 +6,7 @@ export enum OrderState {
 
 export interface IOrderProduct {
     bookId: mongoose.Types.ObjectId | string;
-    name:string
+    name: string
     title: string;
     quantity: number;
     price: number;
@@ -14,7 +14,6 @@ export interface IOrderProduct {
     discount?: number;
     discountAmount?: number
     total: number;
-    discount_code?: string;
     discountAmountVoucher: number;
     weight?: number;
     height?: number;
@@ -22,6 +21,7 @@ export interface IOrderProduct {
     length?: number
     isbn?: string;
 }
+
 export interface IOrderShipping {
     street: string;
     city: string;
@@ -30,12 +30,14 @@ export interface IOrderShipping {
     country: string;
     fee: number;
 }
+
 export interface IOrderPayment {
     method: PaymentMethod;
     amount: number;
     status: PaymentStatus;
     date: Date;
 }
+
 export enum PaymentMethod {
     VNPAY = "VNPAY",
     COD = "COD",
@@ -46,14 +48,16 @@ export enum PaymentStatus {
     Processed = "processed",
     Failed = "failed",
 }
+
 export interface IOrder {
-    userId: mongoose.Types.ObjectId | string;
+    userId: mongoose.Types.ObjectId | string | null;
     shipping: IOrderShipping;
     state: OrderState;
     payment: IOrderPayment;
     products: IOrderProduct[];
     total: number;
     trackingNumber: string;
+    code?: string;
 };
 
 

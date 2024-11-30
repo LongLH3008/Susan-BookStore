@@ -11,6 +11,9 @@
  *           schema:
  *             type: object
  *             properties:
+ *               code:
+ *                  type: string
+ *                  description: Discount code (optional)
  *               userId:
  *                 type: string
  *                 description: The user ID
@@ -25,9 +28,7 @@
  *                     quantity:
  *                       type: number
  *                       description: The quantity of the book
- *                     code:
- *                       type: string
- *                       description: Discount code (optional)
+ *
  *     responses:
  *       200:
  *         description: Order review information
@@ -74,9 +75,6 @@
  *                         type: number
  *                         format: float
  *                         description: Product price
- *                       code:
- *                         type: string
- *                         description: Discount code
  *       400:
  *         description: Bad request
  *         content:
@@ -118,6 +116,9 @@
  *                 format: uuid
  *                 description: User ID
  *                 example: 66f6c837dcc8df8e16e31ad1
+ *               code:
+ *                 type: string
+ *                 description: Discount code (optional)
  *               paymentMethod:
  *                 type: string
  *                 enum: [VNPAY, COD]
@@ -176,10 +177,7 @@
  *                       type: integer
  *                       description: Quantity
  *                       example: 3
- *                     code:
- *                       type: string
- *                       description: Discount code
- *                       example: null
+ *
  *     responses:
  *       200:
  *         description: Order created successfully
@@ -334,7 +332,7 @@
  *                             format: float
  *                             description: Weight
  *                             example: 1.00
- * 
+ *
  *       400:
  *         description: Bad request
  *         content:
