@@ -91,7 +91,7 @@ const OrdersPage = () => {
     setSelectedBlog(blog);
     setConfirmOpen(true);
   };
-  const getBackgroundColor = (state) => {
+  const getBackgroundColor = (state: any) => {
     switch (state) {
       case "pending":
         return "#08979c";
@@ -148,13 +148,17 @@ const OrdersPage = () => {
             </p>
           );
         } else {
-          const productTitles = params.row.products
-            .map((product: IProductOrrder) => (
-              <p>
-                {product.title} x {product?.quantity}
-              </p>
-            ))
-            .join(", ");
+          const productTitles = (
+            <div>
+              {params.row.products.map(
+                (product: IProductOrrder, index: number) => (
+                  <p key={index}>
+                    {product.title} x {product.quantity}
+                  </p>
+                )
+              )}
+            </div>
+          );
           return (
             <Tooltip title={productTitles} placement="right-start">
               <Button>Nhiều sản phẩm</Button>
@@ -168,7 +172,7 @@ const OrdersPage = () => {
     {
       field: "ship",
       headerName: "Phí VC",
-      renderCell: (params) => <p>{ConvertVNDString(25000)} đ</p>,
+      renderCell: () => <p>{ConvertVNDString(25000)} đ</p>,
       width: 100,
     },
     {

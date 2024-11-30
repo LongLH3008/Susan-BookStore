@@ -15,10 +15,10 @@ export const FormatfullDate = (d: string | undefined) => {
   return `${day}/${month}/${year} `;
 };
 export const formatDateTime = (
-  isoDate: string,
-  format: "date" | "time" | "dateTime"
+  isoDate: string | undefined,
+  format: "date" | "time" | "dateTimeS" | "dateTime"
 ): string => {
-  const date = new Date(isoDate);
+  const date = new Date(isoDate!);
 
   const day = date.getDate().toString().padStart(2, "0");
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -32,8 +32,10 @@ export const formatDateTime = (
       return `${day}/${month}/${year}`;
     case "time":
       return `${hours}:${minutes}`;
-    case "dateTime":
+    case "dateTimeS":
       return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+    case "dateTime":
+      return `${hours}:${minutes} ${day}/${month}/${year} `;
     default:
       throw new Error(
         'Invalid format type. Use "date", "time", or "dateTime".'

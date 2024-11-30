@@ -1,71 +1,132 @@
-import React from "react";
+import { useToast } from "@/common/hooks/useToast";
+import { ICMT } from "@/common/interfaces/comment";
+import { Authentication } from "@/common/shared/authentication";
+import Comment from "@/components/(website)/comment/comment";
+import SkeletonCMT from "@/components/(website)/Skeleton/SkeletonCMT";
+import { createCMT, getCMTById } from "@/services/comment.service";
+import CloseIcon from "@mui/icons-material/Close";
+import NavigationIcon from "@mui/icons-material/Navigation";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Fab,
+  IconButton,
+} from "@mui/material";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 
-const BlogComment = () => {
+const BlogComment = ({ idBlog }: { idBlog: string }) => {
+  const [open, setOpen] = useState(false);
+  const { register, handleSubmit } = useForm();
+  const { toast } = useToast();
+  const payload = Authentication();
+  const { data, isLoading, isError, error, refetch } = useQuery({
+    queryKey: ["Comment", idBlog],
+    queryFn: async () => await getCMTById(idBlog),
+    enabled: !!idBlog,
+  });
+  console.log("idBlog", idBlog);
+
+  console.log("id", data);
+
+  const { mutate } = useMutation({
+    mutationFn: ({ idBlog, cmt }: { idBlog: string; cmt: ICMT }) =>
+      createCMT(idBlog, cmt),
+    onSuccess: (data: any) => {
+      toast({
+        variant: data.status,
+        content: `Thêm mới Bình luận thành công`,
+      });
+      refetch();
+    },
+    onError: (err: any) => {
+      const message = "Lỗi khi thêm sản phẩm: ";
+      toast({
+        variant: err.status,
+        content: message + err.response?.data?.error || err.message,
+      });
+    },
+  });
+
+  const onSubmit = (data: any) => {
+    if (!payload) {
+      setOpen(true);
+    } else {
+      const cmt = {
+        comment_author: payload.id,
+        comment_content: data.comment_content,
+        comment_likes: 0,
+      };
+      mutate({ idBlog, cmt });
+    }
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  if (isError)
+    return <div className="">Lỗi tải Bình luận : {error.message}</div>;
   return (
     <>
       <div className="mt-10 mb-24">
-        <h3 className="text-xl font-semibold text-[#292929] mb-5">
-          Leave a comment
-        </h3>
+        <h3 className="text-xl font-semibold text-[#292929] mb-5">Bình luân</h3>
+        <div className="overflow-y-auto h-[300px]">
+          {isLoading ? (
+            <SkeletonCMT />
+          ) : (
+            data?.metadata?.map((cmt: ICMT) => (
+              <Comment cmt={cmt} refetch={refetch} idBlog={idBlog} />
+            ))
+          )}
+        </div>
         <div className="*:text-[13px]">
-          <p className="text-[#707070] ">
-            Your email address will not be published. Required fields are marked
-            *
-          </p>
-          <form action="" className="my-5">
-            <div>
-              <label
-                htmlFor="message"
-                className="block mb-2 font-medium text-[#707070]  dark:text-white"
-              >
-                Comment
-              </label>
-              <textarea
+          <form onSubmit={handleSubmit(onSubmit)} className="my-5">
+            <div className="flex items-center">
+              {/* <img
+                src={getUserAvatar()}
+                alt={fetchedUse?.user_name}
+                className="w-12 h-12 rounded-full"
+              /> */}
+              <input
+                type="text"
                 id="message"
-                rows={4}
-                className="block p-2.5 h-[150px]  w-full text-sm text-gray-900 focus:ring-gray-500 focus:border-gray-100  border border-gray-300 shadow-lg"
-                placeholder="Message"
-                defaultValue={""}
+                className="block rounded-xl p-2.5 me-3 w-full h-auto text-sm text-gray-900 focus:ring-gray-500 focus:border-gray-100  border border-gray-300 shadow-lg"
+                placeholder="Viết bình luận"
+                {...register("comment_content")}
+                required
               />
+              <button type="submit">
+                <Fab variant="extended" size="medium" color="primary">
+                  <NavigationIcon sx={{ mr: 1 }} />
+                  Gửi
+                </Fab>
+              </button>
             </div>
-            <div className="grid sm:grid-cols-2 gap-8 my-7">
-              <div>
-                <label
-                  htmlFor="first_name"
-                  className="block  text-sm font-medium text-gray-900 my-5"
-                >
-                  Name <span className="text-[#fa4d4d]">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="first_name"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-gray-500 focus:border-gray-100 block w-full p-4 "
-                  placeholder="Name"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  htmlFor="last_name"
-                  className="block  text-sm font-medium text-gray-900 my-5"
-                >
-                  Email <span className="text-[#fa4d4d]">*</span>
-                </label>
-                <input
-                  type="text"
-                  id="last_name"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm  focus:ring-gray-500 focus:border-gray-100 block w-full p-4  "
-                  placeholder="Email"
-                  required
-                />
-              </div>
-            </div>
-            <button className="bg-[#000] text-[#fff] hover:bg-[#00bfc5] p-3 focus:scale-95 font-semibold">
-              POST COMMENT
-            </button>
           </form>
         </div>
       </div>
+      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+        <DialogTitle>
+          Đăng nhập để <span className="text-blue-800">bình luận</span> :3
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{ position: "absolute", right: 8, top: 8 }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Link
+            to={"/dang-nhap"}
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 "
+          >
+            Đăng nhập
+          </Link>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
