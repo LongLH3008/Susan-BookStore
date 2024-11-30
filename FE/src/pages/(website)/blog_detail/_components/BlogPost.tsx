@@ -7,7 +7,7 @@ import BlogComment from "./BlogComment";
 import BlogItem from "./BlogItem";
 const BlogPost = () => {
   const { slug } = useParams();
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["Blog detail", slug],
     queryFn: () => getBlogBySlug(slug!),
   });
@@ -23,7 +23,7 @@ const BlogPost = () => {
     <>
       <div className="sm:col-span-3 ">
         <BlogItem dataBlog={data?.metadata} />
-        <BlogComment />
+        <BlogComment idBlog={data?.metadata?._id} />
       </div>
     </>
   );

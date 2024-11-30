@@ -66,10 +66,10 @@ const ProductForm: React.FC = () => {
           });
         },
         onError: (err: any) => {
-          let message = "Lỗi khi cập nhật sản phẩm: ";
+          const message = "Lỗi khi cập nhật sản phẩm: ";
           toast({
-            variant: error.status,
-            content: message + error.response?.data || error.message,
+            variant: err.status,
+            content: message + err.response?.data?.error || err.message,
           });
         },
       })

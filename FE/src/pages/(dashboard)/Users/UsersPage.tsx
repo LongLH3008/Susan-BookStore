@@ -57,15 +57,18 @@ const UsersPage: React.FC = () => {
         headerName: "Avatar",
         field: "user_avatar",
         width: 200,
-        renderCell: (params: any) => {
-          // console.log(params.row);
-
-          !params?.row.user_avatar || params?.row.user_avatar === "" ? (
-            <Avatar>{getInitials(params.row.user_name)}</Avatar>
-          ) : (
-            <Avatar alt={params.row.user_name} src={params.row.user_avatar} />
-          );
-        },
+        renderCell: (params: any) => (
+          <div className="flex items-center space-x-2">
+            {params.row.user_avatar ? (
+              <Avatar alt={params.row.user_name} src={params.row.user_avatar} />
+            ) : (
+              <Avatar className="bg-green-900">
+                {getInitials(params.row.user_name)}
+              </Avatar>
+            )}
+            <p>{params.row.user_name}</p>
+          </div>
+        ),
       },
       {
         headerName: "Tên người dùng",

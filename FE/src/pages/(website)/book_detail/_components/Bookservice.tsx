@@ -3,6 +3,7 @@ import { IProduct } from "@/common/interfaces/product";
 import { IReview } from "@/common/interfaces/review";
 import { Authentication } from "@/common/shared/authentication";
 import Comment from "@/components/(website)/comment/comment";
+import SkeletonCMT from "@/components/(website)/Skeleton/SkeletonCMT";
 import { createReview, getReviewByIdBook } from "@/services/review.service";
 import CloseIcon from "@mui/icons-material/Close";
 import {
@@ -263,50 +264,21 @@ const Bookservice = ({ detailProduct }: { detailProduct: IProduct }) => {
             {/* Bài review */}
             {!isLoading ? (
               <div className="">
-                {/* <form className="max-w-[170px] my-5">
-                  <select
-                    id="countries"
-                    className=" border-0 text-gray-900 text-sm rounded-lg focus:ring-yellow-300 focus:border-yellow-300 block w-full p-2 "
-                  >
-                    <option selected>Gần đây nhất</option>
-                    <option value="highest-rating">Xếp hạng cao nhất</option>
-                    <option value="lowest-rating">Xếp hạng thấp nhất</option>
-                  </select>
-                </form> */}
                 <div className="max-h-[400px] overflow-y-scroll">
                   <h4 className="text-xl font-semibold mb-5">
-                    {reviewIdBook?.metadata?.totalReviews} Bình Luận
+                    {reviewIdBook?.metadata?.totalReviews} Đánh giá
                   </h4>
                   {reviewIdBook?.metadata?.reviews.length === 0 ? (
                     <p>Chưa có đánh giá nào :3</p>
                   ) : (
-                    <Comment reviews={reviewIdBook?.metadata?.reviews} />
+                    reviewIdBook?.metadata?.reviews.map((review: IReview) => (
+                      <Comment cmt={review} />
+                    ))
                   )}
                 </div>
               </div>
             ) : (
-              <div className="flex ">
-                <Skeleton
-                  animation="wave"
-                  variant="circular"
-                  width={60}
-                  height={60}
-                />
-                <div className="ms-3">
-                  <Skeleton
-                    animation="wave"
-                    height={20}
-                    width={100}
-                    style={{ marginBottom: 6 }}
-                  />
-                  <Skeleton
-                    animation="wave"
-                    height={20}
-                    width={200}
-                    style={{ marginBottom: 6 }}
-                  />
-                </div>
-              </div>
+              <SkeletonCMT />
             )}
           </div>
         </div>
