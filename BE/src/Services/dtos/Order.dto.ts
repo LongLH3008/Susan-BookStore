@@ -2,8 +2,9 @@ import mongoose from "mongoose";
 import { IOrderPayment, IOrderProduct, IOrderShipping } from "../../interfaces/models/IOrder";
 
 export interface CheckoutReviewInputDTO {
-    userId: string;
+    userId?: string;
     products: IOrderItem[];
+    code?: string;
 }
 export interface IOrderItem {
     bookId: string;

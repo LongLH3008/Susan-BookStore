@@ -31,7 +31,8 @@ interface BookItem {
 
 export interface DiscountInput {
     products: BookItem[];
-    userId: string;
+    userId?: string;
+    code?:string
 }
 
 class DiscountService {
