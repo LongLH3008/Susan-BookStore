@@ -31,6 +31,8 @@ import {
 import GiaoHangNhanhService from "./GiaoHangNhanh.service";
 import {vnpayService} from "./Vnpay.service";
 import CartService from "./Cart.service";
+import {Code} from "mongodb";
+import Discount from "../models/Discount.model";
 
 type PaymentMethodInput = "COD" | "VNPAY";
 
@@ -111,7 +113,17 @@ class OrderService {
         if (userId) {
             const foundUser = await User.findById(userId);
             if (!foundUser) throw new ResourceNotFoundError("nguoi dung khong ton tai");
+            if (code) {
+                const foundCode = await Discount.findOne({
+                    discount_code: code,
+                });
+                if (!foundCode) throw new ResourceNotFoundError("ma giam gia khogn ton tai ton tai");
+                foundCode.discount_stock = foundCode.discount_stock - 1
+                foundCode.discount_users_used.push(userId as any);
+                await foundCode.save()
+            }
         }
+
 
         const newOrder = await Order.create({
             userId,
