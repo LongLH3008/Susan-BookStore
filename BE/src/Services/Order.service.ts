@@ -30,6 +30,7 @@ import {
 } from "./dtos/SearchOrderCodeRequest";
 import GiaoHangNhanhService from "./GiaoHangNhanh.service";
 import {vnpayService} from "./Vnpay.service";
+import CartService from "./Cart.service";
 
 type PaymentMethodInput = "COD" | "VNPAY";
 
@@ -338,6 +339,9 @@ class OrderService {
                 productsAfterDiscount,
                 url,
             });
+            if (userId) {
+                await CartService.emptyCart(userId)
+            }
             return newOrder;
         } else {
             const {shippingInput, output, total, productsAfterDiscount} =
@@ -353,6 +357,9 @@ class OrderService {
                 customerInfo,
                 productsAfterDiscount,
             });
+            if (userId) {
+                await CartService.emptyCart(userId)
+            }
             return newOrder;
         }
     }
