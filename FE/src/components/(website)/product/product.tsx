@@ -12,8 +12,6 @@ type Props = {
 };
 
 const Product = ({ dataProduct }: Props) => {
-	// console.log(dataProduct);
-
 	return (
 		<ProdContextProvider>
 			<ProdContent dataProduct={dataProduct} />
@@ -23,13 +21,9 @@ const Product = ({ dataProduct }: Props) => {
 
 const ProdContent = ({ dataProduct }: Props) => {
 	const { featuresProduct } = useProductContext();
-	const location = useLocation(); // Lấy location từ useLocation
-	// console.log(dataProduct);
+	const location = useLocation();
 	const { setSelectedProduct } = useProductStore();
 
-	// useEffect(() => {
-	//   setSelectedProduct(dataProduct);
-	// }, [dataProduct]);
 	return (
 		<>
 			<section
@@ -49,12 +43,6 @@ const ProdContent = ({ dataProduct }: Props) => {
 							alt={dataProduct?.title}
 						/>
 					</Link>
-					{/* Status */}
-					{/* {status && (
-            <span className="absolute top-[5%] rounded-full left-[5%] bg-[#00BFC5] w-[50px] h-[30px]">
-              {status}
-            </span>
-          )} */}
 					{/* Discount */}
 					{dataProduct?.discount > 0 && (
 						<span className="absolute top-[5%] rounded-full right-[5%] bg-zinc-800 w-[50px] h-[30px]">
@@ -101,7 +89,7 @@ const ProdContent = ({ dataProduct }: Props) => {
 						)}
 					</div>
 				</div>
-				<ProductFeatures product_id={dataProduct?._id} />
+				<ProductFeatures product={dataProduct} />
 			</section>
 		</>
 	);
