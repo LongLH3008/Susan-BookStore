@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a7c52b46-2c71-412f-ac10-0354865f8100" name="Changes" comment="z" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="feat/cuong/order-manager-api" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2ojF8j1btZy1ipEGYbTbNZf2rLK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Node.js..executor": "Run",
+    "Node.js.console.js.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "feat/order",
+    "last_opened_file_path": "/home/kangz/Desktop/DATN/Susan-BookStore",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "/home/kangz/Desktop/DATN/Susan-BookStore/BE/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mongo"
+    ]
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration type="NodeJSConfigurationType" temporary="true" path-to-js-file="$APPLICATION_CONFIG_DIR$/consoles/db/512c490a-9abb-46c7-984a-18ef72732a81/console.js" working-dir="$PROJECT_DIR$">
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-WS-243.21565.180" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a7c52b46-2c71-412f-ac10-0354865f8100" name="Changes" comment="" />
+      <created>1731374922135</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1731374922135</updated>
+      <workItem from="1731374923742" duration="472000" />
+      <workItem from="1731375648556" duration="556000" />
+      <workItem from="1731386513503" duration="157000" />
+      <workItem from="1731722711758" duration="1373000" />
+      <workItem from="1731724102713" duration="1448000" />
+      <workItem from="1731728627672" duration="737000" />
+      <workItem from="1731746860386" duration="5892000" />
+      <workItem from="1731809214341" duration="662000" />
+      <workItem from="1731834913346" duration="4960000" />
+      <workItem from="1732371544891" duration="243000" />
+      <workItem from="1732381454534" duration="163000" />
+      <workItem from="1732758770816" duration="2912000" />
+      <workItem from="1732763675969" duration="621000" />
+      <workItem from="1732764569513" duration="31000" />
+      <workItem from="1732764612009" duration="6000" />
+      <workItem from="1732861651217" duration="1940000" />
+      <workItem from="1732867299825" duration="1217000" />
+      <workItem from="1732930598594" duration="86000" />
+      <workItem from="1732943824298" duration="8929000" />
+      <workItem from="1732968175836" duration="2121000" />
+      <workItem from="1732975802196" duration="2560000" />
+    </task>
+    <task id="LOCAL-00001" summary="z">
+      <option name="closed" value="true" />
+      <created>1732975850064</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1732975850064</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="z" />
+    <option name="LAST_COMMIT_MESSAGE" value="z" />
+  </component>
+</project>

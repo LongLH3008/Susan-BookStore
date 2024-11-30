@@ -53,6 +53,12 @@ class OrderService {
         //     throw new ResourceNotFoundError("User not found");
 
         // }
+        if (userId) {
+
+            const user = await User.findById(userId);
+            if (!user)
+                throw new ResourceNotFoundError("User not found");
+        }
 
 
         const productPromises = products.map((book: IOrderItem) =>
@@ -99,16 +105,19 @@ class OrderService {
     }
 
     static async createOrder(data: CreateOrderInputDTO) {
-        const {userId, shipping, payment, products, total, trackingNumber} = data;
+        const {userId, shipping, code, payment, products, total, trackingNumber} = data;
 
-        const foundUser = await User.findById(userId);
-        if (!foundUser) throw new ResourceNotFoundError("nguoi dung khong ton tai");
+        if (userId) {
+            const foundUser = await User.findById(userId);
+            if (!foundUser) throw new ResourceNotFoundError("nguoi dung khong ton tai");
+        }
 
         const newOrder = await Order.create({
             userId,
             shipping,
             payment,
             products,
+            code,
             total,
             trackingNumber,
         });
@@ -119,14 +128,17 @@ class OrderService {
                                        userId,
                                        customerInfo,
                                        products,
+                                       code
                                    }: {
         userId: string;
         products: IOrderItem[];
         customerInfo: CustomerInfo;
+        code?: string;
     }) {
         const {total, productsAfterDiscount} = await OrderService.checkOutReview({
             userId,
             products,
+            code
         });
         const shippingInput: any = {
             payment_type_id: 2,
@@ -205,6 +217,7 @@ class OrderService {
                                        shippingInput,
                                        total,
                                        userId,
+                                       code,
                                        customerInfo,
                                        productsAfterDiscount,
                                        url,
@@ -212,7 +225,7 @@ class OrderService {
         const feeShip =
             output.data.service_fee + output.data.deliver_remote_areas_fee;
 
-        // console.log({ productsAfterDiscount })
+        console.log({productsAfterDiscount})
 
         let payment;
 
@@ -275,7 +288,10 @@ class OrderService {
             products: productsAfterDiscount,
             total: total + feeShip,
             trackingNumber: randomCode.toUpperCase(),
+            code
         };
+
+        console.log({data: data.products})
 
         const newOrder = await this.createOrder(data);
 
@@ -288,12 +304,14 @@ class OrderService {
                                        customerInfo,
                                        products,
                                        url,
+                                       code
                                    }: {
         paymentMethod: PaymentMethodInput;
         userId: string;
         products: IOrderItem[];
         url?: string;
         customerInfo: CustomerInfo;
+        code: string
     }) {
         if (paymentMethod === "VNPAY" && url) {
             const {isValid, order} = await vnpayService.verifyUrl(url);
@@ -302,12 +320,12 @@ class OrderService {
                 throw new BadRequestError("Something went wrongs!");
             }
 
-            const {paymentMethod, userId, customerInfo, products} = order;
+            const {paymentMethod, userId, customerInfo, code, products} = order;
 
             console.log({order});
 
             const {shippingInput, output, total, productsAfterDiscount} =
-                await this.prepareOrderInput({userId, customerInfo, products});
+                await this.prepareOrderInput({userId, customerInfo, code, products});
 
             const newOrder = await this.createOrderByType({
                 output,
@@ -315,6 +333,7 @@ class OrderService {
                 paymentMethod,
                 total,
                 userId,
+                code,
                 customerInfo,
                 productsAfterDiscount,
                 url,
@@ -322,7 +341,7 @@ class OrderService {
             return newOrder;
         } else {
             const {shippingInput, output, total, productsAfterDiscount} =
-                await this.prepareOrderInput({userId, customerInfo, products});
+                await this.prepareOrderInput({userId, customerInfo, code, products});
 
             const newOrder = await this.createOrderByType({
                 output,
@@ -330,6 +349,7 @@ class OrderService {
                 shippingInput,
                 total,
                 userId,
+                code,
                 customerInfo,
                 productsAfterDiscount,
             });

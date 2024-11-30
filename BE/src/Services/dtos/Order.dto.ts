@@ -20,5 +20,6 @@ export interface CreateOrderInputDTO {
     products: IOrderProduct[];
     total: number;
     trackingNumber: string;
+    code?:string
 }
 
