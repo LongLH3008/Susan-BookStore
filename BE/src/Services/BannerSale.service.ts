@@ -1,15 +1,23 @@
-import { ConflictError, ResourceNotFoundError, ValidationError } from "../cores/error.response";
+import {
+  ConflictError,
+  ResourceNotFoundError,
+  ValidationError,
+} from "../cores/error.response";
 import banners from "../models/Banner.model";
 import bannerSale from "../models/BannerSale.model";
 import { deleteNullObject } from "../utils";
-import { BannerSaleDTO } from "./dtos/Banner.dto";
+import {
+  BannerSaleDTO,
+  BannerSalePaginationDTO,
+  BannerSaleQueriesResponseDto,
+} from "./dtos/Banner.dto";
 
 class BannerSaleService {
   static async Create(data: BannerSaleDTO) {
     try {
       // validate(bannerValidateSchema, data);
       const checkBanner = await bannerSale.findOne({
-        banner_Images_sale: data.banner_Images_sale,
+        image: data.image,
       });
       if (checkBanner) {
         throw new ConflictError("this banner title already exists");
@@ -46,12 +54,20 @@ class BannerSaleService {
     return blog;
   }
 
-  static async getAllBanersaleInAddmin() {
-    const banner = await bannerSale.find({});
-    if (banner == null) {
-      throw new ResourceNotFoundError("this banner not found");
-    }
-    return banner;
+  static async getAllBanersaleInAddmin(
+    query: BannerSalePaginationDTO
+  ): Promise<BannerSaleQueriesResponseDto> {
+    const { page = 1, limit = 10 } = query;
+    const skip = (page - 1) * limit;
+    const allBanner = await bannerSale.find().skip(skip).limit(limit).lean();
+    const totalNumberOfBanner = await bannerSale.countDocuments();
+    if (!allBanner) throw new ResourceNotFoundError("this banner not found");
+    return {
+      data: allBanner as BannerSaleDTO[],
+      total: totalNumberOfBanner,
+      page,
+      limit,
+    };
   }
 
   static async getBannersaleByIdWithClient({ id }: { id: string }) {
