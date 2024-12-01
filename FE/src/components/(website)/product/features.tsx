@@ -1,4 +1,5 @@
 import { userState } from "@/common/hooks/useAuth";
+import { cartData } from "@/common/hooks/useCart";
 import { useLocalStorageCart } from "@/common/hooks/useLocalStorageCart";
 import { IProduct } from "@/common/interfaces/product";
 import { useState } from "react";
@@ -7,10 +8,10 @@ import ModalDetail from "./modal_detail";
 
 const ProductFeatures = ({ product }: { product: IProduct }) => {
 	const { featuresProduct, AddToCart } = useProductContext();
-	const { add } = useLocalStorageCart();
+	const { add, cart_products: cartLc } = useLocalStorageCart();
+	const { data: cartDt } = cartData();
 
 	const [loading, setLoading] = useState<Boolean>(false);
-	const [like, setLike] = useState<Boolean>(false);
 	const { id } = userState();
 
 	const loadCart = () => {
@@ -20,14 +21,20 @@ const ProductFeatures = ({ product }: { product: IProduct }) => {
 		}, 1500);
 	};
 
-	const pressLike = () => {
-		setLike(true);
-		setTimeout(() => {
-			setLike(false);
-		}, 1500);
+	const checkOutOfStock = () => {
+		if (id) {
+			const checkExist = cartDt.find((item) => item.product_id._id == product._id);
+			if (checkExist && checkExist.product_quantity + 1 > product.stock) return false;
+			return true;
+		}
+		const checkExist = cartLc.find((item) => item.product_id._id == product._id);
+		if (checkExist && checkExist.product_quantity + 1 > product.stock) return false;
+		return true;
 	};
 
 	const AddProductToCart = () => {
+		const check = checkOutOfStock();
+		if (!check) return;
 		loadCart();
 		if (id) {
 			AddToCart({ product_id: product._id, user_id: id, product_quantity: 1 });
@@ -39,12 +46,12 @@ const ProductFeatures = ({ product }: { product: IProduct }) => {
 	return (
 		<div
 			className={`${
-				featuresProduct.isOpen ? "bottom-[30%] opacity-1" : "bottom-[20%] opacity-0"
+				featuresProduct?.isOpen ? "bottom-[30%] opacity-1" : "bottom-[20%] opacity-0"
 			} absolute flex justify-center ease-in duration-200 h-[58px] left-1/2 -translate-x-1/2 bg-white shadow-md rounded-sm w-fit py-[15px]`}
 		>
 			<div className="flex items-center *:px-5 h-full *:border-r *:grid *:place-items-center *:cursor-pointer *:text-zinc-700">
 				<div className="" role="status">
-					{product.stock > 0 ? (
+					{checkOutOfStock() ? (
 						<div onClick={AddProductToCart} className="flex items-center gap-1">
 							<i
 								className={`${

@@ -45,7 +45,7 @@ const BookDetail = () => {
 								Image={detailProduct?.images}
 							/>
 							<CategoryProvider>
-								<BookText detailProduct={detailProduct} isCard={false} />
+								<BookText detailProduct={detailProduct} />
 							</CategoryProvider>
 						</div>
 						<Bookservice detailProduct={detailProduct} />

@@ -5,7 +5,7 @@ import { IProduct } from "../interfaces/product";
 type LocalStorageCart = {
 	cart_products: ICart[];
 	getCart: () => void;
-	add: (arg: IProduct) => void;
+	add: (arg: IProduct, quantity?: number) => void;
 	increase: (id: string) => void;
 	decrease: (id: string) => void;
 	remove: (id: string) => void;
@@ -63,13 +63,18 @@ export const useLocalStorageCart = create<LocalStorageCart>((set) => ({
 		});
 	},
 
-	add: (arg) => {
+	add: (arg, quantity) => {
 		set((state) => {
 			const check = state.cart_products.find((item) => item.product_id._id == arg._id);
 			if (check) {
 				const cart_products = state.cart_products.map((item: ICart) =>
 					item.product_id._id == arg._id
-						? { ...item, product_quantity: item.product_quantity + 1 }
+						? {
+								...item,
+								product_quantity: !quantity
+									? item.product_quantity + 1
+									: item.product_quantity + quantity,
+						  }
 						: item
 				);
 				return { cart_products };
@@ -87,8 +92,8 @@ export const useLocalStorageCart = create<LocalStorageCart>((set) => ({
 					stock: arg.stock,
 					title: arg.title,
 				},
-				product_quantity: 1,
-				_id: (state.cart_products.length + 1).toString(),
+				product_quantity: quantity ?? 1,
+				_id: arg._id,
 			};
 			const cart_products = [...state.cart_products, newItem];
 			localStorage.setItem("cart_products", JSON.stringify(cart_products));

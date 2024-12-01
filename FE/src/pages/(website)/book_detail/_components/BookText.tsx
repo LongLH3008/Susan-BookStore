@@ -1,49 +1,22 @@
 import { userState } from "@/common/hooks/useAuth";
-import { useCart } from "@/common/hooks/useCart";
 import useCategory from "@/common/hooks/useCategories";
-import { useToast } from "@/common/hooks/useToast";
 import { ICategory } from "@/common/interfaces/category";
 import { IProduct } from "@/common/interfaces/product";
 import { ConvertVNDString } from "@/common/shared/round-number";
 import { StarRating } from "@/components/(website)/StarRating/StarRating";
 import { FormatfullDate } from "@/components/formatDate";
-import { useState } from "react";
-import { AiOutlineShopping } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import HandleAmountData from "./handleAmountData";
+import HandleAmountLocal from "./handleAmountLocal";
 
-const BookText = ({ detailProduct, isCard }: { detailProduct: IProduct; isCard: boolean }) => {
-	const [quantity, setQuantity] = useState<number>(1);
-	const { CategoryQuery } = useCategory();
-	const { toast } = useToast();
-
+const BookText = ({ detailProduct }: { detailProduct: IProduct }) => {
 	const { id: user_id } = userState();
+	const { CategoryQuery } = useCategory();
 
-	const { onAction: AddToCart } = useCart({
-		action: "ADD",
-		onSuccess: (data: any) => {
-			toast({
-				variant: data.status,
-				content: "Đã thêm vào giỏ hàng",
-				duration: 1500,
-			});
-		},
-		onError: (err: any) => {
-			console.log(err);
-		},
-	});
-
-	const AddProductToCart = () => {
-		AddToCart({
-			product_id: detailProduct?._id as string,
-			user_id,
-			product_quantity: quantity,
-		});
-	};
 	return (
 		<>
 			<div className="">
 				<h2 className="font-semibold text-2xl">{detailProduct?.title}</h2>
-				<div className="*:my-2">
+				<div className="">
 					<div>
 						<span className="text-xl md:text-3xl text-[#00BFC5] font-semibold">
 							{ConvertVNDString(
@@ -66,10 +39,12 @@ const BookText = ({ detailProduct, isCard }: { detailProduct: IProduct; isCard: 
 						<StarRating rating={5} />
 					)}
 				</div>
-				<hr className="w-full h-[1px] mx-auto my-10 bg-gray-400 border-0 rounded md:my-10 dark:bg-gray-700"></hr>
-				<div className="*:text-[#747474]">
-					<p className="overflow-hidden text-ellipsis line-clamp-2">{detailProduct?.description}</p>
-					<table className="border border-[#747474] my-5 *:p-5 w-full">
+				<hr className="w-full h-[1px] mx-auto my-3 bg-gray-400 border-0 rounded md:my-6 dark:bg-gray-700"></hr>
+				<div className="">
+					<p className="overflow-hidden text-ellipsis line-clamp-2 text-sm">
+						{detailProduct?.description}
+					</p>
+					<table className="border border-[#747474] my-5 *:p-5 w-full text-sm">
 						<tbody className="*:border-b *:border-[#747474]">
 							<tr className="*:p-3">
 								<td className="border-r border-[#747474]">Tên sách:</td>
@@ -103,92 +78,11 @@ const BookText = ({ detailProduct, isCard }: { detailProduct: IProduct; isCard: 
 							</tr>
 						</tbody>
 					</table>
-
-					{!isCard && (
-						<>
-							<div className="flex items-center sm:flex-wrap *:sm:my-4 justify-between  my-8  mr-0 w-full">
-								<div className="flex items-center ">
-									<p className="me-3">SL :</p>
-									<div className="relative flex items-center max-w-[8rem]  ">
-										<button
-											onClick={() => {
-												quantity >= 1 &&
-													setQuantity(Number(quantity) - 1);
-											}}
-											type="button"
-											id="decrement-button"
-											data-input-counter-decrement="quantity-input"
-											className={`bg-gray-100 text-2xl hover:bg-gray-200 border border-gray-300  w-36 h-16 focus:ring-gray-100  focus:ring-2 focus:outline-none`}
-										>
-											-
-										</button>
-										<input
-											type="number"
-											id="quantity-input"
-											data-input-counter
-											aria-describedby="helper-text-explanation"
-											className="bg-gray-50 border-x-0 border-gray-300 h-16 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 "
-											value={quantity}
-											min={0}
-											max={100}
-											onChange={(e) => setQuantity(Number(e.target.value))}
-										/>
-										<button
-											onClick={() =>
-												quantity < 10 &&
-												quantity < detailProduct?.stock &&
-												setQuantity(Number(quantity) + 1)
-											}
-											type="button"
-											id="increment-button"
-											data-input-counter-increment="quantity-input"
-											className={`bg-gray-100 text-sm hover:bg-gray-200 border border-gray-300  w-36 h-16 focus:ring-gray-100  focus:ring-2 focus:outline-none`}
-										>
-											<i
-												className={`fa-solid fa-plus duration-200 ${
-													quantity >= 10 && "rotate-45 text-red-500"
-												}`}
-											></i>
-										</button>
-									</div>
-								</div>
-								<div className="flex cursor-pointer items-center text-zinc-700 hover:text-[#00BFC5] border-2 border-[#000] hover:border-[#00BFC5] px-9 h-16 ">
-									<span
-										onClick={() => AddProductToCart()}
-										className=" flex items-center"
-									>
-										<AiOutlineShopping className="text-xl mr-1" />
-										Thêm vào giỏ hàng
-									</span>
-								</div>
-							</div>
-
-							{quantity >= 10 && (
-								<p className="text-red-500 text-sm mb-3">
-									Số lương trong giỏ hàng đã đạt tối đa cho phép
-								</p>
-							)}
-							{quantity >= detailProduct.stock && (
-								<p className="text-red-500 text-sm mb-3">Sản phẩm đã hết</p>
-							)}
-							<div className="w-full">
-								<Link to="/">
-									<button className="w-full py-4 transition duration-150 bg-black border border-black text-white font-bold hover:border-[#00BFC5] hover:text-[#00BFC5] hover:bg-white">
-										Mua ngay
-									</button>
-								</Link>
-							</div>
-						</>
+					{user_id ? (
+						<HandleAmountData detailProduct={detailProduct} user_id={user_id} />
+					) : (
+						<HandleAmountLocal detailProduct={detailProduct} />
 					)}
-					{/* <div className="my-10">
-            <h3 className="font-bold text-black">CHIA SẺ SẢN PHẨM NÀY</h3>
-            <div className="flex justify-start my-5  *:mr-4 ">
-              <i className="hover:text-white text-[#1de1f2] fa-brands fa-twitter border hover:bg-[#1de1f2] p-3 "></i>
-              <i className="hover:text-white text-[#526faf] fa-brands fa-facebook-f border hover:bg-[#526faf] py-3 px-4  "></i>
-              <i className="hover:text-white text-[#dd5245] fa-brands fa-google border hover:bg-[#dd5245] p-3 "></i>
-              <i className="hover:text-white text-[#bd081b] fa-brands fa-pinterest border hover:bg-[#bd081b] p-3 "></i>
-            </div>
-          </div> */}
 				</div>
 			</div>
 		</>

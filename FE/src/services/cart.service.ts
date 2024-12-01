@@ -5,7 +5,6 @@ export const getCartByUser = async (user_id: string) => {
 };
 
 export const AddToCart = async (arg: ICartNewProduct) => {
-	arg["product_quantity"] = 1;
 	return await SendRequest("POST", `cart/addproduct/${arg.user_id}`, arg);
 };
 

@@ -49,7 +49,7 @@ export const SendRequest = async (
     return result.data;
   } catch (error: any) {
     console.log(error);
-    throw error;
+    return false;
   }
 };
 

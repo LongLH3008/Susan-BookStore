@@ -1,7 +1,9 @@
+import { quantityHandle } from "@/common/hooks/useCart";
 import { ConvertVNDString } from "@/common/shared/round-number";
 import { Link } from "react-router-dom";
 
 const ItemMiniCart = ({ data, amount, remove }: { data: any; amount: number; remove: (product_id: string) => any }) => {
+	const { setItemQuantity } = quantityHandle();
 	return (
 		<div className="grid grid-cols-7 min-h-[80px]">
 			<span className="col-span-2 flex justify-center items-center overflow-hidden border">
@@ -9,7 +11,7 @@ const ItemMiniCart = ({ data, amount, remove }: { data: any; amount: number; rem
 			</span>
 			<div className="ps-[15px] col-span-5 flex flex-col justify-center overflow-hidden pr-2 relative">
 				<Link
-					to={`/book-detail/${data.slug}`}
+					to={`/san-pham/${data.slug}`}
 					state={{ from: location.pathname }}
 					className="text-[12px] text-wrap hover:text-[#00BFC5]"
 				>
@@ -17,7 +19,10 @@ const ItemMiniCart = ({ data, amount, remove }: { data: any; amount: number; rem
 				</Link>
 				<span
 					className="absolute right-0 top-1/4 hover:text-[#00BFC5]"
-					onClick={() => remove(data._id)}
+					onClick={() => {
+						remove(data._id);
+						setItemQuantity(0);
+					}}
 				>
 					<i className="fa-solid fa-xmark"></i>
 				</span>

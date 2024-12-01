@@ -20,9 +20,16 @@ export default function ItemCart({
 	const { coverImage, title, slug, author, _id, stock } = data.product_id;
 
 	const Increase = debounce(() => {
-		if (product_quantity + 1 > 10) return;
+		if (product_quantity + 1 > stock) return;
 		inc(_id);
 	}, 500);
+
+	const Decrease = debounce(() => {
+		if (product_quantity < 2 || product_quantity == 1) {
+			return;
+		}
+		dec(_id);
+	}, 300);
 
 	return (
 		<div
@@ -40,31 +47,23 @@ export default function ItemCart({
 				<img src={coverImage} alt={coverImage} />
 			</span>
 			<span className="md:col-span-5 text-zinc-800 font-[400] text-[14px]">
-				<Link to={`/book-detail/${slug}`} className="text-wrap">
+				<Link to={`/san-pham/${slug}`} className="text-wrap">
 					{title}
 				</Link>
 				<p className="text-[12px] text-zinc-500">{author}</p>
-				{product_quantity + 1 > 10 && (
-					<p className="text-[12px] text-red-500">Số lượng đã đạt tối đa cho phép</p>
-				)}
 				{product_quantity + 1 > stock && <p className="text-[12px] text-red-500">Sản phẩm đã hết</p>}
 			</span>
 			<div className="md:col-span-2 flex justify-between items-center border text-[15px]">
-				<span
-					onClick={() => {
-						product_quantity == 1 ? remove(_id) : dec(_id);
-					}}
-					className="p-2 cursor-pointer"
-				>
+				<span onClick={() => Decrease()} className="p-2 cursor-pointer">
 					-
 				</span>
 				<p>{product_quantity}</p>
 				<button
 					type="button"
-					disabled={product_quantity + 1 > 10 || product_quantity + 1 > stock}
+					disabled={product_quantity + 1 > stock}
 					onClick={() => Increase()}
 					className={`p-2 cursor-pointer duration-200 ${
-						product_quantity >= 10 || product_quantity >= stock ? "text-red-500 rotate-45" : ""
+						product_quantity >= stock ? "text-red-500 rotate-45" : ""
 					}`}
 				>
 					+

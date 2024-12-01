@@ -4,7 +4,7 @@ import DataCart from "./DataCart";
 
 const DropdownMiniCart = () => {
 	const { id } = userState();
-	return <>{id ? <DataCart /> : <LocalStorageCart />}</>;
+	return <>{id ? <DataCart user_id={id} /> : <LocalStorageCart />}</>;
 };
 
 export default DropdownMiniCart;
