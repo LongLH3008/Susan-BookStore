@@ -219,7 +219,7 @@ const Aside = (props: any) => {
             </span>
           </Link>
         </li>
-        <li className="">
+        {/* <li className="">
           <Link
             to={"/quan-tri/binh-luan"}
             className="flex items-center h-[50px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
@@ -235,7 +235,7 @@ const Aside = (props: any) => {
               Bình luận
             </span>
           </Link>
-        </li>
+        </li> */}
       </ul>
       <div className="flex flex-col gap-2">
         <div

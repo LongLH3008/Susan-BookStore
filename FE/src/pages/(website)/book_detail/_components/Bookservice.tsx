@@ -62,7 +62,13 @@ const ModalLogin = ({ open, handleClose }: NotiLogin) => {
   );
 };
 
-const Bookservice = ({ detailProduct }: { detailProduct: IProduct }) => {
+const Bookservice = ({
+  detailProduct,
+  isCard,
+}: {
+  detailProduct: IProduct;
+  isCard: boolean;
+}) => {
   const [tab, setTab] = useState<string>("Description");
   const [rating, setRating] = useState<number>(3);
   const [openModal, setOpenModal] = useState<boolean>(false);
@@ -79,6 +85,7 @@ const Bookservice = ({ detailProduct }: { detailProduct: IProduct }) => {
     queryKey: ["review"],
     queryFn: () => getReviewByIdBook(detailProduct?._id),
   });
+
   const { toast } = useToast();
   const handleClose = () => {
     setOpenModal(false);
@@ -186,81 +193,87 @@ const Bookservice = ({ detailProduct }: { detailProduct: IProduct }) => {
           </div>
           {/* Reviews */}
           <div className={`${tab !== "Reviews" ? "hidden" : ""}`}>
-            <h2 className="text-center text-black text-2xl font-semibold">
-              Đánh giá của khách hàng
-            </h2>
-            <div className="flex justify-center divide-x divide-yellow-300 my-8">
-              <div className="mx-10">
-                <div className="flex *:mr-2 *:text-yellow-300 *:text-xl ">
-                  <i className="fa-regular fa-star " />
-                  <i className="fa-regular fa-star " />
-                  <i className="fa-regular fa-star " />
-                  <i className="fa-regular fa-star " />
-                  <i className="fa-regular fa-star " />
+            {isCard && (
+              <>
+                <h2 className="text-center text-black text-2xl font-semibold">
+                  Đánh giá của khách hàng
+                </h2>
+                <div className="flex justify-center divide-x divide-yellow-300 my-8">
+                  <div className="mx-10">
+                    <div className="flex *:mr-2 *:text-yellow-300 *:text-xl ">
+                      <i className="fa-regular fa-star " />
+                      <i className="fa-regular fa-star " />
+                      <i className="fa-regular fa-star " />
+                      <i className="fa-regular fa-star " />
+                      <i className="fa-regular fa-star " />
+                    </div>
+                    <p>Hãy là người đầu tiên viết đánh giá</p>
+                  </div>
+                  <div className="">
+                    <button
+                      onClick={() => {
+                        setWriteReview(!writeReview);
+                      }}
+                      className="py-3 px-16 mx-10 bg-yellow-300 text-white font-bold hover:opacity-80"
+                    >
+                      {writeReview ? "Hủy đánh giá" : "Viết đánh giá"}
+                    </button>
+                  </div>
                 </div>
-                <p>Hãy là người đầu tiên viết đánh giá</p>
-              </div>
-              <div className="">
-                <button
-                  onClick={() => {
-                    setWriteReview(!writeReview);
-                  }}
-                  className="py-3 px-16 mx-10 bg-yellow-300 text-white font-bold hover:opacity-80"
+
+                <div
+                  className={`${
+                    writeReview ? "" : "hidden"
+                  } *:text-[#646464] *:text-center`}
                 >
-                  {writeReview ? "Hủy đánh giá" : "Viết đánh giá"}
-                </button>
-              </div>
-            </div>
-            <div
-              className={`${
-                writeReview ? "" : "hidden"
-              } *:text-[#646464] *:text-center`}
-            >
-              <hr className="w-full h-[1px] mx-auto my-10 bg-yellow-300 border-0 rounded md:my-10 "></hr>
-              <h2 className=" text-black text-2xl font-bold">Viết đánh giá</h2>
-              <div className="text-center">
-                <p className="my-3">Đánh giá</p>
-                <Rating
-                  name="simple-controlled"
-                  value={rating}
-                  onChange={(
-                    event: SyntheticEvent<Element, Event>,
-                    newValue: number | null
-                  ) => {
-                    setRating(newValue);
-                  }}
-                />
-              </div>
-              <form onSubmit={handleSubmit} className="w-2/4 m-auto  my-4">
-                <div className="*:my-4">
-                  <label htmlFor="review">Đánh giá(150)</label>
-                  <textarea
-                    name=""
-                    id="review"
-                    className="w-full h-32 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:border-yellow-300 focus:ring-yellow-300"
-                    placeholder="Viết đánh giá tại đây ..."
-                    onChange={(e) => setReview(e.target.value)}
-                  ></textarea>
-                </div>
+                  <hr className="w-full h-[1px] mx-auto my-10 bg-yellow-300 border-0 rounded md:my-10 "></hr>
+                  <h2 className=" text-black text-2xl font-bold">
+                    Viết đánh giá
+                  </h2>
+                  <div className="text-center">
+                    <p className="my-3">Đánh giá</p>
+                    <Rating
+                      name="simple-controlled"
+                      value={rating}
+                      onChange={(
+                        event: SyntheticEvent<Element, Event>,
+                        newValue: number | null
+                      ) => {
+                        setRating(newValue);
+                      }}
+                    />
+                  </div>
+                  <form onSubmit={handleSubmit} className="w-2/4 m-auto  my-4">
+                    <div className="*:my-4">
+                      <label htmlFor="review">Đánh giá(150)</label>
+                      <textarea
+                        name=""
+                        id="review"
+                        className="w-full h-32 bg-gray-50 border border-gray-300 text-gray-900 text-sm focus:border-yellow-300 focus:ring-yellow-300"
+                        placeholder="Viết đánh giá tại đây ..."
+                        onChange={(e) => setReview(e.target.value)}
+                      ></textarea>
+                    </div>
 
-                <div className="flex justify-center *:mx-2 my-6">
-                  <button
-                    type="reset"
-                    className="px-8 py-2 border-[3px] text-[17px] font-bold text-yellow-300 border-yellow-300 hover:opacity-80 "
-                  >
-                    Hủy đánh giá
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-8 py-2 border text-[17px] font-bold text-white bg-yellow-300 hover:opacity-80 "
-                  >
-                    Gửi đánh giá
-                  </button>
+                    <div className="flex justify-center *:mx-2 my-6">
+                      <button
+                        type="reset"
+                        className="px-8 py-2 border-[3px] text-[17px] font-bold text-yellow-300 border-yellow-300 hover:opacity-80 "
+                      >
+                        Hủy đánh giá
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-8 py-2 border text-[17px] font-bold text-white bg-yellow-300 hover:opacity-80 "
+                      >
+                        Gửi đánh giá
+                      </button>
+                    </div>
+                  </form>
                 </div>
-              </form>
-            </div>
-            <hr className="w-full h-[1px] mx-auto my-10 bg-yellow-300 border-0 rounded md:my-10 "></hr>
-
+                <hr className="w-full h-[1px] mx-auto my-10 bg-yellow-300 border-0 rounded md:my-10 "></hr>
+              </>
+            )}
             {/* Bài review */}
             {!isLoading ? (
               <div className="">

@@ -1,6 +1,7 @@
 import useBlog from "@/common/hooks/useBlog";
 import { useToast } from "@/common/hooks/useToast";
 import { IBlog } from "@/common/interfaces/blog";
+import BlogComment from "@/pages/(website)/blog_detail/_components/BlogComment";
 import BlogItem from "@/pages/(website)/blog_detail/_components/BlogItem";
 import { deleteBlog } from "@/services/blog.service";
 import CloseIcon from "@mui/icons-material/Close";
@@ -239,6 +240,7 @@ const BlogPage = () => {
         </DialogTitle>
         <DialogContent dividers>
           <BlogItem dataBlog={selectedBlog} />
+          <BlogComment idBlog={selectedBlog?._id} isCart={false} />
         </DialogContent>
       </Dialog>
     </>
