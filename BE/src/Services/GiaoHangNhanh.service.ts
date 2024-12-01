@@ -7,13 +7,52 @@ import Log from "../providers/Log";
 
 class GiaoHangNhanhService {
     static readonly token: string = "c5793e8f-688e-11ef-8e53-0a00184fe694";
-    static readonly shop_id: number = 194426;
+    static readonly shop_id: number = 195530;
 
     // Tạo đơn hàng bên phía giao hàng nhanh 
     static CreateOrderGHN = async (orderData: GiaoHangNhanhDto) => {
         try {
             // Gửi yêu cầu POST đến API của GHN
-            console.log({ orderData: orderData.items })
+            console.log({ orderDataDongtest: orderData })
+
+            // const input = {
+            //     payment_type_id: 2,
+            //     note: "Ahihihi đồ ng",
+            //     required_note: "KHONGCHOXEMHANG",
+            //     return_phone: "0362059832",
+            //     return_address: "39 NTT",
+            //     return_district_id: 1717,
+            //     return_ward_code: "220216",
+            //     client_order_code: "",
+            //     from_name: "nguyễn duy đông",
+            //     from_phone: "0362059832",
+            //     from_address: "Đơn nguyên 5 ktx, mỹ đình 1, Nam từ liêm , Hà nội",
+            //     from_ward_name: "Mỹ đình 1",
+            //     from_district_name: "Nam từ liêm",
+            //     from_province_name: "Hà Nội",
+            //     to_name: "Nguyễn Duy Đông ",
+            //     to_phone: "0339168183",
+            //     to_address: "ok mẹ đi",
+            //     to_ward_name: "Tân Hồng",
+            //     to_district_name: "Từ Sơn",
+            //     to_province_name: "Bắc Ninh",
+            //     cod_amount: 300000,
+            //     content: "Test đơn hàng ",
+            //     weight: 1,
+            //     length: 1,
+            //     width: 19,
+            //     height: 10,
+            //     service_id: 0,
+            //     service_type_id: 2,
+            //     items: [
+            //         {
+            //             name: "Sách",
+            //             code: "book123",
+            //             quantity: 1
+            //         }
+            //     ]
+            // };
+            
 
 
             const response = await axios.post(Locals.config().api_create_order_ghn, orderData, {
@@ -30,11 +69,11 @@ class GiaoHangNhanhService {
                 console.log('Đơn hàng đã được tạo thành công:', orderInfo);
                 return orderInfo
             } else {
-                console.log('Lỗi tạo đơn hàng:', response.data.message);
+                console.log('Lỗi tạo đơn hàng:', response);
                 throw new BadRequestError(response.data.message)
             }
         } catch (error: any) {
-            console.error('Lỗi khi gửi yêu cầu đến GHN:', error.message);
+            console.error('Lỗi khi gửi yêu cầu đến GHN:', error);
             throw new BadRequestError(error.message)
         }
     }
@@ -60,11 +99,11 @@ class GiaoHangNhanhService {
                 console.log('Lấy thông tin đơn hàng thành công:', orderInfo);
                 return orderInfo
             } else {
-                console.log('Lỗi khi lấy chi tiết đơn hàng đơn hàng:', response.data.message);
+                console.log('Lỗi khi lấy chi tiết đơn hàng đơn hàng:', response);
                 throw new BadRequestError(response.data.message)
             }
         } catch (error: any) {
-            console.error('Lỗi khi gửi yêu cầu đến GHN:', error.message);
+            console.error('Lỗi khi gửi yêu cầu đến GHN:', error);
             throw new BadRequestError(error.message)
         }
     }
@@ -153,9 +192,7 @@ class GiaoHangNhanhService {
 
             }
             const body = {
-                service_type_id: 5,
-                from_district_id: 3440,
-                from_ward_code: "13005",
+                service_type_id: 2,
                 to_district_id: req.to_district_id,
                 to_ward_code: req.to_ward_code,
                 height: Math.ceil(TotalThickness + 5 as any),
