@@ -15,12 +15,9 @@ const Voucher = (props: Props) => {
 	console.log(data?.metadata?.discounts);
 
 	return (
-		<div className="relative flex flex-col gap-4">
+		<div className="relative flex flex-col gap-4 group">
 			<p className="text-[16px] font-semibold">Mã giảm giá</p>
-			<div
-				onClick={() => setChooseVoucher({ choose: chooseVoucher.choose, open: true })}
-				className="flex z-10 items-center justify-between px-3 border border-zinc-300 rounded"
-			>
+			<div className="flex z-10 items-center justify-between px-3 border border-zinc-300 rounded">
 				<label className="w-full cursor-pointer flex items-center p-4 pl-0 ms-2 text-sm font-medium text-gray-900">
 					<i className="fa-solid fa-ticket mr-2 text-[16px]"></i>
 					<span>{chooseVoucher.choose == "" ? "Sử dụng mã giảm giá" : chooseVoucher.choose}</span>
@@ -40,12 +37,8 @@ const Voucher = (props: Props) => {
 				)}
 			</div>
 			<div
-				onMouseLeave={() => setChooseVoucher({ choose: chooseVoucher.choose, open: false })}
-				className={`${
-					chooseVoucher.open
-						? "h-[30dvh] opacity-100 translate-y-0"
-						: "h-0 opacity-0 -translate-y-1"
-				} flex flex-col p-2 min-h-0 max-h-[30dvh] duration-500 ease-in-out pr-[2px] border rounded-md overflow-hidden border-[#222] gap-1`}
+				className={`group-hover:h-[30dvh] group-hover:opacity-100 group-hover:translate-y-0 h-0 opacity-0 -translate-y-1
+				flex flex-col p-2 min-h-0 max-h-[30dvh] duration-500 ease-in-out pr-[2px] border rounded-md overflow-hidden border-[#222] gap-1`}
 			>
 				<input
 					type="search"

@@ -1,8 +1,11 @@
 import { CheckoutContext } from "@/common/context/ContextCheckout";
 import { useLocalStorageCart } from "@/common/hooks/useLocalStorageCart";
 import { usePayment } from "@/common/hooks/usePayment";
+import { useToast } from "@/common/hooks/useToast";
+import { ToastVariant } from "@/common/interfaces/toast";
 import { useContext, useState } from "react";
 import { BeatLoader } from "react-spinners";
+import UserAddress from "./CheckoutUserAddress";
 import Contact from "./Contact";
 import Delivery from "./Delivery";
 import Payment from "./Payment";
@@ -10,6 +13,7 @@ import Voucher from "./Voucher";
 
 const CheckoutInfomation = () => {
 	const [loading, setLoading] = useState<boolean>(false);
+	const { toast } = useToast();
 	const { id, user_id, data, form, method } = useContext(CheckoutContext);
 	const { afterPayment } = useLocalStorageCart();
 
@@ -19,7 +23,13 @@ const CheckoutInfomation = () => {
 			setLoading(false);
 			if (user_id) afterPayment();
 		},
-		onError: () => setLoading(false),
+		onError: () => {
+			setLoading(false),
+				toast({
+					variant: ToastVariant.ERROR,
+					content: "Đã có lỗi xảy ra. Tạo đơn hàng không thành công",
+				});
+		},
 	});
 
 	const { onSubmit: PayBanking } = usePayment({
@@ -28,7 +38,9 @@ const CheckoutInfomation = () => {
 			setLoading(false);
 			if (user_id) afterPayment();
 		},
-		onError: () => setLoading(false),
+		onError: () => {
+			setLoading(false), toast({ variant: ToastVariant.ERROR, content: "Thanh toán không thành công" });
+		},
 	});
 
 	const checkout = async () => {
@@ -77,6 +89,7 @@ const CheckoutInfomation = () => {
 	return (
 		<div className="w-[44.5%] max-[1000px]:w-full flex justify-end items-start">
 			<form className="w-full h-full p-[33px] max-[1000px]:pr-0 pl-0 flex flex-col gap-[33px]">
+				{id && <UserAddress user_id={id} />}
 				<Contact />
 				<Delivery />
 				<Voucher />

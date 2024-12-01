@@ -37,6 +37,7 @@ export const usePayment = ({ action, onSuccess, onError }: usePayment) => {
             }
         },
         onSuccess: (response: any) => {
+            console.log(response)
             onSuccess && onSuccess()
             if (action == 'COD') {
                 toast({ variant: ToastVariant.SUCCESS, content: 'Thanh toán thành công' });
