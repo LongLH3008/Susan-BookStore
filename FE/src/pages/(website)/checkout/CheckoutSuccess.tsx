@@ -1,10 +1,12 @@
 import * as icon from "@/common/assets/icon";
+import { userState } from "@/common/hooks/useAuth";
 import { searchOrderByTrackingNumber } from "@/services/order.service";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 const CheckoutSuccess = () => {
 	const { code } = useParams();
+	const { id } = userState();
 	const nav = useNavigate();
 
 	const { data: order } = useQuery({
@@ -60,17 +62,26 @@ const CheckoutSuccess = () => {
 						Tiếp tục mua hàng
 					</Link>
 					<Link
-						to="/don-hang"
-						className="bg-black text-nowrap text-white px-[25px] py-[10px] text-[14px] hover:bg-zinc-700"
-					>
-						Lịch sử mua hàng
-					</Link>
-					<Link
 						to="/gio-hang"
 						className="bg-black text-nowrap text-white px-[25px] py-[10px] text-[14px] hover:bg-zinc-700"
 					>
 						Giỏ hàng
 					</Link>
+					{id ? (
+						<Link
+							to="/don-hang"
+							className="bg-black text-nowrap text-white px-[25px] py-[10px] text-[14px] hover:bg-zinc-700"
+						>
+							Lịch sử mua hàng
+						</Link>
+					) : (
+						<Link
+							to="/don-hang"
+							className="bg-black text-nowrap text-white px-[25px] py-[10px] text-[14px] hover:bg-zinc-700"
+						>
+							Trở về trang chủ
+						</Link>
+					)}
 				</div>
 			</div>
 		</>

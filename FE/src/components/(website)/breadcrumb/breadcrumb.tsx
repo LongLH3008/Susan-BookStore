@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const Breadcrumb = ({ title }: { title: string }) => {
 	const location = useLocation();
-	const from = location.state?.from;
+	console.log(location.state?.from);
 
 	return (
 		<nav
@@ -29,20 +29,22 @@ const Breadcrumb = ({ title }: { title: string }) => {
 						Trang chủ
 					</Link>
 				</li>
-				{from && from !== "/" && from !== location.pathname && (
-					<li>
-						<div className="flex items-center">
-							<i className="mx-2 text-[13px] text-zinc-500 fa-solid fa-angle-right"></i>
-							<Link
-								to={`${from}`}
-								state={{ from: location.pathname }}
-								className="ms-1 text-sm font-medium text-gray-700 hover:text-[#00BFC5] md:ms-2 dark:text-gray-400 dark:hover:text-white"
-							>
-								{handleBreadCrumbItemURL(from)}
-							</Link>
-						</div>
-					</li>
-				)}
+				{location.state?.from !== undefined &&
+					location.state?.from !== "/" &&
+					location.state?.from !== location.pathname && (
+						<li>
+							<div className="flex items-center">
+								<i className="mx-2 text-[13px] text-zinc-500 fa-solid fa-angle-right"></i>
+								<Link
+									to={`${location.state?.from}`}
+									state={{ from: location.pathname }}
+									className="ms-1 text-sm font-medium text-gray-700 hover:text-[#00BFC5] md:ms-2 dark:text-gray-400 dark:hover:text-white"
+								>
+									{handleBreadCrumbItemURL(location.state?.from)}
+								</Link>
+							</div>
+						</li>
+					)}
 				<li aria-current="page">
 					<div className="flex items-center">
 						<i className="mx-2 text-[13px] text-zinc-500 fa-solid fa-angle-right"></i>

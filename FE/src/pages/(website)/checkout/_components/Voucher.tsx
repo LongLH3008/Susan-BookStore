@@ -7,10 +7,12 @@ type Props = {};
 const Voucher = (props: Props) => {
 	const [chooseVoucher, setChooseVoucher] = useState({ open: false, choose: "" });
 
-	const { data: listVoucher } = useQuery({
+	const { data } = useQuery({
 		queryKey: ["vouchers"],
 		queryFn: async () => await getAllVoucher(),
 	});
+
+	console.log(data?.metadata?.discounts);
 
 	return (
 		<div className="relative flex flex-col gap-4">
@@ -43,7 +45,7 @@ const Voucher = (props: Props) => {
 					chooseVoucher.open
 						? "h-[30dvh] opacity-100 translate-y-0"
 						: "h-0 opacity-0 -translate-y-1"
-				} flex flex-col p-2 duration-500 ease-in-out pr-[2px] border rounded-md overflow-hidden border-[#222] gap-1`}
+				} flex flex-col p-2 min-h-0 max-h-[30dvh] duration-500 ease-in-out pr-[2px] border rounded-md overflow-hidden border-[#222] gap-1`}
 			>
 				<input
 					type="search"
@@ -52,23 +54,25 @@ const Voucher = (props: Props) => {
 					placeholder="Nhập mã giảm giá"
 				/>
 				<div className="border-t border-zinc-300 pt-2 mt-1 relative h-[25dvh] flex flex-col *:p-3 *:text-sm text-zinc-500 *:cursor-pointer *:border-b overflow-hidden overflow-y-scroll">
-					{Array.from([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).map((e: any, index: number) => (
+					{data?.metadata?.discounts.map((item: any, index: number) => (
 						<div
 							key={index}
 							onClick={() =>
 								setChooseVoucher({
 									choose:
-										chooseVoucher.choose == "VOU" + index ? "" : "VOU" + index,
-									open: chooseVoucher.choose == "VOU" + index,
+										chooseVoucher.choose == item.discount_code
+											? ""
+											: item.discount_code,
+									open: chooseVoucher.choose == item.discount_code,
 								})
 							}
 							className={`hover:border-l-[#222] ${
-								chooseVoucher.choose == "VOU" + index
-									? "border-l-[#222] hover:border-l-red-500"
+								chooseVoucher.choose == item.discount_code
+									? "border-l-[#00BFC5] hover:border-l-red-500"
 									: "border-l-transparent"
 							} border-l-2 flex justify-between last-of-type:border-b-0`}
 						>
-							<span>VOU{index}</span>
+							<span>{item.discount_code}</span>
 							<span>- 2.000 đ</span>
 						</div>
 					))}
