@@ -14,47 +14,6 @@ class GiaoHangNhanhService {
         try {
             // Gửi yêu cầu POST đến API của GHN
             console.log({ orderDataDongtest: orderData })
-
-            // const input = {
-            //     payment_type_id: 2,
-            //     note: "Ahihihi đồ ng",
-            //     required_note: "KHONGCHOXEMHANG",
-            //     return_phone: "0362059832",
-            //     return_address: "39 NTT",
-            //     return_district_id: 1717,
-            //     return_ward_code: "220216",
-            //     client_order_code: "",
-            //     from_name: "nguyễn duy đông",
-            //     from_phone: "0362059832",
-            //     from_address: "Đơn nguyên 5 ktx, mỹ đình 1, Nam từ liêm , Hà nội",
-            //     from_ward_name: "Mỹ đình 1",
-            //     from_district_name: "Nam từ liêm",
-            //     from_province_name: "Hà Nội",
-            //     to_name: "Nguyễn Duy Đông ",
-            //     to_phone: "0339168183",
-            //     to_address: "ok mẹ đi",
-            //     to_ward_name: "Tân Hồng",
-            //     to_district_name: "Từ Sơn",
-            //     to_province_name: "Bắc Ninh",
-            //     cod_amount: 300000,
-            //     content: "Test đơn hàng ",
-            //     weight: 1,
-            //     length: 1,
-            //     width: 19,
-            //     height: 10,
-            //     service_id: 0,
-            //     service_type_id: 2,
-            //     items: [
-            //         {
-            //             name: "Sách",
-            //             code: "book123",
-            //             quantity: 1
-            //         }
-            //     ]
-            // };
-            
-
-
             const response = await axios.post(Locals.config().api_create_order_ghn, orderData, {
                 headers: {
                     'Content-Type': 'application/json',

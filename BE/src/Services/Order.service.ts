@@ -160,8 +160,6 @@ class OrderService {
             return_district_id: 1717, //
             return_ward_code: "220216",
             client_order_code: "",
-            from_name: "Susan shop", // tên người gủi
-            from_phone: "0999999999", // sdt người gửi
             to_name: customerInfo.name, // tên ngườu nhận hàng *
             to_phone: customerInfo.phone, // sdt người nhận hàng *
             to_address: customerInfo.address, // địa chỉ shipper tới giao hàng *
@@ -177,11 +175,7 @@ class OrderService {
             items: productsAfterDiscount,
             to_ward_code: customerInfo.wardCode,
             to_district_id: customerInfo.districtId,
-            service_type_id: 5,
-            from_address: "Kim dong ",
-            from_ward_name: "Xã Vĩnh Xá",
-            from_district_name: "Huyện Kim Động",
-            from_province_name: "Hưng Yên",
+            service_type_id: 2,
             return_phone: "0944444444",
         };
 
@@ -287,7 +281,7 @@ class OrderService {
             randomCode += characters[randomIndex];
         }
 
-        //const newShipping = await GiaoHangNhanhService.CreateOrderGHN(shippingInput)
+        const newShipping = await GiaoHangNhanhService.CreateOrderGHN(shippingInput)
         const data: any = {
             userId,
             shipping: {
@@ -296,12 +290,12 @@ class OrderService {
                 state: customerInfo.district,
                 zipcode: customerInfo.ward,
                 country: customerInfo.country,
-                fee: feeShip,
+                fee: feeShip, //newShipping.fee.main_service
             },
             payment,
             products: productsAfterDiscount,
             total: total + feeShip,
-            trackingNumber: randomCode.toUpperCase(),
+            trackingNumber: newShipping.order,
             code
         };
 
