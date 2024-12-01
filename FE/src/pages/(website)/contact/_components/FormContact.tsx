@@ -1,85 +1,89 @@
-type Props = {};
+import { useToast } from "@/common/hooks/useToast";
+import { ToastVariant } from "@/common/interfaces/toast";
+import { contactSchema } from "@/common/schemas/contact";
+import CustomFloatingField from "@/components/(website)/floatingfield/CustomFloatingField";
+import { sendContactFromUser } from "@/services/contact.service";
+import { joiResolver } from "@hookform/resolvers/joi";
+import { useForm } from "react-hook-form";
+
+type Props = {
+	full_name: string;
+	email: string;
+	subject: string;
+	content: string;
+};
 
 const FormContact = (props: Props) => {
+	const { toast } = useToast();
+
+	const {
+		handleSubmit,
+		register,
+		formState: { errors },
+		reset,
+		getValues,
+	} = useForm<Props>({
+		resolver: joiResolver(contactSchema),
+	});
+
+	const submit = async () => {
+		const res = await sendContactFromUser(getValues());
+		console.log(res);
+		if (!res) return;
+		toast({
+			variant: ToastVariant.SUCCESS,
+			content: "Gửi thành công, chúng tôi sẽ sớm phản hồi với bạn",
+		});
+		reset();
+	};
+
 	return (
 		<>
 			<div className="lg:col-span-7 md:col-span-12">
-				{" "}
-				<form>
+				<form onSubmit={handleSubmit(submit)}>
 					<div className="space-y-12">
-						<div className="border-b border-gray-900/10 pb-12">
+						<div className="border-b border-gray-900/10 flex flex-col gap-7 pb-12">
 							<h2 className="font-semibold text-3xl pb-5">Liên hệ với chúng tôi</h2>
-							<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-								<div className="sm:col-span-6">
-									<label
-										htmlFor="first-name"
-										className="block text-sm font-medium text-gray-900"
-									>
-										Tên của bạn*
-									</label>
-									<div className="mt-2">
-										<input
-											type="text"
-											name="first-name"
-											id="first-name"
-											autoComplete="given-name"
-											placeholder="Full Name"
-											className="block w-full border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-										/>
-									</div>
-								</div>
-								<div className="sm:col-span-6">
-									<label
-										htmlFor="email"
-										className="block text-sm font-medium leading-6 text-gray-900"
-									>
-										Email *
-									</label>
-									<div className="mt-2">
-										<input
-											id="email"
-											name="email"
-											type="email"
-											autoComplete="email"
-											placeholder="Email Address"
-											className="block w-full border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-										/>
-									</div>
-								</div>
-								<div className="sm:col-span-6">
-									<label
-										htmlFor="email"
-										className="block text-sm font-medium leading-6 text-gray-900"
-									>
-										Tiêu đề
-									</label>
-									<div className="mt-2">
-										<input
-											id="subject"
-											name="subject"
-											type="text"
-											placeholder="Subject"
-											className="block w-full border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-										/>
-									</div>
-								</div>
-								<div className="sm:col-span-6">
-									<label
-										htmlFor="email"
-										className="block text-sm font-medium leading-6 text-gray-900"
-									>
-										Nội dung
-									</label>
-									<div className="mt-2">
-										<textarea
-											id="email"
-											name="email"
-											autoComplete="email"
-											placeholder="Email Address"
-											className="block w-full border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-										/>
-									</div>
-								</div>
+							<CustomFloatingField
+								field="full_name"
+								label="Tên của bạn"
+								register={register}
+								floating
+								rounded
+								error={errors.full_name}
+								message={errors.full_name?.message}
+							/>
+							<CustomFloatingField
+								field="email"
+								label="Email"
+								register={register}
+								floating
+								rounded
+								error={errors.email}
+								message={errors.email?.message}
+							/>
+							<CustomFloatingField
+								field="subject"
+								label="Tiêu đề"
+								register={register}
+								floating
+								rounded
+								error={errors.subject}
+								message={errors.subject?.message}
+							/>
+							<div className="flex flex-col gap-1">
+								<label htmlFor="" className="text-[16px]">
+									Nội dung
+								</label>
+								<textarea
+									{...register("content")}
+									className="h-[20dvh] overflow-y-scroll focus:ring-0 border-zinc-300 rounded-md"
+								></textarea>
+								{errors.content && (
+									<span className="text-red-500 text-sm">
+										{errors.content?.message}
+									</span>
+								)}
 							</div>
 						</div>
 					</div>

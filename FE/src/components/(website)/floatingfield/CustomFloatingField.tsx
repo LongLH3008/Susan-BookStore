@@ -18,6 +18,7 @@ type Props = {
 };
 
 const CustomFloatingField = (args: Props) => {
+	const { register } = args;
 	return (
 		<div className="relative w-full mb-1 flex flex-col gap-1">
 			{!args.floating && (
@@ -36,7 +37,7 @@ const CustomFloatingField = (args: Props) => {
 				${args.className}`)}
 				placeholder={args.placeholder ?? " "}
 				disabled={args.disabled}
-				{...args.register(args.field)}
+				{...register(args.field)}
 			/>
 			{args.floating && (
 				<label
