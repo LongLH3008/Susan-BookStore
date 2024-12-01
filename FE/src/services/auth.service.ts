@@ -54,8 +54,8 @@ export const loginByGoogle = () => {
   window.location.href = `${API.GOOGLE_LOGIN}`;
 };
 
-export const getUsers = async () => {
-  return await SendRequest("GET", "user");
+export const getUsers = async (user_id?: string) => {
+  return await SendRequest("GET", `user${user_id ? '/' + user_id : ''}`);
 };
 
 export const UpdateStatus = async (

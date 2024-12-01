@@ -38,4 +38,5 @@ export const checkoutValidate = Joi.object({
         "any.required": "Chưa chọn phường / xã",
         "string.empty": "Chưa chọn phường / xã",
     }),
+    paymentMethod: Joi.string().default('COD')
 });

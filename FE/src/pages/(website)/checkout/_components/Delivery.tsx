@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 
 const Delivery = () => {
-	const { form, data, calcFeeShip, setFeeShip } = useContext(CheckoutContext);
+	const { form, data, calcFeeShip, setFeeShip, chooseAddress } = useContext(CheckoutContext);
 	const [locationInfo, setLocationInfo] = useState<any>({ district: [], ward: [] });
 
 	const { data: city } = useQuery({
@@ -62,22 +62,28 @@ const Delivery = () => {
 			<p className="text-[16px] font-semibold">Thông tin vận chuyển</p>
 			<div className="grid grid-cols-3 gap-3">
 				<div className="relative flex flex-col gap-1">
-					<select
-						defaultValue=""
-						aria-placeholder="Chọn"
-						onChange={(e) => getDistrict(e.target.value as any)}
-						className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
-					>
-						{city &&
-							city.data.map((item: any, index: number) => (
-								<option key={index} value={item.ProvinceID}>
-									{item.ProvinceName}
-								</option>
-							))}
-						<option value="" defaultChecked>
-							Chọn
-						</option>
-					</select>
+					{chooseAddress == "" ? (
+						<select
+							defaultValue=""
+							aria-placeholder="Chọn"
+							onChange={(e) => chooseAddress == "" && getDistrict(e.target.value as any)}
+							className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
+						>
+							{city &&
+								city.data.map((item: any, index: number) => (
+									<option key={index} value={item.ProvinceID}>
+										{item.ProvinceName}
+									</option>
+								))}
+							<option value="" defaultChecked>
+								Chọn
+							</option>
+						</select>
+					) : (
+						<div className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer border">
+							{form.getValues("province")}
+						</div>
+					)}
 					<label
 						htmlFor="country"
 						className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-zinc-600 peer-focus:dark:text-zinc-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
@@ -89,23 +95,29 @@ const Delivery = () => {
 					</span>
 				</div>
 				<div className="relative flex flex-col gap-1">
-					<select
-						defaultValue=""
-						aria-placeholder="Chọn"
-						{...form.register("districtId")}
-						onChange={(e) => getWard(e.target.value as any)}
-						className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
-					>
-						{locationInfo.district.length > 0 &&
-							locationInfo.district.map((item: any, index: number) => (
-								<option key={index} value={item.DistrictID}>
-									{item.DistrictName}
-								</option>
-							))}
-						<option value="" defaultChecked>
-							Chọn
-						</option>
-					</select>
+					{chooseAddress == "" ? (
+						<select
+							defaultValue=""
+							aria-placeholder="Chọn"
+							{...form.register("districtId")}
+							onChange={(e) => chooseAddress == "" && getWard(e.target.value as any)}
+							className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
+						>
+							<option value="" defaultChecked>
+								Chọn
+							</option>
+							{locationInfo.district.length > 0 &&
+								locationInfo.district.map((item: any, index: number) => (
+									<option key={index} value={item.DistrictID}>
+										{item.DistrictName}
+									</option>
+								))}
+						</select>
+					) : (
+						<div className="block rounded-md border border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer">
+							{form.getValues("district").split("/")[0].trim()}
+						</div>
+					)}
 					<label
 						htmlFor="country"
 						className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-zinc-600 peer-focus:dark:text-zinc-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
@@ -117,23 +129,31 @@ const Delivery = () => {
 					</span>
 				</div>
 				<div className="relative flex flex-col gap-1">
-					<select
-						defaultValue=""
-						aria-placeholder="Chọn"
-						{...form.register("wardCode")}
-						onChange={(e) => chooseWard(e.target.value.toString() as any)}
-						className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
-					>
-						{locationInfo.ward.length > 0 &&
-							locationInfo.ward.map((item: any, index: number) => (
-								<option key={index} value={item.WardCode}>
-									{item.WardName}
-								</option>
-							))}
-						<option value="" defaultChecked>
-							Chọn
-						</option>
-					</select>
+					{chooseAddress == "" ? (
+						<select
+							defaultValue=""
+							aria-placeholder="Chọn"
+							{...form.register("wardCode")}
+							onChange={(e) =>
+								chooseAddress == "" && chooseWard(e.target.value.toString() as any)
+							}
+							className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
+						>
+							{locationInfo.ward.length > 0 &&
+								locationInfo.ward.map((item: any, index: number) => (
+									<option key={index} value={item.WardCode}>
+										{item.WardName}
+									</option>
+								))}
+							<option value="" defaultChecked>
+								Chọn
+							</option>
+						</select>
+					) : (
+						<div className="block border rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer">
+							{form.getValues("ward").split("/")[0].trim()}
+						</div>
+					)}
 					<label
 						htmlFor="country"
 						className="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-zinc-600 peer-focus:dark:text-zinc-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto"
@@ -149,7 +169,9 @@ const Delivery = () => {
 				register={form.register}
 				field="address"
 				label="Địa chỉ chi tiết"
+				disabled={chooseAddress !== ""}
 				required
+				className="disabled:bg-transparent"
 				error={form.formState.errors.address}
 				message={form.formState.errors.address?.message}
 			/>

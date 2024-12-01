@@ -45,11 +45,10 @@ export const SendRequest = async (
       default:
         throw new Error("Invalid HTTP method");
     }
-    // console.log(result);
     return result.data;
   } catch (error: any) {
     console.log(error);
-    return false;
+    throw error;
   }
 };
 
