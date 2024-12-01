@@ -281,7 +281,7 @@ class OrderService {
             randomCode += characters[randomIndex];
         }
 
-        const newShipping = await GiaoHangNhanhService.CreateOrderGHN(shippingInput)
+        //const newShipping = await GiaoHangNhanhService.CreateOrderGHN(shippingInput)
         const data: any = {
             userId,
             shipping: {
@@ -295,7 +295,7 @@ class OrderService {
             payment,
             products: productsAfterDiscount,
             total: total + feeShip,
-            trackingNumber: newShipping.order,
+            trackingNumber: randomCode.toUpperCase(),
             code
         };
 
