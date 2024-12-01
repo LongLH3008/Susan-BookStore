@@ -26,6 +26,7 @@ const vectorSearch_controller_1 = __importDefault(require("../controllers/Api/ve
 const banner_controler_1 = __importDefault(require("../controllers/Api/banner.controler"));
 const bannerSale_controller_1 = __importDefault(require("../controllers/Api/bannerSale.controller"));
 const InfoUser_Controller_1 = __importDefault(require("../controllers/Api/InfoUser.Controller"));
+const Contact_Controller_1 = __importDefault(require("../controllers/Api/Contact.Controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -163,4 +164,7 @@ router.get("/detail/user-Info/:id", (0, utils_1.asyncHandler)(InfoUser_Controlle
 router.delete("/Delete/info-user/:id", (0, utils_1.asyncHandler)(InfoUser_Controller_1.default.delete));
 router.get("/Getall/info-user-WithUserId", (0, utils_1.asyncHandler)(InfoUser_Controller_1.default.GetAllInfoUserWithPagination));
 router.patch("/info-user/update/:id", (0, utils_1.asyncHandler)(InfoUser_Controller_1.default.update));
+router.post("/contact/create", (0, utils_1.asyncHandler)(Contact_Controller_1.default.create));
+router.get("/contact/list", (0, utils_1.asyncHandler)(Contact_Controller_1.default.List));
+router.get("/contact/:id", (0, utils_1.asyncHandler)(Contact_Controller_1.default.Detail));
 exports.default = router;

@@ -22,6 +22,7 @@ import VectorSearchController from "../controllers/Api/vectorSearch.controller";
 import BannerControler from "../controllers/Api/banner.controler";
 import BannerSaleControler from "../controllers/Api/bannerSale.controller";
 import InfoUserController from "../controllers/Api/InfoUser.Controller";
+import ContactController from "../controllers/Api/Contact.Controller";
 
 const router = Router();
 
@@ -331,6 +332,21 @@ router.patch(
   "/info-user/update/:id",
   asyncHandler(InfoUserController.update)
 );
+
+router.post(
+  "/contact/create",
+  asyncHandler(ContactController.create)
+)
+
+router.get(
+  "/contact/list",
+  asyncHandler(ContactController.List)
+)
+
+router.get(
+  "/contact/:id",
+  asyncHandler(ContactController.Detail)
+)
 
 
 
