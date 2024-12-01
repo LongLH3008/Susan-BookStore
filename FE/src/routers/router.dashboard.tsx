@@ -17,7 +17,10 @@ import { BlogProvider } from "@/common/hooks/useBlog";
 import { OrderProvider } from "@/common/hooks/useOrder";
 import BannerPage from "@/pages/(dashboard)/Banner/BannerPage";
 import { BannerProvider } from "@/common/hooks/useBanner";
-
+import CreateBannerHome from "@/pages/(dashboard)/Banner/FormBannerHome";
+import BannerSalePage from "@/pages/(dashboard)/Banner/BannerSalePage";
+import CreateBannerSale from "@/pages/(dashboard)/Banner/FormBannerSale";
+// CreateBannerHome
 const DashboardRoutes = [
   {
     path: "/quan-tri",
@@ -32,6 +35,18 @@ const DashboardRoutes = [
       {
         path: "anh-quang-cao",
         element: <BannerProvider children={<BannerPage />} />,
+      },
+      {
+        path: "anh-quang-cao/them-moi",
+        element: <BannerProvider children={<CreateBannerHome />} />,
+      },
+      {
+        path: "anh-quang-cao/chinh-sua/:id",
+        element: <BannerProvider children={<CreateBannerHome />} />,
+      },
+      {
+        path: "anh-quang-cao-sale",
+        element: <BannerProvider children={<BannerSalePage />} />,
       },
       { path: "danh-muc", element: <CategoriesPage /> },
       { path: "san-pham", element: <ProductsPage /> },

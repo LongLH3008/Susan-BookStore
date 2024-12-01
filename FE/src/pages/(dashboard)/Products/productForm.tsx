@@ -8,8 +8,10 @@ import {
 } from "@/services/product.service";
 import {
   Autocomplete,
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   FormControl,
   FormLabel,
   TextField,
@@ -26,6 +28,7 @@ const ProductForm: React.FC = () => {
   const { toast } = useToast();
   const nav = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const [open, setOpen] = useState<boolean>(false);
   const {
     control,
     register,
@@ -54,7 +57,7 @@ const ProductForm: React.FC = () => {
     setSelectedCategories(newValue.map((option: any) => option.id));
     setValue("categories", selectedCategories);
   };
-  const { mutateAsync, isError, error } = id
+  const { mutateAsync, isError, error, isPending } = id
     ? useMutation({
         mutationFn: ({ data, id }: { data: Book; id: string }) =>
           editProduct(data, id),
@@ -225,7 +228,9 @@ const ProductForm: React.FC = () => {
       reader.readAsDataURL(file);
     }
   };
-
+  useEffect(() => {
+    setOpen(isPending);
+  }, [isPending]);
   return (
     <>
       <div className="p-5 flex justify-between items-center bg-white shadow-sm rounded-lg mb-[50px]">
@@ -549,6 +554,12 @@ const ProductForm: React.FC = () => {
           </Button>
         </Box>
       </Box>
+      <Backdrop
+        sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+        open={open}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 };

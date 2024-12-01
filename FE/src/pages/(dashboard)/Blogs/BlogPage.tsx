@@ -38,10 +38,10 @@ const BlogPage = () => {
 
   const { mutateAsync } = useMutation({
     mutationFn: deleteBlog,
-    onSuccess: () => {
+    onSuccess: (data: any) => {
       setConfirmOpen(false);
       toast({
-        variant: "success",
+        variant: data.status,
         content: `Xóa sản phẩm thành công`,
       });
       DataBlogs.refetch();

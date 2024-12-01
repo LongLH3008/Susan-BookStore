@@ -3,14 +3,13 @@ export interface IBannerHome {
   title: string;
   subtitle: string;
   description: string;
-  _id: string;
+  position: string;
+  _id?: string;
 }
 
-export interface IBanner {
-  banner_Title: string;
-  banner_Images: IBannerHome[];
-  advertisement_images: string[];
-  banner_Description: string;
+export interface IBannerSale {
+  image: string;
   is_active: boolean;
-  _id: string;
+  link: string;
+  _id?: string;
 }
