@@ -5,15 +5,13 @@ const DOCUMENT_NAME = "Banners";
 
 export interface IBannerModel extends IBanner, mongoose.Document {}
 
-const bannerImageSchema = new mongoose.Schema({
-  image: { type: String, required: true },
-  title: { type: String, required: true },
-  subtitle: { type: String, required: true },
-  description: { type: String, required: true },
-});
 const bannerSchema = new mongoose.Schema<IBannerModel>(
   {
-    banner_Images: { type: [bannerImageSchema], required: true },
+    image: { type: String, required: true },
+    title: { type: String, required: true },
+    subtitle: { type: String, required: true },
+    description: { type: String, required: true },
+    position: { type: String, required: true },
     is_active: { type: Boolean, default: true },
   },
   {

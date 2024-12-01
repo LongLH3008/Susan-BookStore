@@ -30,7 +30,11 @@ class bannerSaleControler {
   }
 
   static async GetAllBannerInAdmin(req: Request, res: Response): Promise<any> {
-    const resu = await BannerSaleService.getAllBanersaleInAddmin();
+    const { page, limit } = req.query;
+    const resu = await BannerSaleService.getAllBanersaleInAddmin( {
+      page: Number(page),
+      limit: Number(limit),
+    });
     return new SuccessResponse({
       message: "get all banner successfully !",
       metadata: resu,
