@@ -1,4 +1,5 @@
 import { CheckoutContext } from "@/common/context/ContextCheckout";
+import { useLocalStorageCart } from "@/common/hooks/useLocalStorageCart";
 import { usePayment } from "@/common/hooks/usePayment";
 import { useContext, useState } from "react";
 import { BeatLoader } from "react-spinners";
@@ -9,17 +10,24 @@ import Voucher from "./Voucher";
 
 const CheckoutInfomation = () => {
 	const [loading, setLoading] = useState<boolean>(false);
-	const { id, data, form, method } = useContext(CheckoutContext);
+	const { id, user_id, data, form, method } = useContext(CheckoutContext);
+	const { afterPayment } = useLocalStorageCart();
 
 	const { onSubmit: PayCOD } = usePayment({
 		action: "COD",
-		onSuccess: () => setLoading(false),
+		onSuccess: () => {
+			setLoading(false);
+			if (user_id) afterPayment();
+		},
 		onError: () => setLoading(false),
 	});
 
 	const { onSubmit: PayBanking } = usePayment({
 		action: "BANKING",
-		onSuccess: () => setLoading(false),
+		onSuccess: () => {
+			setLoading(false);
+			if (user_id) afterPayment();
+		},
 		onError: () => setLoading(false),
 	});
 

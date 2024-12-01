@@ -81,6 +81,11 @@ const DataCart = () => {
 								chi tiết giỏ hàng
 							</button>
 						</Link>
+						<Link to={`/thanh-toan/${id}`} state={{ from: location.pathname }}>
+							<button className="mt-5 border-2 text-[13px] font-semibold border-zinc-900 w-full uppercase h-[55px] hover:bg-zinc-900 hover:text-white">
+								thanh toán
+							</button>
+						</Link>
 					</>
 				) : (
 					<div className="flex items-center justify-center">Giỏ hàng chưa có sản phẩm</div>

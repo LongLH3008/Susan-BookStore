@@ -8,11 +8,14 @@ const CheckoutProducts = () => {
 
 	const subtotal = cart?.reduce((acc: number, item: any) => acc + item.product_id.price * item.product_quantity, 0);
 	const discountArr = cart?.filter((item: any) => Math.abs(item.product_id.discount) > 0 && item);
-	const discount = discountArr?.reduce(
-		(acc: number, item: any) =>
-			acc + (Math.abs(item.product_id.discount) / 100) * item.product_id.price * item.product_quantity,
-		0
-	);
+	const discount = discountArr?.reduce((acc: number, item: any) => {
+		const discountPercent = Math.abs(item?.product_id?.discount);
+		const price = Number(item?.product_id?.price);
+		const quantity = Number(item?.product_quantity);
+
+		const calc = acc + (discountPercent / 100) * price * quantity;
+		return Math.round(calc);
+	}, 0);
 
 	return (
 		<div

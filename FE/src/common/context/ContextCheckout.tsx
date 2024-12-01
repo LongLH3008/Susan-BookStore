@@ -56,7 +56,7 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
 				}, 700);
 				nav("/gio-hang");
 			}
-			setData(cart_products);
+			setData(cart_products.filter((item) => item.selected));
 		}
 	}, []);
 
@@ -78,6 +78,7 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
 				value={{
 					data,
 					id,
+					user_id,
 					toast,
 					feeShip,
 					setFeeShip,

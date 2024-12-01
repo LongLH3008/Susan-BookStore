@@ -40,9 +40,9 @@ const ProductFeatures = ({ product }: { product: IProduct }) => {
 		<div
 			className={`${
 				featuresProduct.isOpen ? "bottom-[30%] opacity-1" : "bottom-[20%] opacity-0"
-			} absolute ease-in duration-200 h-[58px] left-[10%] bg-white shadow-md rounded-sm w-[80%] py-[15px]`}
+			} absolute flex justify-center ease-in duration-200 h-[58px] left-1/2 -translate-x-1/2 bg-white shadow-md rounded-sm w-fit py-[15px]`}
 		>
-			<div className="grid grid-cols-3 w-full h-full *:border-r *:grid *:place-items-center *:cursor-pointer *:text-zinc-700">
+			<div className="flex items-center *:px-5 h-full *:border-r *:grid *:place-items-center *:cursor-pointer *:text-zinc-700">
 				<div className="" role="status">
 					{product.stock > 0 ? (
 						<div onClick={AddProductToCart} className="flex items-center gap-1">
@@ -76,9 +76,9 @@ const ProductFeatures = ({ product }: { product: IProduct }) => {
 						/>
 					</svg>
 				</div>
-				<div onClick={pressLike}>
+				{/* <div onClick={pressLike}>
 					<i className={`${like && "text-[#00BFC5]"} hover:text-[#00BFC5] fa-solid fa-heart`}></i>
-				</div>
+				</div> */}
 				{/* Compare */}
 				{/* <ModalCompare /> */}
 				{/* Mini Detail */}

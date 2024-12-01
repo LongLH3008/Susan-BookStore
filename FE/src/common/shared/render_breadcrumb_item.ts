@@ -1,45 +1,22 @@
+export const breadCrumbConstant = [
+	{ path: 'gioi-tiieu', name: 'Giới thiệu' },
+	{ path: 'lien-he', name: 'Liên hệ' },
+	{ path: 'cua-hang', name: 'Cửa hàng' },
+	{ path: 'san-pham', name: 'Sản phẩm' },
+	{ path: 'tin-tuc', name: 'Tin tức' },
+	{ path: 'gio-hang', name: 'Giỏ hàng' },
+	{ path: 'thanh-toan', name: 'Thanh toán' },
+	{ path: 'tra-cuu-don-hang', name: 'Tra cứu đơn hàng' },
+	{ path: 'dang-nhap', name: 'Đăng nhập' },
+	{ path: 'dang-ky', name: 'Đăng ký' },
+	{ path: 'quen-mat-khau', name: 'Quên mật khẩu' },
+]
+
 export const handleBreadCrumbItemURL = (url: string) => {
-	let item = "";
-	switch (url) {
-		case "/gioi-thieu":
-			item = "Giới thiệu";
-			break;
-		case "/lien-he":
-			item = "Liên hệ";
-			break;
-		case "/cua-hang":
-			item = "Cửa hàng";
-			break;
-		case "/tin-tuc":
-			item = "Tin tức";
-			break;
-		// ...
-
-		case "/gio-hang":
-			item = "Giỏ hàng";
-			break;
-		case "/thanh-toan":
-			item = "Thanh toán";
-			break;
-		case "/don-hang":
-			item = "Đơn hàng";
-			break;
-		case "/tra-cuu-don-hang":
-			item = "Tra cứu đơn hàng";
-			break;
-		// ...
-
-		case "/dang-nhap":
-			item = "Đăng nhập";
-			break;
-		case "/dang-ky":
-			item = "Đăng ký";
-			break;
-		case "/quen-mat-khau":
-			item = "Quên mật khẩu";
-			break;
-		default:
-			break;
-	}
-	return item;
+	console.log(url);
+	if (!url) return '...'
+	const result = breadCrumbConstant.find((item) => url.includes(item.path));
+	console.log(result)
+	if (!result) return '...';
+	return result.name;
 };

@@ -12,6 +12,7 @@ type LocalStorageCart = {
 	select: (arg: { _id: string; selected: boolean }) => void;
 	selectAllLocal: () => void;
 	removeSelectAllLocal: () => void;
+	afterPayment: () => void;
 };
 export const useLocalStorageCart = create<LocalStorageCart>((set) => ({
 	cart_products: [],
@@ -27,11 +28,20 @@ export const useLocalStorageCart = create<LocalStorageCart>((set) => ({
 		}
 	},
 
+	afterPayment: () => {
+		set((state) => {
+			const cart_products = state.cart_products.filter((item) => !item.selected);
+			localStorage.setItem("cart_products", JSON.stringify(cart_products));
+			return { cart_products };
+		});
+	},
+
 	select: (arg) => {
 		set((state) => {
 			const cart_products = state.cart_products.map((item: ICart) =>
-				item._id == arg._id ? { ...item, selected: arg.selected } : item
+				item._id == arg._id ? { ...item, selected: !item.selected } : item
 			);
+			console.log(cart_products);
 			localStorage.setItem("cart_products", JSON.stringify(cart_products));
 			return { cart_products };
 		});
