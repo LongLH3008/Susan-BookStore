@@ -4,13 +4,12 @@ const COLLECTION_NAME = "BannerSale";
 const DOCUMENT_NAME = "BannersSale";
 
 export interface IBannerSaleModel extends IBannerSale, mongoose.Document {}
-const bannerSaleSale = new mongoose.Schema({
-  image: { type: String, required: true },
-});
 
 const bannerSaleSchema = new mongoose.Schema<IBannerSaleModel>(
   {
-    banner_Images_sale: { type: [bannerSaleSale], required: true },
+    image: { type: String, required: true },
+    is_active: { type: Boolean, default: true },
+    link: { type: String, required: true },
   },
   {
     timestamps: { createdAt: true, updatedAt: true },

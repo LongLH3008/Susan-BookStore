@@ -1,16 +1,14 @@
 export interface IBanner {
-  banner_Images: {
-    image: string;
-    title: string;
-    subtitle: string;
-    description : string
-  }[];
+  image: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  position: string;
   is_active: boolean;
 }
 
 export interface IBannerSale {
-  banner_Images_sale : {
-    image : string
-  }[];
-  is_active : boolean;
+  image: string;
+  is_active: boolean;
+  link: string;
 }
