@@ -1,17 +1,13 @@
-// import { useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import { Pagination, Navigation, Autoplay } from "swiper/modules";
-import { SlideNavNext, SlideNavPrev } from "./SlideNavButtons";
 import useBanner from "@/common/hooks/useBanner";
-import BannerItem from "@/components/(website)/banner/bannerItem";
-import { useRef } from "react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { SlideNavNext, SlideNavPrev } from "./SlideNavButtons";
 
 const Banner = () => {
-  const { DataBanners, dataBannerHome } = useBanner();
-  const swiperRef = useRef(null);
+  const { DataBanners } = useBanner();
   return (
     <>
       <div className="relative ">
@@ -29,7 +25,7 @@ const Banner = () => {
           modules={[Pagination, Navigation, Autoplay]}
           className="mySwiper sliderbanner "
         >
-          {dataBannerHome?.banner_Images.map((data, index) => (
+          {DataBanners.data?.metadata?.data.map((data, index) => (
             <SwiperSlide
               key={index}
               className={`w-full xl:h-[87vh] lg:h-[65vh] sm:h-[50vh] min-[320px]:h-[40vh]  bg-cover min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%]`}

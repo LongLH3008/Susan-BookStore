@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
 import { IBannerHome } from "@/common/interfaces/banner";
 
 interface props {
   bannerHome: IBannerHome;
 }
 const BannerItem = ({ bannerHome }: props) => {
+  console.log("image", bannerHome.image);
+
   return (
     <>
       <div

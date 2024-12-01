@@ -6,7 +6,7 @@ import { createBlog, getBlogById, updateBlog } from "@/services/blog.service";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { CircularProgress } from "@mui/material";
+import { Backdrop, CircularProgress } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -30,7 +30,7 @@ interface TypeCKEDITOR {
 const CreateBlog = () => {
   // const MAX_INPUTS = 5;
   const payload = Authentication();
-
+  const [open, setOpen] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
 
   const { toast } = useToast();
@@ -261,15 +261,7 @@ const CreateBlog = () => {
 
         data.blog_image = coverImageUrl;
       }
-      let updatedData = data;
-      if (blog?.metadata) {
-        updatedData = {
-          ...blog?.metadata,
-          ...data,
-        };
-      }
 
-      // console.log("updatedData", updatedData);
       id ? await mutateAsync({ data, id }) : await mutateAsync(data);
     } catch (error) {
       toast({
@@ -279,6 +271,9 @@ const CreateBlog = () => {
       console.error("Lỗi khi gửi form:", error);
     }
   };
+  useEffect(() => {
+    setOpen(isPending);
+  }, [isPending]);
 
   return (
     <>
@@ -319,6 +314,7 @@ const CreateBlog = () => {
                 <input
                   type="text"
                   id="blog_title"
+                  disabled={isPending}
                   className={` ${
                     errors.blog_title && "border-red-700"
                   } bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 `}
@@ -352,12 +348,14 @@ const CreateBlog = () => {
               </div>
               <button
                 type="submit"
+                disabled={isPending}
                 className="border px-6 py-3 border-gray-500 rounded-lg hover:border-[#00bfc5] hover:text-[#00bfc5] "
               >
-                submit
+                {isPending ? <CircularProgress /> : "Submit"}
               </button>
               <button
                 type="reset"
+                disabled={isPending}
                 className="border px-6 py-3 border-gray-500 rounded-lg hover:border-[#00bfc5] hover:text-[#00bfc5] "
               >
                 Reset
@@ -373,6 +371,7 @@ const CreateBlog = () => {
                 </label>
                 <input
                   accept="image/*"
+                  disabled={isPending}
                   onChange={handleCoverImageChange}
                   className="block w-full mb-5 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50  focus:outline-none "
                   id="small_size"
@@ -397,6 +396,7 @@ const CreateBlog = () => {
                 <input
                   type="text"
                   id="blog_tags"
+                  disabled={isPending}
                   className={`  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 `}
                   placeholder="Tag1 , tag 2 , tag 3 , ..."
                   {...register("blog_tags")}
@@ -445,6 +445,12 @@ const CreateBlog = () => {
         </form>
       )}
       {/* form */}
+      <Backdrop
+        sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+        open={open}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <style>
         {`
           .ck-editor__editable_inline {

@@ -1,9 +1,8 @@
 import useBanner from "@/common/hooks/useBanner";
 import { useToast } from "@/common/hooks/useToast";
-import { IBanner, IBannerHome } from "@/common/interfaces/banner";
-import { IBlog } from "@/common/interfaces/blog";
+import { IBannerHome } from "@/common/interfaces/banner";
 import BannerItem from "@/components/(website)/banner/bannerItem";
-import BlogItem from "@/pages/(website)/blog_detail/_components/BlogItem";
+import { DeleteBanners } from "@/services/banner.service";
 import { deleteBlog } from "@/services/blog.service";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
@@ -22,7 +21,7 @@ import Paper from "@mui/material/Paper";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
@@ -30,7 +29,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const BannerPage = () => {
   const nav = useNavigate();
-  const { DataBanners, dataBannerHome } = useBanner();
+  const { DataBanners } = useBanner();
   const { toast } = useToast();
   const [selectedBanner, setSelectedBanner] = useState<IBannerHome | null>(
     null
@@ -39,18 +38,18 @@ const BannerPage = () => {
   const [open, setOpen] = useState(false);
 
   const { mutateAsync } = useMutation({
-    mutationFn: deleteBlog,
-    onSuccess: () => {
+    mutationFn: DeleteBanners,
+    onSuccess: (data: any) => {
       setConfirmOpen(false);
       toast({
-        variant: "success",
-        content: `Xóa sản phẩm thành công`,
+        variant: data.status,
+        content: `Xóa ảnh  thành công`,
       });
       DataBanners.refetch();
     },
     onError: (error: AxiosError) => {
       setConfirmOpen(false);
-      const message = "Lỗi khi xóa sản phẩm: ";
+      const message = "Lỗi khi xóa ảnh : ";
       toast({
         variant: error.response?.status || "error",
         content: message + (error.response?.data || error.message),
@@ -63,7 +62,6 @@ const BannerPage = () => {
   };
   const onEdit = (id: string) => {
     nav(`chinh-sua/${id}`);
-    // console.log(id);
   };
   const onShowDetail = (banner: IBannerHome) => {
     console.log(banner);
@@ -84,9 +82,13 @@ const BannerPage = () => {
       field: "image",
       headerName: "Ảnh Banner",
       renderCell: (params) => (
-        <img src={params.value} alt={params.row.title} className="h-20" />
+        <img
+          src={params.value}
+          alt={params.row.title}
+          className="h-20 object-cover"
+        />
       ),
-      flex: 1,
+      width: 200,
     },
     {
       field: "title",
@@ -158,11 +160,7 @@ const BannerPage = () => {
     );
   }
 
-  if (
-    !DataBanners.data ||
-    !dataBannerHome ||
-    !Array.isArray(dataBannerHome.banner_Images)
-  ) {
+  if (!DataBanners.data || !Array.isArray(DataBanners.data.metadata.data)) {
     return (
       <Typography variant="h6" color="textSecondary">
         No banners available.
@@ -170,7 +168,7 @@ const BannerPage = () => {
     );
   }
 
-  const rows = dataBannerHome.banner_Images.map(
+  const rows = DataBanners.data.metadata.data.map(
     (row: IBannerHome, index: number) => ({
       id: index,
       ...row,
@@ -182,10 +180,10 @@ const BannerPage = () => {
       <div className="rounded-lg shadow-sm bg-white p-5 mb-[50px] flex justify-between items-center">
         <div className="flex items-center gap-3">
           <i className="fa-solid fa-image"></i>
-          <h2 className={`text-xl font-[500]`}>Ảnh quảng cáo</h2>
+          <h2 className={`text-xl font-[500]`}>Ảnh trang chủ</h2>
         </div>
         <Link
-          to={"/quan-tri/tin-tuc/them-moi"}
+          to={"/quan-tri/anh-quang-cao/them-moi"}
           className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
         >
           <IoMdAdd />

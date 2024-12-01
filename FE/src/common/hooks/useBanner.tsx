@@ -1,14 +1,14 @@
-import { getAllBanners } from "@/services/banner.service";
+import { getAllBanners, getAllBannerSale } from "@/services/banner.service";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useState } from "react";
-import { IBanner } from "../interfaces/banner";
+import { IBannerHome } from "../interfaces/banner";
 
 interface PropContextBanner {
   children: React.ReactNode;
 }
 interface BannerContextType {
   DataBanners: UseQueryResult<any, Error>;
-  dataBannerHome: IBanner | undefined;
+  DataBannerSale: UseQueryResult<any, Error>;
 }
 
 export const BannerContext = createContext<BannerContextType>(
@@ -20,16 +20,13 @@ export const BannerProvider = ({ children }: PropContextBanner) => {
     queryKey: ["Banner"],
     queryFn: () => getAllBanners(),
   });
-  const [dataBannerHome, setDataBannerHome] = useState<IBanner | undefined>(
-    undefined
-  );
-  useEffect(() => {
-    if (DataBanners.data && DataBanners.data.metadata.length > 0) {
-      setDataBannerHome(DataBanners.data.metadata[0]);
-    }
-  }, [DataBanners.data]);
+  const DataBannerSale = useQuery({
+    queryKey: ["BannerSale"],
+    queryFn: () => getAllBannerSale(),
+  });
+
   return (
-    <BannerContext.Provider value={{ DataBanners, dataBannerHome }}>
+    <BannerContext.Provider value={{ DataBanners, DataBannerSale }}>
       {children}
     </BannerContext.Provider>
   );
