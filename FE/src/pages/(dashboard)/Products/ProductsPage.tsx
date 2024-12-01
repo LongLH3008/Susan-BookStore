@@ -25,6 +25,7 @@ import { Link, useNavigate } from "react-router-dom";
 import SearchForm from "../components/searchForm";
 import MyTable2 from "../components/table";
 import { DataGrid } from "@mui/x-data-grid";
+import Bookservice from "@/pages/(website)/book_detail/_components/Bookservice";
 
 const ProductsPage: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -246,38 +247,10 @@ const ProductsPage: React.FC = () => {
                   Image={selectedProduct?.images}
                 />
                 <CategoryProvider>
-                  <BookText detailProduct={selectedProduct} isCard={true} />
+                  <BookText detailProduct={selectedProduct} isCard={false} />
                 </CategoryProvider>
               </div>
-              <div className={` text-[#646464] leading-loose `}>
-                <p
-                  className={`${
-                    !isExpanded && "overflow-hidden text-ellipsis line-clamp-4"
-                  }`}
-                >
-                  <span className="font-semibold text-gray-700 ">
-                    {" "}
-                    Mô tả :{" "}
-                  </span>
-                  {selectedProduct?.description}
-                </p>
-                <span
-                  onClick={() => setIsExpanded(true)}
-                  className={`${
-                    isExpanded ? "hidden" : ""
-                  } font-bold hover:underline cursor-pointer`}
-                >
-                  Xem thêm
-                </span>
-                <span
-                  onClick={() => setIsExpanded(false)}
-                  className={`${
-                    !isExpanded ? "hidden" : ""
-                  } font-bold hover:underline cursor-pointer`}
-                >
-                  Thu gọn
-                </span>
-              </div>
+              <Bookservice detailProduct={selectedProduct} isCard={false} />
             </div>
           ) : (
             <Typography>Không có dữ liệu</Typography>

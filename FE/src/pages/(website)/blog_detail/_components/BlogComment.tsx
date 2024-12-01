@@ -18,7 +18,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-const BlogComment = ({ idBlog }: { idBlog: string }) => {
+const BlogComment = ({
+  idBlog,
+  isCart,
+}: {
+  idBlog: string;
+  isCart: boolean;
+}) => {
   const [open, setOpen] = useState(false);
   const { register, handleSubmit } = useForm();
   const { toast } = useToast();
@@ -71,7 +77,7 @@ const BlogComment = ({ idBlog }: { idBlog: string }) => {
   return (
     <>
       <div className="mt-10 mb-24">
-        <h3 className="text-xl font-semibold text-[#292929] mb-5">Bình luân</h3>
+        <h3 className="text-xl font-semibold text-[#292929] mb-5">Bình luận</h3>
         <div className="overflow-y-auto h-[300px]">
           {isLoading ? (
             <SkeletonCMT />
@@ -81,31 +87,33 @@ const BlogComment = ({ idBlog }: { idBlog: string }) => {
             ))
           )}
         </div>
-        <div className="*:text-[13px]">
-          <form onSubmit={handleSubmit(onSubmit)} className="my-5">
-            <div className="flex items-center">
-              {/* <img
+        {isCart && (
+          <div className="*:text-[13px]">
+            <form onSubmit={handleSubmit(onSubmit)} className="my-5">
+              <div className="flex items-center">
+                {/* <img
                 src={getUserAvatar()}
                 alt={fetchedUse?.user_name}
                 className="w-12 h-12 rounded-full"
               /> */}
-              <input
-                type="text"
-                id="message"
-                className="block rounded-xl p-2.5 me-3 w-full h-auto text-sm text-gray-900 focus:ring-gray-500 focus:border-gray-100  border border-gray-300 shadow-lg"
-                placeholder="Viết bình luận"
-                {...register("comment_content")}
-                required
-              />
-              <button type="submit">
-                <Fab variant="extended" size="medium" color="primary">
-                  <NavigationIcon sx={{ mr: 1 }} />
-                  Gửi
-                </Fab>
-              </button>
-            </div>
-          </form>
-        </div>
+                <input
+                  type="text"
+                  id="message"
+                  className="block rounded-xl p-2.5 me-3 w-full h-auto text-sm text-gray-900 focus:ring-gray-500 focus:border-gray-100  border border-gray-300 shadow-lg"
+                  placeholder="Viết bình luận"
+                  {...register("comment_content")}
+                  required
+                />
+                <button type="submit">
+                  <Fab variant="extended" size="medium" color="primary">
+                    <NavigationIcon sx={{ mr: 1 }} />
+                    Gửi
+                  </Fab>
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
       </div>
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
         <DialogTitle>
