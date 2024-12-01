@@ -21,6 +21,7 @@ import PaymentController from "../controllers/Api/Vnpay.controller";
 import VectorSearchController from "../controllers/Api/vectorSearch.controller";
 import BannerControler from "../controllers/Api/banner.controler";
 import BannerSaleControler from "../controllers/Api/bannerSale.controller";
+import InfoUserController from "../controllers/Api/InfoUser.Controller";
 
 const router = Router();
 
@@ -309,5 +310,28 @@ router.get(
   "/GetByBanner-sale/client/:id",
   asyncHandler(BannerSaleControler.GetbyidwithClient)
 );
+
+// info user
+router.post("/create/info-user", asyncHandler(InfoUserController.Create));
+router.get(
+  "/detail/user-Info/:id",
+  asyncHandler(InfoUserController.detail)
+);
+router.delete(
+  "/Delete/info-user/:id",
+  asyncHandler(InfoUserController.delete)
+);
+
+router.get(
+  "/Getall/info-user-WithUserId",
+  asyncHandler(InfoUserController.GetAllInfoUserWithPagination)
+);
+
+router.patch(
+  "/info-user/update/:id",
+  asyncHandler(InfoUserController.update)
+);
+
+
 
 export default router;

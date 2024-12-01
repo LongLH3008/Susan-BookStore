@@ -25,6 +25,7 @@ const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.con
 const vectorSearch_controller_1 = __importDefault(require("../controllers/Api/vectorSearch.controller"));
 const banner_controler_1 = __importDefault(require("../controllers/Api/banner.controler"));
 const bannerSale_controller_1 = __importDefault(require("../controllers/Api/bannerSale.controller"));
+const InfoUser_Controller_1 = __importDefault(require("../controllers/Api/InfoUser.Controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -156,4 +157,10 @@ router.get("/GetAll/banner-sale/inAdmin", (0, utils_1.asyncHandler)(bannerSale_c
 router.delete("/DeleteBanner-sale/:id", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.deleteBanner));
 router.put("/UpdateBanner-sale/:id", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.updateBanner));
 router.get("/GetByBanner-sale/client/:id", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.GetbyidwithClient));
+// info user
+router.post("/create/info-user", (0, utils_1.asyncHandler)(InfoUser_Controller_1.default.Create));
+router.get("/detail/user-Info/:id", (0, utils_1.asyncHandler)(InfoUser_Controller_1.default.detail));
+router.delete("/Delete/info-user/:id", (0, utils_1.asyncHandler)(InfoUser_Controller_1.default.delete));
+router.get("/Getall/info-user-WithUserId", (0, utils_1.asyncHandler)(InfoUser_Controller_1.default.GetAllInfoUserWithPagination));
+router.patch("/info-user/update/:id", (0, utils_1.asyncHandler)(InfoUser_Controller_1.default.update));
 exports.default = router;
