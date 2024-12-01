@@ -1,32 +1,31 @@
 import * as icon from "@/common/assets/icon";
-import { userState } from "@/common/hooks/useAuth";
-import { useCart } from "@/common/hooks/useCart";
+import { cartData } from "@/common/hooks/useCart";
 import { ConvertVNDString } from "@/common/shared/round-number";
-import { getCartByUser } from "@/services/cart.service";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import ItemMiniCart from "./ItemCart";
 
-const DataCart = () => {
-	const { onAction } = useCart({ action: "REMOVE" });
-	const { id } = userState();
+const DataCart = ({ user_id }: { user_id: string }) => {
+	const { remove, data, get } = cartData();
 
-	const { data: cart } = useQuery({
-		queryKey: ["cart"],
-		queryFn: async () => await getCartByUser(id),
-	});
+	useEffect(() => {
+		get(user_id);
+	}, []);
+
+	console.log(data);
+	// const { onAction } = useCart({ action: "REMOVE" });
+
+	// const { data: cart } = useQuery({
+	// 	queryKey: ["cart"],
+	// 	queryFn: async () => await getCartByUser(user_id),
+	// });
 
 	const removeProduct = (product_id: string) => {
-		onAction({ user_id: id, product_id });
+		remove({ user_id, product_id });
 	};
 
-	const subtotal = cart?.metadata?.cart_products.reduce(
-		(acc: number, item: any) => acc + item.product_id.price * item.product_quantity,
-		0
-	);
-	const discountArr = cart?.metadata?.cart_products.filter(
-		(item: any) => Math.abs(item.product_id.discount) > 0 && item
-	);
+	const subtotal = data?.reduce((acc: number, item: any) => acc + item.product_id.price * item.product_quantity, 0);
+	const discountArr = data?.filter((item: any) => Math.abs(item.product_id.discount) > 0 && item);
 
 	const discount = discountArr?.reduce((acc: number, item: any) => {
 		const discountPercent = Math.abs(item?.product_id?.discount);
@@ -42,16 +41,16 @@ const DataCart = () => {
 			<span className="max-[1000px]:hidden h-full flex items-center relative">
 				<img className="w-[38px] max-[1000px]:w-[20px]" src={icon.miniCart} alt="" />
 				<p id="amount_books_in_miniCart" className="text-[#00BFC5] absolute bottom-1/2 -right-2">
-					{cart?.metadata.cart_products.length}
+					{data.length}
 				</p>
 			</span>
 			<div
 				className={`w-[370px] -right-1/4 translate-x-1/4 absolute group-hover:top-[110%] -z-50 group-hover:z-10 opacity-0 group-hover:opacity-100 top-[50%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
 			>
-				{cart?.metadata.cart_products.length && cart.metadata.cart_products.length > 0 ? (
+				{data.length && data.length > 0 ? (
 					<>
 						<div className="text-zinc-600 w-full pb-5 grid gap-y-5 border-b cart_scroll pr-3 overflow-y-scroll scroll-smooth max-h-[200px]">
-							{cart?.metadata.cart_products.map((item: any, index: number) => (
+							{data.map((item: any, index: number) => (
 								<ItemMiniCart
 									key={index}
 									data={item.product_id}
@@ -81,7 +80,7 @@ const DataCart = () => {
 								chi tiết giỏ hàng
 							</button>
 						</Link>
-						<Link to={`/thanh-toan/${id}`} state={{ from: location.pathname }}>
+						<Link to={`/thanh-toan/${user_id}`} state={{ from: location.pathname }}>
 							<button className="mt-5 border-2 text-[13px] font-semibold border-zinc-900 w-full uppercase h-[55px] hover:bg-zinc-900 hover:text-white">
 								thanh toán
 							</button>

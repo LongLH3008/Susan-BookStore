@@ -1,46 +1,50 @@
 import { userState } from "@/common/hooks/useAuth";
-import { useCart } from "@/common/hooks/useCart";
+import { cartData } from "@/common/hooks/useCart";
 import { useLocalStorageCart } from "@/common/hooks/useLocalStorageCart";
 import { Link } from "react-router-dom";
 import ItemCart from "./ItemCart";
 
 export default function CartProducts({ dataCart }: { dataCart: ICart[] }) {
 	const { id: user_id } = userState();
-	const { decrease, increase, remove, select, selectAllLocal, removeSelectAllLocal } = useLocalStorageCart();
-	const { onAction: Remove } = useCart({ action: "REMOVE" });
-	const { onAction: IncreaseAmount } = useCart({ action: "INCREASE" });
-	const { onAction: DecreaseAmount } = useCart({ action: "DECREASE" });
-	const { onAction: Select } = useCart({ action: "SELECT_TO_CHECKOUT" });
+	const { decrease, increase, remove, select } = cartData();
+	const {
+		decrease: dcLocal,
+		increase: icLocal,
+		remove: rmLocal,
+		select: slLocal,
+		selectAllLocal,
+		removeSelectAllLocal,
+	} = useLocalStorageCart();
 
 	const selectedProducts = dataCart?.map(({ _id, selected }) => ({ _id, selected }));
 
 	const removeProduct = (product_id: string) => {
-		user_id ? Remove({ user_id, product_id }) : remove(product_id);
+		user_id ? remove({ user_id, product_id }) : rmLocal(product_id);
 	};
 
 	const Increase = (product_id: string) => {
-		user_id ? IncreaseAmount({ user_id, product_id }) : increase(product_id);
+		user_id ? increase({ user_id, product_id }) : icLocal(product_id);
 	};
 
 	const Decrease = (product_id: string) => {
-		user_id ? DecreaseAmount({ user_id, product_id }) : decrease(product_id);
+		user_id ? decrease({ user_id, product_id }) : dcLocal(product_id);
 	};
 
 	const SelectSingle = (arg: { _id: string; selected: boolean }) => {
 		const data_item_cart = selectedProducts.map((item: TCartSelectItem) =>
 			item._id == arg._id ? { ...arg } : item
 		);
-		user_id ? Select({ user_id, data_item_cart }) : select({ _id: arg._id, selected: arg.selected });
+		user_id ? select({ user_id, data_item_cart }) : slLocal({ _id: arg._id, selected: arg.selected });
 	};
 
 	const removeAllSelect = () => {
 		const data_item_cart = selectedProducts.map((item: TCartSelectItem) => ({ ...item, selected: false }));
-		user_id ? Select({ user_id, data_item_cart }) : removeSelectAllLocal();
+		user_id ? select({ user_id, data_item_cart }) : removeSelectAllLocal();
 	};
 
 	const selectAll = () => {
 		const data_item_cart = selectedProducts.map((item: TCartSelectItem) => ({ ...item, selected: true }));
-		user_id ? Select({ user_id, data_item_cart }) : selectAllLocal();
+		user_id ? select({ user_id, data_item_cart }) : selectAllLocal();
 	};
 
 	return (

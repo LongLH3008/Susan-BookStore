@@ -67,3 +67,14 @@ z .poppins {
 .cart_scroll::-webkit-scrollbar-thumb {
 	@apply bg-zinc-400;
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Ẩn mũi tên tăng/giảm trên Firefox */
+input[type="number"] {
+	-moz-appearance: textfield;
+}
