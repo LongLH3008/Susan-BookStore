@@ -33,6 +33,16 @@ const ClientRoutes = [
         path: "san-pham/:slug",
         element: <ProductProvider children={<Website.BookDetail />} />,
       },
+      {
+        path: "tim-kiem",
+        element: (
+          <BlogProvider>
+            <ProductProvider>
+              <Website.Search />
+            </ProductProvider>
+          </BlogProvider>
+        ),
+      },
       { path: "gio-hang", element: <Website.Cart /> },
       {
         path: "cua-hang",

@@ -23,37 +23,6 @@ const Right = ({
   viewMode,
 }: Props) => {
   const { productQuery, updateFilter } = useProduct();
-  const location = useLocation();
-
-  const getQueryParams = () => {
-    const queryParams = new URLSearchParams(location.search);
-    return {
-      q: queryParams.get("q") || "",
-      c: queryParams.get("c") || "",
-    };
-  };
-
-  const [query, setQuery] = useState(getQueryParams().q);
-  const [cate, setCate] = useState(getQueryParams().c);
-  const [books, setBooks] = useState([]);
-  const getBooks = async () => {
-    try {
-      const data = await getBooksByKeyword({
-        input: query,
-        model: "nomic-ai/nomic-embed-text-v1.5",
-        dimensions: 512,
-      });
-      setBooks(data);
-    } catch (error) {
-      console.error("Error fetching books:", error);
-    }
-  };
-  console.log("books", books);
-
-  useEffect(() => {
-    getBooks();
-  }, []);
-  console.log(books);
 
   useEffect(() => {
     updateFilter("page", currentPage);
@@ -63,31 +32,18 @@ const Right = ({
     <>
       <div className="col-span-9 mb-10">
         <div className="flex flex-wrap -mx-4 ">
-          {!(query && query.length > 0)
-            ? productQuery?.isLoading
-              ? Array.from({ length: 6 }).map((_, index) => (
-                  <div
-                    key={index}
-                    className={`${
-                      viewMode ? viewMode : " md:w-1/3 sm:w-1/2 "
-                    } px-4 mt-5`}
-                  >
-                    <SkeletonProduct />
-                  </div>
-                ))
-              : productQuery?.data?.metadata?.books?.map(
-                  (product: IProduct) => (
-                    <div
-                      key={product._id}
-                      className={`${
-                        viewMode ? viewMode : " md:w-1/3 sm:w-1/2 "
-                      } px-4 mt-5`}
-                    >
-                      <Product dataProduct={product} />{" "}
-                    </div>
-                  )
-                )
-            : books?.metadata?.books?.map((product: IProduct) => (
+          {productQuery?.isLoading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <div
+                  key={index}
+                  className={`${
+                    viewMode ? viewMode : " md:w-1/3 sm:w-1/2 "
+                  } px-4 mt-5`}
+                >
+                  <SkeletonProduct />
+                </div>
+              ))
+            : productQuery?.data?.metadata?.books?.map((product: IProduct) => (
                 <div
                   key={product._id}
                   className={`${
@@ -103,7 +59,6 @@ const Right = ({
           itemsPerPage={itemsToShow}
           currentPage={currentPage}
           onPageChange={onPageChange}
-          totalSearch={books}
         />
       </div>
     </>

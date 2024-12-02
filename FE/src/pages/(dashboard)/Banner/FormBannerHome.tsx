@@ -67,6 +67,7 @@ const CreateBannerHome = () => {
       setValue("title", BannerHome?.metadata.title);
       setValue("subtitle", BannerHome?.metadata.subtitle);
       setValue("description", BannerHome?.metadata.description);
+      setValue("position", BannerHome?.metadata.position);
       if (BannerHome?.metadata?.image) {
         setPreviewCoverImage(BannerHome.metadata.image);
       }
@@ -284,24 +285,19 @@ const CreateBannerHome = () => {
                     <div>
                       <RadioGroup {...field} row>
                         <FormControlLabel
-                          value="top"
+                          value="start"
                           control={<Radio />}
-                          label="Top"
+                          label="Bên trái"
                         />
                         <FormControlLabel
                           value="center"
                           control={<Radio />}
-                          label="Center"
+                          label="Ở giữa"
                         />
                         <FormControlLabel
-                          value="right"
+                          value="end"
                           control={<Radio />}
-                          label="Right"
-                        />
-                        <FormControlLabel
-                          value="left"
-                          control={<Radio />}
-                          label="Left"
+                          label="Bên phải"
                         />
                       </RadioGroup>
                       {errors.position && (

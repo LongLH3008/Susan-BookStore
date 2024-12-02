@@ -3,6 +3,7 @@ export { default as Loader } from "../../components/(website)/Loader";
 export { default as NotFound404 } from "./404NotFound";
 export { default as About } from "./about/About";
 export { default as Blog } from "./blog/Blog";
+export { default as Search } from "./search/Search";
 export { default as BlogDetail } from "./blog_detail/BlogDetail";
 export { default as BookDetail } from "./book_detail/BookDetail";
 export { default as Cart } from "./cart/Cart";
