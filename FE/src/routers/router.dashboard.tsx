@@ -1,5 +1,11 @@
 // src/routes/DashboardRoutes.js
+import { BannerProvider } from "@/common/hooks/useBanner";
+import { BlogProvider } from "@/common/hooks/useBlog";
+import { OrderProvider } from "@/common/hooks/useOrder";
 import DashboardLayout from "@/layouts/DashboardLayout";
+import BannerPage from "@/pages/(dashboard)/Banner/BannerPage";
+import BannerSalePage from "@/pages/(dashboard)/Banner/BannerSalePage";
+import CreateBannerHome from "@/pages/(dashboard)/Banner/FormBannerHome";
 import BlogPage from "@/pages/(dashboard)/Blogs/BlogPage";
 import CreateBlog from "@/pages/(dashboard)/Blogs/CreateBlog";
 import CategoriesPage from "@/pages/(dashboard)/Categories/CategoriesPage";
@@ -13,13 +19,6 @@ import FormAttr from "@/pages/(dashboard)/Products/FormAttr";
 import ProductsPage from "@/pages/(dashboard)/Products/ProductsPage";
 import UsersPage from "@/pages/(dashboard)/Users/UsersPage";
 import DashboardGuard from "./guards/dashboard.guard";
-import { BlogProvider } from "@/common/hooks/useBlog";
-import { OrderProvider } from "@/common/hooks/useOrder";
-import BannerPage from "@/pages/(dashboard)/Banner/BannerPage";
-import { BannerProvider } from "@/common/hooks/useBanner";
-import CreateBannerHome from "@/pages/(dashboard)/Banner/FormBannerHome";
-import BannerSalePage from "@/pages/(dashboard)/Banner/BannerSalePage";
-import CreateBannerSale from "@/pages/(dashboard)/Banner/FormBannerSale";
 // CreateBannerHome
 const DashboardRoutes = [
   {

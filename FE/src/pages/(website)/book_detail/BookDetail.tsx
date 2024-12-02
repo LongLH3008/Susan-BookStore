@@ -25,19 +25,19 @@ const BookDetail = () => {
   if (isError) return <NotFound404 />;
   return (
     <>
-      {isLoading ? (
-        <div className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] grid grid-cols-2 gap-10 my-20">
-          <Skeleton variant="rectangular" width="100%" height="35dvh" />
-          <div className="flex flex-col gap-1 border-t py-4 px-3">
-            <Skeleton variant="text" width="100%" />
-            <Skeleton variant="text" width="100%" height={24} />
-            <Skeleton variant="text" width="100%" />
-            <Skeleton variant="text" width="100%" height={28} />
+      <div className="">
+        <Breadcrumb title={detailProduct?.title} />
+        {isLoading ? (
+          <div className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] grid grid-cols-2 gap-10 my-20">
+            <Skeleton variant="rectangular" width="100%" height="35dvh" />
+            <div className="flex flex-col gap-1 border-t py-4 px-3">
+              <Skeleton variant="text" width="100%" />
+              <Skeleton variant="text" width="100%" height={24} />
+              <Skeleton variant="text" width="100%" />
+              <Skeleton variant="text" width="100%" height={28} />
+            </div>
           </div>
-        </div>
-      ) : (
-        <div className="">
-          <Breadcrumb title={detailProduct?.title} />
+        ) : (
           <div className=" min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%]">
             <div className="grid lg:grid-cols-2 my-14 gap-8">
               <BookImage
@@ -51,8 +51,8 @@ const BookDetail = () => {
             <Bookservice detailProduct={detailProduct} isCard={true} />
             <SimilarProducts category={detailProduct?.categories} />
           </div>
-        </div>
-      )}
+        )}{" "}
+      </div>
     </>
   );
 };

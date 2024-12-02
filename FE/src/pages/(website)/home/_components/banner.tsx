@@ -35,7 +35,9 @@ const Banner = () => {
                   backgroundImage: `url(${data.image})`,
                 }}
               >
-                <div className=" lg:my-32 min-[320px]:my-10 *:text-[#333333] ">
+                <div
+                  className={` lg:my-32 min-[320px]:my-10 *:text-[#333333] flex flex-col items-${data.position}`}
+                >
                   <h4 className="xl:text-3xl uppercase ">{data.title}</h4>
                   <h2 className="xl:text-[75px] lg:text-5xl min-[320px]:text-3xl font-bold uppercase my-3 animate-bounce-x ">
                     {data.subtitle}

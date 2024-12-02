@@ -5,8 +5,8 @@ import useMegaMenu from "@/common/hooks/useMegaMenu";
 import { ICategory } from "@/common/interfaces/category";
 import { IProduct } from "@/common/interfaces/product";
 import { Skeleton } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const DropdownShop = () => {
   const { CategoryQuery } = useCategory();
@@ -58,7 +58,7 @@ const DropdownShop = () => {
                   ?.slice(0, 4)
                   ?.map((category: ICategory) => (
                     <Link
-                      to={"/cua-hang?q=" + category?.category_name}
+                      to={"/tim-kiem?q=" + category?.category_name}
                       className="hover:text-[#00CFB5] truncate"
                     >
                       {category?.category_name}
@@ -80,7 +80,7 @@ const DropdownShop = () => {
               ) : (
                 author.slice(0, 4).map((aut: string) => (
                   <Link
-                    to={"/cua-hang?q=" + aut}
+                    to={"/tim-kiem?q=" + aut}
                     className="hover:text-[#00CFB5] truncate"
                   >
                     {aut}
@@ -103,7 +103,7 @@ const DropdownShop = () => {
               ) : (
                 Publishers.slice(0, 4).map((Publ: string) => (
                   <Link
-                    to={"/cua-hang?q=" + Publ}
+                    to={"/tim-kiem?q=" + Publ}
                     className="hover:text-[#00CFB5] truncate"
                   >
                     {Publ}
