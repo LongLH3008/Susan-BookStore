@@ -98,7 +98,7 @@ const Delivery = () => {
 			<input type="hidden" {...form.register("ward")} />
 
 			<p className="text-[16px] font-semibold">Thông tin vận chuyển</p>
-			<div className="grid sm:grid-cols-3 gap-7 sm:gap-3">
+			<div className="flex flex-col sm:grid sm:grid-cols-3 gap-7 sm:gap-3">
 				<div className="relative flex flex-col gap-1">
 					<div className="relative border h-[6dvh] flex items-center group overflow-hidden hover:overflow-visible rounded-md border-zinc-300 p-2">
 						<span className="text-[10px] text-zinc-500 absolute top-[2px] left-1">

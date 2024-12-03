@@ -95,18 +95,18 @@ const UserAddress = ({ user_id }: { user_id: string }) => {
 			</div>
 			<div className="flex z-10 items-center justify-between px-3 border border-zinc-300 rounded">
 				<label className="w-full cursor-pointer flex items-center p-4 pl-0 ms-2 text-sm font-medium text-gray-900">
-					<MdLocationPin className="text-xl mr-3" />
-					<span>
+					<MdLocationPin className="max-sm:hidden text-xl mr-3" />
+					<span className="text-justify">
 						{orderAddress_Payment_Discount.chooseAddress !== ""
 							? orderAddress_Payment_Discount.chooseAddress
 							: "Chọn địa chỉ"}
 					</span>
 				</label>
 				{orderAddress_Payment_Discount.chooseAddress !== "" && (
-					<div className="flex items-center">
+					<div className="flex flex-col items-end max-sm:gap-5 sm:flex-row sm:items-center">
 						<span
 							onClick={() => reset()}
-							className="text-[#222] z-20 text-[12px] underline w-24 cursor-pointer"
+							className="text-[#222] z-20 text-[12px] max-sm:order-last underline w-24 sm:mr-3 text-right cursor-pointer"
 						>
 							Loại bỏ
 						</span>

@@ -3,7 +3,6 @@ import { CheckoutProvider } from "@/common/context/ContextCheckout";
 import { Link } from "react-router-dom";
 import CheckoutInfomation from "./_components/CheckoutInfomation";
 import CheckoutProducts from "./_components/CheckoutProducts";
-import ResponsiveCheckoutProducts from "./_components/ResponsiveCheckoutProducts";
 
 const Checkout = () => {
 	return (
@@ -20,8 +19,7 @@ const Checkout = () => {
 					Quay lại giỏ hàng <img className="w-[25px]" src={icon.cartCheckout} alt="" />
 				</Link>
 			</nav>
-			<ResponsiveCheckoutProducts />
-			<div className="min-[320px]:px-[5%] xl:pl-[11.5%] 2xl:pl-[17.5%] min-[1000px]:pr-0 flex w-full relative">
+			<div className="min-[320px]:px-[5%] max-lg:pl-0 xl:pl-[11.5%] 2xl:pl-[17.5%] min-[1000px]:pr-0 flex max-lg:flex-col w-full relative">
 				<CheckoutInfomation />
 				<CheckoutProducts />
 			</div>

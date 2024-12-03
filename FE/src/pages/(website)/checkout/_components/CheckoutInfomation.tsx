@@ -89,7 +89,7 @@ const CheckoutInfomation = () => {
 
 	return (
 		<div className="w-[44.5%] max-[1000px]:w-full flex justify-end items-start">
-			<form className="w-full h-full p-[33px] max-[1000px]:pr-0 pl-0 flex flex-col gap-[33px]">
+			<form className="w-full h-full p-[33px] max-[1000px]:pr-0 pl-0 flex flex-col gap-5 lg:gap-[33px]">
 				{id && <UserAddress user_id={id} />}
 				<Contact />
 				<Delivery />
