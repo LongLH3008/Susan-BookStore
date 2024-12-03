@@ -8,6 +8,10 @@ export const createUserAddress = async (arg: any) => {
     return SendRequest('POST', 'create/info-user', arg);
 }
 
+export const updateUserAddress = async (arg: any) => {
+    return SendRequest('PATCH', `info-user/update/${arg.id}`, arg)
+}
+
 export const removeUserAddress = async (id: string) => {
     return SendRequest('DELETE', `Delete/info-user/${id}`);
 }

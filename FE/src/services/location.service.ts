@@ -8,6 +8,6 @@ export const getAllDistrict = async (parent_id?: any) => {
     return await getLocation({ location: 'district', parent_id: Number(parent_id) })
 }
 
-export const getWards = async (parent_id: number) => {
-    return await getLocation({ location: 'ward', parent_id })
+export const getWards = async (parent_id: any) => {
+    return await getLocation({ location: 'ward', parent_id: Number(parent_id) })
 }
