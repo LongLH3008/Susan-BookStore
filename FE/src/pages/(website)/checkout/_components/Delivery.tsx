@@ -5,8 +5,18 @@ import { useQuery } from "@tanstack/react-query";
 import { useContext, useState } from "react";
 
 const Delivery = () => {
-	const { form, data, calcFeeShip, setFeeShip, chooseAddress } = useContext(CheckoutContext);
+	const {
+		form,
+		data,
+		calcFeeShip,
+		orderAddress_Payment_Discount,
+		setOrder_A_P_D,
+		checkingOrder,
+		setcheckingOrder,
+	} = useContext(CheckoutContext);
 	const [locationInfo, setLocationInfo] = useState<any>({ district: [], ward: [] });
+
+	const [isError, setError] = useState(false);
 
 	const { data: city } = useQuery({
 		queryKey: ["city"],
@@ -14,7 +24,7 @@ const Delivery = () => {
 	});
 
 	const getDistrict = async (province_id: number) => {
-		setFeeShip(0);
+		if (isError) setError(false);
 		const { data } = await getAllDistrict(province_id);
 		const province = city.data.find((item: any) => item.ProvinceID == province_id);
 		form.setValue("province", province.ProvinceName);
@@ -24,9 +34,16 @@ const Delivery = () => {
 		form.resetField("wardCode");
 		setLocationInfo({ ward: [], district: data });
 		form.trigger("city");
+		setOrder_A_P_D({ ...orderAddress_Payment_Discount, chooseAddress: "" });
+		setcheckingOrder({
+			...checkingOrder,
+			feeShip: 0,
+			total: checkingOrder.subtotal - checkingOrder.discountAmount - checkingOrder.discountAmountVoucher,
+		});
 	};
 
 	const getWard = async (district_id: number) => {
+		if (isError) setError(false);
 		const { data } = await getWards(district_id);
 		const district = locationInfo.district.find((item: any) => item.DistrictID == district_id);
 		form.setValue("district", district.DistrictName);
@@ -37,6 +54,7 @@ const Delivery = () => {
 	};
 
 	const chooseWard = async (wardCode: string) => {
+		if (isError) setError(false);
 		const ward = locationInfo.ward.find((item: any) => item.WardCode == wardCode.toString());
 		form.setValue("ward", ward.WardName);
 		form.trigger("ward");
@@ -49,7 +67,12 @@ const Delivery = () => {
 				bookId: item.product_id,
 				quantity: item.product_quantity,
 			}));
-			await calcFeeShip({ items, to_district_id: Number(to_district_id), to_ward_code });
+			try {
+				await calcFeeShip({ items, to_district_id: Number(to_district_id), to_ward_code });
+			} catch (error) {
+				form.resetField("districtId");
+				setError(true);
+			}
 		}
 	};
 
@@ -62,11 +85,14 @@ const Delivery = () => {
 			<p className="text-[16px] font-semibold">Thông tin vận chuyển</p>
 			<div className="grid grid-cols-3 gap-3">
 				<div className="relative flex flex-col gap-1">
-					{chooseAddress == "" ? (
+					{orderAddress_Payment_Discount.chooseAddress == "" ? (
 						<select
 							defaultValue=""
 							aria-placeholder="Chọn"
-							onChange={(e) => chooseAddress == "" && getDistrict(e.target.value as any)}
+							onChange={(e) =>
+								orderAddress_Payment_Discount.chooseAddress == "" &&
+								getDistrict(e.target.value as any)
+							}
 							className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
 						>
 							{city &&
@@ -95,12 +121,15 @@ const Delivery = () => {
 					</span>
 				</div>
 				<div className="relative flex flex-col gap-1">
-					{chooseAddress == "" ? (
+					{orderAddress_Payment_Discount.chooseAddress == "" ? (
 						<select
 							defaultValue=""
 							aria-placeholder="Chọn"
 							{...form.register("districtId")}
-							onChange={(e) => chooseAddress == "" && getWard(e.target.value as any)}
+							onChange={(e) =>
+								orderAddress_Payment_Discount.chooseAddress == "" &&
+								getWard(e.target.value as any)
+							}
 							className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
 						>
 							<option value="" defaultChecked>
@@ -115,7 +144,7 @@ const Delivery = () => {
 						</select>
 					) : (
 						<div className="block rounded-md border border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer">
-							{form.getValues("district").split("/")[0].trim()}
+							{form.getValues("district")}
 						</div>
 					)}
 					<label
@@ -129,13 +158,14 @@ const Delivery = () => {
 					</span>
 				</div>
 				<div className="relative flex flex-col gap-1">
-					{chooseAddress == "" ? (
+					{orderAddress_Payment_Discount.chooseAddress == "" ? (
 						<select
 							defaultValue=""
 							aria-placeholder="Chọn"
 							{...form.register("wardCode")}
 							onChange={(e) =>
-								chooseAddress == "" && chooseWard(e.target.value.toString() as any)
+								orderAddress_Payment_Discount.chooseAddress == "" &&
+								chooseWard(e.target.value.toString() as any)
 							}
 							className="block rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer"
 						>
@@ -151,7 +181,7 @@ const Delivery = () => {
 						</select>
 					) : (
 						<div className="block border rounded-md border-zinc-300 px-2.5 pb-2.5 pt-5 w-full text-sm focus:outline-none focus:ring-0 focus:border-zinc-600 peer">
-							{form.getValues("ward").split("/")[0].trim()}
+							{form.getValues("ward")}
 						</div>
 					)}
 					<label
@@ -162,6 +192,9 @@ const Delivery = () => {
 					</label>
 					<span className="text-[12px] text-red-600">{form.formState.errors.ward?.message}</span>
 				</div>
+				<span className="text-[12px] col-span-3 text-red-600">
+					{isError && "Địa chỉ giao hàng chưa được hỗ trợ, vui lòng chon địa chỉ khác"}
+				</span>
 			</div>
 			<CustomFloatingField
 				rounded
@@ -169,7 +202,7 @@ const Delivery = () => {
 				register={form.register}
 				field="address"
 				label="Địa chỉ chi tiết"
-				disabled={chooseAddress !== ""}
+				disabled={orderAddress_Payment_Discount.chooseAddress !== ""}
 				required
 				className="disabled:bg-transparent"
 				error={form.formState.errors.address}

@@ -3,7 +3,7 @@ import { useContext } from "react";
 import CustomFloatingField from "../../../../components/(website)/floatingfield/CustomFloatingField";
 
 const Contact = () => {
-	const { form, chooseAddress } = useContext(CheckoutContext);
+	const { form, orderAddress_Payment_Discount } = useContext(CheckoutContext);
 
 	return (
 		<div className="relative flex flex-col gap-4">
@@ -22,13 +22,24 @@ const Contact = () => {
 			/>
 			<CustomFloatingField
 				floating
+				field="email"
+				rounded
+				label="Email"
+				register={form.register}
+				error={form.formState.errors.email}
+				message={form.formState.errors.email?.message}
+				className="disabled:bg-transparent"
+				required
+			/>
+			<CustomFloatingField
+				floating
 				field="phone"
 				rounded
-				label="Email / Số điện thoại của bạn"
+				label="Số điện thoại của bạn"
 				register={form.register}
 				error={form.formState.errors.phone}
 				message={form.formState.errors.phone?.message}
-				disabled={chooseAddress !== ""}
+				disabled={orderAddress_Payment_Discount.chooseAddress !== ""}
 				className="disabled:bg-transparent"
 				required
 			/>

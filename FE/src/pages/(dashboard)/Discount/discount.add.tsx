@@ -1,5 +1,5 @@
 import { useToast } from "@/common/hooks/useToast";
-import { DiscountApplyTo, DiscountType, IVoucher } from "@/common/interfaces/voucher";
+import { DiscountType, IVoucher } from "@/common/interfaces/voucher";
 import { voucherValidate } from "@/common/schemas/voucher";
 import CustomFloatingField from "@/components/(website)/floatingfield/CustomFloatingField";
 import { voucherService } from "@/services/voucher.service";
@@ -171,9 +171,9 @@ const DiscountAdd = (props: Props) => {
 						<option value="" defaultChecked>
 							Chọn loại
 						</option>
-						<option value={DiscountApplyTo.all}>Tất cả</option>
-						<option value={DiscountApplyTo.category}>Danh mục</option>
-						<option value={DiscountApplyTo.specific}>Sản phẩm</option>
+						<option value={"all"}>Tất cả</option>
+						<option value={"category"}>Danh mục</option>
+						<option value={"specific"}>Sản phẩm</option>
 					</select>
 					<span
 						className={`${
@@ -184,7 +184,7 @@ const DiscountAdd = (props: Props) => {
 					</span>
 				</div>
 				<div className="flex items-center col-span-2">
-					{voucherApplies !== DiscountApplyTo.category ? (
+					{voucherApplies !== "category" ? (
 						<CustomFloatingField
 							rounded
 							required

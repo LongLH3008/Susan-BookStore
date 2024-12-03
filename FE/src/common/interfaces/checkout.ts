@@ -5,8 +5,9 @@ export type product = {
 };
 
 export interface ICheckout {
+  email: string
   userId: string;
-  paymentMethod: "COD";
+  paymentMethod: "COD" | "VNPAY";
   name: string;
   phone: string;
   address: string;
@@ -68,5 +69,11 @@ export interface IBankingPayment {
 export interface FeeShip {
   to_ward_code: string;
   to_district_id: number
-  items: [{ bookId: string, quantity: number }]
+  items: { bookId: string, quantity: number }[]
+}
+
+export interface IOrderChecking {
+  code?: string
+  userId?: string,
+  products: { bookId: string, quantity: number }[]
 }

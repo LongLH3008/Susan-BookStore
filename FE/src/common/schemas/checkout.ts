@@ -5,10 +5,10 @@ export const checkoutValidate = Joi.object({
         "any.required": "Tên bắt buộc",
         "string.empty": "Tên không được để trống",
     }),
-    // email: Joi.string().Joi.email({ tlds: false }).required().messages({
-    //     "any.required": "Email bắt buộc",
-    //     "string.empty": "Email không được để trống",
-    // }),
+    email: Joi.string().email({ tlds: false }).required().messages({
+        "any.required": "Email bắt buộc",
+        "string.empty": "Email không được để trống",
+    }),
     phone: Joi.string().required().pattern(new RegExp(`^(84|0[3|5|7|8|9])[0-9]{8}$`)).messages({
         "any.required": "Số điện thoại bắt buộc",
         "string.empty": "Số điện thoại không được để trống",

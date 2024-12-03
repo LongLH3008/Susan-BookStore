@@ -2,11 +2,11 @@ import {
     BadRequestError,
     ResourceNotFoundError,
 } from "../cores/error.response";
-import {PaymentMethod, PaymentStatus} from "../interfaces/models/IOrder";
+import { PaymentMethod, PaymentStatus } from "../interfaces/models/IOrder";
 import Book from "../models/Book.model";
 import Order from "../models/Order.model";
 import User from "../models/User.model";
-import DiscountService, {DiscountInput} from "./Discount.service";
+import DiscountService, { DiscountInput } from "./Discount.service";
 import {
     detailOrderData,
     GetAllOrderWithPaginateForAdminData,
@@ -29,9 +29,9 @@ import {
     SearchOrderCodeReponse,
 } from "./dtos/SearchOrderCodeRequest";
 import GiaoHangNhanhService from "./GiaoHangNhanh.service";
-import {vnpayService} from "./Vnpay.service";
+import { vnpayService } from "./Vnpay.service";
 import CartService from "./Cart.service";
-import {Code} from "mongodb";
+import { Code } from "mongodb";
 import Discount from "../models/Discount.model";
 
 type PaymentMethodInput = "COD" | "VNPAY";
@@ -50,7 +50,7 @@ interface CustomerInfo {
 
 class OrderService {
     static async checkOutReview(data: CheckoutReviewInputDTO) {
-        const {userId, code, products} = data;
+        const { userId, code, products } = data;
         // const user = await User.findById(userId);
         // if (!user) {
         //     throw new ResourceNotFoundError("User not found");
@@ -68,7 +68,7 @@ class OrderService {
             Book.findById(book.bookId)
         );
         const productsFound = await Promise.all(productPromises);
-        console.log({productsFound});
+        console.log({ productsFound });
         const notFoundProducts = productsFound.filter(product => !product);
 
         if (notFoundProducts?.length > 0) {
@@ -94,7 +94,7 @@ class OrderService {
             code
         }
 
-        console.log({discountAmountInput});
+        console.log({ discountAmountInput });
 
 
         const {
@@ -104,11 +104,11 @@ class OrderService {
             discountAmountVoucher,
             productsAfterDiscount
         } = await DiscountService.getDiscountAmount2(discountAmountInput);
-        return {total, subtotal, code, discountAmount, discountAmountVoucher, productsAfterDiscount};
+        return { total, subtotal, code, discountAmount, discountAmountVoucher, productsAfterDiscount };
     }
 
     static async createOrder(data: CreateOrderInputDTO) {
-        const {userId, shipping, code, payment, products, total, trackingNumber} = data;
+        const { userId, shipping, code, payment, products, total, trackingNumber, email } = data;
 
         if (userId) {
             const foundUser = await User.findById(userId);
@@ -139,17 +139,17 @@ class OrderService {
     }
 
     static async prepareOrderInput({
-                                       userId,
-                                       customerInfo,
-                                       products,
-                                       code
-                                   }: {
+        userId,
+        customerInfo,
+        products,
+        code
+    }: {
         userId: string;
         products: IOrderItem[];
         customerInfo: CustomerInfo;
         code?: string;
     }) {
-        const {total, productsAfterDiscount} = await OrderService.checkOutReview({
+        const { total, productsAfterDiscount } = await OrderService.checkOutReview({
             userId,
             products,
             code
@@ -179,7 +179,7 @@ class OrderService {
             return_phone: "0944444444",
         };
 
-        const {output, input} = await GiaoHangNhanhService.FeeTotal(
+        const { output, input } = await GiaoHangNhanhService.FeeTotal(
             shippingInput
         );
 
@@ -188,7 +188,7 @@ class OrderService {
         shippingInput.width = input.width;
         shippingInput.length = input.length;
 
-        return {shippingInput, output, total, productsAfterDiscount};
+        return { shippingInput, output, total, productsAfterDiscount };
     }
 
     static async checkStock(products: { bookId: string }[]) {
@@ -220,24 +220,24 @@ class OrderService {
     }
 
     static async createOrderByType({
-                                       output,
-                                       paymentMethod,
-                                       shippingInput,
-                                       total,
-                                       userId,
-                                       code,
-                                       customerInfo,
-                                       productsAfterDiscount,
-                                       url,
-                                   }: any) {
+        output,
+        paymentMethod,
+        shippingInput,
+        total,
+        userId,
+        code,
+        customerInfo,
+        productsAfterDiscount,
+        url,
+    }: any) {
         const feeShip =
             output.data.service_fee + output.data.deliver_remote_areas_fee;
 
-        console.log({productsAfterDiscount})
+        console.log({ productsAfterDiscount })
 
         let payment;
 
-        console.log({paymentMethod, url});
+        console.log({ paymentMethod, url });
 
         if (paymentMethod === "COD") {
             payment = {
@@ -263,14 +263,14 @@ class OrderService {
 
         const bulkUpdateOperations = productsAfterDiscount.map((item: any) => ({
             updateOne: {
-                filter: {_id: item.bookId},
-                update: {$inc: {stock: -item.quantity}},
+                filter: { _id: item.bookId },
+                update: { $inc: { stock: -item.quantity } },
             },
         }));
 
         await Book.bulkWrite(bulkUpdateOperations);
 
-        console.log({shippingInput: shippingInput});
+        console.log({ shippingInput: shippingInput });
 
         const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         let randomCode = "";
@@ -299,7 +299,7 @@ class OrderService {
             code
         };
 
-        console.log({data: data.products})
+        console.log({ data: data.products })
 
         const newOrder = await this.createOrder(data);
 
@@ -307,13 +307,13 @@ class OrderService {
     }
 
     static async handleCreateOrder({
-                                       paymentMethod,
-                                       userId,
-                                       customerInfo,
-                                       products,
-                                       url,
-                                       code
-                                   }: {
+        paymentMethod,
+        userId,
+        customerInfo,
+        products,
+        url,
+        code
+    }: {
         paymentMethod: PaymentMethodInput;
         userId: string;
         products: IOrderItem[];
@@ -322,18 +322,18 @@ class OrderService {
         code: string
     }) {
         if (paymentMethod === "VNPAY" && url) {
-            const {isValid, order} = await vnpayService.verifyUrl(url);
+            const { isValid, order } = await vnpayService.verifyUrl(url);
 
             if (!isValid) {
                 throw new BadRequestError("Something went wrongs!");
             }
 
-            const {paymentMethod, userId, customerInfo, code, products} = order;
+            const { paymentMethod, userId, customerInfo, code, products } = order;
 
-            console.log({order});
+            console.log({ order });
 
-            const {shippingInput, output, total, productsAfterDiscount} =
-                await this.prepareOrderInput({userId, customerInfo, code, products});
+            const { shippingInput, output, total, productsAfterDiscount } =
+                await this.prepareOrderInput({ userId, customerInfo, code, products });
 
             const newOrder = await this.createOrderByType({
                 output,
@@ -351,8 +351,8 @@ class OrderService {
             }
             return newOrder;
         } else {
-            const {shippingInput, output, total, productsAfterDiscount} =
-                await this.prepareOrderInput({userId, customerInfo, code, products});
+            const { shippingInput, output, total, productsAfterDiscount } =
+                await this.prepareOrderInput({ userId, customerInfo, code, products });
 
             const newOrder = await this.createOrderByType({
                 output,
@@ -375,12 +375,12 @@ class OrderService {
     static async SearchOrderCode(
         query: SearchOrderCode
     ): Promise<SearchOrderCodeReponse> {
-        const {search} = query;
+        const { search } = query;
         const searchCondition: Record<string, any> = {};
         const fieldsToSelect =
             "_id userId products trackingNumber total state createdAt";
         if (search && search.trim() !== "") {
-            searchCondition.trackingNumber = {$regex: search, $options: "i"};
+            searchCondition.trackingNumber = { $regex: search, $options: "i" };
         }
         let order: SearchOrderCodeData[] = [];
         order = await Order.find(searchCondition).select(fieldsToSelect).lean();
@@ -394,7 +394,7 @@ class OrderService {
     static async GetAllOrderWithPaginationAndUser(
         query: GetAllOrderWithPaginationAndUserRequest
     ): Promise<GetAllOrderWithPaginationAndUserResponse> {
-        const {userId, page = 1, limit = 10} = query;
+        const { userId, page = 1, limit = 10 } = query;
         var checkuserId = await User.findById(userId);
         if (!checkuserId)
             throw new ResourceNotFoundError("nguoi dung khong ton tai");
@@ -402,13 +402,13 @@ class OrderService {
             "_id userId products trackingNumber total state createdAt";
         const skip = (page - 1) * limit;
         let Getall: GetAllOrderWithPaginationAndUserData[] = [];
-        Getall = await Order.find({userId})
+        Getall = await Order.find({ userId })
             .select(listfiletoselect)
-            .sort({createdAt: -1})
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
             .lean();
-        const total = await Order.countDocuments({userId});
+        const total = await Order.countDocuments({ userId });
         return {
             data: Getall as GetAllOrderWithPaginationAndUserData[],
             total,
@@ -422,7 +422,7 @@ class OrderService {
         query: GetAllOrderWithPaginateForAdminRequest
     ): Promise<GetAllOrderWithPaginateForAdminResponse> {
         try {
-            const {page = 1, limit = 10, search} = query;
+            const { page = 1, limit = 10, search } = query;
 
             // Validate và parse limit
             const parsedLimit = parseInt(limit.toString(), 10);
@@ -436,7 +436,7 @@ class OrderService {
             // Xây dựng điều kiện tìm kiếm
             const searchCondition: Record<string, any> = {};
             if (search && search.trim() !== "") {
-                searchCondition.trackingNumber = {$regex: search, $options: "i"};
+                searchCondition.trackingNumber = { $regex: search, $options: "i" };
             }
 
             const fieldsToSelect =
@@ -447,7 +447,7 @@ class OrderService {
                 searchCondition
             )
                 .select(fieldsToSelect)
-                .sort({createdAt: -1})
+                .sort({ createdAt: -1 })
                 .skip(skip)
                 .limit(parsedLimit)
                 .lean();
@@ -456,7 +456,7 @@ class OrderService {
             const userIds = [...new Set(orders.map((order) => order.userId))];
 
             // Lấy thông tin users
-            const users = await User.find({_id: {$in: userIds}})
+            const users = await User.find({ _id: { $in: userIds } })
                 .select("_id user_email username")
                 .select("_id user_email user_name user_avatar user_phone_number")
                 .lean();
@@ -505,7 +505,7 @@ class OrderService {
             const userIds = [order.userId]; // Chỉ có 1 order nên userIds chứa 1 phần tử
 
             // Truy vấn thông tin người dùng từ danh sách userIds
-            const users = await User.find({_id: {$in: userIds}})
+            const users = await User.find({ _id: { $in: userIds } })
                 .select("_id user_email user_name user_avatar user_phone_number")
                 .lean();
 

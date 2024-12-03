@@ -69,7 +69,7 @@ const DropdownInfoUser = (props: Props) => {
 								state={{ from: location.pathname }}
 								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
 							>
-								Sản phẩm yêu thích
+								Sổ địa chỉ giao hàng
 							</Link>
 							<Link
 								to="/gio-hang"
