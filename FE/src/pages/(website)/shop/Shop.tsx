@@ -12,10 +12,8 @@ const Shop = () => {
   const [itemsToShow, setItemsToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterValues, setFilterValues] = useState({
-    price: { gte: 0, lte: 1100000 },
-    // availability: [],
+    price: { gte: 0, lte: 11000000 },
     productType: [],
-    // author: [],
   });
 
   const { productQuery, updateFilter, setFeature } = useProduct();
