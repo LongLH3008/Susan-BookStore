@@ -7,9 +7,11 @@ export const breadCrumbConstant = [
 	{ path: 'gio-hang', name: 'Giỏ hàng' },
 	{ path: 'thanh-toan', name: 'Thanh toán' },
 	{ path: 'tra-cuu-don-hang', name: 'Tra cứu đơn hàng' },
+	{ path: 'don-hang', name: 'Đơn hàng' },
 	{ path: 'dang-nhap', name: 'Đăng nhập' },
 	{ path: 'dang-ky', name: 'Đăng ký' },
 	{ path: 'quen-mat-khau', name: 'Quên mật khẩu' },
+	{ path: 'so-dia-chi', name: 'Sổ địa chỉ' },
 ]
 
 export const handleBreadCrumbItemURL = (url: string) => {
