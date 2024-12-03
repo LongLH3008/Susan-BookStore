@@ -1,11 +1,11 @@
-import { FeeShip, IBankingPayment, ICaclCheckout } from "@/common/interfaces/checkout";
+import { FeeShip, IBankingPayment, IOrderChecking } from "@/common/interfaces/checkout";
 import { SendRequest } from "@/config";
 
 export const getListBank = async () => {
     return await SendRequest('GET', 'payment/bank-list');
 }
 
-export const calcCheckout = async (arg: ICaclCheckout) => {
+export const calcCheckout = async (arg: IOrderChecking) => {
     return await SendRequest('POST', 'orders/checkout-review', arg)
 }
 

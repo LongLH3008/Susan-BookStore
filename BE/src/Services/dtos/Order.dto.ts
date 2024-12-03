@@ -14,12 +14,13 @@ export interface IOrderItem {
 
 
 export interface CreateOrderInputDTO {
+    email: string;
     userId: mongoose.Types.ObjectId | string;
     shipping: IOrderShipping;
     payment: IOrderPayment;
     products: IOrderProduct[];
     total: number;
     trackingNumber: string;
-    code?:string
+    code?: string
 }
 

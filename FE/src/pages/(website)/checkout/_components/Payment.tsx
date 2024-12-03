@@ -7,7 +7,7 @@ type Props = {};
 
 const Payment = (props: Props) => {
 	const [chooseBank, setChooseBank] = useState<any>("");
-	const { method, setMethod } = useContext(CheckoutContext);
+	const { orderAddress_Payment_Discount, setOrder_A_P_D } = useContext(CheckoutContext);
 
 	const { data: listBank } = useQuery({
 		queryKey: ["banks"],
@@ -23,7 +23,7 @@ const Payment = (props: Props) => {
 			<div
 				onClick={() => {
 					setChooseBank("");
-					setMethod("COD");
+					setOrder_A_P_D({ ...orderAddress_Payment_Discount, paymentMethod: "COD" });
 				}}
 				className="flex items-center justify-between px-3 border border-zinc-300 rounded"
 			>
@@ -31,13 +31,15 @@ const Payment = (props: Props) => {
 					<i className="fa-solid fa-money-bill mr-2 text-[16px]"></i>
 					<span>Thanh toán khi nhận hàng</span>
 				</label>
-				{method == "COD" && chooseBank == "" && <i className="fa-solid fa-check"></i>}
+				{orderAddress_Payment_Discount.paymentMethod == "COD" && chooseBank == "" && (
+					<i className="fa-solid fa-check"></i>
+				)}
 			</div>
 			<div
 				onClick={() => {
 					// setChooseBank("Ngân hàng NCB");
 					setChooseBank("open");
-					setMethod("VNPAY");
+					setOrder_A_P_D({ ...orderAddress_Payment_Discount, paymentMethod: "VNPAY" });
 				}}
 				className="flex items-center justify-between px-3 border border-zinc-300 rounded"
 			>
@@ -55,7 +57,7 @@ const Payment = (props: Props) => {
 			{/* {chooseBank !== "" && listBank && listBank.metadata.length > 0 && ( */}
 			<div
 				className={`${
-					method == "VNPAY" && chooseBank !== ""
+					orderAddress_Payment_Discount.paymentMethod == "VNPAY" && chooseBank !== ""
 						? "h-[32dvh] opacity-100 translate-y-0"
 						: "h-0 opacity-0 -translate-y-3"
 				} grid grid-cols-3 duration-500 ease-in-out gap-2 overflow-y-scroll text-zinc-500 overflow-hidden`}

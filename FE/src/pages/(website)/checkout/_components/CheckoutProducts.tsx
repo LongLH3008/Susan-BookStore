@@ -4,18 +4,7 @@ import { useContext } from "react";
 import ItemInCheckout from "./ItemInCheckout";
 
 const CheckoutProducts = () => {
-	const { data: cart, feeShip } = useContext(CheckoutContext);
-
-	const subtotal = cart?.reduce((acc: number, item: any) => acc + item.product_id.price * item.product_quantity, 0);
-	const discountArr = cart?.filter((item: any) => Math.abs(item.product_id.discount) > 0 && item);
-	const discount = discountArr?.reduce((acc: number, item: any) => {
-		const discountPercent = Math.abs(item?.product_id?.discount);
-		const price = Number(item?.product_id?.price);
-		const quantity = Number(item?.product_quantity);
-
-		const calc = acc + (discountPercent / 100) * price * quantity;
-		return Math.round(calc);
-	}, 0);
+	const { data: cart, checkingOrder, orderAddress_Payment_Discount } = useContext(CheckoutContext);
 
 	return (
 		<div
@@ -27,25 +16,32 @@ const CheckoutProducts = () => {
 			<div className="w-full mt-10 flex flex-col gap-2 *:flex *:justify-between *:items-center">
 				<div className="text-zinc-700 text-[14px] font-[500]">
 					<p>Tạm tính</p>
-					<p>{ConvertVNDString(subtotal)} đ</p>
+					<p>{ConvertVNDString(checkingOrder.subtotal)} đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
 					<p>Giảm giá</p>
-					<p>{ConvertVNDString(discount)} đ</p>
+					<p>{ConvertVNDString(checkingOrder.discountAmount)} đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
 					<p>Phí vận chuyển</p>
-					<p>{ConvertVNDString(feeShip)} đ</p>
+					<p>{ConvertVNDString(checkingOrder.feeShip)} đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
-					<p>Mã giảm giá</p>
-					<p>0.17</p>
+					<div className="flex flex-col justify-start gap-1">
+						<span>Mã giảm giá</span>
+						{orderAddress_Payment_Discount.discountCode && (
+							<span className="text-[12px] text-zinc-500">
+								{orderAddress_Payment_Discount.discountCode}
+							</span>
+						)}
+					</div>
+					<p>{ConvertVNDString(checkingOrder.discountAmountVoucher)} đ</p>
 				</div>
 				<div className="text-zinc-700 text-[18px] font-semibold mt-10">
 					<p>Tổng cộng</p>
 					<p>
 						<span className="text-[13px] text-zinc-400 mr-1">VND</span>
-						<span>{ConvertVNDString(subtotal - discount + feeShip)} đ</span>
+						<span>{ConvertVNDString(checkingOrder.total)} đ</span>
 					</p>
 				</div>
 			</div>

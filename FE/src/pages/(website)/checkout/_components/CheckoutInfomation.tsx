@@ -14,14 +14,14 @@ import Voucher from "./Voucher";
 const CheckoutInfomation = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const { toast } = useToast();
-	const { id, user_id, data, form, method } = useContext(CheckoutContext);
+	const { id, user_id, data, form, orderAddress_Payment_Discount, checkingOrder } = useContext(CheckoutContext);
 	const { afterPayment } = useLocalStorageCart();
 
 	const { onSubmit: PayCOD } = usePayment({
 		action: "COD",
 		onSuccess: () => {
 			setLoading(false);
-			if (user_id) afterPayment();
+			if (!user_id) afterPayment();
 		},
 		onError: () => {
 			setLoading(false),
@@ -36,7 +36,7 @@ const CheckoutInfomation = () => {
 		action: "BANKING",
 		onSuccess: () => {
 			setLoading(false);
-			if (user_id) afterPayment();
+			if (!user_id) afterPayment();
 		},
 		onError: () => {
 			setLoading(false), toast({ variant: ToastVariant.ERROR, content: "Thanh toán không thành công" });
@@ -67,14 +67,15 @@ const CheckoutInfomation = () => {
 
 		const payload = {
 			userId: id,
-			paymentMethod: method,
+			paymentMethod: orderAddress_Payment_Discount.paymentMethod,
 			customerInfo,
 			products,
+			amount: checkingOrder.total,
+			code: orderAddress_Payment_Discount.discountCode,
 		};
 
-		if (method == "VNPAY") {
+		if (orderAddress_Payment_Discount.paymentMethod == "VNPAY") {
 			const bankingPayload = {
-				amount: 200000,
 				bankCode: "NCB",
 				orderInfo: {
 					...payload,
