@@ -1,12 +1,14 @@
 import { IProduct } from "@/common/interfaces/product";
 import Breadcrumb from "@/components/(website)/breadcrumb/breadcrumb";
 import ProductSearch from "@/components/(website)/product/productSearch";
-import LoadingBlog from "@/components/(website)/Skeleton/SkeletonBlog";
+import BlogDetailLoading from "@/components/(website)/Skeleton/SketetonBlogDetail";
 import { getBooksByKeyword } from "@/services/search.service";
-import { Backdrop, CircularProgress } from "@mui/material";
+import { Backdrop, CircularProgress, Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const Search = () => {
+  const location = useLocation();
   const getQueryParams = () => {
     const queryParams = new URLSearchParams(location.search);
     return {
@@ -17,20 +19,29 @@ const Search = () => {
   const [query, setQuery] = useState(getQueryParams().q);
   const [cate, setCate] = useState(getQueryParams().c);
   const [books, setBooks] = useState<IProduct[]>([]);
-
+  const [dataSearch, setDataSearch] = useState();
+  const [limit, setLimit] = useState<number>(5);
+  const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
 
   const getBooks = async () => {
     setIsLoading(true);
     try {
-      const data = await getBooksByKeyword({
-        input: query,
-        model: "nomic-ai/nomic-embed-text-v1.5",
-        dimensions: 512,
-      });
+      const data = await getBooksByKeyword(
+        {
+          input: query,
+          model: "nomic-ai/nomic-embed-text-v1.5",
+          dimensions: 512,
+        },
+        { limit, page }
+      );
+      console.log("data", data);
+
       setBooks(data.metadata.books || []);
+      setDataSearch(data.metadata);
     } catch (error) {
       console.error("Error fetching books:", error);
+      setBooks([]);
     } finally {
       setIsLoading(false);
     }
@@ -43,11 +54,13 @@ const Search = () => {
 
   useEffect(() => {
     getBooks();
-  }, [query, cate]);
-  // console.log("books", books);
-  useEffect(() => {
-    setIsLoading(isLoading);
-  }, [isLoading]);
+  }, [query, cate, limit, page]);
+  console.log("dataSearch", dataSearch);
+
+  const handlePageChange = (event: any, value: number) => {
+    setPage(value);
+    console.log("Trang hiện tại:", value);
+  };
   return (
     <>
       <Breadcrumb
@@ -59,7 +72,9 @@ const Search = () => {
           <span className="text-[#00bfc5]">
             "{`${query && cate ? `${query} - ${cate}` : query || cate}`}"
           </span>{" "}
-          của bạn cho kết quả như sau:
+          của bạn cho{" "}
+          <span className="text-[#00bfc5]">{dataSearch?.total}</span> kết quả
+          như sau:
         </h2>
         {/* <form className="max-w-3xl mx-auto my-10">
           <label
@@ -87,13 +102,27 @@ const Search = () => {
             </button>
           </div>
         </form> */}
-        {!((query && query.length) || isLoading)
-          ? Array.from({ length: 6 }).map((_, index) => (
-              <div key={index} className={`px-4 mt-5`}>
-                <LoadingBlog index={index} />
-              </div>
-            ))
-          : books?.map((product: IProduct) => <ProductSearch data={product} />)}
+        {isLoading ? (
+          <div className={`px-4 mt-5`}>
+            <BlogDetailLoading />
+          </div>
+        ) : books.length > 0 ? (
+          books?.map((product: IProduct) => (
+            <ProductSearch data={product} key={product._id} />
+          ))
+        ) : (
+          <p className="text-center text-red-600 mb-10 :(((">
+            Không có kết quả nào thỏa mãn
+          </p>
+        )}
+      </div>
+      <div className="flex items-center justify-center my-6">
+        <Pagination
+          count={Math.ceil((dataSearch?.total || 0) / limit)}
+          page={page}
+          onChange={handlePageChange}
+          shape="rounded"
+        />
       </div>
       <Backdrop
         sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}

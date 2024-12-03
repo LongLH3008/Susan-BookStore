@@ -13,7 +13,6 @@ type featureProbs = {
   author: string[];
 };
 type ProdContextType = {
-  productDataFilter: dataProductProb | undefined;
   setFeature: React.Dispatch<React.SetStateAction<featureProbs | undefined>>;
   filters: FiltersType;
   updateFilter: (key: string, value: any) => void;
@@ -36,7 +35,6 @@ export const ProductContext = createContext<ProdContextType>(
 );
 
 export const ProductProvider = ({ children }: ProdContextProps) => {
-  const [productDataFilter, setProductDataFilter] = useState<dataProductProb>();
   const [features, setFeature] = useState<featureProbs>();
 
   const [filters, setFilters] = useState<FiltersType>({
@@ -60,10 +58,6 @@ export const ProductProvider = ({ children }: ProdContextProps) => {
     staleTime: 5000,
   });
 
-  useEffect(() => {
-    setProductDataFilter(productQuery?.data?.metadata);
-  }, [productQuery?.data]);
-
   // console.log("productDataFilter", productDataFilter);
   useEffect(() => {
     if (features?.price) {
@@ -75,28 +69,6 @@ export const ProductProvider = ({ children }: ProdContextProps) => {
     } else {
       updateFilter("category_ids", undefined);
     }
-
-    // if (features?.author && features.author.length > 0) {
-    //   const filtered =
-    //     features.author.length > 0
-    //       ? productQuery?.data?.metadata?.books?.filter((product: IProduct) =>
-    //           features.author.includes(product.author)
-    //         )
-    //       : productQuery?.data?.metadata?.books;
-    //   setProductDataFilter(filtered);
-    // }
-    // if (features?.author && features.author.length > 0) {
-    //   // Kiểm tra nếu có dữ liệu products và tiến hành lọc
-    //   const filteredProducts = productDataFilter?.books?.filter(
-    //     (product: IProduct) => features.author.includes(product.author)
-    //   );
-    //   console.log(filteredProducts);
-
-    //   setProductDataFilter(filteredProducts);
-    // } else {
-    //   // Nếu không có tác giả, hiển thị toàn bộ dữ liệu sản phẩm
-    //   setProductDataFilter(productQuery?.data?.metadata?.books);
-    // }
   }, [features, productQuery?.data?.metadata]);
 
   return (
@@ -106,7 +78,6 @@ export const ProductProvider = ({ children }: ProdContextProps) => {
         filters,
         updateFilter,
         productQuery,
-        productDataFilter,
       }}
     >
       {children}
