@@ -8,9 +8,9 @@ const CheckoutProducts = () => {
 
 	return (
 		<div
-			className={`
-			sticky top-0 left-[54.2%] h-screen
-			max-[1000px]:hidden w-[55.5%] max-h-full bg-zinc-50 border-l flex flex-col justify-start items-start p-[30px] md:pr-[5.3%] xl:pr-[13%] 2xl:pr-[21%]`}
+			className={`max-lg:order-first max-lg:border-b-[1px] max-lg:mb-5 max-lg:pb-10 border-b-zinc-600
+			lg:sticky lg:top-0 lg:left-[54.2%] lg:h-screen
+			w-full lg:w-[55.5%] max-h-full lg:bg-zinc-50 lg:border-l flex flex-col justify-start items-start max-lg:px-0 p-[30px] lg:pr-[5.3%] xl:pr-[13%] 2xl:pr-[21%]`}
 		>
 			{cart && cart.map((item: ICart, index: number) => <ItemInCheckout key={index} data={item} />)}
 			<div className="w-full mt-10 flex flex-col gap-2 *:flex *:justify-between *:items-center">
@@ -37,7 +37,7 @@ const CheckoutProducts = () => {
 					</div>
 					<p>{ConvertVNDString(checkingOrder.discountAmountVoucher)} đ</p>
 				</div>
-				<div className="text-zinc-700 text-[18px] font-semibold mt-10">
+				<div className="max-lg:sticky max-lg:top-0 max-lg:left-0 text-zinc-700 text-[18px] font-semibold mt-10">
 					<p>Tổng cộng</p>
 					<p>
 						<span className="text-[13px] text-zinc-400 mr-1">VND</span>

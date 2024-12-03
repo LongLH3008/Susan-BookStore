@@ -6,6 +6,7 @@ import { Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const BlogItem = () => {
+
   const { DataBlogs, setFilters } = useBlog();
   const [limit, setLimit] = useState<number>(6);
   const [page, setPage] = useState<number>(1);
@@ -42,6 +43,7 @@ const BlogItem = () => {
       </div>
     </>
   );
+
 };
 
 export default BlogItem;

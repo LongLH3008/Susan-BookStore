@@ -103,12 +103,6 @@ const Voucher = () => {
 		});
 	};
 
-	const handleHeight = () => {
-		if (data.length == 0) return 16;
-		if (data.length > 3) return 30;
-		return data.length * 16;
-	};
-
 	return (
 		<div className="relative flex flex-col gap-4 group">
 			<p className="text-[16px] font-semibold">Mã giảm giá</p>
@@ -130,9 +124,7 @@ const Voucher = () => {
 				)}
 			</div>
 			<div
-				className={`group-hover:h-[${
-					handleHeight() + "dvh"
-				}] group-hover:opacity-100 group-hover:translate-y-0 h-0 p-0 opacity-0 -translate-y-1
+				className={`group-hover:h-fit group-hover:opacity-100 group-hover:translate-y-0 h-0 p-0 opacity-0 -translate-y-1
 				flex flex-col group-hover:py-2 px-2 min-h-0 max-h-[30dvh] duration-500 ease-in-out border rounded-md overflow-hidden border-[#222] gap-1`}
 			>
 				<input

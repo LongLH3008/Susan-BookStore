@@ -33,7 +33,7 @@ export default function ItemCart({
 
 	return (
 		<div
-			className={`relative grid md:grid-cols-12 items-center border-l-2 pl-5 hover:border-zinc-900 duration-100 ease-in cursor-pointer ${
+			className={`relative grid md:grid-cols-12 items-center md:border-l-2 md:pl-5 hover:border-zinc-900 duration-100 ease-in cursor-pointer ${
 				isSelected == true && "border-zinc-900"
 			}`}
 		>
@@ -46,7 +46,7 @@ export default function ItemCart({
 			<span className="md:col-span-2 flex justify-center items-center overflow-hidden w-[80px] h-[80px] border border-zinc-300">
 				<img src={coverImage} alt={coverImage} />
 			</span>
-			<span className="md:col-span-5 text-zinc-800 font-[400] text-[14px]">
+			<span className="md:col-span-5 max-lg:flex max-lg:flex-col max-lg:gap-1 max-lg:py-2 text-zinc-800 font-[400] text-[14px]">
 				<Link to={`/san-pham/${slug}`} className="text-wrap">
 					{title}
 				</Link>
