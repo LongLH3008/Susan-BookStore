@@ -1,6 +1,7 @@
 // src/routes/DashboardRoutes.js
 import { BannerProvider } from "@/common/hooks/useBanner";
 import { BlogProvider } from "@/common/hooks/useBlog";
+import { CategoryProvider } from "@/common/hooks/useCategories";
 import { OrderProvider } from "@/common/hooks/useOrder";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import BannerPage from "@/pages/(dashboard)/Banner/BannerPage";
@@ -19,6 +20,7 @@ import FormAttr from "@/pages/(dashboard)/Products/FormAttr";
 import ProductsPage from "@/pages/(dashboard)/Products/ProductsPage";
 import UsersPage from "@/pages/(dashboard)/Users/UsersPage";
 import DashboardGuard from "./guards/dashboard.guard";
+import { ProductProvider } from "@/common/hooks/useProduct";
 // CreateBannerHome
 const DashboardRoutes = [
   {
@@ -48,7 +50,16 @@ const DashboardRoutes = [
         element: <BannerProvider children={<BannerSalePage />} />,
       },
       { path: "danh-muc", element: <CategoriesPage /> },
-      { path: "san-pham", element: <ProductsPage /> },
+      {
+        path: "san-pham",
+        element: (
+          <ProductProvider>
+            <CategoryProvider>
+              <ProductsPage />
+            </CategoryProvider>
+          </ProductProvider>
+        ),
+      },
       { path: "san-pham/chinh-sua/:id", element: <FormAttr /> },
       { path: "san-pham/them-moi", element: <FormAttr /> },
       { path: "binh-luan", element: <CommentsPage /> },
