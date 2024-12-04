@@ -50,7 +50,7 @@ const DropdownInfoUser = (props: Props) => {
 				<div
 					onMouseEnter={() => setOpen(true)}
 					onMouseLeave={() => setOpen(false)}
-					className={`w-[280px] -right-1/4 translate-x-1/4  absolute top-[110%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
+					className={`w-[280px] right-16 translate-x-1/4 absolute top-[70%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
 				>
 					<div className="font-semibold uppercase text-[12px] pb-3 border-b border-zinc-400 text-zinc-800">
 						Tài khoản

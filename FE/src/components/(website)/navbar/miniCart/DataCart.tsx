@@ -45,7 +45,7 @@ const DataCart = ({ user_id }: { user_id: string }) => {
 				</p>
 			</span>
 			<div
-				className={`w-[370px] -right-1/4 translate-x-1/4 absolute group-hover:top-[110%] -z-50 group-hover:z-10 opacity-0 group-hover:opacity-100 top-[50%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
+				className={`w-[370px] right-10 translate-x-1/4 absolute group-hover:top-[70%] -z-50 group-hover:z-10 opacity-0 group-hover:opacity-100 top-[50%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
 			>
 				{data.length && data.length > 0 ? (
 					<>

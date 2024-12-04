@@ -36,6 +36,11 @@ const DiscountList = (props: Props) => {
 		});
 	};
 
+	const handleDate = (input: string) => {
+		const data = new Date(input);
+		return data.toLocaleDateString("vi-VN");
+	};
+
 	return (
 		<div className="text-zinc-700 h-full flex flex-col justify-between">
 			<div className="rounded-lg shadow-sm bg-white p-5 flex justify-between items-center">
@@ -75,14 +80,18 @@ const DiscountList = (props: Props) => {
 										className="border-b *:p-2 *:py-5 *:text-left hover:bg-zinc-50"
 									>
 										<td>{index + 1}</td>
-										<td>Malcolm</td>
-										<td>abc</td>
-										<td>all</td>
-										<td>22</td>
-										<td>12</td>
-										<td>30/09/2024</td>
-										<td>30/09/2024</td>
-										<td>hoạt động</td>
+										<td>{item.discount_code}</td>
+										<td>{item.discount_type}</td>
+										<td>{item.discount_applies_to}</td>
+										<td>{item.discount_stock}</td>
+										<td>{item.discount_users_used.length}</td>
+										<td>{handleDate(item.discount_start_date)}</td>
+										<td>{handleDate(item.discount_end_date)}</td>
+										<td>
+											{item.discount_is_active
+												? "Kích hoạt"
+												: "Chưa kích hoạt"}
+										</td>
 										<td className="flex items-center gap-2">
 											<span className="size-10 border text-lg text-zinc-400 hover:border-[#00bfc5] hover:text-[#00bfc5] cursor-pointer font-light grid place-content-center">
 												<FiEdit />
