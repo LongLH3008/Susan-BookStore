@@ -1,7 +1,10 @@
 import { CategoryProvider } from "@/common/hooks/useCategories";
+import useProduct from "@/common/hooks/useProduct";
 import { useToast } from "@/common/hooks/useToast";
 import BookImage from "@/pages/(website)/book_detail/_components/BookImage";
+import Bookservice from "@/pages/(website)/book_detail/_components/Bookservice";
 import BookText from "@/pages/(website)/book_detail/_components/BookText";
+import Left from "@/pages/(website)/shop/_components/Fillter";
 import { deleteProduct, fetchProducts } from "@/services/product.service";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
@@ -12,55 +15,58 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  Popover,
   Tooltip,
   Typography,
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
-import { MdDeleteOutline } from "react-icons/md";
+import {
+  MdDeleteOutline,
+  MdFilterListAlt,
+  MdOutlineSearch,
+} from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
-import SearchForm from "../components/searchForm";
 import MyTable2 from "../components/table";
-import { DataGrid } from "@mui/x-data-grid";
-import Bookservice from "@/pages/(website)/book_detail/_components/Bookservice";
 
 const ProductsPage: React.FC = () => {
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
   const { toast } = useToast();
   const [search, setSearch] = useState<string>("");
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [open, setOpen] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const openPopover = Boolean(anchorEl);
+  const id = openPopover ? "simple-popover" : undefined;
 
-  const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["books", limit, page, search],
-    queryFn: () => fetchProducts({ limit, page, search }),
-  });
+  const { productQuery, updateFilter, setFeature } = useProduct();
+  const handleSearch = (e: any) => {
+    setSearch(e.target.value);
+    console.log("search", e.target.value);
 
-  const handleSearch = (searchTerm: string) => {
-    setSearch(searchTerm);
-    refetch();
+    productQuery?.refetch();
   };
-  console.log("selectedProduct", selectedProduct);
 
+  console.log("productQuery?.data?.metadata?.books", productQuery);
+  useEffect(() => {
+    updateFilter("search", search);
+  }, [search]);
   const { mutateAsync } = useMutation({
     mutationFn: deleteProduct,
-    onSuccess: () => {
+    onSuccess: (data) => {
       setConfirmOpen(false);
       toast({
         variant: data.status,
         content: `Xóa sản phẩm thành công`,
       });
 
-      refetch();
+      productQuery.refetch();
     },
     onError: (error: AxiosError) => {
-      let message = "Lỗi khi xóa sản phẩm: ";
+      const message = "Lỗi khi xóa sản phẩm: ";
       toast({
         variant: error.status,
         content: message + error.response?.data || error.message,
@@ -94,6 +100,18 @@ const ProductsPage: React.FC = () => {
     setSelectedProduct(null);
   };
 
+  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setAnchorEl(null);
+  };
+
+  const handleReset = () => {
+    setSearch("");
+    setFeature(undefined);
+  };
   const columns = React.useMemo(
     () => [
       {
@@ -119,14 +137,13 @@ const ProductsPage: React.FC = () => {
           <img
             src={params.row.coverImage}
             alt={params.row.coverImage}
-            style={{ width: "50px", height: "50px" }}
+            className=" h-20"
           />
         ),
       },
       {
         headerName: "Thao tác",
         field: "actions",
-        width: "110px",
         flex: 5,
         renderCell: (params: any) => (
           <>
@@ -170,12 +187,24 @@ const ProductsPage: React.FC = () => {
           <i className="fa-solid fa-boxes-stacked"></i>
           <h2 className={`text-xl font-[500]`}>Sản phẩm</h2>
         </div>
-        <Link
-          to={"/quan-tri/san-pham/them-moi"}
-          className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
-        >
-          <IoMdAdd />
-        </Link>
+        <div className="flex items-center gap-3">
+          <Tooltip title="Bộ lọc">
+            <button
+              onClick={handleClickPopover}
+              className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
+            >
+              <MdFilterListAlt />
+            </button>
+          </Tooltip>
+          <Tooltip title="Thêm sản phẩm">
+            <Link
+              to={"/quan-tri/san-pham/them-moi"}
+              className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
+            >
+              <IoMdAdd />
+            </Link>
+          </Tooltip>
+        </div>
       </div>
 
       {/* <SearchForm
@@ -185,19 +214,13 @@ const ProductsPage: React.FC = () => {
       /> */}
 
       <MyTable2
-        rows={data?.metadata?.books || []}
+        rows={productQuery?.data?.metadata?.books || []}
         columns={columns}
-        limit={limit}
-        count={data?.metadata?.total || 0}
-        page={page}
-        loading={isLoading}
-        error={isError ? error?.message : ""}
-        onBackPage={() => setPage((prev) => Math.max(prev - 1, 1))}
-        onNextPage={() => setPage((prev) => prev + 1)}
-        onChangeLimit={(newLimit) => setLimit(newLimit)}
+        loading={productQuery?.isLoading}
+        error={productQuery?.isError ? productQuery?.error?.message : ""}
       />
 
-      {isError && (
+      {productQuery?.isError && (
         <div
           style={{
             display: "flex",
@@ -205,7 +228,9 @@ const ProductsPage: React.FC = () => {
             padding: "20px",
           }}
         >
-          <Typography color="error">Error: {error?.message}</Typography>
+          <Typography color="error">
+            Error: {productQuery?.error?.message}
+          </Typography>
         </div>
       )}
       {/* Modal xác nhận xóa sản phẩm */}
@@ -257,6 +282,58 @@ const ProductsPage: React.FC = () => {
           )}
         </DialogContent>
       </Dialog>
+      {/* Popover filter */}
+      <Popover
+        id={id}
+        open={openPopover}
+        anchorEl={anchorEl}
+        onClose={handleClosePopover}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        sx={{
+          "& .MuiPaper-root": {
+            width: "400px",
+            maxHeight: "70vh",
+            overflowY: "auto",
+          },
+        }}
+      >
+        <Typography sx={{ p: 2 }}>
+          <div className=" flex justify-between items-center border-b-2 border-gray-300">
+            <h2 className="my-2 font-bold text-lg">Bộ lọc</h2>
+            <p
+              onClick={handleReset}
+              className="cursor-pointer underline hover:text-[#00BFC5]"
+            >
+              Làm mới
+            </p>
+          </div>
+          <form className="max-w-md mx-auto my-3">
+            <label
+              htmlFor="default-search"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+            >
+              Search
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <MdOutlineSearch className="text-2xl" />
+              </div>
+              <input
+                type="search"
+                id="default-search"
+                className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Tìm kiếm tên sản phẩm ..."
+                onChange={handleSearch}
+                required
+              />
+            </div>
+          </form>
+          <Left />
+        </Typography>
+      </Popover>
     </>
   );
 };

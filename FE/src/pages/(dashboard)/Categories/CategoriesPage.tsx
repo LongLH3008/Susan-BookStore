@@ -62,7 +62,7 @@ const CategoriesPage: React.FC = () => {
       refetch();
     },
     onError: (err: AxiosError) => {
-      let message = "Lỗi khi xóa danh mục";
+      const message = "Lỗi khi xóa danh mục";
       toast({
         variant: err.status,
         content: message,
@@ -174,14 +174,12 @@ const CategoriesPage: React.FC = () => {
           <i className="w-5 fa-solid fa-layer-group"></i>
           <h2 className={`text-xl font-[500]`}>Danh Mục</h2>
         </div>
-        <Button
+        <button
           onClick={onAdd}
-          variant="contained"
-          color="primary"
           className="size-10  bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
         >
           <IoMdAdd />
-        </Button>
+        </button>
       </div>
       <div className="flex items-center justify-end">
         <SearchForm onSearch={handleSearch} />
@@ -189,14 +187,8 @@ const CategoriesPage: React.FC = () => {
       <MyTable2
         rows={data?.metadata || []}
         columns={columns}
-        limit={limit}
-        count={data?.metadata?.length || 0}
-        page={page}
         loading={isLoading}
         error={isError ? error?.message : ""}
-        onBackPage={() => setPage((prev) => Math.max(prev - 1, 1))}
-        onNextPage={() => setPage((prev) => prev + 1)}
-        onChangeLimit={(newLimit) => setLimit(newLimit)}
       />
 
       {isError && (

@@ -60,11 +60,13 @@ const Nav = ({
               value={itemsToShow}
               onChange={handleItemsToShowChange}
             >
-              {Array.from({ length: 4 }, (_, i) => (i+1)*10).map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
+              {Array.from({ length: 4 }, (_, i) => (i + 1) * 10).map(
+                (value) => (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
+                )
+              )}
             </select>
           </div>
           <div className="short-list ml-2 ">
@@ -84,8 +86,6 @@ const Nav = ({
               <option value="title-descending">Thứ tự Z-A</option>
               <option value="price-ascending">Giá thấp đến cao</option>
               <option value="price-descending">Giá cao đến thấp</option>
-              {/* <option value="created-descending">Ngày mới đến cũ</option>
-              <option value="created-ascending">Ngày Cũ đến mới</option> */}
             </select>
           </div>
         </div>

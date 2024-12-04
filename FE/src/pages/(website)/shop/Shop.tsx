@@ -11,12 +11,8 @@ const Shop = () => {
   const [viewMode, setViewMode] = useState("md:w-1/3 sm:w-1/2");
   const [itemsToShow, setItemsToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filterValues, setFilterValues] = useState({
-    price: { gte: 0, lte: 11000000 },
-    productType: [],
-  });
 
-  const { productQuery, updateFilter, setFeature } = useProduct();
+  const { productQuery, updateFilter } = useProduct();
   const totalItems = productQuery?.data?.metadata?.total;
 
   useEffect(() => {
@@ -24,13 +20,6 @@ const Shop = () => {
     console.log("itemsToShow", itemsToShow);
   }, [itemsToShow]);
 
-  useEffect(() => {
-    setFeature(filterValues);
-  }, [filterValues]);
-
-  const handleFilterProduct = (data: any) => {
-    setFilterValues(data);
-  };
   const handleViewChange = (mode: any) => {
     setViewMode(mode);
   };
@@ -71,10 +60,7 @@ const Shop = () => {
         <div className="grid grid-cols-12 gap-8">
           <CategoryProvider>
             <MegeMenuProvider>
-              <Left
-                filterValues={filterValues}
-                handleFilterProduct={handleFilterProduct}
-              />
+              <Left />
             </MegeMenuProvider>
           </CategoryProvider>
 

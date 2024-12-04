@@ -23,13 +23,11 @@ import { Link } from "react-router-dom";
 import { getInitials } from "@/components/getInitials";
 
 const UsersPage: React.FC = () => {
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["users", limit, page],
+    queryKey: ["users", 5, 1],
     queryFn: () => getUsers(),
   });
 
@@ -165,14 +163,7 @@ const UsersPage: React.FC = () => {
       <MyTable2
         rows={data?.metadata?.allUsers || []}
         columns={columns}
-        limit={limit}
-        count={data?.total || 0}
-        page={page}
         loading={isLoading}
-        error={isError ? error?.message : ""}
-        onBackPage={() => setPage((prev) => Math.max(prev - 1, 1))}
-        onNextPage={() => setPage((prev) => prev + 1)}
-        onChangeLimit={(newLimit) => setLimit(newLimit)}
       />
       {isError && (
         <div
