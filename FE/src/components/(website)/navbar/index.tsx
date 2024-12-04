@@ -82,7 +82,7 @@ const Navbar = (props: Props) => {
 							liên hệ
 						</Link>
 					</div>
-					<div className="col-span-1 h-full flex justify-end items-center lg:gap-[25%] *:cursor-pointer relative">
+					<div className="col-span-1 *:h-full *:flex *:items-center h-full flex justify-end items-center lg:gap-[25%] *:cursor-pointer relative">
 						<ProductProvider>
 							<DropdownSearch />
 						</ProductProvider>

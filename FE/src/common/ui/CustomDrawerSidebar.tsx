@@ -11,8 +11,8 @@ export const CustomDrawerSidebar: FlowbiteDrawerTheme = {
 				off: "left-0 right-0 top-0 w-full -translate-y-full",
 			},
 			right: {
-				on: "right-0 top-0 h-screen w-[95%] sm:w-[52%] transform-none duration-[0.4s] ease-in",
-				off: "right-0 top-0 h-screen w-[95%] sm:w-[52%] translate-x-full duration-[0.4s] ease-in",
+				on: "right-0 top-0 h-screen w-fit transform-none duration-[0.4s] ease-in",
+				off: "right-0 top-0 h-screen w-fit translate-x-full duration-[0.4s] ease-in",
 			},
 			bottom: {
 				on: "bottom-0 left-0 right-0 w-full transform-none",
