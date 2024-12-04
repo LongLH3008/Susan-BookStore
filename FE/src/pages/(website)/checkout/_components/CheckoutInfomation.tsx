@@ -70,13 +70,13 @@ const CheckoutInfomation = () => {
 			paymentMethod: orderAddress_Payment_Discount.paymentMethod,
 			customerInfo,
 			products,
-			amount: checkingOrder.total,
 			code: orderAddress_Payment_Discount.discountCode,
 		};
 
 		if (orderAddress_Payment_Discount.paymentMethod == "VNPAY") {
 			const bankingPayload = {
 				bankCode: "NCB",
+				amount: checkingOrder.total,
 				orderInfo: {
 					...payload,
 				},

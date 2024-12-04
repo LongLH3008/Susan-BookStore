@@ -44,6 +44,7 @@ export const usePayment = ({ action, onSuccess, onError }: usePayment) => {
                 nav(`/thanh-toan-thanh-cong/${response.metadata.trackingNumber}`);
             }
             if (action == 'BANKING') {
+                console.log(response.metadata);
                 window.location.href = `${response.metadata}`;
             }
         },
