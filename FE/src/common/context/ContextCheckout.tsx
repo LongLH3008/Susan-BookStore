@@ -28,6 +28,7 @@ export type orderAddress_Payment_Discount = {
 
 export const CheckoutContext = createContext<any>({});
 
+// vccc
 export function CheckoutProvider({ children }: { children: ReactNode }) {
 	const { id } = useParams();
 	const [data, setData] = useState<ICart[]>([]);
