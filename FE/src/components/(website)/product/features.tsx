@@ -4,7 +4,7 @@ import { useLocalStorageCart } from "@/common/hooks/useLocalStorageCart";
 import { IProduct } from "@/common/interfaces/product";
 import { useState } from "react";
 import useProductContext from "../../../common/context/ContextProduct";
-import ModalDetail from "./modal_detail";
+import ModalDetail from "./detail/modal_detail";
 
 const ProductFeatures = ({ product }: { product: IProduct }) => {
 	const { featuresProduct, AddToCart } = useProductContext();
@@ -83,13 +83,7 @@ const ProductFeatures = ({ product }: { product: IProduct }) => {
 						/>
 					</svg>
 				</div>
-				{/* <div onClick={pressLike}>
-					<i className={`${like && "text-[#00BFC5]"} hover:text-[#00BFC5] fa-solid fa-heart`}></i>
-				</div> */}
-				{/* Compare */}
-				{/* <ModalCompare /> */}
-				{/* Mini Detail */}
-				<ModalDetail />
+				<ModalDetail detailProduct={product} />
 			</div>
 		</div>
 	);
