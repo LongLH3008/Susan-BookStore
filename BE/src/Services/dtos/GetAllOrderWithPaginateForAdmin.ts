@@ -13,6 +13,7 @@ export interface GetAllOrderWithPaginateForAdminRequest {
 export interface GetAllOrderWithPaginateForAdminResponse {
   data: GetAllOrderWithPaginateForAdminData[];
   total: number;
+  totalAmount: number;
   page: number;
   limit: number;
 }

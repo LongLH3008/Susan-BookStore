@@ -27,6 +27,7 @@ const banner_controler_1 = __importDefault(require("../controllers/Api/banner.co
 const bannerSale_controller_1 = __importDefault(require("../controllers/Api/bannerSale.controller"));
 const InfoUser_Controller_1 = __importDefault(require("../controllers/Api/InfoUser.Controller"));
 const Contact_Controller_1 = __importDefault(require("../controllers/Api/Contact.Controller"));
+const Statistinal_controller_1 = __importDefault(require("../controllers/Api/Statistinal.controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -167,4 +168,7 @@ router.patch("/info-user/update/:id", (0, utils_1.asyncHandler)(InfoUser_Control
 router.post("/contact/create", (0, utils_1.asyncHandler)(Contact_Controller_1.default.create));
 router.get("/contact/list", (0, utils_1.asyncHandler)(Contact_Controller_1.default.List));
 router.get("/contact/:id", (0, utils_1.asyncHandler)(Contact_Controller_1.default.Detail));
+// Statistics
+router.get("/topfivebook", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.GetAllOrderWithStatistical));
+router.get("/topfiveuser", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.GetAllOrderWithTop5User));
 exports.default = router;

@@ -33,11 +33,13 @@ import { vnpayService } from "./Vnpay.service";
 import CartService from "./Cart.service";
 import { Code } from "mongodb";
 import Discount from "../models/Discount.model";
+import SendEmalCheckOutOrder from "../helper/EmailOrder";
 
 type PaymentMethodInput = "COD" | "VNPAY";
 
 interface CustomerInfo {
     name: string;
+    email: string;
     phone: string;
     address: string;
     ward: string;
@@ -364,9 +366,14 @@ class OrderService {
                 customerInfo,
                 productsAfterDiscount,
             });
+
             if (userId) {
                 await CartService.emptyCart(userId)
             }
+            //send email to user
+            await SendEmalCheckOutOrder.sendNotificationCheckoutOrder(
+                customerInfo.email,
+                newOrder.trackingNumber);
             return newOrder;
         }
     }
@@ -488,9 +495,16 @@ class OrderService {
       }));
             // Đếm tổng số orders theo điều kiện tìm kiếm
             const total = await Order.countDocuments(searchCondition);
+      
+
+        const totalAmount = orders.reduce((total, order) => {
+        // quantity trong prd
+        return total + (order.total || 0);
+    },0);
             return {
                 data: orders,
                 total,
+                totalAmount,
                 page,
                 limit: parsedLimit,
             };
