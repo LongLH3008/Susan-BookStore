@@ -69,7 +69,7 @@ const CheckoutInfomation = () => {
 			paymentMethod: orderAddress_Payment_Discount.paymentMethod,
 			customerInfo,
 			products,
-			code: orderAddress_Payment_Discount.discountCode,
+			code: orderAddress_Payment_Discount.discountCode.split("(")[0].trim(),
 		};
 
 		if (orderAddress_Payment_Discount.paymentMethod == "VNPAY") {

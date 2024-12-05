@@ -140,14 +140,13 @@ const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_
 					</span>
 				</div>
 			</div>
-			{quantity >= detailProduct.stock && (
-				<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
-			)}
+			{quantity >= detailProduct.stock ||
+				(checkExistInCart &&
+					Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock && (
+						<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
+					))}
 			{checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > 10 && (
 				<p className="text-red-500 text-sm mb-3">Số lượng sản phẩm trong giỏ đã đạt tối đa cho phép</p>
-			)}
-			{checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock && (
-				<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
 			)}
 		</>
 	);

@@ -3,8 +3,8 @@ import { getUserAddress } from "@/services/user.service";
 import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { MdLocationPin } from "react-icons/md";
-import { AddAddress } from "../../address/_components/AddAddress";
-import { UpdateAddress } from "../../address/_components/UpdateAddress";
+import { AddAddress } from "../../account-detail/address/_components/AddAddress";
+import { UpdateAddress } from "../../account-detail/address/_components/UpdateAddress";
 
 const UserAddress = ({ user_id }: { user_id: string }) => {
 	const {

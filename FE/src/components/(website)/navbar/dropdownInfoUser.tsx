@@ -58,18 +58,11 @@ const DropdownInfoUser = (props: Props) => {
 					{id ? (
 						<div className="flex flex-col gap-1 pt-1">
 							<Link
-								to="/don-hang"
+								to="/thong-tin-tai-khoan"
 								state={{ from: location.pathname }}
 								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
 							>
-								Đơn hàng
-							</Link>
-							<Link
-								to="/so-dia-chi"
-								state={{ from: location.pathname }}
-								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
-							>
-								Sổ địa chỉ giao hàng
+								Thông tin tài khoản
 							</Link>
 							<Link
 								to="/gio-hang"
@@ -79,13 +72,6 @@ const DropdownInfoUser = (props: Props) => {
 								Giỏ hàng
 							</Link>
 							<div className="font-semibold h-1  border-b border-zinc-400 text-zinc-800"></div>
-							<Link
-								to="/doi-mat-khau"
-								state={{ from: location.pathname }}
-								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
-							>
-								Đổi mật khẩu
-							</Link>
 							<div
 								onClick={() => Logout()}
 								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
