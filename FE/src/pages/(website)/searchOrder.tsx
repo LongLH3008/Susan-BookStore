@@ -5,7 +5,7 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import Joi from "joi";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import OrderItem from "./_components/orderItem";
+import OrderItem from "./account-detail/order/orderItem";
 
 type Props = {};
 

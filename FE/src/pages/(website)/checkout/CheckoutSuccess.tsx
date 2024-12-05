@@ -69,14 +69,14 @@ const CheckoutSuccess = () => {
 					</Link>
 					{id ? (
 						<Link
-							to="/don-hang"
+							to="/thong-tin-tai-khoan/don-hang"
 							className="bg-black text-nowrap text-white px-[25px] py-[10px] text-[14px] hover:bg-zinc-700"
 						>
 							Lịch sử mua hàng
 						</Link>
 					) : (
 						<Link
-							to="/don-hang"
+							to="/"
 							className="bg-black text-nowrap text-white px-[25px] py-[10px] text-[14px] hover:bg-zinc-700"
 						>
 							Trở về trang chủ

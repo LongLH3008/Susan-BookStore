@@ -1,8 +1,8 @@
 import Joi from "joi";
 
 export const voucherValidate = Joi.object({
-	discount_product_ids: Joi.array().min(1),
-	discount_category_ids: Joi.array().min(1),
+	discount_product_ids: Joi.array(),
+	discount_category_ids: Joi.array(),
 	discount_name: Joi.string().required().messages({
 		"any.required": "Tên voucher bắt buộc",
 		"string.empty": "Tên voucher không được để trống",
@@ -26,6 +26,7 @@ export const voucherValidate = Joi.object({
 	discount_stock: Joi.number().required().messages({
 		"any.required": "Số lượng voucher bắt buộc",
 	}),
+	discount_is_active: Joi.boolean().default(true),
 	discount_min_order_value: Joi.number().min(0).default(200000),
 	discount_max_use_per_user: Joi.number().min(1).default(4),
 	discount_start_date: Joi.date().iso().default("2024-09-22T14:18:37.487Z"),

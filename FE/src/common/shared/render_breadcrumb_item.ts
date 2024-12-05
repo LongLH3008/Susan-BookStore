@@ -7,15 +7,12 @@ export const breadCrumbConstant = [
 	{ path: 'gio-hang', name: 'Giỏ hàng' },
 	{ path: 'thanh-toan', name: 'Thanh toán' },
 	{ path: 'tra-cuu-don-hang', name: 'Tra cứu đơn hàng' },
-	{ path: 'don-hang', name: 'Đơn hàng' },
+	{ path: 'thong-tin-tai-khoan', name: 'Thông tin tài khoản' },
 	{ path: 'dang-nhap', name: 'Đăng nhập' },
 	{ path: 'dang-ky', name: 'Đăng ký' },
-	{ path: 'quen-mat-khau', name: 'Quên mật khẩu' },
-	{ path: 'so-dia-chi', name: 'Sổ địa chỉ' },
 ]
 
 export const handleBreadCrumbItemURL = (url: string) => {
-	console.log(url);
 	if (!url) return '...'
 	const result = breadCrumbConstant.find((item) => url.includes(item.path));
 	console.log(result)

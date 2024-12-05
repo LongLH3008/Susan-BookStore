@@ -4,7 +4,7 @@ import Book from "../models/Book.model";
 import Category from "../models/Category.model";
 import { validate } from "../schemas";
 import categorySchema from "../schemas/category.schema";
-import { ICategoryCreateDTO, ICategoryUpdateDTO, ICategoryResponseDTO } from "./dtos/Category.dto";
+import { ICategoryCreateDTO, ICategoryResponseDTO, ICategoryUpdateDTO } from "./dtos/Category.dto";
 
 export class CategoryService {
     static async create(data: ICategoryCreateDTO): Promise<ICategoryResponseDTO> {
