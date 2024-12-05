@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 
 const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_id: string }) => {
 	const [quantity, setQuantity] = useState<number>(1);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { toast } = useToast();
 	const { data: cart, add } = cartData();
 	const nav = useNavigate();
@@ -18,25 +17,35 @@ const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_
 
 	const changeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
-		if (checkExistInCart && Number(value) + checkExistInCart.product_quantity > detailProduct.stock) {
+		const numericValue = Number(value);
+		if (checkExistInCart && numericValue + checkExistInCart.product_quantity > 10) {
 			e.preventDefault();
-			setQuantity(detailProduct.stock - checkExistInCart.product_quantity);
-		} else if (Number(value) > detailProduct.stock) {
+			return setQuantity(10 - checkExistInCart.product_quantity);
+		}
+		if (checkExistInCart && numericValue + checkExistInCart.product_quantity > detailProduct.stock) {
 			e.preventDefault();
-			setQuantity(detailProduct.stock);
-		} else if (Number(value) <= 1) {
+			return setQuantity(detailProduct.stock - checkExistInCart.product_quantity);
+		}
+		if (numericValue > 10) {
 			e.preventDefault();
-			setQuantity(0);
-		} else setQuantity(Number(value));
+			return setQuantity(10);
+		}
+		if (numericValue > detailProduct.stock) {
+			e.preventDefault();
+			return setQuantity(detailProduct.stock);
+		}
+		if (numericValue <= 1) {
+			e.preventDefault();
+			return setQuantity(0);
+		}
+		setQuantity(numericValue);
 	};
 
 	const Increase = () => {
-		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock) {
-			return;
-		}
-		if (quantity + 1 > detailProduct.stock) {
-			return;
-		}
+		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity >= 10) return;
+		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity >= detailProduct.stock) return;
+		if (quantity + 1 >= 10) return;
+		if (quantity + 1 >= detailProduct.stock) return;
 		setQuantity(quantity + 1);
 	};
 
@@ -46,7 +55,6 @@ const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_
 	};
 
 	const AddProductToCart = async (quantity: number, arg?: { checkout: boolean }) => {
-		if (arg?.checkout) setIsLoading(true);
 		if (checkExistInCart && checkExistInCart.product_quantity + quantity > detailProduct.stock) return;
 		if (quantity > detailProduct.stock) return;
 
@@ -65,7 +73,7 @@ const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_
 			const res = await CartService.SelectToCheckout({ user_id, data_item_cart });
 			if (!res) return;
 			setTimeout(() => {
-				nav(`/thanh-toan/${user_id}`), setIsLoading(false);
+				nav(`/thanh-toan/${user_id}`);
 			}, 1000);
 			return;
 		}
@@ -112,7 +120,8 @@ const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_
 									quantity <= detailProduct.stock ||
 									(checkExistInCart &&
 										Number(quantity) + checkExistInCart.product_quantity <=
-											detailProduct.stock)
+											detailProduct.stock &&
+										Number(quantity) + checkExistInCart.product_quantity <= 10)
 										? ""
 										: "rotate-45 text-red-500"
 								}`}
@@ -131,9 +140,14 @@ const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_
 					</span>
 				</div>
 			</div>
-			{quantity >= detailProduct.stock && <p className="text-red-500 text-sm mb-3">Sản phẩm đã hết hàng</p>}
+			{quantity >= detailProduct.stock && (
+				<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
+			)}
+			{checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > 10 && (
+				<p className="text-red-500 text-sm mb-3">Số lượng sản phẩm trong giỏ đã đạt tối đa cho phép</p>
+			)}
 			{checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock && (
-				<p className="text-red-500 text-sm mb-3">Số lượng sản phẩm trong giỏ đã đạt giới hạn tồn kho</p>
+				<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
 			)}
 		</>
 	);

@@ -16,20 +16,34 @@ const AmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 
 	const changeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
-		if (checkExistInCart && Number(value) + checkExistInCart.product_quantity > detailProduct.stock) {
+		const numericValue = Number(value);
+		if (checkExistInCart && numericValue + checkExistInCart.product_quantity > 10) {
 			e.preventDefault();
-			setQuantity(detailProduct.stock - checkExistInCart.product_quantity);
-		} else if (Number(value) > detailProduct.stock) {
+			return setQuantity(10 - checkExistInCart.product_quantity);
+		}
+		if (checkExistInCart && numericValue + checkExistInCart.product_quantity > detailProduct.stock) {
 			e.preventDefault();
-			setQuantity(detailProduct.stock);
-		} else if (Number(value) <= 1) {
+			return setQuantity(detailProduct.stock - checkExistInCart.product_quantity);
+		}
+		if (numericValue > 10) {
 			e.preventDefault();
-			setQuantity(0);
-		} else setQuantity(Number(value));
+			return setQuantity(10);
+		}
+		if (numericValue > detailProduct.stock) {
+			e.preventDefault();
+			return setQuantity(detailProduct.stock);
+		}
+		if (numericValue <= 1) {
+			e.preventDefault();
+			return setQuantity(0);
+		}
+		setQuantity(numericValue);
 	};
 
 	const Increase = () => {
+		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > 10) return;
 		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock) return;
+		if (quantity + 1 > 10) return;
 		if (quantity + 1 > detailProduct.stock) return;
 		setQuantity(quantity + 1);
 	};
@@ -87,7 +101,8 @@ const AmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 									quantity <= detailProduct.stock ||
 									(checkExistInCart &&
 										Number(quantity) + checkExistInCart.product_quantity <=
-											detailProduct.stock)
+											detailProduct.stock &&
+										Number(quantity) + checkExistInCart.product_quantity <= 10)
 										? ""
 										: "rotate-45 text-red-500"
 								}`}
@@ -106,9 +121,14 @@ const AmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 					</span>
 				</div>
 			</div>
-			{quantity >= detailProduct.stock && <p className="text-red-500 text-sm mb-3">Sản phẩm đã hết hàng</p>}
+			{quantity >= detailProduct.stock && (
+				<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
+			)}
+			{checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > 10 && (
+				<p className="text-red-500 text-sm mb-3">Số lượng sản phẩm trong giỏ đã đạt tối đa cho phép</p>
+			)}
 			{checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock && (
-				<p className="text-red-500 text-sm mb-3">Số lượng sản phẩm trong giỏ đã đạt giới hạn tồn kho</p>
+				<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
 			)}
 		</>
 	);

@@ -24,8 +24,11 @@ const DataCart = ({ user_id }: { user_id: string }) => {
 		remove({ user_id, product_id });
 	};
 
-	const subtotal = data?.reduce((acc: number, item: any) => acc + item.product_id.price * item.product_quantity, 0);
-	const discountArr = data?.filter((item: any) => Math.abs(item.product_id.discount) > 0 && item);
+	const subtotal = data?.reduce(
+		(acc: number, item: any) => acc + item.product_id?.price * item.product_quantity,
+		0
+	);
+	const discountArr = data?.filter((item: any) => Math.abs(item.product_id?.discount) > 0 && item);
 
 	const discount = discountArr?.reduce((acc: number, item: any) => {
 		const discountPercent = Math.abs(item?.product_id?.discount);

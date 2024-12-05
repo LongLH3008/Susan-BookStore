@@ -13,6 +13,7 @@ type LocalStorageCart = {
 	selectAllLocal: () => void;
 	removeSelectAllLocal: () => void;
 	afterPayment: () => void;
+	changeQuantity: (id: string, quantity: number) => void;
 };
 export const useLocalStorageCart = create<LocalStorageCart>((set) => ({
 	cart_products: [],
@@ -58,6 +59,16 @@ export const useLocalStorageCart = create<LocalStorageCart>((set) => ({
 	removeSelectAllLocal: () => {
 		set((state) => {
 			const cart_products = state.cart_products.map((item) => ({ ...item, selected: false }));
+			localStorage.setItem("cart_products", JSON.stringify(cart_products));
+			return { cart_products };
+		});
+	},
+
+	changeQuantity: (id, quantity) => {
+		set((state) => {
+			const cart_products = state.cart_products.map((item) =>
+				item.product_id._id == id ? { ...item, product_quantity: quantity } : item
+			);
 			localStorage.setItem("cart_products", JSON.stringify(cart_products));
 			return { cart_products };
 		});

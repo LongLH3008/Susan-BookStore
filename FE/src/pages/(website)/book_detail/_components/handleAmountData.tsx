@@ -20,25 +20,35 @@ const HandleAmountData = ({ detailProduct, user_id }: { detailProduct: IProduct;
 
 	const changeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
-		if (checkExistInCart && Number(value) + checkExistInCart.product_quantity > detailProduct.stock) {
+		const numericValue = Number(value);
+		if (checkExistInCart && numericValue + checkExistInCart.product_quantity > 10) {
 			e.preventDefault();
-			setQuantity(detailProduct.stock - checkExistInCart.product_quantity);
-		} else if (Number(value) > detailProduct.stock) {
+			return setQuantity(10 - checkExistInCart.product_quantity);
+		}
+		if (checkExistInCart && numericValue + checkExistInCart.product_quantity > detailProduct.stock) {
 			e.preventDefault();
-			setQuantity(detailProduct.stock);
-		} else if (Number(value) <= 1) {
+			return setQuantity(detailProduct.stock - checkExistInCart.product_quantity);
+		}
+		if (numericValue > 10) {
 			e.preventDefault();
-			setQuantity(0);
-		} else setQuantity(Number(value));
+			return setQuantity(10);
+		}
+		if (numericValue > detailProduct.stock) {
+			e.preventDefault();
+			return setQuantity(detailProduct.stock);
+		}
+		if (numericValue <= 1) {
+			e.preventDefault();
+			return setQuantity(0);
+		}
+		setQuantity(numericValue);
 	};
 
 	const Increase = () => {
-		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock) {
-			return;
-		}
-		if (quantity + 1 > detailProduct.stock) {
-			return;
-		}
+		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > 10) return;
+		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock) return;
+		if (quantity + 1 > 10) return;
+		if (quantity + 1 > detailProduct.stock) return;
 		setQuantity(quantity + 1);
 	};
 
@@ -48,24 +58,29 @@ const HandleAmountData = ({ detailProduct, user_id }: { detailProduct: IProduct;
 	};
 
 	const AddProductToCart = async (quantity: number, arg?: { checkout: boolean }) => {
-		if (arg?.checkout) setIsLoading(true);
+		if (checkExistInCart && checkExistInCart.product_quantity + quantity > 10) return;
 		if (checkExistInCart && checkExistInCart.product_quantity + quantity > detailProduct.stock) return;
 		if (quantity > detailProduct.stock) return;
 
 		if (arg?.checkout) {
-			const data_item_cart = cart.map((item) =>
-				item.product_id._id == detailProduct._id
-					? { _id: item._id, selected: true }
-					: { _id: item._id, selected: false }
-			);
+			setIsLoading(true);
+			const data_item_cart =
+				cart.length > 0
+					? cart.map((item) =>
+							item.product_id._id == detailProduct._id
+								? { _id: item._id, selected: true }
+								: { _id: item._id, selected: false }
+					  )
+					: [{ _id: detailProduct._id, selected: true }];
 			const add = await CartService.AddToCart({
-				product_id: detailProduct?._id as string,
+				product_id: detailProduct._id,
 				user_id,
 				product_quantity: quantity,
 			});
 			if (!add) return;
 			const res = await CartService.SelectToCheckout({ user_id, data_item_cart });
 			if (!res) return;
+			setIsLoading(false);
 			setTimeout(() => {
 				nav(`/thanh-toan/${user_id}`), setIsLoading(false);
 			}, 1000);
@@ -115,7 +130,8 @@ const HandleAmountData = ({ detailProduct, user_id }: { detailProduct: IProduct;
 									quantity <= detailProduct.stock ||
 									(checkExistInCart &&
 										Number(quantity) + checkExistInCart.product_quantity <=
-											detailProduct.stock)
+											detailProduct.stock &&
+										Number(quantity) + checkExistInCart.product_quantity <= 10)
 										? ""
 										: "rotate-45 text-red-500"
 								}`}
@@ -134,9 +150,14 @@ const HandleAmountData = ({ detailProduct, user_id }: { detailProduct: IProduct;
 					</span>
 				</div>
 			</div>
-			{quantity >= detailProduct.stock && <p className="text-red-500 text-sm mb-3">Sản phẩm đã hết hàng</p>}
+			{quantity >= detailProduct.stock && (
+				<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
+			)}
+			{checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > 10 && (
+				<p className="text-red-500 text-sm mb-3">Số lượng sản phẩm trong giỏ đã đạt tối đa cho phép</p>
+			)}
 			{checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock && (
-				<p className="text-red-500 text-sm mb-3">Số lượng sản phẩm trong giỏ đã đạt giới hạn tồn kho</p>
+				<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
 			)}
 			<div className="w-full flex flex-col gap-1">
 				<button

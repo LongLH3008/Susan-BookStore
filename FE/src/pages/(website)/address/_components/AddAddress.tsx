@@ -123,7 +123,7 @@ export function AddAddress({ trigger }: { trigger?: ReactNode }) {
 				{trigger}
 			</div>
 
-			<Modal show={openModal} onClose={() => setOpenModal(false)}>
+			<Modal className="*:max-w-[600px]" show={openModal} onClose={() => setOpenModal(false)}>
 				<Modal.Body className="px-7 py-4 h-fit overflow-visible">
 					<form action="" className="py-5 flex flex-col gap-7">
 						<h3 className="text-xl font-semibold sm:text-2xl">Thêm địa chỉ mới</h3>
