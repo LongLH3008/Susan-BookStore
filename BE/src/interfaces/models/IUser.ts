@@ -16,7 +16,7 @@ export enum UserTypeAuth {
 
 declare global {
     namespace Express {
-      
+
         interface User extends IUser, mongoose.Document { }
     }
 }
@@ -24,7 +24,8 @@ export interface IUser {
     user_name: string
     user_otp: string
     user_email: string
-    user_phone_number: string
+    user_phone_number: string,
+    user_birth: string,
     user_password: string
     user_status: UserStatus
     user_address: string

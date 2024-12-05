@@ -36,7 +36,6 @@ const CheckoutInfomation = () => {
 		action: "BANKING",
 		onSuccess: () => {
 			setLoading(false);
-			if (!user_id) afterPayment();
 		},
 		onError: () => {
 			setLoading(false), toast({ variant: ToastVariant.ERROR, content: "Thanh toán không thành công" });

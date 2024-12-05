@@ -154,7 +154,7 @@ export function UpdateAddress({
 			<div onClick={() => setOpenModal(true)} className="w-fit h-fit border-0">
 				{trigger}
 			</div>
-			<Modal show={openModal} onClose={() => setOpenModal(false)}>
+			<Modal className="*:max-w-[600px]" show={openModal} onClose={() => setOpenModal(false)}>
 				<Modal.Body className="px-7 py-4 h-fit overflow-visible">
 					<form action="" className="py-5 flex flex-col gap-7">
 						<h3 className="text-xl font-semibold sm:text-2xl">Cập nhật địa chỉ</h3>

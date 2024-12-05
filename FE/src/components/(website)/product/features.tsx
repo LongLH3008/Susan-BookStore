@@ -23,12 +23,13 @@ const ProductFeatures = ({ product }: { product: IProduct }) => {
 
 	const checkOutOfStock = () => {
 		if (id) {
-			const checkExist = cartDt.find((item) => item.product_id._id == product._id);
-			if (checkExist && checkExist.product_quantity + 1 > product.stock) return false;
+			const checkExist = cartDt.find((item) => item.product_id?._id == product?._id);
+			if (checkExist && checkExist.product_quantity + 1 > 10) return false;
+			if (checkExist && checkExist.product_quantity + 1 > product?.stock) return false;
 			return true;
 		}
-		const checkExist = cartLc.find((item) => item.product_id._id == product._id);
-		if (checkExist && checkExist.product_quantity + 1 > product.stock) return false;
+		const checkExist = cartLc.find((item) => item.product_id?._id == product?._id);
+		if (checkExist && checkExist.product_quantity + 1 > product?.stock) return false;
 		return true;
 	};
 
@@ -37,7 +38,7 @@ const ProductFeatures = ({ product }: { product: IProduct }) => {
 		if (!check) return;
 		loadCart();
 		if (id) {
-			AddToCart({ product_id: product._id, user_id: id, product_quantity: 1 });
+			AddToCart({ product_id: product?._id, user_id: id, product_quantity: 1 });
 		} else {
 			add(product);
 		}
@@ -51,7 +52,7 @@ const ProductFeatures = ({ product }: { product: IProduct }) => {
 		>
 			<div className="flex items-center *:px-5 h-full *:border-r *:grid *:place-items-center *:cursor-pointer *:text-zinc-700">
 				<div className="" role="status">
-					{checkOutOfStock() ? (
+					{checkOutOfStock() && (
 						<div onClick={AddProductToCart} className="flex items-center gap-1">
 							<i
 								className={`${
@@ -59,7 +60,8 @@ const ProductFeatures = ({ product }: { product: IProduct }) => {
 								} hover:text-[#00BFC5] fa-solid fa-bag-shopping`}
 							></i>
 						</div>
-					) : (
+					)}
+					{!checkOutOfStock() && !loading && (
 						<div className="flex items-center gap-1 text-red-500">
 							!<i className={`fa-solid fa-bag-shopping`}></i>
 						</div>
