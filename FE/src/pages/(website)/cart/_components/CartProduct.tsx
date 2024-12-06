@@ -1,19 +1,22 @@
 import { userState } from "@/common/hooks/useAuth";
 import { cartData } from "@/common/hooks/useCart";
 import { useLocalStorageCart } from "@/common/hooks/useLocalStorageCart";
+import { debounce } from "@mui/material";
 import { Link } from "react-router-dom";
 import ItemCart from "./ItemCart";
 
 export default function CartProducts({ dataCart }: { dataCart: ICart[] }) {
 	const { id: user_id } = userState();
-	const { decrease, increase, remove, select } = cartData();
+	const { decrease, increase, remove, select, add } = cartData();
 	const {
 		decrease: dcLocal,
 		increase: icLocal,
 		remove: rmLocal,
 		select: slLocal,
 		selectAllLocal,
+		getCart,
 		removeSelectAllLocal,
+		changeQuantity,
 	} = useLocalStorageCart();
 
 	const selectedProducts = dataCart?.map(({ _id, selected }) => ({ _id, selected }));
@@ -47,6 +50,30 @@ export default function CartProducts({ dataCart }: { dataCart: ICart[] }) {
 		user_id ? select({ user_id, data_item_cart }) : selectAllLocal();
 	};
 
+	const changeAmount = (e: React.ChangeEvent<HTMLInputElement>, detailItem: ICart) => {
+		const { value } = e.target;
+		if (Number(value) > 10) {
+			e.preventDefault();
+			changeData(detailItem, 10);
+		} else if (Number(value) > detailItem.product_id.stock) {
+			e.preventDefault();
+			changeData(detailItem, detailItem.product_id.stock);
+		} else if (Number(value) <= 1) {
+			e.preventDefault();
+			changeData(detailItem, 1);
+		} else changeData(detailItem, Number(value));
+	};
+
+	const changeData = debounce((detailItem: ICart, quantity: number) => {
+		if (user_id) {
+			const product_quantity = quantity - detailItem.product_quantity;
+			add({ product_id: detailItem.product_id._id, product_quantity, user_id });
+			return;
+		}
+		changeQuantity(detailItem._id, quantity);
+		getCart();
+	});
+
 	return (
 		<div className="overflow-hidden overscrollHidden overflow-y-scroll min-[1000px]:col-span-3 min-[1000px]:pr-1 flex flex-col justify-between gap-3">
 			{dataCart?.length && dataCart.length > 0 ? (
@@ -60,6 +87,7 @@ export default function CartProducts({ dataCart }: { dataCart: ICart[] }) {
 							dec={Decrease}
 							remove={removeProduct}
 							data={item}
+							change={changeAmount}
 						/>
 					))}
 				</div>

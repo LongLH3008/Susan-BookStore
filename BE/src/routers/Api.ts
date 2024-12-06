@@ -23,6 +23,7 @@ import BannerControler from "../controllers/Api/banner.controler";
 import BannerSaleControler from "../controllers/Api/bannerSale.controller";
 import InfoUserController from "../controllers/Api/InfoUser.Controller";
 import ContactController from "../controllers/Api/Contact.Controller";
+import StatisticsController from "../controllers/Api/Statistinal.controller";
 
 const router = Router();
 
@@ -346,6 +347,16 @@ router.get(
 router.get(
   "/contact/:id",
   asyncHandler(ContactController.Detail)
+)
+
+// Statistics
+router.get(
+  "/topfivebook",
+  asyncHandler(StatisticsController.GetAllOrderWithStatistical)
+)
+router.get(
+  "/topfiveuser",
+  asyncHandler(StatisticsController.GetAllOrderWithTop5User)
 )
 
 

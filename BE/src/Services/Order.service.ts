@@ -33,11 +33,13 @@ import { vnpayService } from "./Vnpay.service";
 import CartService from "./Cart.service";
 import { Code } from "mongodb";
 import Discount from "../models/Discount.model";
+import SendEmalCheckOutOrder from "../helper/EmailOrder";
 
 type PaymentMethodInput = "COD" | "VNPAY";
 
 interface CustomerInfo {
     name: string;
+    email: string;
     phone: string;
     address: string;
     ward: string;
@@ -364,9 +366,14 @@ class OrderService {
                 customerInfo,
                 productsAfterDiscount,
             });
+
             if (userId) {
                 await CartService.emptyCart(userId)
             }
+            //send email to user
+            await SendEmalCheckOutOrder.sendNotificationCheckoutOrder(
+                customerInfo.email,
+                newOrder.trackingNumber);
             return newOrder;
         }
     }
@@ -452,33 +459,52 @@ class OrderService {
                 .limit(parsedLimit)
                 .lean();
 
-            // Lấy danh sách userIds duy nhất
-            const userIds = [...new Set(orders.map((order) => order.userId))];
+           // Lấy danh sách userIds duy nhất (lọc bỏ các userId undefined)
+    const userIds = [
+        ...new Set(
+          orders
+            .map((order) => order.userId)
+            .filter((userId) => userId !== undefined && userId !== null) // Loại bỏ undefined hoặc null
+            .map((userId) => userId.toString()) // Chuyển đổi sang chuỗi
+        ),
+      ];
 
-            // Lấy thông tin users
-            const users = await User.find({ _id: { $in: userIds } })
-                .select("_id user_email username")
-                .select("_id user_email user_name user_avatar user_phone_number")
-                .lean();
+        // Lấy thông tin users
+    const users = await User.find({ _id: { $in: userIds } })
+    .select("_id user_email user_name user_avatar user_phone_number")
+    .lean();
 
+  if (!users || users.length === 0) {
+    console.error("No users found for the given userIds:", userIds);
+  }
+    
+            
             // Tạo map để mapping nhanh user info
-            const userMap = new Map(users.map((user) => [user._id.toString(), user]));
-
-            // Thêm thông tin user vào orders
-            orders = orders.map((order) => ({
-                ...order,
-                user_name: userMap.get(order.userId.toString())?.user_name || "",
-                user_email: userMap.get(order.userId.toString())?.user_email || "",
-                user_avatar: userMap.get(order.userId.toString())?.user_avatar || "",
-                user_phone_number:
-                    userMap.get(order.userId.toString())?.user_phone_number || "",
-            }));
-
+    const userMap = new Map(
+        users.map((user) => [user._id.toString(), user]) // Sử dụng .toString()
+      );
+  
+      // Thêm thông tin user vào orders
+      orders = orders.map((order) => ({
+        ...order,
+        user_name: userMap.get(order.userId?.toString())?.user_name || "",
+        user_email: userMap.get(order.userId?.toString())?.user_email || "",
+        user_avatar: userMap.get(order.userId?.toString())?.user_avatar || "",
+        user_phone_number:
+          userMap.get(order.userId?.toString())?.user_phone_number || "",
+      }));
             // Đếm tổng số orders theo điều kiện tìm kiếm
             const total = await Order.countDocuments(searchCondition);
+      
+
+        const totalAmount = orders.reduce((total, order) => {
+        // quantity trong prd
+        return total + (order.total || 0);
+    },0);
             return {
                 data: orders,
                 total,
+                totalAmount,
                 page,
                 limit: parsedLimit,
             };
@@ -518,7 +544,6 @@ class OrderService {
             order.user_avatar = userMap.get(order.userId.toString())?.user_avatar || "";
             order.user_phone_number =
                 userMap.get(order.userId.toString())?.user_phone_number || "";
-
             return order;
         } catch (error) {
             throw error;

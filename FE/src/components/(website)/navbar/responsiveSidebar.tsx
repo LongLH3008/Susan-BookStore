@@ -16,12 +16,12 @@ const ResponsiveSidebar = (props: Props) => {
 		<>
 			<span
 				onClick={() => setIsOpen(true)}
-				className="min-[1000px]:hidden max-[1000px]:block cursor-pointer relative *:text-[22px] *:text-zinc-800"
+				className="min-[1000px]:hidden max-[1000px]:block h-full flex items-center cursor-pointer relative *:text-[22px] *:text-zinc-800"
 			>
 				<i className="fa-solid fa-bars absolute top-1/2 -translate-y-1/2 right-0"></i>
 			</span>
 			<Drawer theme={CustomDrawerSidebar} open={isOpen} onClose={handleClose} position="right">
-				<Drawer.Items>
+				<Drawer.Items className="pt-[68px]">
 					<div className="h-[68px] flex">
 						<button
 							onClick={() => setIsOpen(false)}

@@ -1,16 +1,16 @@
-import { useLocalStorageCart } from "@/common/hooks/useLocalStorageCart";
+import { cartData } from "@/common/hooks/useCart";
 import { useToast } from "@/common/hooks/useToast";
 import { IProduct } from "@/common/interfaces/product";
 import { ToastVariant } from "@/common/interfaces/toast";
+import * as CartService from "@/services/cart.service";
 import { useState } from "react";
 import { AiOutlineShopping } from "react-icons/ai";
-import { FaPhoneAlt } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const HandleAmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
+const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_id: string }) => {
 	const [quantity, setQuantity] = useState<number>(1);
 	const { toast } = useToast();
-	const { cart_products: cart, add, removeSelectAllLocal, select } = useLocalStorageCart();
+	const { data: cart, add } = cartData();
 	const nav = useNavigate();
 
 	const checkExistInCart = cart.find((item) => item.product_id._id == detailProduct._id);
@@ -42,10 +42,10 @@ const HandleAmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 	};
 
 	const Increase = () => {
-		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > 10) return;
-		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock) return;
-		if (quantity + 1 > 10) return;
-		if (quantity + 1 > detailProduct.stock) return;
+		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity >= 10) return;
+		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity >= detailProduct.stock) return;
+		if (quantity + 1 >= 10) return;
+		if (quantity + 1 >= detailProduct.stock) return;
 		setQuantity(quantity + 1);
 	};
 
@@ -54,18 +54,35 @@ const HandleAmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 		setQuantity(quantity - 1);
 	};
 
-	const AddProductToCart = (quantity: number, arg?: { checkout: boolean }) => {
-		if (checkExistInCart && checkExistInCart.product_quantity + quantity > 10) return;
+	const AddProductToCart = async (quantity: number, arg?: { checkout: boolean }) => {
 		if (checkExistInCart && checkExistInCart.product_quantity + quantity > detailProduct.stock) return;
-		if (quantity > detailProduct.stock || quantity == 0) return;
-		add({ ...detailProduct }, quantity);
+		if (quantity > detailProduct.stock) return;
 
 		if (arg?.checkout) {
-			removeSelectAllLocal();
-			select({ _id: detailProduct._id, selected: true });
-			setTimeout(() => nav("/thanh-toan"), 400);
+			const data_item_cart = cart.map((item) =>
+				item.product_id._id == detailProduct._id
+					? { _id: item._id, selected: true }
+					: { _id: item._id, selected: false }
+			);
+			const add = await CartService.AddToCart({
+				product_id: detailProduct?._id as string,
+				user_id,
+				product_quantity: quantity,
+			});
+			if (!add) return;
+			const res = await CartService.SelectToCheckout({ user_id, data_item_cart });
+			if (!res) return;
+			setTimeout(() => {
+				nav(`/thanh-toan/${user_id}`);
+			}, 1000);
 			return;
 		}
+
+		add({
+			product_id: detailProduct?._id as string,
+			user_id,
+			product_quantity: quantity,
+		});
 
 		toast({
 			variant: ToastVariant.ADD_TO_CART,
@@ -79,7 +96,6 @@ const HandleAmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 		<>
 			<div className="flex items-center sm:flex-wrap *:sm:mt-4 mb-4 justify-between mt-8 mr-0 w-full">
 				<div className="flex items-center ">
-					<p className="me-3">SL :</p>
 					<div className="relative flex items-center max-w-[8rem] *:p-4">
 						<span
 							onClick={() => Decrease()}
@@ -89,7 +105,7 @@ const HandleAmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 						</span>
 						<input
 							type="number"
-							className="bg-transparent border-x-0 ring-0 outline-0 focus:ring-0 border-gray-300 text-center text-gray-900 text-sm"
+							className="bg-transparent w-12 border-x-0 ring-0 outline-0 focus:ring-0 border-gray-300 text-center text-gray-900 text-sm"
 							value={quantity}
 							min={0}
 							max={100}
@@ -116,7 +132,7 @@ const HandleAmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 				<div
 					onClick={() => AddProductToCart(quantity)}
 					className={`flex cursor-pointer items-center border-2 text-zinc-700 hover:text-[#00BFC5] border-[#000] hover:border-[#00BFC5]
-							px-9 h-16`}
+							px-5 h-14`}
 				>
 					<span className=" flex items-center">
 						<AiOutlineShopping className="text-xl mr-1" />
@@ -124,32 +140,16 @@ const HandleAmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 					</span>
 				</div>
 			</div>
-			{checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > 10 && (
-				<p className="text-red-500 text-sm mb-3">Số lượng sản phẩm trong giỏ đã đạt tối đa cho phép</p>
-			)}
 			{quantity >= detailProduct.stock ||
 				(checkExistInCart &&
 					Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock && (
 						<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
 					))}
-			<div className="w-full flex flex-col gap-1">
-				<button
-					onClick={() => AddProductToCart(quantity, { checkout: true })}
-					type="button"
-					className="w-full py-4 transition duration-150 bg-black border border-black text-white font-bold hover:border-[#00BFC5] hover:text-[#00BFC5] hover:bg-white"
-				>
-					Mua ngay
-				</button>
-				<Link
-					to="tel:+84346540479"
-					className="hover:underline flex items-center gap-2 hover:text-[#00bfc5] my-3"
-				>
-					<FaPhoneAlt className="text-sm" />
-					Liên hệ để đặt số lượng lớn
-				</Link>
-			</div>
+			{checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > 10 && (
+				<p className="text-red-500 text-sm mb-3">Số lượng sản phẩm trong giỏ đã đạt tối đa cho phép</p>
+			)}
 		</>
 	);
 };
 
-export default HandleAmountLocal;
+export default AmountData;

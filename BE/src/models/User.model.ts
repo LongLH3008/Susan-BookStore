@@ -6,7 +6,6 @@ import {
 	UserStatus,
 	UserTypeAuth,
 } from "../interfaces/models/IUser";
-import { array, string } from "joi";
 
 
 const COLLECTION_NAME = "User";
@@ -31,6 +30,10 @@ const Userchema = new mongoose.Schema<IUserModel>(
 			unique: true,
 		},
 		user_phone_number: {
+			type: String,
+			required: false,
+		},
+		user_birth: {
 			type: String,
 			required: false,
 		},

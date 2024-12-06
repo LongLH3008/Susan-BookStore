@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { FaCheck } from "react-icons/fa";
 import { VscDebugRestart } from "react-icons/vsc";
 import { useNavigate } from "react-router-dom";
+import HandleChooseCategory from "./_components/handleChooseCategory";
 type Props = {};
 
 const DiscountAdd = (props: Props) => {
@@ -16,7 +17,7 @@ const DiscountAdd = (props: Props) => {
 	const navigate = useNavigate();
 
 	const [voucherType, setVoucherType] = useState("");
-	const [voucherApplies, setVoucherApplies] = useState("");
+	const [voucherApplies, setVoucherApplies] = useState<"all" | "category" | "specific">("all");
 
 	const changeType = (e: any) => {
 		console.log(e.target.value);
@@ -30,25 +31,45 @@ const DiscountAdd = (props: Props) => {
 
 	const resetForm = () => {
 		reset();
-		setVoucherApplies("");
+		setVoucherApplies("all");
 		setVoucherType("");
 	};
 
 	const {
 		reset,
 		handleSubmit,
+		setValue,
+		getValues,
+		trigger,
 		formState: { errors },
 		register,
-	} = useForm<IVoucher>({ resolver: joiResolver(voucherValidate) });
+	} = useForm<IVoucher>({
+		resolver: joiResolver(voucherValidate),
+		defaultValues: {
+			discount_category_ids: [],
+			discount_product_ids: [],
+		},
+	});
 
 	const { onAction: createVoucher } = voucherService({
 		action: "CREATE",
-		onSuccess: (data: any) => toast({ variant: data.status, content: "Tạo mới voucher thành công" }),
+		onSuccess: (data: any) => {
+			toast({ variant: data.status, content: "Tạo mới voucher thành công" });
+			navigate("/quan-tri/ma-giam-gia");
+		},
 		onError: (err: any) => toast({ variant: err.status, content: err.message }),
 	});
 
+	const submit = async () => {
+		setValue("discount_is_active", Number(getValues("discount_is_active")) == 1);
+		setValue("discount_stock", getValues("discount_max_use_per_user"));
+		console.log(await trigger(), getValues(), errors);
+
+		createVoucher(getValues());
+	};
+
 	return (
-		<form onSubmit={handleSubmit(createVoucher)} className="text-zinc-700 h-full flex flex-col justify-between">
+		<form className="text-zinc-700 h-full flex flex-col justify-between">
 			<div className="p-5 flex justify-between items-center bg-white shadow-sm rounded-lg">
 				<div className="flex items-center gap-3">
 					<i className="fa-solid fa-ticket"></i>
@@ -63,7 +84,8 @@ const DiscountAdd = (props: Props) => {
 						<VscDebugRestart />
 					</button>
 					<button
-						type="submit"
+						type="button"
+						onClick={() => submit()}
 						className="size-10 bg-[#00bfc5] hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-md hover:scale-110 duration-200"
 					>
 						<FaCheck />
@@ -74,7 +96,6 @@ const DiscountAdd = (props: Props) => {
 				<CustomFloatingField
 					rounded
 					required
-					type="number"
 					label="Mã giảm giá"
 					placeholder="Nhập mã giảm giá"
 					register={register}
@@ -100,10 +121,10 @@ const DiscountAdd = (props: Props) => {
 						className={`focus:border-zinc-400 ring-0 rounded-md border-zinc-300 text-sm *:text-sm *:py-2`}
 						{...register("discount_is_active")}
 					>
-						<option value={true} defaultChecked>
+						<option value={1} defaultChecked>
 							Hoạt động
 						</option>
-						<option value={false}>Không hoạt động</option>
+						<option value={0}>Không hoạt động</option>
 					</select>
 				</div>
 				<div className="flex flex-col gap-1 relative">
@@ -168,10 +189,9 @@ const DiscountAdd = (props: Props) => {
 						defaultValue={""}
 						onChange={() => changeApplies(event)}
 					>
-						<option value="" defaultChecked>
-							Chọn loại
+						<option value={"all"} defaultChecked>
+							Tất cả
 						</option>
-						<option value={"all"}>Tất cả</option>
 						<option value={"category"}>Danh mục</option>
 						<option value={"specific"}>Sản phẩm</option>
 					</select>
@@ -183,37 +203,35 @@ const DiscountAdd = (props: Props) => {
 						{errors.discount_applies_to?.message}
 					</span>
 				</div>
-				<div className="flex items-center col-span-2">
-					{voucherApplies !== "category" ? (
+				<div className="flex *:w-full items-center col-span-2">
+					{voucherApplies == "all" && (
+						<CustomFloatingField
+							rounded
+							label="Áp dụng cho tất cả sản phẩm"
+							placeholder={"Tất cả sản phẩm"}
+							register={register}
+							field="discount_product_ids"
+							disabled
+						/>
+					)}
+					{voucherApplies == "specific" && (
 						<CustomFloatingField
 							rounded
 							required
 							type="number"
 							label="Áp dụng cho sản phẩm"
-							placeholder={
-								voucherApplies == "all"
-									? "Tất cả sản phẩm"
-									: "Chọn các sản phẩm áp dụng"
-							}
+							placeholder={"Chọn các sản phẩm áp dụng"}
 							register={register}
 							error={errors.discount_product_ids as any}
 							field="discount_product_ids"
 							message={errors.discount_product_ids?.message}
 							disabled={voucherApplies !== "specific"}
 						/>
-					) : (
-						<CustomFloatingField
-							rounded
-							required
-							type="number"
-							label="Áp dụng cho danh mục"
-							placeholder="Chọn các danh mục áp dụng"
-							register={register}
-							error={errors.discount_category_ids as any}
-							field="discount_category_ids"
-							message={errors.discount_category_ids?.message}
-						/>
 					)}
+					{voucherApplies == "category" && (
+						<HandleChooseCategory setValue={setValue} errors={errors} />
+					)}
+
 					{/* <span
 						className={`${
 							errors.discount_value ? "block" : "hidden"

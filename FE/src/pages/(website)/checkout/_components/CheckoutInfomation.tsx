@@ -36,7 +36,6 @@ const CheckoutInfomation = () => {
 		action: "BANKING",
 		onSuccess: () => {
 			setLoading(false);
-			if (!user_id) afterPayment();
 		},
 		onError: () => {
 			setLoading(false), toast({ variant: ToastVariant.ERROR, content: "Thanh toán không thành công" });
@@ -70,13 +69,13 @@ const CheckoutInfomation = () => {
 			paymentMethod: orderAddress_Payment_Discount.paymentMethod,
 			customerInfo,
 			products,
-			amount: checkingOrder.total,
-			code: orderAddress_Payment_Discount.discountCode,
+			code: orderAddress_Payment_Discount.discountCode.split("(")[0].trim(),
 		};
 
 		if (orderAddress_Payment_Discount.paymentMethod == "VNPAY") {
 			const bankingPayload = {
 				bankCode: "NCB",
+				amount: checkingOrder.total,
 				orderInfo: {
 					...payload,
 				},

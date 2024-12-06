@@ -1,5 +1,5 @@
 import useCategory from "@/common/hooks/useCategories";
-import useMegaMenu from "@/common/hooks/useMegaMenu";
+import useProduct from "@/common/hooks/useProduct";
 import { ICategory } from "@/common/interfaces/category";
 import React, { useEffect, useState } from "react";
 import { MdKeyboardArrowDown, MdKeyboardArrowRight } from "react-icons/md";
@@ -10,19 +10,28 @@ interface FilterProb {
   productType: string[];
   // author: string[];
 }
-interface Prob {
-  handleFilterProduct: any;
-  filterValues: FilterProb;
-}
-const Left = ({ filterValues, handleFilterProduct }: Prob) => {
+
+const Left = () => {
+  const [filterValues, setFilterValues] = useState<FilterProb>({
+    price: { gte: 0, lte: 11000000 },
+    productType: [],
+  });
   const [openItem, setOpenItem] = useState<number[]>([1, 2]);
+  const { setFeature } = useProduct();
   const { CategoryQuery, setLimit } = useCategory();
 
-  const { author } = useMegaMenu();
+  const handleFilterProduct = (data: Partial<FilterProb>) => {
+    setFilterValues((prev) => ({
+      ...prev,
+      ...data,
+    }));
+  };
   useEffect(() => {
-    setLimit(10);
-  }, []);
-
+    const timeout = setTimeout(() => {
+      setFeature(filterValues);
+    }, 300);
+    return () => clearTimeout(timeout);
+  }, [filterValues, setFeature]);
   //logic filter
 
   const toggleItem = (index: number) => {
@@ -33,29 +42,32 @@ const Left = ({ filterValues, handleFilterProduct }: Prob) => {
     );
   };
   //lấy data filter
-
+  useEffect(() => {
+    setLimit(10);
+  }, [setLimit]);
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = event.target;
 
-    handleFilterProduct((prev: any) => {
-      if (type === "checkbox") {
-        const values = prev[name as keyof typeof prev] as string[];
-        return {
-          ...prev,
-          [name]: checked
-            ? [...values, value]
-            : values.filter((v) => v !== value),
-        };
-      } else {
-        const [key, subKey] = name.split(".");
-        return {
-          ...prev,
-          [key]: { ...prev[key as keyof typeof prev], [subKey]: Number(value) },
-        };
-      }
-    });
+    if (type === "checkbox") {
+      setFilterValues((prev) => ({
+        ...prev,
+        [name]: checked
+          ? [...(prev[name as keyof FilterProb] as string[]), value]
+          : (prev[name as keyof FilterProb] as string[]).filter(
+              (v) => v !== value
+            ),
+      }));
+    } else {
+      const [key, subKey] = name.split(".");
+      setFilterValues((prev) => ({
+        ...prev,
+        [key]: {
+          ...(prev[key as keyof FilterProb] as object),
+          [subKey]: Number(value),
+        },
+      }));
+    }
   };
-
   const handleToggle = (
     index: number,
     event: React.MouseEvent<HTMLButtonElement>

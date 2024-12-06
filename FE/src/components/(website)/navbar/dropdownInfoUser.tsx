@@ -50,7 +50,7 @@ const DropdownInfoUser = (props: Props) => {
 				<div
 					onMouseEnter={() => setOpen(true)}
 					onMouseLeave={() => setOpen(false)}
-					className={`w-[280px] -right-1/4 translate-x-1/4  absolute top-[110%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
+					className={`w-[280px] right-16 translate-x-1/4 absolute top-[70%] h-fit duration-200 shadow-lg bg-white p-[35px]`}
 				>
 					<div className="font-semibold uppercase text-[12px] pb-3 border-b border-zinc-400 text-zinc-800">
 						Tài khoản
@@ -58,18 +58,11 @@ const DropdownInfoUser = (props: Props) => {
 					{id ? (
 						<div className="flex flex-col gap-1 pt-1">
 							<Link
-								to="/don-hang"
+								to="/thong-tin-tai-khoan"
 								state={{ from: location.pathname }}
 								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
 							>
-								Đơn hàng
-							</Link>
-							<Link
-								to="/so-dia-chi"
-								state={{ from: location.pathname }}
-								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
-							>
-								Sổ địa chỉ giao hàng
+								Thông tin tài khoản
 							</Link>
 							<Link
 								to="/gio-hang"
@@ -79,13 +72,6 @@ const DropdownInfoUser = (props: Props) => {
 								Giỏ hàng
 							</Link>
 							<div className="font-semibold h-1  border-b border-zinc-400 text-zinc-800"></div>
-							<Link
-								to="/doi-mat-khau"
-								state={{ from: location.pathname }}
-								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"
-							>
-								Đổi mật khẩu
-							</Link>
 							<div
 								onClick={() => Logout()}
 								className="text-[12px] p-3 hover:bg-[rgba(0,0,0,0.05)]"

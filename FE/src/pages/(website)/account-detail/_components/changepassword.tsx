@@ -3,15 +3,10 @@ import { useToast } from "@/common/hooks/useToast";
 import { changePassword } from "@/common/schemas/auth";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import Breadcrumb from "../../components/(website)/breadcrumb/breadcrumb";
 
-type Props = {};
-
-const ChangePassword = (props: Props) => {
+const ChangePassword = () => {
 	const { toast } = useToast();
 	const { id } = userState();
-	const nav = useNavigate();
 
 	const {
 		handleSubmit,
@@ -27,7 +22,6 @@ const ChangePassword = (props: Props) => {
 					variant: data.status,
 					content: "Thay đổi mật khẩu thành công",
 				});
-				nav("/");
 			}, 300);
 		},
 		onError: (err: any) => {
@@ -48,14 +42,13 @@ const ChangePassword = (props: Props) => {
 
 	return (
 		<>
-			<Breadcrumb title="Đổi mật khẩu" />
-			<div className="xl:px-[11.5%] 2xl:px-[17.5%] h-fit flex justify-center *:h-full py-[100px]">
-				<div className="w-[540px] h-full bg-[#f3f3f3] flex flex-col justify-between items-center px-[40px] py-[37px]">
+			<div className="flex items-center justify-center">
+				<div className="w-[540px] h-full flex flex-col justify-between items-center px-[40px] py-[37px]">
 					<p className="text-[30px] leading-[36px] font-medium text-[#333]">Đổi mật khẩu</p>
 					<p className="text-[#666] text-[15px] leading-[15px]">Thay đổi mật khẩu mới</p>
 					<form
 						onSubmit={handleSubmit(changePw)}
-						className="mt-6 bg-white shadow-lg p-[30px] w-full gap-2 flex flex-col justify-between *:text-[14px]"
+						className="mt-6 bg-white shadow-lg p-[30px] border border-zinc-100 w-full gap-2 flex flex-col justify-between *:text-[14px]"
 					>
 						<div
 							className={`relative ${

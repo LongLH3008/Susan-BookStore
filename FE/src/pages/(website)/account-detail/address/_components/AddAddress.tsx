@@ -1,13 +1,14 @@
 "use client";
 
+import { userState } from "@/common/hooks/useAuth";
 import CustomFloatingField from "@/components/(website)/floatingfield/CustomFloatingField";
 import { getAllCity, getAllDistrict, getWards } from "@/services/location.service";
-import { updateUserAddress } from "@/services/user.service";
+import { createUserAddress } from "@/services/user.service";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Modal } from "flowbite-react";
 import Joi from "joi";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { useForm } from "react-hook-form";
 import { IoMdClose } from "react-icons/io";
 
@@ -43,47 +44,12 @@ const schemaAddress = Joi.object({
 	}),
 });
 
-export function UpdateAddress({
-	trigger,
-	dataAddress,
-	fallBack,
-}: {
-	trigger?: ReactNode;
-	dataAddress: any;
-	fallBack?: void;
-}) {
+export function AddAddress({ trigger }: { trigger?: ReactNode }) {
 	const queryClient = useQueryClient();
 	const [openModal, setOpenModal] = useState(false);
+	const { id: userId } = userState();
 	const [locationInfo, setLocationInfo] = useState<any>({ district: [], ward: [] });
 	const [detail, setDetail] = useState({ province: "", district: "", ward: "" });
-
-	const form = useForm<TAddress>({
-		resolver: joiResolver(schemaAddress),
-		defaultValues: {
-			address: dataAddress.address,
-			province: dataAddress.province,
-			district: dataAddress.district,
-			ward: dataAddress.ward,
-			phone: dataAddress.phone,
-		},
-	});
-
-	useEffect(() => {
-		const splitName = (input: string) => {
-			return input.split("/")[0].trim();
-		};
-
-		(async () => {
-			const { district } = await getAllDistrict(dataAddress.province.split("/")[1].trim());
-			const { ward } = await getWards(dataAddress.district.split("/")[1].trim());
-			setLocationInfo({ ward, district });
-			setDetail({
-				province: splitName(dataAddress.province),
-				district: splitName(dataAddress.district),
-				ward: splitName(dataAddress.ward),
-			});
-		})();
-	}, []);
 
 	const { data: province } = useQuery({
 		queryKey: ["cc"],
@@ -101,6 +67,10 @@ export function UpdateAddress({
 		});
 		return res;
 	};
+
+	const form = useForm<TAddress>({
+		resolver: joiResolver(schemaAddress),
+	});
 
 	const getDistrict = async (item: any) => {
 		form.setValue("province", `${item.ProvinceName} / ${item.ProvinceID}`);
@@ -133,12 +103,10 @@ export function UpdateAddress({
 		if (!check) return;
 		const payload = {
 			...form.getValues(),
-			id: dataAddress._id,
+			userId,
 		};
-		try {
-			await updateUserAddress(payload);
-			fallBack && fallBack;
-		} catch (error) {}
+
+		const res = await createUserAddress(payload);
 		queryClient.invalidateQueries({ queryKey: ["userAddress"], exact: true });
 		close();
 	};
@@ -154,10 +122,11 @@ export function UpdateAddress({
 			<div onClick={() => setOpenModal(true)} className="w-fit h-fit border-0">
 				{trigger}
 			</div>
-			<Modal show={openModal} onClose={() => setOpenModal(false)}>
+
+			<Modal className="*:max-w-[600px]" show={openModal} onClose={() => setOpenModal(false)}>
 				<Modal.Body className="px-7 py-4 h-fit overflow-visible">
 					<form action="" className="py-5 flex flex-col gap-7">
-						<h3 className="text-xl font-semibold sm:text-2xl">Cập nhật địa chỉ</h3>
+						<h3 className="text-xl font-semibold sm:text-2xl">Thêm địa chỉ mới</h3>
 						<CustomFloatingField
 							floating
 							field="phone"
@@ -177,7 +146,7 @@ export function UpdateAddress({
 								</span>
 								<div className="h-0 group-hover:h-[20dvh] group-hover:z-50 w-full bg-white rounded-md border text-zinc-700 -z-50 overflow-y-scroll flex flex-col *:py-[6px] *:px-2 *:text-sm absolute top-[103%] left-0">
 									{province &&
-										province?.length > 0 &&
+										province.length > 0 &&
 										province?.map((item: any, index: number) => (
 											<span
 												className="hover:bg-zinc-100 cursor-pointer"
@@ -201,7 +170,7 @@ export function UpdateAddress({
 								<span className="text-sm translate-y-1">
 									{detail.district !== "" ? detail.district : "Chọn"}
 								</span>
-								{locationInfo?.district?.length > 0 && (
+								{locationInfo.district.length > 0 && (
 									<div className="h-0 group-hover:h-[20dvh] group-hover:z-50 w-full bg-white rounded-md border text-zinc-700 -z-50 overflow-y-scroll flex flex-col *:py-[6px] *:px-2 *:text-sm absolute top-[103%] left-0">
 										{sortByKey("DistrictName", locationInfo.district)?.map(
 											(item: any, index: number) => (
@@ -229,9 +198,9 @@ export function UpdateAddress({
 								<span className="text-sm translate-y-1">
 									{detail.ward !== "" ? detail.ward : "Chọn"}
 								</span>
-								{locationInfo?.ward?.length > 0 && (
+								{locationInfo.ward.length > 0 && (
 									<div className="h-0 group-hover:h-[20dvh] group-hover:z-50 w-full bg-white rounded-md border text-zinc-700 -z-50 overflow-y-scroll flex flex-col *:py-[6px] *:px-2 *:text-sm absolute top-[103%] left-0">
-										{sortByKey("WardName", locationInfo?.ward)?.map(
+										{sortByKey("WardName", locationInfo.ward)?.map(
 											(item: any, index: number) => (
 												<span
 													className="hover:bg-zinc-100 cursor-pointer"
@@ -264,7 +233,7 @@ export function UpdateAddress({
 							onClick={form.handleSubmit(submit)}
 							className="w-full rounded-md  border text-center py-3 cursor-pointer hover:bg-black hover:text-white"
 						>
-							Cập nhật
+							Thêm mới
 						</span>
 					</form>
 				</Modal.Body>
