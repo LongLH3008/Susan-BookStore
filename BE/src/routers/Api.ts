@@ -315,50 +315,35 @@ router.get(
 
 // info user
 router.post("/create/info-user", asyncHandler(InfoUserController.Create));
-router.get(
-  "/detail/user-Info/:id",
-  asyncHandler(InfoUserController.detail)
-);
-router.delete(
-  "/Delete/info-user/:id",
-  asyncHandler(InfoUserController.delete)
-);
+router.get("/detail/user-Info/:id", asyncHandler(InfoUserController.detail));
+router.delete("/Delete/info-user/:id", asyncHandler(InfoUserController.delete));
 
 router.get(
   "/Getall/info-user-WithUserId",
   asyncHandler(InfoUserController.GetAllInfoUserWithPagination)
 );
 
-router.patch(
-  "/info-user/update/:id",
-  asyncHandler(InfoUserController.update)
-);
+router.patch("/info-user/update/:id", asyncHandler(InfoUserController.update));
 
-router.post(
-  "/contact/create",
-  asyncHandler(ContactController.create)
-)
+router.post("/contact/create", asyncHandler(ContactController.create));
 
-router.get(
-  "/contact/list",
-  asyncHandler(ContactController.List)
-)
+router.get("/contact/list", asyncHandler(ContactController.List));
 
-router.get(
-  "/contact/:id",
-  asyncHandler(ContactController.Detail)
-)
+router.get("/contact/:id", asyncHandler(ContactController.Detail));
 
 // Statistics
 router.get(
   "/topfivebook",
   asyncHandler(StatisticsController.GetAllOrderWithStatistical)
-)
+);
 router.get(
   "/topfiveuser",
   asyncHandler(StatisticsController.GetAllOrderWithTop5User)
-)
+);
 
-
+router.post(
+  "/filterbydayandmonth",
+  asyncHandler(StatisticsController.StatisticalFilterOrderPrdayAndMonth)
+);
 
 export default router;

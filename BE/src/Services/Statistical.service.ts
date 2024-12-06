@@ -2,6 +2,7 @@ import Order from "../models/Order.model";
 import {
   GetAllOrderWithStatisticalRequest,
   GetAllOrderWithStatisticalResponse,
+  StatisticalOrderDto,
   TopSellingBook,
   TopSellingUser,
 } from "./dtos/Statistincal.dto";
@@ -147,6 +148,61 @@ class StatisticalService {
     } catch (error) {
       console.error("Error in TopBuyingUsers:", error);
       throw error;
+    }
+  }
+
+  static async StatisticalOrderbydayAndMonth(filter: {
+    date?: string;
+    month?: number;
+    year?: number;
+  }): Promise<StatisticalOrderDto[]> {
+    try {
+      const matchStage: any = {};
+
+      // Lọc theo ngày cụ thể
+      if (filter.date) {
+        const specificDate = new Date(filter.date);
+        matchStage["$expr"] = {
+          $and: [
+            { $eq: [{ $dayOfMonth: "$createdAt" }, specificDate.getDate()] },
+            { $eq: [{ $month: "$createdAt" }, specificDate.getMonth() + 1] },
+            { $eq: [{ $year: "$createdAt" }, specificDate.getFullYear()] },
+          ],
+        };
+      }
+
+      // Lọc theo tháng và năm
+      if (filter.month && filter.year) {
+        matchStage["$expr"] = {
+          $and: [
+            { $eq: [{ $month: "$createdAt" }, filter.month] },
+            { $eq: [{ $year: "$createdAt" }, filter.year] },
+          ],
+        };
+      }
+
+      // Pipeline
+      const orderStatistics: StatisticalOrderDto[] = await Order.aggregate([
+        ...(Object.keys(matchStage).length > 0 ? [{ $match: matchStage }] : []),
+        {
+          $group: {
+            _id: null,
+            totalOrders: { $sum: 1 }, // Tổng số đơn hàng
+            totalRevenue: { $sum: "$total" }, // Tổng doanh thu
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            totalOrders: 1,
+            totalRevenue: 1,
+          },
+        },
+      ]);
+      return orderStatistics;
+    } catch (error: any) {
+      console.error("Error in StatisticalOrderbydayAndMonth:", error);
+      throw new Error("Không thể thống kê đơn hàng: " + error.message);
     }
   }
 }

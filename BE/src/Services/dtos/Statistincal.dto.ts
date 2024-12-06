@@ -67,3 +67,12 @@ export interface FilterbydayandmonthResponse {
   page: number;
   limit: number;
 }
+
+
+
+// statistical view prd by day and month
+export interface StatisticalOrderDto {
+  totalOrders: number; // Tổng số đơn hàng
+  totalRevenue: number; // Tổng doanh thu
+}
+

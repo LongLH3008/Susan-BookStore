@@ -171,4 +171,5 @@ router.get("/contact/:id", (0, utils_1.asyncHandler)(Contact_Controller_1.defaul
 // Statistics
 router.get("/topfivebook", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.GetAllOrderWithStatistical));
 router.get("/topfiveuser", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.GetAllOrderWithTop5User));
+router.post("/filterbydayandmonth", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.StatisticalFilterOrderPrdayAndMonth));
 exports.default = router;
