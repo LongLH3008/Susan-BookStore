@@ -56,12 +56,12 @@ class BookService {
   
     const skip = (page - 1) * limit;
   
-    const books = await Book.find({ isActive: true })
+    const books = await Book.find()
       .skip(skip)
       .limit(limit)
       .lean();
   
-    const total = await Book.countDocuments({ isActive: true });
+    const total = await Book.countDocuments();
   
     return {
       books: books as unknown as BookOutputDTO[],
@@ -151,10 +151,89 @@ class BookService {
       limit,
     };
   }
+  static async getBookByQueryAdmin(
+    query: BookQueryInputDTO
+  ): Promise<BookListOutputDTO> {
+    const { error } = bookQuerySchema.validate(query);
+    if (error) throw new ValidationError(error.details[0].message);
+  
+    const {
+      category_ids,
+      page = 1,
+      limit = 10,
+      sort = "ascByTitle",
+      minPrice,
+      maxPrice,
+      minRating,
+      search,
+    } = query;
+  
+    const skip: number = (page - 1) * limit;
+    let sortBy: { [key: string]: 1 | -1 } = {};
+    let filter: any = { };
+  
+    if (category_ids) {
+      const categoriesArray = category_ids.split(",");
+      filter.categories = { $in: categoriesArray };
+    }
+  
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) filter.price.$gte = minPrice;
+      if (maxPrice) filter.price.$lte = maxPrice;
+    }
+  
+    if (minRating) {
+      filter.rating = { $gte: parseFloat(minRating.toString()) };
+    }
+  
+    if (search && search.trim()) {
+      filter.$text = { $search: search.trim() };  
+    }
+  
+    switch (sort) {
+      case "ascByPrice":
+        sortBy = { price: 1 };
+        break;
+      case "descByPrice":
+        sortBy = { price: -1 };
+        break;
+      case "ascByRating":
+        sortBy = { rating: 1 };
+        break;
+      case "descByRating":
+        sortBy = { rating: -1 };
+        break;
+      case "ascByTitle":
+        sortBy = { title: 1 };
+        break;
+      case "descByTitle":
+        sortBy = { title: -1 };
+        break;
+      default:
+        sortBy = { title: 1 };
+        break;
+    }
+    let books: BookOutputDTO[] = [];
+    if (limit === 0) {
+    books = await Book.find(filter).sort(sortBy).lean();
+    } else {
+      books = await Book.find(filter).sort(sortBy).skip(skip).limit(limit).lean();
+    }
+  
+    const total = await Book.countDocuments(filter);
+  
+    return {
+      books: books as BookOutputDTO[],
+      total,
+      page,
+      limit,
+    };
+  }
   
 
   static async getBookById(id: string): Promise<BookOutputDTO> {
-    const foundBook = await Book.findOne({ _id: id, isActive: true });
+    const foundBook = await Book.findOne({ _id: id});
     if (!foundBook) throw new ResourceNotFoundError("Book not found");
     return foundBook.toObject() as BookOutputDTO;
   }
