@@ -16,32 +16,39 @@ class SendEmalCheckOutOrder {
         },
       });
 
+      const subject = "Hoàn tất đơn hàng - Cảm ơn bạn đã mua sắm cùng chúng tôi!";
+      const htmlContent = `
+          <p>Quý khách hàng thân mến,</p>
+          <p>Chúng tôi rất vui mừng thông báo rằng đơn hàng của bạn đã được giao thành công!</p>
+          <p><strong>Chi tiết đơn hàng:</strong></p>
+          <ul>
+              <li><strong>Mã đơn hàng:</strong> ${trackingNumber}</li>
+              <li><strong>Ngày đặt hàng:</strong> ${new Date().toLocaleDateString()}</li>
+          </ul>
+          <p>Đơn hàng của bạn đã hoàn tất. Chúng tôi hy vọng bạn hài lòng với sản phẩm!</p>
+          <p>Vui lòng dành chút thời gian để chia sẻ trải nghiệm của bạn bằng cách để lại đánh giá. Phản hồi của bạn giúp chúng tôi cải thiện dịch vụ và hỗ trợ khách hàng khác.</p>
+          <p>
+              <a href="http://localhost:5173/tra-cuu-don-hang/" style="color: blue; text-decoration: underline;">Xem chi tiết đơn hàng tại đây</a> 
+              hoặc để lại đánh giá sản phẩm tại đường dẫn bên dưới:
+          </p>
+          <p>
+              <a href="http://localhost:5173/tra-cuu-don-hang" style="color: blue; text-decoration: underline;">
+                  Để lại đánh giá sản phẩm
+              </a>
+          </p>
+          <p>Xin cảm ơn quý khách đã mua sắm cùng chúng tôi!</p>
+          <p>Trân trọng,<br/>Đội ngũ hỗ trợ</p>
+      `;
+
+      // Encode subject and HTML content in Base64
+      const base64Subject = Buffer.from(subject).toString("base64");
+      const base64HtmlContent = Buffer.from(htmlContent).toString("base64");
+
       const mailOptions = {
         from: Locals.config().emailUser, // Địa chỉ gửi
         to: email, // Địa chỉ nhận
-        subject: "Order Completed - Thank You for Shopping with Us!", // Tiêu đề email
-        html: `
-            <p>Dear valued customer,</p>
-            <p>We are excited to inform you that your order has been successfully delivered!</p>
-            <p><strong>Order Details:</strong></p>
-            <ul>
-                <li><strong>Order Code:</strong> ${trackingNumber}</li>
-                <li><strong>Order Date:</strong> ${new Date().toLocaleDateString()}</li>
-            </ul>
-            <p>Your order has been completed. We hope you are satisfied with your purchase!</p>
-            <p>Please take a moment to share your experience by leaving a product review. Your feedback helps us improve our service and assist other customers.</p>
-            <p>
-                <a href="http://localhost:5173/don-hang" style="color: blue; text-decoration: underline;">View your order details here</a> 
-                or leave a review for your purchased products below:
-            </p>
-            <p>
-                <a href="http://localhost:5173/review/${trackingNumber}" style="color: blue; text-decoration: underline;">
-                    Leave a Product Review
-                </a>
-            </p>
-            <p>Thank you for shopping with us!</p>
-            <p>Best regards,<br/>The Support Team</p>
-        `,
+        subject: `=?UTF-8?B?${base64Subject}?=`, // Base64 encoded subject
+        html: Buffer.from(base64HtmlContent, "base64").toString(), // Decode back the Base64 HTML content
       };
 
       await transporter.sendMail(mailOptions);

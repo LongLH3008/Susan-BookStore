@@ -1,3 +1,4 @@
+import { StatisticalOrderDto } from "./../../Services/dtos/Statistincal.dto";
 import { SuccessResponse } from "../../cores/succes.response";
 import StatisticalService from "../../Services/Statistical.service";
 import { Response } from "express";
@@ -14,8 +15,24 @@ class StatisticalController {
     }).send(res);
   }
 
-  static async GetAllOrderWithTop5User(req: Request, res: Response): Promise<any> {
+  static async GetAllOrderWithTop5User(
+    req: Request,
+    res: Response
+  ): Promise<any> {
     const views = await StatisticalService.TopBuyingUsers();
+    return new SuccessResponse({
+      message: "Get all order successfully",
+      metadata: views,
+    }).send(res);
+  }
+
+  static async StatisticalFilterOrderPrdayAndMonth(
+    req: Request,
+    res: Response
+  ): Promise<any> {
+    const views = await StatisticalService.StatisticalOrderbydayAndMonth(
+      req.body
+    );
     return new SuccessResponse({
       message: "Get all order successfully",
       metadata: views,
