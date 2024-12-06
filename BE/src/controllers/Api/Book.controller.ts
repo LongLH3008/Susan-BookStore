@@ -24,6 +24,12 @@ class BookController {
       metadata: await BookService.getBookByQuery(req.query)
     }).send(res);
   }
+  static async getByQueryAdmin(req: Request, res: Response): Promise<any> {
+    return new SuccessResponse({
+      message: "Get books successfully",
+      metadata: await BookService.getBookByQueryAdmin(req.query)
+    }).send(res);
+  }
 
   static async getById(req: Request, res: Response): Promise<any> {
     const id = req.params.id;

@@ -85,6 +85,7 @@ router.get("/books/reviews", asyncHandler(ReviewController.getAllReviews));
 // Public routes
 router.get("/books", asyncHandler(BookController.getByQuery));
 router.get("/views-books-admin", asyncHandler(BookController.getAllBooks));
+router.get("/books-admin", asyncHandler(BookController.getByQueryAdmin));
 router.get("/books/:id", asyncHandler(BookController.getById));
 router.get("/books/slug/:slug", asyncHandler(BookController.getBySlug));
 
