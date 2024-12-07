@@ -5,7 +5,7 @@ import BookImage from "@/pages/(website)/book_detail/_components/BookImage";
 import Bookservice from "@/pages/(website)/book_detail/_components/Bookservice";
 import BookText from "@/pages/(website)/book_detail/_components/BookText";
 import Left from "@/pages/(website)/shop/_components/Fillter";
-import { deleteProduct, fetchProducts } from "@/services/product.service";
+import { deleteProduct } from "@/services/product.service";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
 import {
@@ -15,11 +15,14 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  Paper,
   Popover,
+  TablePagination,
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { DataGrid } from "@mui/x-data-grid";
+import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
@@ -30,7 +33,6 @@ import {
   MdOutlineSearch,
 } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
-import MyTable2 from "../components/table";
 
 const ProductsPage: React.FC = () => {
   const { toast } = useToast();
@@ -41,16 +43,19 @@ const ProductsPage: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const openPopover = Boolean(anchorEl);
   const id = openPopover ? "simple-popover" : undefined;
+  const [page, setPage] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(6);
 
-  const { productQuery, updateFilter, setFeature } = useProduct();
+  const { productQueryAdmin, updateFilter, setFeature, filters } = useProduct();
   const handleSearch = (e: any) => {
     setSearch(e.target.value);
     console.log("search", e.target.value);
 
-    productQuery?.refetch();
+    productQueryAdmin?.refetch();
   };
 
-  console.log("productQuery?.data?.metadata?.books", productQuery);
+  console.log("productQueryAdmin?.data?.metadata?.books", productQueryAdmin);
+
   useEffect(() => {
     updateFilter("search", search);
   }, [search]);
@@ -63,7 +68,7 @@ const ProductsPage: React.FC = () => {
         content: `Xóa sản phẩm thành công`,
       });
 
-      productQuery.refetch();
+      productQueryAdmin.refetch();
     },
     onError: (error: AxiosError) => {
       const message = "Lỗi khi xóa sản phẩm: ";
@@ -112,12 +117,45 @@ const ProductsPage: React.FC = () => {
     setSearch("");
     setFeature(undefined);
   };
+  useEffect(() => {
+    if (filters.page !== page || filters.limit !== limit) {
+      updateFilter("page", page);
+      updateFilter("limit", limit);
+    }
+  }, [page, limit, filters.page, filters.limit]);
+
+  const handlePage = (event: any, value: number) => {
+    if (value >= 0) {
+      setPage(value);
+    }
+  };
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const newLimit = parseInt(event.target.value, 10);
+    if (newLimit > 0) {
+      setLimit(newLimit);
+      setPage(1);
+    }
+  };
   const columns = React.useMemo(
     () => [
       {
+        headerName: "Ảnh đại diện",
+        field: "coverImage",
+        width: 100,
+        renderCell: (params: any) => (
+          <img
+            src={params.row.coverImage}
+            alt={params.row.coverImage}
+            className=" h-20"
+          />
+        ),
+      },
+      {
         headerName: "Tên sản phẩm",
         field: "title",
-        width: 200,
+        width: 300,
       },
       {
         headerName: "Giá sản phẩm",
@@ -130,21 +168,14 @@ const ProductsPage: React.FC = () => {
         flex: 3,
       },
       {
-        headerName: "Ảnh đại diện",
-        field: "coverImage",
-        flex: 4,
-        renderCell: (params: any) => (
-          <img
-            src={params.row.coverImage}
-            alt={params.row.coverImage}
-            className=" h-20"
-          />
-        ),
+        headerName: "Trạng thái",
+        field: "author",
+        flex: 3,
       },
       {
         headerName: "Thao tác",
         field: "actions",
-        flex: 5,
+        flex: 4,
         renderCell: (params: any) => (
           <>
             <div className="flex gap-3  items-center ">
@@ -179,6 +210,8 @@ const ProductsPage: React.FC = () => {
     ],
     []
   );
+  console.log("page", page);
+  console.log("limit", limit);
 
   return (
     <>
@@ -213,14 +246,52 @@ const ProductsPage: React.FC = () => {
         linkAdd="/quan-tri/san-pham/them-moi"
       /> */}
 
-      <MyTable2
-        rows={productQuery?.data?.metadata?.books || []}
+      {/* <MyTable2
+        rows={productQueryAdmin?.data?.metadata?.books || []}
         columns={columns}
-        loading={productQuery?.isLoading}
-        error={productQuery?.isError ? productQuery?.error?.message : ""}
-      />
-
-      {productQuery?.isError && (
+        loading={productQueryAdmin?.isLoading}
+        error={productQueryAdmin?.isError ? productQueryAdmin?.error?.message : ""}
+      /> */}
+      <Paper
+        sx={{
+          height: "67vh",
+          maxHeight: "calc(100vh-300px)",
+          width: "100%",
+          overflowY: "auto",
+          position: "relative",
+        }}
+      >
+        <DataGrid
+          rows={productQueryAdmin?.data?.metadata?.books || []}
+          columns={columns}
+          getRowId={(row) => row?._id || row?.id}
+          getRowHeight={() => "auto"}
+          checkboxSelection
+          loading={productQueryAdmin?.isLoading}
+          sx={{
+            border: 0,
+            "& .MuiDataGrid-cell": {
+              display: "flex",
+              alignItems: "center",
+              padding: "10px",
+            },
+            "& .MuiDataGrid-footerContainer": {
+              display: "none",
+            },
+          }}
+        />
+        <div className="w-full absolute bottom-0 right-4 bg-white">
+          <TablePagination
+            component="div"
+            count={productQueryAdmin?.data?.metadata?.total}
+            page={page - 1}
+            rowsPerPage={limit}
+            onPageChange={(event, newPage) => handlePage(event, newPage + 1)}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </div>
+      </Paper>
+      {productQueryAdmin?.isError && (
         <div
           style={{
             display: "flex",
@@ -229,7 +300,7 @@ const ProductsPage: React.FC = () => {
           }}
         >
           <Typography color="error">
-            Error: {productQuery?.error?.message}
+            Error: {productQueryAdmin?.error?.message}
           </Typography>
         </div>
       )}

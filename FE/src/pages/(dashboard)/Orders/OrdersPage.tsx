@@ -12,6 +12,7 @@ import {
   Avatar,
   Box,
   Button,
+  Chip,
   CircularProgress,
   Dialog,
   DialogContent,
@@ -116,16 +117,20 @@ const OrdersPage = () => {
       field: "user_name",
       headerName: "Khách Hàng",
       renderCell: (params) => {
-        const { user_name, avatar } = params.row;
+        const { user_name, user_avatar } = params.row;
 
         if (!user_name) {
-          return <p className="text-red-600">Chưa điền tên</p>;
+          return (
+            <p onClick={() => setOpen(true)} className="text-red-600">
+              Chưa điền tên
+            </p>
+          );
         }
 
         return (
           <div className="flex items-center space-x-2">
-            {avatar ? (
-              <Avatar alt={user_name} src={avatar} />
+            {user_avatar ? (
+              <Avatar alt={user_name} src={user_avatar} />
             ) : (
               <Avatar>{getInitials(user_name)}</Avatar>
             )}
@@ -167,19 +172,44 @@ const OrdersPage = () => {
       },
       width: 500,
     },
-
     {
-      field: "ship",
-      headerName: "Phí VC",
-      renderCell: () => <p>{ConvertVNDString(25000)} đ</p>,
+      field: "user_phone_number",
+      headerName: "SĐT",
+      renderCell: (params) => {
+        return params?.row?.user_phone_number ? (
+          <p> {params?.row?.user_phone_number}</p>
+        ) : (
+          <p className="text-red-700 text-sm">Chưa điền SĐT</p>
+        );
+      },
       width: 100,
     },
     {
+      field: "methodPayment",
+      headerName: "Trạng thái thanh toán",
+      renderCell: (params) => {
+        return params?.row?.payment.method === "COD" ? (
+          <Chip label="Chưa thanh toán" className="bg-blue-100 text-blue-700" />
+        ) : (
+          <Chip label="Đã thanh toán" className="bg-green-100 text-green-700" />
+        );
+      },
+      width: 200,
+    },
+    // {
+    //   field: "ship",
+    //   headerName: "Phí VC",
+    //   renderCell: () => <p>{ConvertVNDString(25000)} đ</p>,
+    //   width: 100,
+    // },
+    {
       field: "createdAt",
       headerName: "Tạo lúc",
-      renderCell: (params) => (
-        <p>{formatDateTime(params.row.createdAt, "time")}</p>
-      ),
+      renderCell: (params) => {
+        const today = dayjs().startOf("day");
+        const orderDate = dayjs(orderTime).startOf("day");
+        return <p>{formatDateTime(params.row.createdAt, "time")}</p>;
+      },
       width: 100,
     },
     {

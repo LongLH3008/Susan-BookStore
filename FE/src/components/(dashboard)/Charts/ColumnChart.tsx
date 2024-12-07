@@ -18,6 +18,13 @@ const ColumnChart = () => {
             { x: "Fri", y: 122 },
             { x: "Sat", y: 323 },
             { x: "Sun", y: 111 },
+            { x: "Mon", y: 231 },
+            { x: "Tue", y: 122 },
+            { x: "Wed", y: 63 },
+            { x: "Thu", y: 421 },
+            { x: "Fri", y: 122 },
+            { x: "Sat", y: 323 },
+            { x: "Sun", y: 111 },
           ],
         },
         {
@@ -31,12 +38,20 @@ const ColumnChart = () => {
             { x: "Fri", y: 522 },
             { x: "Sat", y: 411 },
             { x: "Sun", y: 243 },
+            { x: "Mon", y: 231 },
+            { x: "Tue", y: 122 },
+            { x: "Wed", y: 63 },
+            { x: "Thu", y: 421 },
+            { x: "Fri", y: 122 },
+            { x: "Sat", y: 323 },
+            { x: "Sun", y: 111 },
           ],
         },
       ],
       chart: {
         type: "bar",
-        height: "200px",
+        height: "230px",
+        // width: "100%",
         fontFamily: "Inter, sans-serif",
         toolbar: {
           show: false,
@@ -71,7 +86,7 @@ const ColumnChart = () => {
         colors: ["transparent"],
       },
       grid: {
-        show: false,
+        show: true,
         strokeDashArray: 4,
         padding: {
           left: 2,
@@ -119,7 +134,7 @@ const ColumnChart = () => {
     }
   });
   return (
-    <div className="max-w-sm w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
+    <div className="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
       <div className="flex justify-between pb-4 mb-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center">
           <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center me-3">
@@ -144,7 +159,7 @@ const ColumnChart = () => {
           </div>
         </div>
         <div>
-          <span className="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300">
+          <span className="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md ">
             <svg
               className="w-2.5 h-2.5 me-1.5"
               aria-hidden="true"
@@ -184,7 +199,11 @@ const ColumnChart = () => {
         </dl>
       </div>
 
-      <div ref={chartRef} id="column-chart"></div>
+      <div
+        ref={chartRef}
+        id="column-chart"
+        // style={{ width: "600px", margin: "0 auto" }}
+      ></div>
       <div className="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
         <div className="flex justify-between items-center pt-5"></div>
       </div>

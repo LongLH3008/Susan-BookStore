@@ -1,7 +1,6 @@
-import { fetchProducts } from "@/services/product.service";
+import { fetchProducts, fetchProductsAdmin } from "@/services/product.service";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { createContext, useContext, useEffect, useState } from "react";
-import { dataProductProb } from "../interfaces/product";
 
 type ProdContextProps = {
   children: React.ReactNode;
@@ -17,6 +16,7 @@ type ProdContextType = {
   filters: FiltersType;
   updateFilter: (key: string, value: any) => void;
   productQuery: UseQueryResult<any, Error>;
+  productQueryAdmin: UseQueryResult<any, Error>;
 };
 
 type FiltersType = {
@@ -55,9 +55,13 @@ export const ProductProvider = ({ children }: ProdContextProps) => {
   const productQuery = useQuery({
     queryKey: ["Books", filters],
     queryFn: () => fetchProducts(filters as any),
-    staleTime: 5000,
+    staleTime: Infinity,
   });
-
+  const productQueryAdmin = useQuery({
+    queryKey: ["BooksAdmin", filters],
+    queryFn: () => fetchProductsAdmin(filters as any),
+    staleTime: Infinity,
+  });
   // console.log("productDataFilter", productDataFilter);
   useEffect(() => {
     if (features?.price) {
@@ -78,6 +82,7 @@ export const ProductProvider = ({ children }: ProdContextProps) => {
         filters,
         updateFilter,
         productQuery,
+        productQueryAdmin,
       }}
     >
       {children}

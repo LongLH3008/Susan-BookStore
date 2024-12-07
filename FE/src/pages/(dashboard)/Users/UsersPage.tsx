@@ -102,7 +102,7 @@ const UsersPage: React.FC = () => {
       {
         headerName: "Tên người dùng",
         field: "user_name",
-        flex: 2,
+        width: 200,
       },
       {
         headerName: "Email",
