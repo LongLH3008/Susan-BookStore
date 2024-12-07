@@ -126,7 +126,7 @@ const CategoriesPage: React.FC = () => {
               "https://blu.edu.vn/Content/images/default-image.jpg"
             }
             alt={params.row.category_name}
-            style={{ width: "50px", height: "50px" }}
+            style={{ width: "50px", height: "50px", objectFit: "cover" }}
           />
         ),
       },
