@@ -206,11 +206,15 @@ const OrdersPage = () => {
       field: "createdAt",
       headerName: "Tạo lúc",
       renderCell: (params) => {
-        const today = dayjs().startOf("day");
-        const orderDate = dayjs(orderTime).startOf("day");
-        return <p>{formatDateTime(params.row.createdAt, "time")}</p>;
+        const today = new Date().toISOString().split("T")[0];
+        const createdAt = params.row.createdAt.split("T")[0];
+        if (today === createdAt) {
+          return <p>{formatDateTime(params.row.createdAt, "time")}</p>;
+        } else {
+          return <p>{formatDateTime(params.row.createdAt, "dateTime")}</p>;
+        }
       },
-      width: 100,
+      width: 150,
     },
     {
       field: "total",
