@@ -117,8 +117,10 @@ const Voucher = () => {
 			<p className="text-[16px] font-semibold">Mã giảm giá</p>
 			<div className="flex z-10 items-center justify-between px-3 border border-zinc-300 rounded">
 				<label className="w-full cursor-pointer flex items-center p-4 pl-0 ms-2 text-sm font-medium text-gray-900">
-					<i className="fa-solid fa-ticket mr-2 text-[16px]"></i>
-					<span>{chooseVoucher.choose == "" ? "Sử dụng mã giảm giá" : chooseVoucher.choose}</span>
+					<i className="fa-solid fa-ticket mr-3 text-[16px]"></i>
+					<span className="text-[12px]">
+						{chooseVoucher.choose == "" ? "Sử dụng mã giảm giá" : chooseVoucher.choose}
+					</span>
 				</label>
 				{chooseVoucher.choose !== "" && (
 					<div className="flex items-center">

@@ -30,7 +30,7 @@ const CheckoutProducts = () => {
 					<div className="flex flex-col justify-start gap-1">
 						<span>Mã giảm giá</span>
 						{orderAddress_Payment_Discount.discountCode && (
-							<span className="text-[12px] text-zinc-500">
+							<span className="text-[12px] max-w-[70%] text-wrap text-zinc-500">
 								{orderAddress_Payment_Discount.discountCode}
 							</span>
 						)}

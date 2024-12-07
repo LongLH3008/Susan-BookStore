@@ -5,6 +5,7 @@ import Book from "../models/Book.model";
 import Discount from "../models/Discount.model";
 import { discountCreateSchema, discountQuerySchema, discountUpdateSchema } from "../schemas/discount.schema";
 import { deleteNullObject } from "../utils";
+import BookService from "./Book.service";
 import {
     DiscountCreateInputDTO,
     DiscountListOutputDTO,
@@ -42,6 +43,11 @@ class DiscountService {
         const existingDiscount = await Discount.findOne({ discount_code: data.discount_code });
         if (existingDiscount) {
             throw new BadRequestError("Mã giảm giá đã tồn tại");
+        }
+
+        if (data?.discount_category_ids && data.discount_category_ids.length > 0) {
+            const getBooks = await BookService.getBookByQuery({ category_ids: data.discount_category_ids[0], limit: 9999 })
+            data.discount_product_ids = [...getBooks?.books.map((item) => item._id)]
         }
 
         const newDiscount = await Discount.create(data);
@@ -117,6 +123,11 @@ class DiscountService {
     static async updateDiscount(id: string, payload: DiscountUpdateInputDTO): Promise<DiscountOutputDTO> {
         const { error } = discountUpdateSchema.validate(payload);
         if (error) throw new BadRequestError(error.details[0].message);
+
+        if (payload?.discount_category_ids && payload.discount_category_ids.length > 0) {
+            const getBooks = await BookService.getBookByQuery({ category_ids: payload.discount_category_ids[0], limit: 9999 })
+            payload.discount_product_ids = [...getBooks?.books.map((item) => item._id)]
+        }
 
         const updatedDiscount = await Discount.findOneAndUpdate(
             { _id: id, discount_is_active: true },

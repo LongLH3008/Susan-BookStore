@@ -17,17 +17,17 @@ const ItemInCheckout = ({ data }: { data: ICart }) => {
 						<p className="text-zinc-500 text-[12px]">{data.product_id.format}</p>
 					</span>
 					<div className="flex flex-col justify-center">
-						{data.product_id.discount > 0 && (
+						{Math.abs(data.product_id.discount) > 0 && (
 							<p className="text-[14px] text-zinc-700 text-right line-through">
 								{ConvertVNDString(data.product_id.price)} đ
 							</p>
 						)}
 
 						<p className="text-[14px] text-zinc-700 text-right">
-							{data.product_id.discount > 0
+							{Math.abs(data.product_id.discount) > 0
 								? ConvertVNDString(
 										data.product_id.price *
-											((100 - data.product_id.discount) / 100)
+											((100 - Math.abs(data.product_id.discount)) / 100)
 								  )
 								: ConvertVNDString(data.product_id.price)}{" "}
 							đ
