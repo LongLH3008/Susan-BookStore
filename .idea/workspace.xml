@@ -4,9 +4,192 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7c52b46-2c71-412f-ac10-0354865f8100" name="Changes" comment="z">
+    <list default="true" id="a7c52b46-2c71-412f-ac10-0354865f8100" name="Changes" comment="fix discount">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BE/src/Services/Discount.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BE/src/Services/Discount.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FE/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.bin/loose-envify" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.bin/loose-envify.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.bin/loose-envify.ps1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/js-tokens/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/js-tokens/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/js-tokens/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/js-tokens/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/js-tokens/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/loose-envify/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/loose-envify/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/loose-envify/cli.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/loose-envify/custom.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/loose-envify/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/loose-envify/loose-envify.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/loose-envify/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/loose-envify/replace.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ai/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ai/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ai/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ai/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/bi/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/bi/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/bi/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/bi/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/bs/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/bs/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/bs/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/bs/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/cg/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/cg/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/cg/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/cg/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ci/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ci/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ci/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ci/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/di/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/di/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/di/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/di/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fa/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fa/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fa/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fa/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fa6/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fa6/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fa6/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fa6/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fc/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fc/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fc/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fc/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fi/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fi/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fi/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/fi/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/gi/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/gi/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/gi/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/gi/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/go/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/go/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/go/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/go/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/gr/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/gr/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/gr/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/gr/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/hi/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/hi/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/hi/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/hi/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/hi2/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/hi2/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/hi2/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/hi2/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/im/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/im/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/im/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/im/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/io/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/io/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/io/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/io/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/io5/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/io5/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/io5/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/io5/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lia/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lia/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lia/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lia/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/iconBase.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/iconBase.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/iconBase.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/iconContext.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/iconContext.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/iconContext.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/iconsManifest.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/iconsManifest.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/iconsManifest.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lib/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lu/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lu/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lu/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/lu/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/md/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/md/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/md/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/md/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/pi/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/pi/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/pi/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/pi/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ri/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ri/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ri/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ri/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/rx/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/rx/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/rx/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/rx/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/si/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/si/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/si/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/si/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/sl/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/sl/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/sl/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/sl/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/tb/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/tb/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/tb/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/tb/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/tfi/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/tfi/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/tfi/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/tfi/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ti/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ti/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ti/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/ti/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/vsc/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/vsc/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/vsc/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/vsc/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/wi/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/wi/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/wi/index.mjs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react-icons/wi/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-dev-runtime.development.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-dev-runtime.production.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-dev-runtime.profiling.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-runtime.development.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-runtime.production.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react-jsx-runtime.profiling.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react.development.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react.production.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react.shared-subset.development.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/cjs/react.shared-subset.production.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/jsx-dev-runtime.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/jsx-runtime.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/react.shared-subset.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/umd/react.development.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/umd/react.production.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/react/umd/react.profiling.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +315,7 @@
       <workItem from="1732975802196" duration="3657000" />
       <workItem from="1732979469957" duration="845000" />
       <workItem from="1733561427050" duration="28000" />
-      <workItem from="1733561511907" duration="1113000" />
+      <workItem from="1733561511907" duration="2500000" />
     </task>
     <task id="LOCAL-00001" summary="z">
       <option name="closed" value="true" />
@@ -142,7 +325,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732975850064</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="fix discount">
+      <option name="closed" value="true" />
+      <created>1733562983388</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1733562983388</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,6 +341,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="z" />
-    <option name="LAST_COMMIT_MESSAGE" value="z" />
+    <MESSAGE value="fix discount" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix discount" />
   </component>
 </project>
