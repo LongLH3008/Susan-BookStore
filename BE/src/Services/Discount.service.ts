@@ -125,6 +125,12 @@ class DiscountService {
         const {error} = discountUpdateSchema.validate(payload);
         if (error) throw new BadRequestError(error.details[0].message);
 
+        if (payload?.discount_category_ids && payload.discount_category_ids.length > 0) {
+            const getBooks = await BookService.getBookByQuery({ category_ids: payload.discount_category_ids[0], limit: 9999 })
+            payload.discount_product_ids = [...getBooks?.books.map((item) => item._id)]
+        }
+
+
         const updatedDiscount = await Discount.findOneAndUpdate(
             {_id: id, discount_is_active: true},
             deleteNullObject(payload),
