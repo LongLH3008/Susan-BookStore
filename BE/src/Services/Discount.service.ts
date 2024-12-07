@@ -12,6 +12,7 @@ import {
     DiscountQueryInputDTO,
     DiscountUpdateInputDTO
 } from "./dtos/Discount.dto";
+import BookService from "./Book.service";
 
 const {default: mongoose} = require("mongoose");
 
@@ -43,6 +44,12 @@ class DiscountService {
         if (existingDiscount) {
             throw new BadRequestError("Mã giảm giá đã tồn tại");
         }
+
+        if (data?.discount_category_ids && data.discount_category_ids.length > 0) {
+            const getBooks = await BookService.getBookByQuery({ category_ids: data.discount_category_ids[0], limit: 9999 })
+            data.discount_product_ids = [...getBooks?.books.map((item) => item._id)]
+        }
+
 
         const newDiscount = await Discount.create(data);
         return newDiscount.toObject() as DiscountOutputDTO;
