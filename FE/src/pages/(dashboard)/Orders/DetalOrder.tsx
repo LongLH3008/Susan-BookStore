@@ -17,7 +17,7 @@ const DetalOrder = ({ dataOrder }: { dataOrder: IOrder }) => {
                 {/* <p>Số lượng SP : {dataOrder?.products} </p> */}
               </div>
               {dataOrder?.products?.map((product: IProductOrrder) => (
-                <div className="rounded-lg p-3 bg-white mt-3">
+                <div key={product._id} className="rounded-lg p-3 bg-white mt-3">
                   <h2 className="text-sm font-bold ">
                     <Chip
                       label={product?.isbn}
@@ -28,14 +28,14 @@ const DetalOrder = ({ dataOrder }: { dataOrder: IOrder }) => {
                   </h2>
                   <div className="flex items-center justify-between">
                     <p className="text-sm">Số trang : {product.length}</p>
-                    <p>
+                    <span>
                       <Chip
                         label={ConvertVNDString(product.price) + " đ"}
                         size="small"
                       />{" "}
                       x
                       <Chip label={product.quantity} size="small" />
-                    </p>
+                    </span>
                   </div>
                 </div>
               ))}
@@ -48,7 +48,7 @@ const DetalOrder = ({ dataOrder }: { dataOrder: IOrder }) => {
                 <div className="flex items-center justify-between mb-4 *:text-sm *:text-end">
                   <p>Tiền chuyển khoản</p>
                   <p className="bg-[#eaecf0] w-[25%] p-1 rounded-lg">
-                    {dataOrder.payment.method == "COD"
+                    {dataOrder?.payment.method == "COD"
                       ? 0
                       : ConvertVNDString(dataOrder.total)}
                     đ
@@ -102,11 +102,11 @@ const DetalOrder = ({ dataOrder }: { dataOrder: IOrder }) => {
                     {ConvertVNDString(dataOrder.total)} đ
                   </p>
                 </div>
-                {dataOrder.payment.method !== "COD" && (
+                {dataOrder?.payment.method !== "COD" && (
                   <div className="flex items-center justify-between mb-4 border-dashed border-b-2 border-gray-300 *:text-sm *:text-end">
                     <p>Đã thanh toán</p>
                     <p className="bg-[#eaecf0] w-[25%] p-1 rounded-lg">
-                      {dataOrder.payment.method == "COD"
+                      {dataOrder?.payment.method == "COD"
                         ? 0
                         : ConvertVNDString(dataOrder.total)}{" "}
                       đ
@@ -118,7 +118,7 @@ const DetalOrder = ({ dataOrder }: { dataOrder: IOrder }) => {
 
                   <p className="bg-[#eaecf0] w-[25%] p-1 rounded-lg text-red-600">
                     {dataOrder.state !== "success"
-                      ? dataOrder.payment.method == "COD"
+                      ? dataOrder?.payment.method == "COD"
                         ? ConvertVNDString(dataOrder.total)
                         : 0
                       : 0}
@@ -133,22 +133,28 @@ const DetalOrder = ({ dataOrder }: { dataOrder: IOrder }) => {
           <div className="bg-white p-4 rounded-lg *:mb-4">
             <p className="font-bold rounded-lg">Khách hàng</p>
             <div className="grid grid-cols-2 gap-2 *:rounded-lg *:text-sm *:truncate">
-              <p className="bg-[#eaecf0] py-1 px-2">{dataOrder.user_name}</p>
               <p className="bg-[#eaecf0] py-1 px-2">
-                {dataOrder.user_phone_number}
+                {dataOrder.user_name || "chưa điền"}
+              </p>
+              <p className="bg-[#eaecf0] py-1 px-2">
+                {dataOrder.user_phone_number || "chưa điền"}
               </p>
             </div>
             <div className="grid grid-cols-2 gap-2 *:rounded-lg *:text-sm *:truncate">
-              <p className="bg-[#eaecf0] py-1 px-2">{dataOrder.user_email}</p>
+              <p className="bg-[#eaecf0] py-1 px-2">
+                {dataOrder.user_email || "chưa điền"}
+              </p>
               {/* <p className="bg-[#eaecf0] py-1 px-2">0707709155</p> */}
             </div>
           </div>
           <div className="bg-white p-4 rounded-lg *:mb-4 mt-3">
             <p className="font-bold rounded-lg">Nhận hàng</p>
             <div className="grid grid-cols-2 gap-2 *:rounded-lg *:text-sm *:truncate">
-              <p className="bg-[#eaecf0] py-1 px-2">{dataOrder.user_name}</p>
               <p className="bg-[#eaecf0] py-1 px-2">
-                {dataOrder.user_phone_number}
+                {dataOrder.user_name || "chưa điền"}
+              </p>
+              <p className="bg-[#eaecf0] py-1 px-2">
+                {dataOrder.user_phone_number || "chưa điền"}
               </p>
             </div>
             <p className="bg-[#eaecf0] py-1 px-2 rounded-lg text-sm truncate">

@@ -28,6 +28,8 @@ import { useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import DetalOrder from "./DetalOrder";
+import OrderStatusSelect from "./test";
+import { UpdateStatusOrder } from "@/services/order.service";
 
 const OrdersPage = () => {
   const nav = useNavigate();
@@ -36,16 +38,7 @@ const OrdersPage = () => {
   const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const [backgroundColor, setBackgroundColor] = useState("white");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-
-  const handleOption = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOption = event.target.value;
-    console.log("selectedOption", selectedOption);
-
-    setBackgroundColor(selectedOption);
-  };
-  console.log("backgroundColor", backgroundColor);
 
   const { mutateAsync } = useMutation({
     mutationFn: deleteBlog,
@@ -55,7 +48,7 @@ const OrdersPage = () => {
         variant: "success",
         content: `Xóa sản phẩm thành công`,
       });
-      DataBlogs.refetch();
+      DataOrders.refetch();
     },
     onError: (error: AxiosError) => {
       setConfirmOpen(false);
@@ -66,17 +59,29 @@ const OrdersPage = () => {
       });
     },
   });
+  const { mutate } = useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: { state: string } }) =>
+      UpdateStatusOrder(id, payload),
+    onSuccess: (data: any) => {
+      toast({
+        variant: data.status,
+        content: `Cập nhật trạng thái thành công`,
+      });
+      DataOrders.refetch();
+    },
+    onError: (error: any) => {
+      const message = "Lỗi cập nhật trạng thái : ";
+      toast({
+        variant: error.response?.status || "error",
+        content: message + (error.response?.data || error.message),
+      });
+    },
+  });
   const handleClose = () => {
     setOpen(false);
     setSelectedOrder(null);
   };
-  const handleChange = (event) => {
-    console.log(event.target.value);
-  };
-  const onEdit = (id: string) => {
-    nav(`chinh-sua/${id}`);
-    // console.log(id);
-  };
+
   const onShowDetail = (params: any) => {
     console.log(params);
     setSelectedOrder(params.row);
@@ -97,23 +102,31 @@ const OrdersPage = () => {
     setSelectedIds(ids);
   };
   console.log("selectedIds", selectedIds);
-  const getBackgroundColor = (state: any) => {
-    switch (state) {
-      case "pending":
-        return "#08979c";
-      case "confirmed":
-        return "#1d4ed8";
-      case "shipped":
-        return "#fbbf24";
-      case "received":
-        return "#10b981";
-      case "cancelled":
-        return "#b91c1c";
-      default:
-        return "transparent";
-    }
+  const statusList = [
+    { label: "pending", title: "Mới", color: "#08979c" },
+    { label: "confirmed", title: "Xác nhận", color: "#1d4ed8" },
+    { label: "shipped", title: "Đang vận chuyển", color: "#fbbf24" },
+    { label: "success", title: "Đã nhận", color: "#10b981" },
+    { label: "Cancelled", title: "Xóa", color: "#b91c1c" },
+  ];
+
+  const getStatusColor = (status: string) => {
+    const foundStatus = statusList.find((s) => s.label === status);
+    return foundStatus?.color || "#000";
   };
 
+  const handleOption = async (id: string, e: any) => {
+    const payload = {
+      state: e.target.value,
+    };
+    console.log("payload", payload);
+    console.log("id", id);
+
+    if (id && payload) {
+      await mutate({ id, payload });
+    }
+    // onUpdateStatus(newStatusId);
+  };
   const columns: GridColDef[] = [
     {
       field: "trackingNumber",
@@ -203,12 +216,12 @@ const OrdersPage = () => {
       },
       width: 200,
     },
-    // {
-    //   field: "ship",
-    //   headerName: "Phí VC",
-    //   renderCell: () => <p>{ConvertVNDString(25000)} đ</p>,
-    //   width: 100,
-    // },
+    {
+      field: "ship",
+      headerName: "Phí VC",
+      renderCell: () => <p>{ConvertVNDString(25000)} đ</p>,
+      width: 100,
+    },
     {
       field: "createdAt",
       headerName: "Tạo lúc",
@@ -239,44 +252,24 @@ const OrdersPage = () => {
             id="small"
             className="block w-full p-1 mb-6 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:border-blue-500 "
             value={params.row.state}
-            style={{
-              backgroundColor: getBackgroundColor(params.row.state),
-              color: "#fff",
-            }}
-            onChange={handleOption}
+            onChange={(e: any) => handleOption(params.row._id, e)}
             onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: getStatusColor(params.row.state),
+              color: "#FFF",
+            }}
           >
-            <option
-              value="pending"
-              style={{ backgroundColor: "#08979c", color: "white" }}
-              // {params?.row?.state === "pending" ? "selected" : ""}
-            >
-              Mới
-            </option>
-            <option
-              value="confirmed"
-              style={{ backgroundColor: "#1d4ed8", color: "white" }}
-            >
-              Đã xác nhận
-            </option>
-            <option
-              value="shipped"
-              style={{ backgroundColor: "#fbbf24", color: "black" }}
-            >
-              Đang gửi hàng
-            </option>
-            <option
-              value="received"
-              style={{ backgroundColor: "#10b981", color: "white" }}
-            >
-              Đã nhận
-            </option>
-            <option
-              value="cancelled"
-              style={{ backgroundColor: "#b91c1c", color: "white" }}
-            >
-              Hủy
-            </option>
+            {statusList.map((status) => (
+              <option
+                key={status.label}
+                value={status.label}
+                style={{
+                  backgroundColor: status.color || "#000",
+                }}
+              >
+                {status.title}
+              </option>
+            ))}
           </select>
         );
       },
@@ -320,7 +313,7 @@ const OrdersPage = () => {
 
     ...row,
   }));
-  console.log("order", selectedOrder);
+  // console.log("order", selectedOrder);
 
   return (
     <>
@@ -409,9 +402,10 @@ const OrdersPage = () => {
           </IconButton>
         </DialogTitle>
         <DialogContent dividers>
-          <DetalOrder dataOrder={selectedOrder} />
+          {selectedOrder && <DetalOrder dataOrder={selectedOrder} />}
         </DialogContent>
       </Dialog>
+      {/* <OrderStatusSelect currentStatusId={"Pending"} /> */}
     </>
   );
 };
