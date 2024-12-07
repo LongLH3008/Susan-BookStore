@@ -1,10 +1,10 @@
-import { BadRequestError, ResourceNotFoundError } from "../cores/error.response";
-import { DiscountApplyTo, DiscountType } from '../interfaces/models/IDiscount';
-import { IOrderProduct } from "../interfaces/models/IOrder";
+import {BadRequestError, ResourceNotFoundError} from "../cores/error.response";
+import {DiscountApplyTo, DiscountType} from '../interfaces/models/IDiscount';
+import {IOrderProduct} from "../interfaces/models/IOrder";
 import Book from "../models/Book.model";
 import Discount from "../models/Discount.model";
-import { discountCreateSchema, discountQuerySchema, discountUpdateSchema } from "../schemas/discount.schema";
-import { deleteNullObject } from "../utils";
+import {discountCreateSchema, discountQuerySchema, discountUpdateSchema} from "../schemas/discount.schema";
+import {deleteNullObject} from "../utils";
 import {
     DiscountCreateInputDTO,
     DiscountListOutputDTO,
@@ -13,7 +13,7 @@ import {
     DiscountUpdateInputDTO
 } from "./dtos/Discount.dto";
 
-const { default: mongoose } = require("mongoose");
+const {default: mongoose} = require("mongoose");
 
 interface BookItem {
     product_id: string;
@@ -36,12 +36,23 @@ export interface DiscountInput {
 
 class DiscountService {
     static async createDiscount(data: DiscountCreateInputDTO): Promise<DiscountOutputDTO> {
-        const { error } = discountCreateSchema.validate(data);
+        const {error} = discountCreateSchema.validate(data);
         if (error) throw new BadRequestError(error.details[0].message);
 
-        const existingDiscount = await Discount.findOne({ discount_code: data.discount_code });
+        const existingDiscount = await Discount.findOne({discount_code: data.discount_code});
         if (existingDiscount) {
             throw new BadRequestError("Mã giảm giá đã tồn tại");
+        }
+
+        if (data.discount_applies_to === DiscountApplyTo.category) {
+            const allBooks = await Book.find({
+                categories: {
+                    $in: data.discount_category_ids
+                }
+            }).lean();
+            const allBookIds = allBooks.map((book) => book._id);
+            data.discount_product_ids = allBookIds
+            console.log(data.discount_product_ids);
         }
 
         const newDiscount = await Discount.create(data);
@@ -49,13 +60,13 @@ class DiscountService {
     }
 
     static async getAllDiscounts(query: DiscountQueryInputDTO): Promise<DiscountListOutputDTO> {
-        const { error } = discountQuerySchema.validate(query);
+        const {error} = discountQuerySchema.validate(query);
         if (error) throw new BadRequestError(error.details[0].message);
 
-        const { page = 1, limit = 10, code } = query;
+        const {page = 1, limit = 10, code} = query;
         const skip = (page - 1) * limit;
 
-        const filter: any = { discount_is_active: true };
+        const filter: any = {discount_is_active: true};
         if (code) {
             filter.discount_code = code;
         }
@@ -82,13 +93,13 @@ class DiscountService {
     }
 
     static async getAllDiscountsAdmin(query: DiscountQueryInputDTO): Promise<DiscountListOutputDTO> {
-        const { error } = discountQuerySchema.validate(query);
+        const {error} = discountQuerySchema.validate(query);
         if (error) throw new BadRequestError(error.details[0].message);
 
-        const { page = 1, limit = 10, code } = query;
+        const {page = 1, limit = 10, code} = query;
         const skip = (page - 1) * limit;
 
-        const filter: any = { discount_is_active: true };
+        const filter: any = {discount_is_active: true};
         if (code) {
             filter.discount_code = code;
         }
@@ -115,13 +126,13 @@ class DiscountService {
     }
 
     static async updateDiscount(id: string, payload: DiscountUpdateInputDTO): Promise<DiscountOutputDTO> {
-        const { error } = discountUpdateSchema.validate(payload);
+        const {error} = discountUpdateSchema.validate(payload);
         if (error) throw new BadRequestError(error.details[0].message);
 
         const updatedDiscount = await Discount.findOneAndUpdate(
-            { _id: id, discount_is_active: true },
+            {_id: id, discount_is_active: true},
             deleteNullObject(payload),
-            { new: true }
+            {new: true}
         ).lean();
 
         if (!updatedDiscount) {
@@ -150,10 +161,10 @@ class DiscountService {
 
     static async cancelDiscount(code: string, userId: string): Promise<any> {
         const result = await Discount.updateOne(
-            { discount_code: code, discount_is_active: true },
+            {discount_code: code, discount_is_active: true},
             {
-                $pull: { discount_users_used: userId },
-                $inc: { discount_uses_count: -1, discount_max_uses: 1 },
+                $pull: {discount_users_used: userId},
+                $inc: {discount_uses_count: -1, discount_max_uses: 1},
             }
         );
 
@@ -166,8 +177,8 @@ class DiscountService {
 
     static async activateDiscount(code: string): Promise<any> {
         const result = await Discount.updateOne(
-            { discount_code: code },
-            { discount_is_active: true }
+            {discount_code: code},
+            {discount_is_active: true}
         );
 
         if (result.modifiedCount === 0) {
@@ -179,8 +190,8 @@ class DiscountService {
 
     static async deactivateDiscount(code: string): Promise<any> {
         const result = await Discount.updateOne(
-            { discount_code: code },
-            { discount_is_active: false }
+            {discount_code: code},
+            {discount_is_active: false}
         );
 
         if (result.modifiedCount === 0) {
@@ -191,7 +202,7 @@ class DiscountService {
     }
 
     static async getDiscountByBook(bookId: string): Promise<any> {
-        const foundBook = await Book.findOne({ _id: bookId, isActive: true });
+        const foundBook = await Book.findOne({_id: bookId, isActive: true});
 
         if (!foundBook) {
             throw new ResourceNotFoundError("Sách không tồn tại hoặc đã bị vô hiệu hóa");
@@ -200,9 +211,9 @@ class DiscountService {
         const discounts = await Discount.find({
             discount_is_active: true,
             $or: [
-                { discount_applies_to: DiscountApplyTo.all },
-                { discount_applies_to: DiscountApplyTo.specific, discount_product_ids: bookId },
-                { discount_applies_to: DiscountApplyTo.category, discount_category_ids: { $in: foundBook.categories } }
+                {discount_applies_to: DiscountApplyTo.all},
+                {discount_applies_to: DiscountApplyTo.specific, discount_product_ids: bookId},
+                {discount_applies_to: DiscountApplyTo.category, discount_category_ids: {$in: foundBook.categories}}
             ]
         }).lean();
 
@@ -212,7 +223,7 @@ class DiscountService {
     static async getDiscountAmount2(data: DiscountInput) {
 
 
-        const { products, code, userId } = data;
+        const {products, code, userId} = data;
 
         let subtotal = products.reduce((acc: number, cur: BookItem) => {
             return acc + (cur.product_price * cur.quantity);
@@ -268,7 +279,7 @@ class DiscountService {
                 total: subtotal - discountAmount - discountAmountVoucher,
             };
         }
-        let foundDiscount = await Discount.findOne({ discount_code: code });
+        let foundDiscount = await Discount.findOne({discount_code: code});
         if (!foundDiscount) throw new BadRequestError("Mã giảm giá không tồn tại");
 
         const {
