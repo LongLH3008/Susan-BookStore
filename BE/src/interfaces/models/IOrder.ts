@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export enum OrderState {
-    pending = "pending", confirmed = "confirmed", shipped = "shipped", cancelled = "cancelled"
+    pending = "pending", confirmed = "confirmed", shipped = "shipped", cancelled = "cancelled" , "success" = "success"
 }
 
 export interface IOrderProduct {

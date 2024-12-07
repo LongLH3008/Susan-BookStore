@@ -28,6 +28,7 @@ const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.con
 const banner_controler_1 = __importDefault(require("../controllers/Api/banner.controler"));
 const bannerSale_controller_1 = __importDefault(require("../controllers/Api/bannerSale.controller"));
 const vectorSearch_controller_1 = __importDefault(require("../controllers/Api/vectorSearch.controller"));
+const UpdateStatusOrder_controller_1 = __importDefault(require("../controllers/Api/UpdateStatusOrder.controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -176,4 +177,6 @@ router.get("/contact/:id", (0, utils_1.asyncHandler)(Contact_Controller_1.defaul
 router.get("/topfivebook", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.GetAllOrderWithStatistical));
 router.get("/topfiveuser", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.GetAllOrderWithTop5User));
 router.post("/filterbydayandmonth", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.StatisticalFilterOrderPrdayAndMonth));
+// udpate status order
+router.patch("/update-status-order/:id", (0, utils_1.asyncHandler)(UpdateStatusOrder_controller_1.default.UdpateStatusOrderForAdmin));
 exports.default = router;
