@@ -5,7 +5,7 @@ export type product = {
 };
 
 export interface ICheckout {
-  email: string
+  email: string;
   userId: string;
   paymentMethod: "COD" | "VNPAY";
   name: string;
@@ -27,7 +27,13 @@ export interface IProductOrrder {
   subtotal: number;
   discount: number;
   total: number;
-  discount_code: string;
+  discountAmountVoucher: number;
+  discountAmount: number;
+  isbn: string;
+  length: number;
+  width: number;
+  weight: number;
+  height: number;
   _id: string;
 }
 export interface IOrder {
@@ -54,6 +60,7 @@ export interface IOrder {
   createdAt: string;
   user_name: string;
   user_email: string;
+  user_phone_number: string;
 }
 export interface ICaclCheckout {
   userId: string;
@@ -68,12 +75,12 @@ export interface IBankingPayment {
 
 export interface FeeShip {
   to_ward_code: string;
-  to_district_id: number
-  items: { bookId: string, quantity: number }[]
+  to_district_id: number;
+  items: { bookId: string; quantity: number }[];
 }
 
 export interface IOrderChecking {
-  code?: string
-  userId?: string,
-  products: { bookId: string, quantity: number }[]
+  code?: string;
+  userId?: string;
+  products: { bookId: string; quantity: number }[];
 }

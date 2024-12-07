@@ -145,7 +145,7 @@ const Aside = (props: any) => {
                   : "translate-x-0 opacity-1"
               }`}
             >
-              Ảnh
+              Banner
             </span>
           </div>
           {open && (

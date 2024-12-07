@@ -1,11 +1,10 @@
 import useOrder from "@/common/hooks/useOrder";
 import { useToast } from "@/common/hooks/useToast";
-import { IBlog } from "@/common/interfaces/blog";
-import { IOrder, IProductOrrder } from "@/common/interfaces/checkout";
+import { IOrder } from "@/common/interfaces/blog";
+import { IProductOrrder } from "@/common/interfaces/checkout";
 import { ConvertVNDString } from "@/common/shared/round-number";
 import { formatDateTime } from "@/components/formatDate";
 import { getInitials } from "@/components/getInitials";
-import BlogItem from "@/pages/(website)/blog_detail/_components/BlogItem";
 import { deleteBlog } from "@/services/blog.service";
 import CloseIcon from "@mui/icons-material/Close";
 import {
@@ -28,15 +27,17 @@ import { AxiosError } from "axios";
 import { useState } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import DetalOrder from "./DetalOrder";
 
 const OrdersPage = () => {
   const nav = useNavigate();
   const { DataOrders } = useOrder();
   const { toast } = useToast();
-  const [selectedBlog, setSelectedBlog] = useState<IBlog | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("white");
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const handleOption = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedOption = event.target.value;
@@ -67,7 +68,7 @@ const OrdersPage = () => {
   });
   const handleClose = () => {
     setOpen(false);
-    setSelectedBlog(null);
+    setSelectedOrder(null);
   };
   const handleChange = (event) => {
     console.log(event.target.value);
@@ -76,21 +77,26 @@ const OrdersPage = () => {
     nav(`chinh-sua/${id}`);
     // console.log(id);
   };
-  const onShowDetail = (blog: IBlog) => {
-    console.log(blog);
-    setSelectedBlog(blog);
+  const onShowDetail = (params: any) => {
+    console.log(params);
+    setSelectedOrder(params.row);
     setOpen(true);
   };
   const confirmDelete = async () => {
-    if (selectedBlog) {
-      await mutateAsync(selectedBlog._id!);
+    if (selectedOrder) {
+      await mutateAsync(selectedOrder._id!);
     }
   };
 
-  const onDelete = (blog: IBlog) => {
-    setSelectedBlog(blog);
+  const onDelete = (blog: IOrder) => {
+    setSelectedOrder(blog);
     setConfirmOpen(true);
   };
+
+  const handleSelectionChange = (ids: string) => {
+    setSelectedIds(ids);
+  };
+  console.log("selectedIds", selectedIds);
   const getBackgroundColor = (state: any) => {
     switch (state) {
       case "pending":
@@ -107,6 +113,7 @@ const OrdersPage = () => {
         return "transparent";
     }
   };
+
   const columns: GridColDef[] = [
     {
       field: "trackingNumber",
@@ -313,7 +320,7 @@ const OrdersPage = () => {
 
     ...row,
   }));
-  console.log("rows", rows);
+  console.log("order", selectedOrder);
 
   return (
     <>
@@ -347,12 +354,15 @@ const OrdersPage = () => {
           pageSizeOptions={[5, 10]}
           getRowHeight={() => "auto"}
           checkboxSelection
+          onRowSelectionModelChange={(ids) => handleSelectionChange(ids)} // Lấy ID từ checkbox
+          onRowClick={onShowDetail}
           sx={{
             border: 0,
             "& .MuiDataGrid-cell": {
               display: "flex",
               alignItems: "center",
               padding: "10px",
+              cursor: "pointer",
             },
             "& .MuiDataGrid-columnHeader[data-field='active'], & .MuiDataGrid-cell[data-field='active']":
               {
@@ -374,7 +384,10 @@ const OrdersPage = () => {
       >
         <DialogTitle>Xác nhận xóa</DialogTitle>
         <DialogContent dividers>
-          <Typography>Bạn có chắc chắn muốn xóa đơn hàng này không?</Typography>
+          <Typography>
+            Bạn có chắc chắn muốn xóa đơn hàng này không? Nếu xóa sẽ k thể khôi
+            phục
+          </Typography>
         </DialogContent>
         <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2 }}>
           <Button onClick={() => setConfirmOpen(false)}>Hủy</Button>
@@ -384,7 +397,7 @@ const OrdersPage = () => {
         </Box>
       </Dialog>
       {/* blog detail */}
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+      <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
         <DialogTitle>
           Chi tiết đơn hàng
           <IconButton
@@ -396,7 +409,7 @@ const OrdersPage = () => {
           </IconButton>
         </DialogTitle>
         <DialogContent dividers>
-          <BlogItem dataBlog={selectedBlog} />
+          <DetalOrder dataOrder={selectedOrder} />
         </DialogContent>
       </Dialog>
     </>

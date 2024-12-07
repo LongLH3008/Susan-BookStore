@@ -102,6 +102,7 @@ const UsersPage: React.FC = () => {
       {
         headerName: "Tên người dùng",
         field: "user_name",
+
         width: 200,
       },
       {
@@ -117,6 +118,11 @@ const UsersPage: React.FC = () => {
       {
         headerName: "Vai trò",
         field: "user_role",
+        renderCell: (params: any) => (
+          <p>
+            {params.row.user_role == "user" ? "Customer" : params.row.user_role}
+          </p>
+        ),
         flex: 5,
       },
       {
