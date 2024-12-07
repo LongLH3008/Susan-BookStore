@@ -27,7 +27,7 @@ export const voucherValidate = Joi.object({
 		"any.required": "Số lượng voucher bắt buộc",
 	}),
 	discount_is_active: Joi.boolean().default(true),
-	discount_min_order_value: Joi.number().min(0).default(200000),
+	discount_min_order_value: Joi.number().min(0).default(0),
 	discount_max_use_per_user: Joi.number().min(1).default(4),
 	discount_start_date: Joi.date().iso().default("2024-09-22T14:18:37.487Z"),
 	discount_end_date: Joi.date().iso().greater(Joi.ref("discount_start_date")).default("2024-09-29T14:18:37.487Z"),

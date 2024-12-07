@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { Request } from "express-jwt";
-import { SuccessResponse } from "../../cores/succes.response";
 import DiscountService from "../../Services/Discount.service";
+import { SuccessResponse } from "../../cores/succes.response";
 
 class DiscountController {
     static async create(req: Request, res: Response): Promise<any> {
@@ -14,6 +14,23 @@ class DiscountController {
 
     static async getAll(req: Request, res: Response): Promise<any> {
         const discounts = await DiscountService.getAllDiscounts(req.query);
+        return new SuccessResponse({
+            message: "Discounts retrieved successfully",
+            metadata: discounts,
+        }).send(res);
+    }
+
+    static async getOne(req: Request, res: Response): Promise<any> {
+        const { id } = req.params
+        const discounts = await DiscountService.getDiscount(id);
+        return new SuccessResponse({
+            message: "Discounts retrieved successfully",
+            metadata: discounts as any,
+        }).send(res);
+    }
+
+    static async getAllAdmin(req: Request, res: Response): Promise<any> {
+        const discounts = await DiscountService.getAllDiscountsAdmin(req.query);
         return new SuccessResponse({
             message: "Discounts retrieved successfully",
             metadata: discounts,

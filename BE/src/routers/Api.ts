@@ -11,19 +11,19 @@ import { asyncHandler } from "../utils";
 import { upload } from "../configs/multer.config";
 import BookController from "../controllers/Api/Book.controller";
 import CartController from "../controllers/Api/Cart.controller";
+import ContactController from "../controllers/Api/Contact.Controller";
 import DiscountController from "../controllers/Api/Discount.controller";
 import GiaoHangNhanhController from "../controllers/Api/GiaoHangNhanhTest.controller";
+import InfoUserController from "../controllers/Api/InfoUser.Controller";
 import OrderController from "../controllers/Api/Order.Controller";
 import ReviewController from "../controllers/Api/Review.controller";
+import StatisticsController from "../controllers/Api/Statistinal.controller";
 import UploadController from "../controllers/Api/Upload.controller";
 import UserController from "../controllers/Api/User.controller";
 import PaymentController from "../controllers/Api/Vnpay.controller";
-import VectorSearchController from "../controllers/Api/vectorSearch.controller";
 import BannerControler from "../controllers/Api/banner.controler";
 import BannerSaleControler from "../controllers/Api/bannerSale.controller";
-import InfoUserController from "../controllers/Api/InfoUser.Controller";
-import ContactController from "../controllers/Api/Contact.Controller";
-import StatisticsController from "../controllers/Api/Statistinal.controller";
+import VectorSearchController from "../controllers/Api/vectorSearch.controller";
 
 const router = Router();
 
@@ -169,7 +169,9 @@ router.put(
 //discount
 router.post("/discounts", asyncHandler(DiscountController.create));
 router.get("/discounts", asyncHandler(DiscountController.getAll));
+router.get("/discounts/admin", asyncHandler(DiscountController.getAllAdmin));
 router.put("/discounts/:id", asyncHandler(DiscountController.update));
+router.get("/discount/:id", asyncHandler(DiscountController.getOne));
 router.delete("/discounts/:code", asyncHandler(DiscountController.delete));
 router.get(
   "/discounts/book/:bookId",

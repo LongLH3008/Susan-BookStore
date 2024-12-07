@@ -1,9 +1,10 @@
 import { CategoryProvider } from "@/common/hooks/useCategories";
 import useProduct from "@/common/hooks/useProduct";
 import { useToast } from "@/common/hooks/useToast";
+import { ToastVariant } from "@/common/interfaces/toast";
 import BookImage from "@/pages/(website)/book_detail/_components/BookImage";
-import Bookservice from "@/pages/(website)/book_detail/_components/Bookservice";
 import BookText from "@/pages/(website)/book_detail/_components/BookText";
+import Bookservice from "@/pages/(website)/book_detail/_components/Bookservice";
 import Left from "@/pages/(website)/shop/_components/Fillter";
 import { deleteProduct } from "@/services/product.service";
 import CloseIcon from "@mui/icons-material/Close";
@@ -22,16 +23,13 @@ import {
   Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
-import {
-  MdDeleteOutline,
-  MdFilterListAlt,
-  MdOutlineSearch,
-} from "react-icons/md";
+import { MdDeleteOutline, MdFilterListAlt, MdOutlineSearch } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 
 const ProductsPage: React.FC = () => {
@@ -73,45 +71,46 @@ const ProductsPage: React.FC = () => {
     onError: (error: AxiosError) => {
       const message = "Lỗi khi xóa sản phẩm: ";
       toast({
-        variant: error.status,
+        variant: ToastVariant.ERROR,
         content: message + error.response?.data || error.message,
       });
     },
   });
 
-  const nav = useNavigate();
 
-  const onDelete = (product: any) => {
-    setSelectedProduct(product);
-    setConfirmOpen(true);
-  };
+	const nav = useNavigate();
 
-  const confirmDelete = async () => {
-    if (selectedProduct) {
-      await mutateAsync(selectedProduct._id);
-    }
-  };
-  const onEdit = (id: string) => {
-    nav(`chinh-sua/${id}`);
-  };
+	const onDelete = (product: any) => {
+		setSelectedProduct(product);
+		setConfirmOpen(true);
+	};
 
-  const onShowDetail = (product: any) => {
-    setSelectedProduct(product);
-    setOpen(true);
-  };
+	const confirmDelete = async () => {
+		if (selectedProduct) {
+			await mutateAsync(selectedProduct._id);
+		}
+	};
+	const onEdit = (id: string) => {
+		nav(`chinh-sua/${id}`);
+	};
 
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedProduct(null);
-  };
+	const onShowDetail = (product: any) => {
+		setSelectedProduct(product);
+		setOpen(true);
+	};
 
-  const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+	const handleClose = () => {
+		setOpen(false);
+		setSelectedProduct(null);
+	};
 
-  const handleClosePopover = () => {
-    setAnchorEl(null);
-  };
+	const handleClickPopover = (event: React.MouseEvent<HTMLButtonElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handleClosePopover = () => {
+		setAnchorEl(null);
+	};
 
   const handleReset = () => {
     setSearch("");
@@ -213,34 +212,34 @@ const ProductsPage: React.FC = () => {
   console.log("page", page);
   console.log("limit", limit);
 
-  return (
-    <>
-      <div className="rounded-lg shadow-sm bg-white p-5 flex justify-between items-center mb-[50px]">
-        <div className="flex items-center gap-3">
-          <i className="fa-solid fa-boxes-stacked"></i>
-          <h2 className={`text-xl font-[500]`}>Sản phẩm</h2>
-        </div>
-        <div className="flex items-center gap-3">
-          <Tooltip title="Bộ lọc">
-            <button
-              onClick={handleClickPopover}
-              className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
-            >
-              <MdFilterListAlt />
-            </button>
-          </Tooltip>
-          <Tooltip title="Thêm sản phẩm">
-            <Link
-              to={"/quan-tri/san-pham/them-moi"}
-              className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
-            >
-              <IoMdAdd />
-            </Link>
-          </Tooltip>
-        </div>
-      </div>
+	return (
+		<>
+			<div className="rounded-lg shadow-sm bg-white p-5 flex justify-between items-center mb-[50px]">
+				<div className="flex items-center gap-3">
+					<i className="fa-solid fa-boxes-stacked"></i>
+					<h2 className={`text-xl font-[500]`}>Sản phẩm</h2>
+				</div>
+				<div className="flex items-center gap-3">
+					<Tooltip title="Bộ lọc">
+						<button
+							onClick={handleClickPopover}
+							className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
+						>
+							<MdFilterListAlt />
+						</button>
+					</Tooltip>
+					<Tooltip title="Thêm sản phẩm">
+						<Link
+							to={"/quan-tri/san-pham/them-moi"}
+							className="size-10 bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
+						>
+							<IoMdAdd />
+						</Link>
+					</Tooltip>
+				</div>
+			</div>
 
-      {/* <SearchForm
+			{/* <SearchForm
         onSearch={handleSearch}
         initialSearchTerm={search}
         linkAdd="/quan-tri/san-pham/them-moi"
@@ -407,6 +406,7 @@ const ProductsPage: React.FC = () => {
       </Popover>
     </>
   );
+
 };
 
 export default ProductsPage;

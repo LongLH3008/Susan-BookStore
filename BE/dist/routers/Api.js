@@ -15,19 +15,19 @@ const utils_1 = require("../utils");
 const multer_config_1 = require("../configs/multer.config");
 const Book_controller_1 = __importDefault(require("../controllers/Api/Book.controller"));
 const Cart_controller_1 = __importDefault(require("../controllers/Api/Cart.controller"));
+const Contact_Controller_1 = __importDefault(require("../controllers/Api/Contact.Controller"));
 const Discount_controller_1 = __importDefault(require("../controllers/Api/Discount.controller"));
 const GiaoHangNhanhTest_controller_1 = __importDefault(require("../controllers/Api/GiaoHangNhanhTest.controller"));
+const InfoUser_Controller_1 = __importDefault(require("../controllers/Api/InfoUser.Controller"));
 const Order_Controller_1 = __importDefault(require("../controllers/Api/Order.Controller"));
 const Review_controller_1 = __importDefault(require("../controllers/Api/Review.controller"));
+const Statistinal_controller_1 = __importDefault(require("../controllers/Api/Statistinal.controller"));
 const Upload_controller_1 = __importDefault(require("../controllers/Api/Upload.controller"));
 const User_controller_1 = __importDefault(require("../controllers/Api/User.controller"));
 const Vnpay_controller_1 = __importDefault(require("../controllers/Api/Vnpay.controller"));
-const vectorSearch_controller_1 = __importDefault(require("../controllers/Api/vectorSearch.controller"));
 const banner_controler_1 = __importDefault(require("../controllers/Api/banner.controler"));
 const bannerSale_controller_1 = __importDefault(require("../controllers/Api/bannerSale.controller"));
-const InfoUser_Controller_1 = __importDefault(require("../controllers/Api/InfoUser.Controller"));
-const Contact_Controller_1 = __importDefault(require("../controllers/Api/Contact.Controller"));
-const Statistinal_controller_1 = __importDefault(require("../controllers/Api/Statistinal.controller"));
+const vectorSearch_controller_1 = __importDefault(require("../controllers/Api/vectorSearch.controller"));
 const router = (0, express_1.Router)();
 // user-google
 router.post("/user-google", (0, utils_1.asyncHandler)(User_controller_1.default.createUserFromGoogle)); // create user from google
@@ -110,7 +110,9 @@ router.put("/cart/select/:user_id", (0, utils_1.asyncHandler)(Cart_controller_1.
 //discount
 router.post("/discounts", (0, utils_1.asyncHandler)(Discount_controller_1.default.create));
 router.get("/discounts", (0, utils_1.asyncHandler)(Discount_controller_1.default.getAll));
+router.get("/discounts/admin", (0, utils_1.asyncHandler)(Discount_controller_1.default.getAllAdmin));
 router.put("/discounts/:id", (0, utils_1.asyncHandler)(Discount_controller_1.default.update));
+router.get("/discount/:id", (0, utils_1.asyncHandler)(Discount_controller_1.default.getOne));
 router.delete("/discounts/:code", (0, utils_1.asyncHandler)(Discount_controller_1.default.delete));
 router.get("/discounts/book/:bookId", (0, utils_1.asyncHandler)(Discount_controller_1.default.getDiscountsByBook));
 router.post("/discounts/activate", (0, utils_1.asyncHandler)(Discount_controller_1.default.activate));

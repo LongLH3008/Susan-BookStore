@@ -1,8 +1,13 @@
+import defaultImg from "@/common/assets/img/default.png";
 import { userState } from "@/common/hooks/useAuth";
+import { useToast } from "@/common/hooks/useToast";
+import { ToastVariant } from "@/common/interfaces/toast";
 import { IUser } from "@/common/interfaces/user";
 import CustomFloatingField from "@/components/(website)/floatingfield/CustomFloatingField";
-import { getUsers } from "@/services/auth.service";
+import { instance } from "@/config";
+import { getUsers, updateUser } from "@/services/auth.service";
 import { joiResolver } from "@hookform/resolvers/joi";
+import { useQueryClient } from "@tanstack/react-query";
 import Joi from "joi";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -33,8 +38,13 @@ const updateSchema = Joi.object({
 });
 
 const UserDetail = () => {
+	const queryClient = useQueryClient();
 	const { id } = userState();
 	const [user, setUser] = useState<IUser>({} as IUser);
+	const [showImg, setShowImg] = useState<string>("");
+	const [err, setErr] = useState<string>("");
+	const [file, setFile] = useState<FileList | null>(null);
+	const { toast } = useToast();
 
 	useEffect(() => {
 		(async () => {
@@ -42,7 +52,12 @@ const UserDetail = () => {
 			const user: IUser = res?.metadata;
 			setUser(user);
 			setValue("user_name", user.user_name);
+			setValue("user_birth", user.user_birth);
 			setValue("user_gender", user.user_gender);
+			setValue("user_avatar", user.user_avatar);
+			if (user.user_avatar !== "") {
+				setShowImg(user.user_avatar);
+			}
 		})();
 	}, []);
 
@@ -56,8 +71,45 @@ const UserDetail = () => {
 		resolver: joiResolver(updateSchema),
 	});
 
-	const submit = (data: userUpdate) => {
+	const submit = async (data: userUpdate) => {
 		console.log("Submitted data:", data);
+		console.log(file);
+
+		if (file && file.length > 0) {
+			const imagesFormData = new FormData();
+			for (const item of file as any) {
+				imagesFormData.append("files", item);
+			}
+			console.log(imagesFormData);
+
+			try {
+				const imagesResponse = await instance.post("/upload", imagesFormData);
+				setValue("user_avatar", imagesResponse.data.metadata.fileLinks[0]);
+			} catch (error) {
+				toast({ variant: ToastVariant.ERROR, content: "Cập nhật thất bại, đã có lỗi xảy ra" });
+				return;
+			}
+		}
+
+		try {
+			const res = await updateUser({ ...getValues() }, id);
+			toast({ variant: ToastVariant.SUCCESS, content: "Cập nhật thành công" });
+			queryClient.invalidateQueries({ queryKey: ["userAccount"] });
+		} catch (error) {
+			toast({ variant: ToastVariant.ERROR, content: "Cập nhật thất bại, đã có lỗi xảy ra" });
+		}
+	};
+
+	const changeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (!file?.type.match("image/*")) {
+			setErr(`File tải lên [ ${file?.name} ] không đúng định dạng`);
+			return;
+		}
+		if (err !== "") setErr("");
+		setFile(e.target.files);
+		const url = URL.createObjectURL(file as any);
+		setShowImg(url);
 	};
 
 	return (
@@ -66,10 +118,23 @@ const UserDetail = () => {
 			<form onSubmit={handleSubmit(submit)}>
 				<div className="flex flex-wrap justify-between items-start gap-5 mt-5">
 					<div className="flex flex-col justify-center items-center md:w-[30%] gap-5">
-						<label htmlFor="avatar" className="size-36 rounded-full bg-black overflow-hidden">
-							<input type="file" className="opacity-0 size-0" id="avatar" />
-							<div className="absolute top-0 left-0"></div>
+						<label
+							htmlFor="avatar"
+							className="size-36 rounded-full relative cursor-pointer border p-1 overflow-hidden grid place-items-center *:w-full *:h-full *:object-cover"
+						>
+							{showImg !== "" ? (
+								<img src={showImg} alt="" />
+							) : (
+								<img src={defaultImg} className="opacity-50 scale-75" alt="" />
+							)}
+							<input
+								type="file"
+								onChange={(e) => changeFile(e)}
+								className="opacity-0 size-0 absolute top-0 left-0"
+								id="avatar"
+							/>
 						</label>
+						{err !== "" && <span className="text-[12px] text-red-500">{err}</span>}
 						<span className="text-zinc-600 text-sm">{user?.user_email}</span>
 					</div>
 					<div className="flex flex-col gap-5 md:w-[60%]">

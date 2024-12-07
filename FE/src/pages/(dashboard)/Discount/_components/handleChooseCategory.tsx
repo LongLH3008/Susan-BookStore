@@ -10,11 +10,13 @@ type Props = {};
 const HandleChooseCategory = ({
 	setValue,
 	errors,
+	dataCategory,
 }: {
 	setValue: UseFormSetValue<IVoucher>;
 	errors: FieldErrors<IVoucher>;
+	dataCategory: string;
 }) => {
-	const [category, setCategory] = useState<string>("");
+	const [category, setCategory] = useState<string>(dataCategory);
 
 	const { data: categories } = useQuery({
 		queryKey: ["category"],
@@ -27,9 +29,14 @@ const HandleChooseCategory = ({
 	});
 
 	const chooseCategory = (item: ICategory) => {
-		setCategory(item.category_name);
+		setCategory(item.id);
 		setValue("discount_category_ids", [item.id]);
 		setValue("discount_product_ids", []);
+	};
+
+	const renderCategory = (id: string) => {
+		const cate = categories?.find((item) => item.id == id);
+		return cate?.category_name;
 	};
 
 	return (
@@ -38,7 +45,7 @@ const HandleChooseCategory = ({
 				Áp dụng cho danh mục sản phẩm <span className="text-red-500">*</span>
 			</h4>
 			<div className="relative border h-[4.5dvh] flex items-center group overflow-hidden hover:overflow-visible rounded-md border-zinc-300 p-2">
-				<span className="text-sm">{category ?? "Chọn"}</span>
+				<span className="text-sm">{renderCategory(category) ?? "Chọn"}</span>
 				<div className="h-0 group-hover:h-[20dvh] group-hover:z-50 w-full bg-white rounded-md border text-zinc-700 -z-50 overflow-y-scroll flex flex-col *:py-[6px] *:px-2 *:text-sm absolute top-[103%] left-0">
 					{categories &&
 						categories.length > 0 &&

@@ -4,27 +4,52 @@ import { voucherValidate } from "@/common/schemas/voucher";
 import CustomFloatingField from "@/components/(website)/floatingfield/CustomFloatingField";
 import { voucherService } from "@/services/voucher.service";
 import { joiResolver } from "@hookform/resolvers/joi";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaCheck } from "react-icons/fa";
 import { VscDebugRestart } from "react-icons/vsc";
 import { useNavigate } from "react-router-dom";
 import HandleChooseCategory from "./_components/handleChooseCategory";
-type Props = {};
+import HandleChooseProducts from "./_components/handleChooseProducts";
 
-const DiscountAdd = (props: Props) => {
+const DiscountAdd = () => {
 	const { toast } = useToast();
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	const [voucherType, setVoucherType] = useState("");
 	const [voucherApplies, setVoucherApplies] = useState<"all" | "category" | "specific">("all");
 
+	const {
+		reset,
+		setValue,
+		resetField,
+		getValues,
+		trigger,
+		formState: { errors },
+		register,
+	} = useForm<IVoucher>({
+		resolver: joiResolver(voucherValidate),
+		defaultValues: {
+			discount_category_ids: [],
+			discount_product_ids: [],
+			discount_min_order_value: 0,
+		},
+	});
+
 	const changeType = (e: any) => {
 		console.log(e.target.value);
+
 		setVoucherType(e.target.value);
 	};
 
 	const changeApplies = (e: any) => {
+		resetField("discount_product_ids");
+		resetField("discount_category_ids");
+		if (e.target.value !== "all") {
+			setValue("discount_min_order_value", 0);
+		}
 		console.log(e.target.value);
 		setVoucherApplies(e.target.value);
 	};
@@ -35,36 +60,23 @@ const DiscountAdd = (props: Props) => {
 		setVoucherType("");
 	};
 
-	const {
-		reset,
-		handleSubmit,
-		setValue,
-		getValues,
-		trigger,
-		formState: { errors },
-		register,
-	} = useForm<IVoucher>({
-		resolver: joiResolver(voucherValidate),
-		defaultValues: {
-			discount_category_ids: [],
-			discount_product_ids: [],
-		},
-	});
-
 	const { onAction: createVoucher } = voucherService({
 		action: "CREATE",
 		onSuccess: (data: any) => {
 			toast({ variant: data.status, content: "Tạo mới voucher thành công" });
 			navigate("/quan-tri/ma-giam-gia");
+			queryClient.invalidateQueries({ queryKey: ["voucher_list"] });
 		},
 		onError: (err: any) => toast({ variant: err.status, content: err.message }),
 	});
 
 	const submit = async () => {
-		setValue("discount_is_active", Number(getValues("discount_is_active")) == 1);
-		setValue("discount_stock", getValues("discount_max_use_per_user"));
+		const check = await trigger();
 		console.log(await trigger(), getValues(), errors);
-
+		setValue("discount_is_active", true);
+		setValue("discount_code", getValues("discount_code").toUpperCase().trim().split(" ").join(""));
+		setValue("discount_stock", getValues("discount_max_use_per_user"));
+		if (!check) return;
 		createVoucher(getValues());
 	};
 
@@ -78,7 +90,10 @@ const DiscountAdd = (props: Props) => {
 				<div className="flex items-center gap-2">
 					<button
 						type="reset"
-						onClick={() => reset()}
+						onClick={() => {
+							reset();
+							navigate("/quan-tri/ma-giam-gia");
+						}}
 						className="size-10 border border-zinc-500 grid place-items-center rounded-md text-lg hover:scale-110 duration-200"
 					>
 						<VscDebugRestart />
@@ -119,12 +134,11 @@ const DiscountAdd = (props: Props) => {
 					</label>
 					<select
 						className={`focus:border-zinc-400 ring-0 rounded-md border-zinc-300 text-sm *:text-sm *:py-2`}
-						{...register("discount_is_active")}
 					>
 						<option value={1} defaultChecked>
 							Hoạt động
 						</option>
-						<option value={0}>Không hoạt động</option>
+						{/* <option value={0}>Không hoạt động</option> */}
 					</select>
 				</div>
 				<div className="flex flex-col gap-1 relative">
@@ -162,6 +176,7 @@ const DiscountAdd = (props: Props) => {
 					register={register}
 					error={voucherType == "percentage" && errors.discount_value}
 					field="discount_value"
+					className="disabled:text-transparent"
 					message={voucherType == "percentage" ? errors.discount_value?.message : ""}
 					disabled={voucherType !== "percentage"}
 				/>
@@ -170,6 +185,7 @@ const DiscountAdd = (props: Props) => {
 					required
 					type="number"
 					label="Giá trị tối đa"
+					className="disabled:text-transparent"
 					placeholder="Nhập giá trị tối đa"
 					register={register}
 					error={voucherType == "fixed_amount" && errors.discount_value}
@@ -214,22 +230,11 @@ const DiscountAdd = (props: Props) => {
 							disabled
 						/>
 					)}
-					{voucherApplies == "specific" && (
-						<CustomFloatingField
-							rounded
-							required
-							type="number"
-							label="Áp dụng cho sản phẩm"
-							placeholder={"Chọn các sản phẩm áp dụng"}
-							register={register}
-							error={errors.discount_product_ids as any}
-							field="discount_product_ids"
-							message={errors.discount_product_ids?.message}
-							disabled={voucherApplies !== "specific"}
-						/>
-					)}
 					{voucherApplies == "category" && (
-						<HandleChooseCategory setValue={setValue} errors={errors} />
+						<HandleChooseCategory dataCategory="" setValue={setValue} errors={errors} />
+					)}
+					{voucherApplies == "specific" && (
+						<HandleChooseProducts dataProducts={[]} setValue={setValue} errors={errors} />
 					)}
 
 					{/* <span
@@ -246,9 +251,11 @@ const DiscountAdd = (props: Props) => {
 					required
 					type="number"
 					label="Giá trị đơn hàng tối thiểu"
+					className="disabled:text-transparent"
 					placeholder="Nhập giá trị đơn hàng"
 					register={register}
 					error={errors.discount_min_order_value}
+					disabled={voucherApplies !== "all"}
 					field="discount_min_order_value"
 					message={errors.discount_min_order_value?.message}
 				/>
