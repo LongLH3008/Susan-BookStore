@@ -11,7 +11,7 @@ class statusOrderController {
       message: "Upadate status order successFully !",
       metadata: (await StatusOrerService.UpdateStatusOrderForAdmin(
         req.params.id,
-        req.body.s
+        req.body.state
       )) as any,
     }).send(res);
   }
