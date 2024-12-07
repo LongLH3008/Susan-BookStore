@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a7c52b46-2c71-412f-ac10-0354865f8100" name="Changes" comment="z" />
+    <list default="true" id="a7c52b46-2c71-412f-ac10-0354865f8100" name="Changes" comment="z">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/src/Services/Discount.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BE/src/Services/Discount.service.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +21,43 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;cuongzzzzzz&quot;
+  }
+}</component>
+  <component name="GitToolBoxStore">
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="fix/discount" />
+                    <option name="lastUsedInstant" value="1733561965" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="dev" />
+                    <option name="lastUsedInstant" value="1733561964" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
+    </option>
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/LongLH3008/Susan-BookStore.git&quot;,
+    &quot;accountId&quot;: &quot;05b8ab1c-a682-4974-9e5f-10242f3c0090&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -32,15 +72,15 @@
     "Node.js.console.js.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "feat/order",
-    "last_opened_file_path": "/home/kangz/Desktop/DATN/Susan-BookStore",
+    "git-widget-placeholder": "fix/discount",
+    "last_opened_file_path": "/Users/kangzzz/WebstormProjects/Susan-BookStore/Susan-BookStore",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "/home/kangz/Desktop/DATN/Susan-BookStore/BE/node_modules/typescript/lib",
+    "settings.editor.selected.configurable": "configurable.group.editor",
+    "ts.external.directory.path": "/Users/kangzzz/WebstormProjects/Susan-BookStore/Susan-BookStore/FE/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -57,7 +97,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-WS-243.21565.180" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-WS-243.22562.112" />
       </set>
     </attachedChunks>
   </component>
@@ -91,6 +131,8 @@
       <workItem from="1732968175836" duration="2121000" />
       <workItem from="1732975802196" duration="3657000" />
       <workItem from="1732979469957" duration="845000" />
+      <workItem from="1733561427050" duration="28000" />
+      <workItem from="1733561511907" duration="1113000" />
     </task>
     <task id="LOCAL-00001" summary="z">
       <option name="closed" value="true" />
