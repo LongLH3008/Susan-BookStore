@@ -29,10 +29,12 @@ import SearchForm from "../components/searchForm";
 import CategoryForm from "./CategoryForm";
 import { Link } from "react-router-dom";
 import { IoMdAdd } from "react-icons/io";
+import { MdDeleteOutline, MdOutlineSearch } from "react-icons/md";
+import { FiEdit } from "react-icons/fi";
 
 const CategoriesPage: React.FC = () => {
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(0);
   const { toast } = useToast();
   const [search, setSearch] = useState<string>("");
 
@@ -48,8 +50,8 @@ const CategoriesPage: React.FC = () => {
     queryFn: () => getCategories({ limit, page, search }),
   });
 
-  const handleSearch = (searchTerm: string) => {
-    setSearch(searchTerm);
+  const handleSearch = (e: any) => {
+    setSearch(e.target.value);
     refetch();
   };
   const { mutateAsync: deleteMutate } = useMutation({
@@ -111,16 +113,19 @@ const CategoriesPage: React.FC = () => {
       {
         headerName: "Tên danh mục",
         field: "category_name",
-        width: 450,
+        width: 250,
       },
       {
         headerName: "Ảnh đại diện",
         field: "category_thumb",
-        width: 450,
+        width: 250,
         renderCell: (params: any) => (
           <img
-            src={params.row.category_thumb}
-            alt={params.row.category_thumb}
+            src={
+              params.row.category_thumb ||
+              "https://blu.edu.vn/Content/images/default-image.jpg"
+            }
+            alt={params.row.category_name}
             style={{ width: "50px", height: "50px" }}
           />
         ),
@@ -128,7 +133,7 @@ const CategoriesPage: React.FC = () => {
       {
         headerName: "Trạng thái",
         field: "is_active",
-        width: 450,
+        width: 250,
         renderCell: (params: any) => (
           <Box display="flex" alignItems="center">
             <Switch
@@ -148,15 +153,32 @@ const CategoriesPage: React.FC = () => {
         width: 250,
         renderCell: (params: any) => (
           <>
-            <Tooltip title="Chỉnh sửa">
-              <EditIcon onClick={() => onEdit(params.row)} />
-            </Tooltip>
-            <Tooltip title="Hiển thị chi tiết">
-              <InfoIcon onClick={() => onShowDetail(params.row)} />
-            </Tooltip>
-            <Tooltip title="Xóa">
-              <DeleteIcon onClick={() => onDelete(params.row)} />
-            </Tooltip>
+            <div className="flex gap-3  items-center ">
+              <Tooltip title="Chỉnh sửa">
+                <span
+                  onClick={() => onEdit(params.row)}
+                  className="size-10 border text-lg text-zinc-400 hover:border-[#00bfc5] hover:text-[#00bfc5] cursor-pointer font-light grid place-content-center"
+                >
+                  <FiEdit />
+                </span>
+              </Tooltip>
+              <Tooltip title="Hiển thị chi tiết">
+                <span
+                  onClick={() => onShowDetail(params.row)}
+                  className="size-10 border text-lg text-zinc-400 hover:border-[#00bfc5] hover:text-[#00bfc5] cursor-pointer font-light grid place-content-center"
+                >
+                  <InfoIcon />
+                </span>
+              </Tooltip>
+              <Tooltip title="Xóa">
+                <span
+                  onClick={() => onDelete(params.row)}
+                  className="size-10 border text-2xl text-zinc-400 hover:border-red-500 hover:text-red-500 cursor-pointer font-light grid place-content-center"
+                >
+                  <MdDeleteOutline />
+                </span>
+              </Tooltip>
+            </div>
           </>
         ),
       },
@@ -174,16 +196,39 @@ const CategoriesPage: React.FC = () => {
           <i className="w-5 fa-solid fa-layer-group"></i>
           <h2 className={`text-xl font-[500]`}>Danh Mục</h2>
         </div>
-        <button
-          onClick={onAdd}
-          className="size-10  bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
-        >
-          <IoMdAdd />
-        </button>
+        <div className="flex justify-end items-center *:ms-4">
+          <form className="max-w-md mx-auto ">
+            <label
+              htmlFor="default-search"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+            >
+              Search
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                <MdOutlineSearch className="text-2xl" />
+              </div>
+              <input
+                type="search"
+                id="default-search"
+                className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Tìm kiếm tên danh mục ..."
+                onChange={handleSearch}
+                required
+              />
+            </div>
+          </form>
+          <button
+            onClick={onAdd}
+            className="size-10  bg-zinc-900 hover:bg-[#00bfc5] grid place-items-center text-white rounded-md text-2xl hover:scale-110 duration-200"
+          >
+            <IoMdAdd />
+          </button>
+        </div>
       </div>
-      <div className="flex items-center justify-end">
+      {/* <div className="flex items-center justify-end">
         <SearchForm onSearch={handleSearch} />
-      </div>
+      </div> */}
       <MyTable2
         rows={data?.metadata || []}
         columns={columns}
@@ -244,7 +289,6 @@ const CategoriesPage: React.FC = () => {
         <DialogContent dividers>
           {selectedCategory ? (
             <Box>
-              <Typography variant="h6">Thông tin cơ bản</Typography>
               <Typography>
                 <strong>Tên danh mục:</strong> {selectedCategory.category_name}
               </Typography>

@@ -79,7 +79,6 @@ const BlogPage = () => {
     setConfirmOpen(true);
   };
   const columns: GridColDef[] = [
-    { field: "blog_title", headerName: "Tiêu đề", flex: 1 },
     {
       field: "blog_image",
       headerName: "Ảnh tin tức",
@@ -88,6 +87,8 @@ const BlogPage = () => {
       ),
       flex: 2,
     },
+    { field: "blog_title", headerName: "Tiêu đề", width: 300 },
+
     {
       field: "blog_tags",
       headerName: "Thẻ",

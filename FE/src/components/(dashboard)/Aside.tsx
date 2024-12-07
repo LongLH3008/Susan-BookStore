@@ -66,10 +66,10 @@ const Aside = (props: any) => {
         </li>
         <li className="">
           <Link
-            to={"/quan-tri/nguoi-dung"}
+            to={"/quan-tri/danh-muc"}
             className="flex items-center h-[50px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
           >
-            <i className="fa-solid fa-user"></i>
+            <i className="w-5 fa-solid fa-layer-group"></i>
             <span
               className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
                 resizeAside
@@ -77,7 +77,58 @@ const Aside = (props: any) => {
                   : "translate-x-0 opacity-1"
               }`}
             >
-              Người dùng
+              Danh mục
+            </span>
+          </Link>
+        </li>
+        <li className="">
+          <Link
+            to={"/quan-tri/san-pham"}
+            className="flex items-center h-[50px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
+          >
+            <i className="fa-solid fa-boxes-stacked"></i>
+            <span
+              className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
+                resizeAside
+                  ? "translate-x-[150%] opacity-0"
+                  : "translate-x-0 opacity-1"
+              }`}
+            >
+              Sản phẩm
+            </span>
+          </Link>
+        </li>
+        <li className="">
+          <Link
+            to={"/quan-tri/don-hang"}
+            className="flex items-center h-[50px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
+          >
+            <i className="fa-solid fa-cart-shopping"></i>
+            <span
+              className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
+                resizeAside
+                  ? "translate-x-[150%] opacity-0"
+                  : "translate-x-0 opacity-1"
+              }`}
+            >
+              Đơn hàng
+            </span>
+          </Link>
+        </li>{" "}
+        <li className="">
+          <Link
+            to={"/quan-tri/ma-giam-gia"}
+            className="flex items-center h-[50px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
+          >
+            <i className="fa-solid fa-ticket"></i>
+            <span
+              className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
+                resizeAside
+                  ? "translate-x-[150%] opacity-0"
+                  : "translate-x-0 opacity-1"
+              }`}
+            >
+              Mã giảm giá
             </span>
           </Link>
         </li>
@@ -136,74 +187,6 @@ const Aside = (props: any) => {
         </li>
         <li className="">
           <Link
-            to={"/quan-tri/danh-muc"}
-            className="flex items-center h-[50px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
-          >
-            <i className="w-5 fa-solid fa-layer-group"></i>
-            <span
-              className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
-                resizeAside
-                  ? "translate-x-[150%] opacity-0"
-                  : "translate-x-0 opacity-1"
-              }`}
-            >
-              Danh mục
-            </span>
-          </Link>
-        </li>
-        <li className="">
-          <Link
-            to={"/quan-tri/san-pham"}
-            className="flex items-center h-[50px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
-          >
-            <i className="fa-solid fa-boxes-stacked"></i>
-            <span
-              className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
-                resizeAside
-                  ? "translate-x-[150%] opacity-0"
-                  : "translate-x-0 opacity-1"
-              }`}
-            >
-              Sản phẩm
-            </span>
-          </Link>
-        </li>
-        <li className="">
-          <Link
-            to={"/quan-tri/ma-giam-gia"}
-            className="flex items-center h-[50px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
-          >
-            <i className="fa-solid fa-ticket"></i>
-            <span
-              className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
-                resizeAside
-                  ? "translate-x-[150%] opacity-0"
-                  : "translate-x-0 opacity-1"
-              }`}
-            >
-              Mã giảm giá
-            </span>
-          </Link>
-        </li>
-        <li className="">
-          <Link
-            to={"/quan-tri/don-hang"}
-            className="flex items-center h-[50px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
-          >
-            <i className="fa-solid fa-cart-shopping"></i>
-            <span
-              className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
-                resizeAside
-                  ? "translate-x-[150%] opacity-0"
-                  : "translate-x-0 opacity-1"
-              }`}
-            >
-              Đơn hàng
-            </span>
-          </Link>
-        </li>
-        <li className="">
-          <Link
             to={"/quan-tri/tin-tuc"}
             className="flex items-center h-[50px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
           >
@@ -219,12 +202,12 @@ const Aside = (props: any) => {
             </span>
           </Link>
         </li>
-        {/* <li className="">
+        <li className="">
           <Link
-            to={"/quan-tri/binh-luan"}
+            to={"/quan-tri/nguoi-dung"}
             className="flex items-center h-[50px] px-5 relative overflow-hidden hover:bg-zinc-200 rounded-md"
           >
-            <i className="fa-solid fa-comment"></i>
+            <i className="fa-solid fa-user"></i>
             <span
               className={`absolute whitespace-nowrap duration-700 top-1/2 -translate-y-1/2 left-14 ease-in-out ${
                 resizeAside
@@ -232,10 +215,10 @@ const Aside = (props: any) => {
                   : "translate-x-0 opacity-1"
               }`}
             >
-              Bình luận
+              Người dùng
             </span>
           </Link>
-        </li> */}
+        </li>
       </ul>
       <div className="flex flex-col gap-2">
         <div
