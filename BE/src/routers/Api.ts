@@ -24,6 +24,7 @@ import PaymentController from "../controllers/Api/Vnpay.controller";
 import BannerControler from "../controllers/Api/banner.controler";
 import BannerSaleControler from "../controllers/Api/bannerSale.controller";
 import VectorSearchController from "../controllers/Api/vectorSearch.controller";
+import StatusOrderController from "../controllers/Api/StatusOrder.Controller";
 
 const router = Router();
 
@@ -349,5 +350,11 @@ router.post(
   "/filterbydayandmonth",
   asyncHandler(StatisticsController.StatisticalFilterOrderPrdayAndMonth)
 );
+
+router.patch(
+  "/update-status-order/:id",
+  asyncHandler(StatusOrderController.UpdateStatusOrderForClient)
+);
+
 
 export default router;
