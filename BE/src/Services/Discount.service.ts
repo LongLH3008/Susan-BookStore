@@ -44,17 +44,6 @@ class DiscountService {
             throw new BadRequestError("Mã giảm giá đã tồn tại");
         }
 
-        // if (data.discount_applies_to === DiscountApplyTo.category) {
-        //     const allBooks = await Book.find({
-        //         categories: {
-        //             $in: data.discount_category_ids
-        //         }
-        //     }).lean();
-        //     const allBookIds = allBooks.map((book) => book._id);
-        //     data.discount_product_ids = allBookIds
-        //     console.log(data.discount_product_ids);
-        // }
-
         const newDiscount = await Discount.create(data);
         return newDiscount.toObject() as DiscountOutputDTO;
     }
