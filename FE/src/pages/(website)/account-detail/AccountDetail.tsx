@@ -1,4 +1,6 @@
+import defaultImg from "@/common/assets/img/default.png";
 import { userState } from "@/common/hooks/useAuth";
+import { IUser } from "@/common/interfaces/user";
 import Breadcrumb from "@/components/(website)/breadcrumb/breadcrumb";
 import { getUsers } from "@/services/auth.service";
 import { useQuery } from "@tanstack/react-query";
@@ -13,7 +15,7 @@ const AccountDetail = () => {
 		queryFn: async () => {
 			try {
 				const res = await getUsers(id);
-				return res.metadata;
+				return res.metadata as IUser;
 			} catch (error) {}
 		},
 	});
@@ -32,10 +34,14 @@ const AccountDetail = () => {
 				<div className="grid grid-cols-10 gap-5 w-full h-[70dvh]">
 					<div className="col-span-2 flex flex-col gap-5">
 						<div className="h-[25dvh] bg-white shadow-sm rounded-md flex flex-col gap-3 justify-center items-center">
-							<figure className="size-20 rounded-full overflow-hidden grid place-items-center">
-								<span className="bg-black h-full w-full object-cover"></span>
+							<figure className="size-20 rounded-full border p-1 overflow-hidden grid place-items-center *:w-full *:h-full *:object-cover">
+								{user?.user_avatar !== "" ? (
+									<img src={user?.user_avatar} alt="" />
+								) : (
+									<img src={defaultImg} className="opacity-50 scale-75" alt="" />
+								)}
 							</figure>
-							<span className="text-sm text-zinc-500">Email của tao</span>
+							<span className="text-[12px] text-zinc-500">{user?.user_email}</span>
 						</div>
 						<div className="h-fit bg-white shadow-sm rounded-md flex flex-col p-2 *:p-2 *:px-4 *:text-wrap text-sm text-zinc-500">
 							{nav.map((item: any, index: number) => (

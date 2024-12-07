@@ -42,6 +42,10 @@ export const changePassword = async (args: {
   return await SendRequest("POST", "auth/change-pw", args);
 };
 
+export const updateUser = async (arg: any, id: string) => {
+  return await SendRequest('PUT', `user/${id}`, arg);
+}
+
 const checkAuthentication = async () => {
   if ((window.location.href = "https://accounts.google.com"))
     console.log("aaa");

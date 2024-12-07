@@ -13,15 +13,6 @@ z .poppins {
 	font-family: Lato;
 }
 
-/* Ẩn thanh cuộn*/
-.overscrollHidden::-webkit-scrollbar {
-	width: 0;
-}
-
-.overscrollHidden::-webkit-scrollbar-thumb {
-	background-color: transparent;
-}
-
 .sliderbanner:hover .btn_banner_home {
 	display: block !important;
 }
@@ -77,4 +68,13 @@ input[type="number"]::-webkit-outer-spin-button {
 /* Ẩn mũi tên tăng/giảm trên Firefox */
 input[type="number"] {
 	-moz-appearance: textfield;
+}
+
+/* Ẩn thanh cuộn*/
+.overscrollHidden::-webkit-scrollbar {
+	width: 0 !important;
+}
+
+.overscrollHidden::-webkit-scrollbar-thumb {
+	background-color: transparent !important;
 }

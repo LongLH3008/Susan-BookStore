@@ -1,6 +1,7 @@
 import { CheckoutContext } from "@/common/context/ContextCheckout";
 import { IOrderChecking } from "@/common/interfaces/checkout";
 import { IVoucher } from "@/common/interfaces/voucher";
+import { ConvertVNDString } from "@/common/shared/round-number";
 import { calcCheckout } from "@/services/checkout.service";
 import { getAllVoucher } from "@/services/voucher.service";
 import { debounce } from "@mui/material";
@@ -78,6 +79,14 @@ const Voucher = () => {
 		await recaculate();
 	};
 
+	const handleValue = (item: IVoucher) => {
+		let value =
+			item.discount_type == "percentage"
+				? `-${item.discount_value}%`
+				: `- ${ConvertVNDString(item.discount_value)}đ`;
+		return value + " / sản phẩm";
+	};
+
 	const recaculate = async (code?: string) => {
 		setOrder_A_P_D({
 			...orderAddress_Payment_Discount,
@@ -152,6 +161,12 @@ const Voucher = () => {
 								<div className="flex flex-col gap-1">
 									<span>{item.discount_code}</span>
 									<span className="text-[12px]">{item.discount_description}</span>
+									{item.discount_min_order_value > 0 && (
+										<span className="text-[12px]">
+											Đơn hàng tối thiểu đạt{" "}
+											{ConvertVNDString(item.discount_min_order_value)}đ
+										</span>
+									)}
 								</div>
 								<div className="flex flex-col gap-1 items-end justify-center">
 									<span
@@ -161,7 +176,7 @@ const Voucher = () => {
 												: "border border-zinc-400"
 										} w-fit p-1`}
 									>
-										-{item.discount_value}%
+										{handleValue(item)}
 									</span>
 									{!checkDiscountCode(item) && (
 										<span className="text-[12px] text-black">

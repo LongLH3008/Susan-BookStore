@@ -11,9 +11,9 @@ export interface IVoucher {
 	discount_description?: string;
 	discount_max_use_per_user: number;
 	discount_users_used: [];
-	discount_is_active?: boolean;
 	discount_start_date: string;
 	discount_end_date: string;
+	discount_is_active?: boolean;
 	_id: string;
 }
 

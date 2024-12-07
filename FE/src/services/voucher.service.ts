@@ -8,13 +8,17 @@ export const getAllVoucher = async () => {
 	return await SendRequest("GET", "discounts");
 };
 
+export const getAllVoucherAdmin = async () => {
+	return await SendRequest("GET", "discounts/admin");
+};
+
 const createVoucher = async (arg: IVoucher) => {
 	console.log(arg);
 	return await SendRequest("POST", "discounts", arg);
 };
 
-export const getBookVoucher = async (bookID: string) => {
-	return await SendRequest("GET", "discounts/book/" + bookID);
+export const getDetailVoucher = async (code: string) => {
+	return await SendRequest("GET", "discount/" + code);
 };
 
 const removeVoucher = async (code: string) => {
@@ -22,7 +26,9 @@ const removeVoucher = async (code: string) => {
 };
 
 const updateVoucher = async (arg: IVoucher) => {
-	return await SendRequest("PUT", "discounts/" + arg._id, arg);
+	let payload: Record<string, any> = { ...arg };
+	delete payload['_id']
+	return await SendRequest("PUT", "discounts/" + arg._id, payload);
 };
 
 const activateVoucher = async (code: string) => {
@@ -33,12 +39,9 @@ const deactivateVoucher = async (code: string) => {
 	return await SendRequest("POST", "discounts/deactivate", { code });
 };
 
-const deactiveVoucherForUser = async (arg: { code: string; userId: string }) => {
-	return await SendRequest("POST", "discount/cancel", arg);
-};
 
 type voucherService = {
-	action: "GET" | "CREATE" | "UPDATE" | "REMOVE";
+	action: "GET" | "CREATE" | "UPDATE" | "REMOVE" | "ACTIVE" | "UNACTIVE";
 	onSuccess?: (data?: any) => void;
 	onError?: (error?: any) => void;
 };
@@ -62,6 +65,12 @@ export const voucherService = ({ action, onSuccess, onError }: voucherService) =
 					case "REMOVE":
 						response = await removeVoucher(args);
 						break;
+					case "ACTIVE":
+						response = await activateVoucher(args);
+						break;
+					case "UNACTIVE":
+						response = await deactivateVoucher(args);
+						break
 				}
 				return response;
 			} catch (error) {
@@ -69,7 +78,7 @@ export const voucherService = ({ action, onSuccess, onError }: voucherService) =
 			}
 		},
 		onSuccess: (response: any) => {
-			if (action == "CREATE" || action == "UPDATE" || action == "REMOVE") {
+			if (action !== "GET") {
 				queryClient.invalidateQueries({ queryKey: ["voucher_list"] });
 			}
 			onSuccess && onSuccess({ status: ToastVariant.SUCCESS, message: response });
@@ -81,9 +90,9 @@ export const voucherService = ({ action, onSuccess, onError }: voucherService) =
 				onError(
 					error.response
 						? {
-								status: ToastVariant.ERROR,
-								message: error.response.data.message ?? error.response.data.error,
-						  }
+							status: ToastVariant.ERROR,
+							message: error.response.data.message ?? error.response.data.error,
+						}
 						: { status: ToastVariant.LOST_CONNECT, message: "Lỗi kết nối máy chủ" }
 				);
 		},
