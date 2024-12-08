@@ -1,3 +1,4 @@
+import { any } from "joi";
 import Order from "../models/Order.model";
 import {
   GetAllOrderWithStatisticalRequest,
@@ -5,6 +6,7 @@ import {
   StatisticalOrderDto,
   TopSellingBook,
   TopSellingUser,
+  WeekData,
 } from "./dtos/Statistincal.dto";
 
 class StatisticalService {
@@ -227,6 +229,126 @@ class StatisticalService {
         },
       ]);
       return orderStatistics;
+    } catch (error: any) {
+      console.error("Error in StatisticalOrderbydayAndMonth:", error);
+      throw new Error("Không thể thống kê đơn hàng: " + error.message);
+    }
+  }
+
+  // *****************************************************/
+
+  static async StatisticalOrderbydayAndMonthTwo(filter: {
+    startDate: string;
+    endDate: string;
+  }): Promise<{
+    totalOrders: number;
+    totalRevenue: number;
+    totalSold: number;
+    dataWeeks: WeekData[];
+  }> {
+    try {
+      // Validate and parse input dates
+      const startDate = new Date(filter.startDate);
+      const endDate = new Date(filter.endDate);
+
+      // Validate input
+      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        throw new Error("Invalid date format");
+      }
+
+      // Tính khoảng cách giữa hai ngày
+      const daysDifference = Math.ceil(
+        (endDate.getTime() - startDate.getTime()) / (1000 * 3600 * 24)
+      );
+
+      // Aggregate pipeline
+      const statistics = await Order.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gte: startDate,
+              $lte: endDate,
+            },
+          },
+        },
+        {
+          $addFields: {
+            // Tính tuần theo ngày trong khoảng thời gian
+            weekNumber: {
+              $ceil: {
+                $divide: [{ $subtract: [{ $dayOfMonth: "$createdAt" }, 1] }, 7],
+              },
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$weekNumber",
+            totalOrders: { $sum: 1 },
+            totalRevenue: { $sum: "$total" },
+            totalSold: { $sum: { $sum: "$products.quantity" } },
+          },
+        },
+        {
+          $sort: { _id: 1 },
+        },
+      ]);
+
+      // Xử lý dữ liệu
+      let processedData: WeekData[];
+
+      // Nếu khoảng thời gian <= 7 ngày, chỉ hiển thị 1 tuần
+      if (daysDifference <= 7) {
+        processedData = statistics.map((item) => ({
+          Week: 1,
+          totalOrders: item.totalOrders,
+          totalRevenue: item.totalRevenue,
+          totalSold: item.totalSold,
+        }));
+      }
+      // Nếu khoảng thời gian > 7 ngày, hiển thị 4 tuần
+      else {
+        // Tạo mảng 4 tuần với dữ liệu từ aggregate
+        const weekMap = new Map(statistics.map((item) => [item._id, item]));
+
+        processedData = [1, 2, 3, 4].map((weekNum) => {
+          const weekData = weekMap.get(weekNum);
+          return weekData
+            ? {
+                Week: weekNum,
+                totalOrders: weekData.totalOrders,
+                totalRevenue: weekData.totalRevenue,
+                totalSold: weekData.totalSold,
+              }
+            : {
+                Week: weekNum,
+                totalOrders: 0,
+                totalRevenue: 0,
+                totalSold: 0,
+              };
+        });
+      }
+
+      // Tính tổng
+      const totalOrders = processedData.reduce(
+        (sum, week) => sum + week.totalOrders,
+        0
+      );
+      const totalRevenue = processedData.reduce(
+        (sum, week) => sum + week.totalRevenue,
+        0
+      );
+      const totalSold = processedData.reduce(
+        (sum, week) => sum + week.totalSold,
+        0
+      );
+
+      return {
+        totalOrders,
+        totalRevenue,
+        totalSold,
+        dataWeeks: processedData,
+      };
     } catch (error: any) {
       console.error("Error in StatisticalOrderbydayAndMonth:", error);
       throw new Error("Không thể thống kê đơn hàng: " + error.message);

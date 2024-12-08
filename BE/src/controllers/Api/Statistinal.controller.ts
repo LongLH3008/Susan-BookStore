@@ -44,5 +44,18 @@ class StatisticalController {
     }).send(res);
   }
 
+  static async StatisticalFilterOrderPrdayAndMonthTwo(
+    req: Request,
+    res: Response
+  ): Promise<any> {
+    const views = await StatisticalService.StatisticalOrderbydayAndMonthTwo(
+      req.body
+    );
+    return new SuccessResponse({
+      message: "Get all order successfully",
+      metadata: views,
+    }).send(res);
+  }
+
 }
 export default StatisticalController;

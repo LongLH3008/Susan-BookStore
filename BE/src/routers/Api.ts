@@ -358,11 +358,17 @@ router.post(
   "/filterbydayandmonth",
   asyncHandler(StatisticsController.StatisticalFilterOrderPrdayAndMonth)
 );
+router.post(
+  "/filterbydayandmonth/admin",
+  asyncHandler(StatisticsController.StatisticalFilterOrderPrdayAndMonthTwo)
+);
 
 router.patch(
   "/update-status-order/:id",
   asyncHandler(StatusOrderController.UpdateStatusOrderForClient)
 );
+
+
 
 
 export default router;

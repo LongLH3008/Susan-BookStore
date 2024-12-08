@@ -179,5 +179,6 @@ router.get("/contact/:id", (0, utils_1.asyncHandler)(Contact_Controller_1.defaul
 router.post("/statistical-prd-by-date", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.GetAllOrderWithStatistical));
 router.get("/topfiveuser", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.GetAllOrderWithTop5User));
 router.post("/filterbydayandmonth", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.StatisticalFilterOrderPrdayAndMonth));
+router.post("/filterbydayandmonth/admin", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.StatisticalFilterOrderPrdayAndMonthTwo));
 router.patch("/update-status-order/:id", (0, utils_1.asyncHandler)(StatusOrder_Controller_1.default.UpdateStatusOrderForClient));
 exports.default = router;

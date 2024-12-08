@@ -69,6 +69,12 @@ export interface FilterbydayandmonthResponse {
   page: number;
   limit: number;
 }
+export  interface WeekData {
+    Week: number;
+    totalOrders: number;
+    totalRevenue: number;
+    totalSold: number;
+  }
 
 
 
