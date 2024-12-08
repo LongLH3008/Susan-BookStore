@@ -345,8 +345,8 @@ router.get("/contact/list", asyncHandler(ContactController.List));
 router.get("/contact/:id", asyncHandler(ContactController.Detail));
 
 // Statistics
-router.get(
-  "/topfivebook",
+router.post(
+  "/statistical-prd-by-date",
   asyncHandler(StatisticsController.GetAllOrderWithStatistical)
 );
 router.get(

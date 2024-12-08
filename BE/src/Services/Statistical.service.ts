@@ -8,30 +8,53 @@ import {
 } from "./dtos/Statistincal.dto";
 
 class StatisticalService {
-  static async StatisticalPrdAndMoney(): Promise<GetAllOrderWithStatisticalResponse> {
+  static async StatisticalPrdAndMoney(
+    from: Date,
+    to: Date,
+    page: number = 1,
+    limit: number = 5
+  ): Promise<GetAllOrderWithStatisticalResponse> {
     try {
-      // Calculate top 5 best-selling books
+      // Chuyển đổi ngày tháng
+      const fromDate = new Date(from);
+      const toDate = new Date(to);
+  
+      // Đảm bảo toDate được đặt về cuối ngày
+      toDate.setHours(23, 59, 59, 999);
+  
       const topSellingBooks: TopSellingBook[] = await Order.aggregate([
-        { $unwind: "$products" }, // Unwind the products array
+        {
+          $match: {
+            createdAt: {
+              $gte: fromDate, 
+              $lte: toDate
+            },
+          }
+        },
+        { $unwind: "$products" },
         {
           $group: {
-            _id: "$products.bookId", // Group by bookId
-            totalSold: { $sum: "$products.quantity" }, // Sum quantities sold
-            title: { $first: "$products.title" }, // Include book title
-          },
+            _id: "$products.bookId",
+            totalSold: { $sum: "$products.quantity" },
+            bookName: { $first: "$products.title" },
+            totalRevenue: { $sum: { $multiply: ["$products.quantity", "$products.price"] } }
+          }
         },
-        { $sort: { totalSold: -1 } }, // Sort by totalSold descending
-        { $limit: 5 }, // Limit to top 5
+        { $sort: { totalSold: -1 } },
+        { $skip: (page - 1) * limit },
+        { $limit: limit }
       ]);
-
-      // Return only the necessary fields
+  
       return {
         topSellingBooks,
+        page,
+        limit,
       };
     } catch (error) {
       throw error;
     }
   }
+  
 
   static async TopBuyingUsers(): Promise<TopSellingUser[]> {
     try {

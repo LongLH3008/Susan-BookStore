@@ -8,7 +8,12 @@ class StatisticalController {
     req: Request,
     res: Response
   ): Promise<any> {
-    const views = await StatisticalService.StatisticalPrdAndMoney();
+    const views = await StatisticalService.StatisticalPrdAndMoney(
+      req.body.from,
+      req.body.to,
+      req.body.page = 1,
+      req.body.limit = 5
+    );
     return new SuccessResponse({
       message: "Get all order with statistical successfully",
       metadata: views,
@@ -38,5 +43,6 @@ class StatisticalController {
       metadata: views,
     }).send(res);
   }
+
 }
 export default StatisticalController;

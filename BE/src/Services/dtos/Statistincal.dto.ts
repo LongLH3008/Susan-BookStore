@@ -21,7 +21,7 @@ export interface GetAllOrderWithStatisticalData {
   createdAt: Date;
 }
 
-// top sach ban chạy
+// top sach ban chạy theo khoảng thời gian 
 export interface TopSellingBook {
   _id: string;
   bookName: string;
@@ -30,6 +30,8 @@ export interface TopSellingBook {
 
 export interface GetAllOrderWithStatisticalResponse {
   topSellingBooks: TopSellingBook[];
+  page : number;
+  limit : number;
 }
 
 //top 5 ngươi dung

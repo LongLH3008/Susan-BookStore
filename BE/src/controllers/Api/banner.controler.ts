@@ -67,6 +67,7 @@ class bannerControler {
       metadata: blog,
     }).send(res);
   }
+
 }
 
 export default bannerControler;
