@@ -1,6 +1,105 @@
+import { getMondayAndSunday, getTimeMonth } from "@/common/shared/getWeekTime";
+import { filterByDay, filterByDayAndMonth } from "@/services/statistical.service";
 import ApexCharts from "apexcharts";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { BsBarChartLine } from "react-icons/bs";
+
+type Total = {
+	totalOrders: number;
+	totalRevenue: number;
+	totalSold: number;
+};
+
+interface Weeks extends Total {
+	Week: string;
+}
+
+interface Days extends Total {
+	Day: string;
+}
+
 const ColumnChart = () => {
+	const { monday, sunday } = getMondayAndSunday();
+	const [dataChart, setDataChart] = useState<(Weeks | Days)[]>([]);
+	const [time, setTime] = useState<{ from: string; to: string }>({ from: monday, to: sunday });
+	const [filter, setFilter] = useState<string>("Tuần này");
+	const [dataTotal, setDataTotal] = useState<Total>({ totalOrders: 0, totalRevenue: 0, totalSold: 0 });
+
+	const weekDays = ["Thứ hai", "Thứ ba", "Thứ bốn", "Thứ năm", "Thứ sáu", "Thứ bảy", "Chủ nhật"];
+
+	useEffect(() => {
+		(async () => {
+			if (filter.includes("Tuần")) {
+				const res = await filterByDay({ startDate: monday, endDate: sunday });
+				const { totalOrders, totalRevenue, totalSold } = res?.metadata;
+				setDataChart(res.metadata.dataDays);
+				setDataTotal({ totalOrders, totalRevenue, totalSold });
+			} else {
+				const res = await filterByDayAndMonth({ startDate: monday, endDate: sunday });
+				const { totalOrders, totalRevenue, totalSold } = res?.metadata;
+				setDataChart(res.metadata.dataWeeks);
+				setDataTotal({ totalOrders, totalRevenue, totalSold });
+			}
+		})();
+	}, [time, filter]);
+
+	const totalOrders = filter.includes("Tuần")
+		? dataChart?.map((item: any) => ({
+				x: `${weekDays[item.Day]}`,
+				y: item.totalOrders,
+		  }))
+		: dataChart?.map((item: any) => ({
+				x: `Tuần ${item.Week}`,
+				y: item.totalOrders,
+		  }));
+
+	const totalRevenue = filter.includes("Tuần")
+		? dataChart?.map((item: any) => ({
+				x: `${weekDays[item.Day]}`,
+				y: item.totalRevenue,
+		  }))
+		: dataChart?.map((item: any) => ({
+				x: `Tuần ${item.Week}`,
+				y: item.totalRevenue,
+		  }));
+
+	const totalSold = filter.includes("Tuần")
+		? dataChart?.map((item: any) => ({
+				x: `${weekDays[item.Day]}`,
+				y: item.totalSold,
+		  }))
+		: dataChart?.map((item: any) => ({
+				x: `Tuần ${item.Week}`,
+				y: item.totalSold,
+		  }));
+
+	console.log(totalSold, totalRevenue, totalOrders, dataChart);
+
+	const setLastWeek = () => {
+		const { monday, sunday } = getMondayAndSunday({ lastweek: true });
+		setTime({ from: monday, to: sunday });
+		setFilter("Tuần trước");
+	};
+
+	const setMonth = (value: number) => {
+		const { from, to } = getTimeMonth(value);
+		setTime({ from, to });
+		setFilter("Tháng " + value);
+	};
+
+	const setThisWeek = () => {
+		setTime({ from: monday, to: sunday });
+		setFilter("Tuần này");
+	};
+	const setTimeWeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const inputDate = new Date(e.target.value);
+		const newEndDate = new Date(inputDate);
+		newEndDate.setDate(inputDate.getDate() + 7);
+		const toDateString = newEndDate.toISOString().split("T")[0];
+		setFilter("Thời gian tuần");
+		setTime({ from: e.target.value, to: toDateString });
+	};
+
 	const chartRef = useRef(null);
 
 	useEffect(() => {
@@ -8,50 +107,23 @@ const ColumnChart = () => {
 			colors: ["#1A56DB", "#FDBA8C"],
 			series: [
 				{
-					name: "Organic",
+					name: "Số lượng đơn hàng",
 					color: "#1A56DB",
-					data: [
-						{ x: "Mon", y: 231 },
-						{ x: "Tue", y: 122 },
-						{ x: "Wed", y: 63 },
-						{ x: "Thu", y: 421 },
-						{ x: "Fri", y: 122 },
-						{ x: "Sat", y: 323 },
-						{ x: "Sun", y: 111 },
-						{ x: "Mon", y: 231 },
-						{ x: "Tue", y: 122 },
-						{ x: "Wed", y: 63 },
-						{ x: "Thu", y: 421 },
-						{ x: "Fri", y: 122 },
-						{ x: "Sat", y: 323 },
-						{ x: "Sun", y: 111 },
-					],
+					data: totalOrders,
 				},
-				// {
-				//   name: "Social media",
-				//   color: "#FDBA8C",
-				//   data: [
-				//     { x: "Mon", y: 232 },
-				//     { x: "Tue", y: 113 },
-				//     { x: "Wed", y: 341 },
-				//     { x: "Thu", y: 224 },
-				//     { x: "Fri", y: 522 },
-				//     { x: "Sat", y: 411 },
-				//     { x: "Sun", y: 243 },
-				//     { x: "Mon", y: 231 },
-				//     { x: "Tue", y: 122 },
-				//     { x: "Wed", y: 63 },
-				//     { x: "Thu", y: 421 },
-				//     { x: "Fri", y: 122 },
-				//     { x: "Sat", y: 323 },
-				//     { x: "Sun", y: 111 },
-				//   ],
-				// },
+				{
+					name: "Số lượng sản phẩm đã bán",
+					color: "#FDBA8C",
+					data: totalSold,
+				},
+				{
+					name: "Doanh thu",
+					color: "#00bfc5",
+					data: totalRevenue,
+				},
 			],
 			chart: {
 				type: "bar",
-				height: "230px",
-				// width: "100%",
 				fontFamily: "Inter, sans-serif",
 				toolbar: {
 					show: false,
@@ -133,73 +205,77 @@ const ColumnChart = () => {
 			};
 		}
 	});
+
 	return (
 		<div className="w-full bg-white rounded-lg shadow dark:bg-gray-800 p-4 md:p-6">
 			<div className="flex justify-between pb-4 mb-4 border-b border-gray-200 dark:border-gray-700">
-				<div className="flex items-center">
+				<div className="flex items-center w-full">
 					<div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center me-3">
-						<svg
-							className="w-6 h-6 text-gray-500 dark:text-gray-400"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="currentColor"
-							viewBox="0 0 20 19"
-						>
-							<path d="M14.5 0A3.987 3.987 0 0 0 11 2.1a4.977 4.977 0 0 1 3.9 5.858A3.989 3.989 0 0 0 14.5 0ZM9 13h2a4 4 0 0 1 4 4v2H5v-2a4 4 0 0 1 4-4Z" />
-							<path d="M5 19h10v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2ZM5 7a5.008 5.008 0 0 1 4-4.9 3.988 3.988 0 1 0-3.9 5.859A4.974 4.974 0 0 1 5 7Zm5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm5-1h-.424a5.016 5.016 0 0 1-1.942 2.232A6.007 6.007 0 0 1 17 17h2a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5ZM5.424 9H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h2a6.007 6.007 0 0 1 4.366-5.768A5.016 5.016 0 0 1 5.424 9Z" />
-						</svg>
+						<BsBarChartLine />
 					</div>
-					<div>
-						<h5 className="leading-none text-2xl font-bold text-gray-900 dark:text-white pb-1">
-							Doanh số tháng
-						</h5>
-						<p className="text-sm font-normal text-gray-500 dark:text-gray-400">
-							Leads generated per week
-						</p>
+					<div className="flex justify-between w-full items-start">
+						<div className="flex flex-col gap-1">
+							<h5 className="leading-none text-xl font-bold text-gray-900 dark:text-white pb-1">
+								Thống kê doanh số {filter.toLowerCase()}
+							</h5>
+							<span className="text-sm">
+								{new Date(time.from).toLocaleDateString("vi-VN")} -{" "}
+								{new Date(time.to).toLocaleDateString("vi-VN")}
+							</span>
+						</div>
+						<div className="bg-white border group relative overflow-hidden hover:overflow-visible border-zinc-300 cursor-pointer text-[13px] flex items-center text-center justify-center w-24 h-8 rounded-md">
+							<span>{filter}</span>
+							<div className="absolute w-full top-[105%] rounded-md border border-zinc-300 flex flex-col left-0 h-0 opacity-0 z-10 shadow-sm bg-white group-hover:h-auto group-hover:z-[9999] group-hover:opacity-100">
+								<span
+									onClick={() => setThisWeek()}
+									className="hover:bg-zinc-100 px-2 py-1"
+								>
+									Tuần này
+								</span>
+								<span
+									onClick={() => setLastWeek()}
+									className="hover:bg-zinc-100 px-2 py-1"
+								>
+									Tuần trước
+								</span>
+								<div className="relative group overflow-hidden px-2 py-1 hover:overflow-visible w-full">
+									<span className="px-2 py-2 relative peer cursor-pointer">
+										Tháng
+									</span>
+									<div className="absolute -top-1/2 right-[102%] -z-50 group-hover:z-10 group-hover:w-[200px] group-hover:h-fit w-0 h-0 bg-white shadow-sm border border-zinc-300 rounded-md grid grid-cols-4 text-zinc-500 p-2">
+										{Array.from({ length: 12 }, (_, i) => (
+											<div
+												onClick={() => setMonth(i + 1)}
+												key={i + 1}
+												className="hover:bg-zinc-100 p-2 min-w-4 flex items-center justify-center rounded cursor-pointer"
+											>
+												{i + 1}
+											</div>
+										))}
+									</div>
+								</div>
+								<div className="relative group overflow-hidden px-2 py-1 hover:overflow-visible w-full">
+									<span className="px-2 py-2 relative peer cursor-pointer">
+										Thời gian
+									</span>
+									<div className="absolute -top-1/2 right-[102%] gap-2 -z-50 group-hover:z-10 group-hover:w-[300px] group-hover:h-fit w-0 h-0 bg-white shadow-sm border border-zinc-300 rounded-md flex flex-wrap p-2">
+										<div className="flex items-center w-full justify-between">
+											<span>Tuần bắt đầu từ</span>
+											<input
+												onChange={(e) => setTimeWeek(e)}
+												type="date"
+												className="text-sm border-zinc-300 rounded-md"
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-				</div>
-				<div>
-					<span className="bg-green-100 text-green-800 text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md ">
-						<svg
-							className="w-2.5 h-2.5 me-1.5"
-							aria-hidden="true"
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 10 14"
-						>
-							<path
-								stroke="currentColor"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="M5 13V1m0 0L1 5m4-4 4 4"
-							/>
-						</svg>
-						42.5%
-					</span>
 				</div>
 			</div>
 
-			<div className="grid grid-cols-2">
-				<dl className="flex items-center">
-					<dt className="text-gray-500 dark:text-gray-400 text-sm font-normal me-1">
-						Money spent:
-					</dt>
-					<dd className="text-gray-900 text-sm dark:text-white font-semibold">$3,232</dd>
-				</dl>
-				<dl className="flex items-center justify-end">
-					<dt className="text-gray-500 dark:text-gray-400 text-sm font-normal me-1">
-						Conversion rate:
-					</dt>
-					<dd className="text-gray-900 text-sm dark:text-white font-semibold">1.2%</dd>
-				</dl>
-			</div>
-
-			<div
-				ref={chartRef}
-				id="column-chart"
-				// style={{ width: "600px", margin: "0 auto" }}
-			></div>
+			<div ref={chartRef} id="column-chart"></div>
 			<div className="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
 				<div className="flex justify-between items-center pt-5"></div>
 			</div>

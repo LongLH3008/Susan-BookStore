@@ -1,7 +1,13 @@
 export interface IFilterDate {
-  date?: string;
-  moth: number;
-  year: number;
+  startDate: string,
+  endDate: string
+}
+
+export interface IFilterTopBook {
+  from: string,
+  to: string,
+  page?: number
+  limit?: number
 }
 export interface IDataFilterDate {
   totalOrders: number;
@@ -11,7 +17,8 @@ export interface IDataFilterDate {
 export interface ITopBook {
   _id: string;
   totalSold: number;
-  title: string;
+  bookName: string;
+  totalRevenue: number;
 }
 export interface ITopUser {
   _id: string;

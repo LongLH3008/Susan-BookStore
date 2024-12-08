@@ -255,7 +255,6 @@ const DiscountAdd = () => {
 					placeholder="Nhập giá trị đơn hàng"
 					register={register}
 					error={errors.discount_min_order_value}
-					disabled={voucherApplies !== "all"}
 					field="discount_min_order_value"
 					message={errors.discount_min_order_value?.message}
 				/>

@@ -290,7 +290,6 @@ const DiscountEdit = () => {
 					register={register}
 					className="disabled:text-transparent"
 					error={errors.discount_min_order_value}
-					disabled={voucherApplies !== "all"}
 					field="discount_min_order_value"
 					message={errors.discount_min_order_value?.message}
 				/>

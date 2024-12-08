@@ -1,12 +1,16 @@
-import { IFilterDate } from "@/common/interfaces/statiscal";
+import { IFilterDate, IFilterTopBook } from "@/common/interfaces/statiscal";
 import { SendRequest } from "@/config";
 
 export const filterByDayAndMonth = async (data: IFilterDate) => {
-  return await SendRequest("POST", "filterbydayandmonth", data);
+  return await SendRequest("POST", "filterbydayandmonth/admin", data);
 };
 
-export const getTopBook = async () => {
-  return await SendRequest("GET", "topfivebook");
+export const filterByDay = async (data: IFilterDate) => {
+  return await SendRequest("POST", "filterbyday/admin", data);
+};
+
+export const getTopBook = async (arg: IFilterTopBook) => {
+  return await SendRequest("POST", "statistical-prd-by-date", arg);
 };
 
 export const getTopUser = async () => {
