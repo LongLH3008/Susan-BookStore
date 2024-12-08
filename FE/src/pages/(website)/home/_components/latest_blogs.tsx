@@ -8,7 +8,7 @@ type Props = {};
 const LatestBlogs = (props: Props) => {
 	const { DataBlogs } = useBlog();
 	return (
-		<div className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] mb-[20px]">
+		<div className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%] mb-[40px]">
 			<div className="mb-[20px] text-center text-3xl text-zinc-800 font-medium tracking-wide border-t pt-[100px]">
 				Tin tức mới nhất
 			</div>

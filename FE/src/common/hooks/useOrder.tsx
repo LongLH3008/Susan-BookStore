@@ -21,7 +21,7 @@ export const OrderContext = createContext<OrderContextType>({} as OrderContextTy
 export const OrderProvider = ({ children }: PropContextOrder) => {
 	const [filters, setFilters] = useState<FiltersType>({
 		page: 1,
-		limit: 40,
+		limit: 9999,
 		search: "",
 	});
 
