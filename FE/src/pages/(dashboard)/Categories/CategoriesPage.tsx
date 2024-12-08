@@ -11,9 +11,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MyTable2 from "../components/table";
 
+import useProduct from "@/common/hooks/useProduct";
 import {
   active,
   deleteCategory,
@@ -21,28 +22,24 @@ import {
   inactivect,
 } from "@/services/categories.service";
 import CloseIcon from "@mui/icons-material/Close";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import InfoIcon from "@mui/icons-material/Info";
 import { AxiosError } from "axios";
-import SearchForm from "../components/searchForm";
-import CategoryForm from "./CategoryForm";
-import { Link } from "react-router-dom";
-import { IoMdAdd } from "react-icons/io";
-import { MdDeleteOutline, MdOutlineSearch } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
+import { IoMdAdd } from "react-icons/io";
+import { MdOutlineSearch } from "react-icons/md";
+import CategoryForm from "./CategoryForm";
 
 const CategoriesPage: React.FC = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(0);
+  const [idCate, setIdCate] = useState<string>("");
   const { toast } = useToast();
   const [search, setSearch] = useState<string>("");
-
+  const { productQueryAdmin, updateFilter } = useProduct();
   const [selectedCategory, setSelectedCategory] = useState<any>(null);
   const [open, setOpen] = useState(false);
   const [openct, setOpenct] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [updatedCategoryName, setUpdatedCategoryName] = useState("");
 
   const [selectedCategoryEdit, setSelectedCategoryEdit] = useState<any>(null);
   const { data, isLoading, isError, error, refetch } = useQuery({
@@ -50,10 +47,18 @@ const CategoriesPage: React.FC = () => {
     queryFn: () => getCategories({ limit, page, search }),
   });
 
+  const [localFilter, setLocalFilter] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (localFilter) {
+      updateFilter("category_ids", localFilter);
+    }
+  }, [localFilter]);
   const handleSearch = (e: any) => {
     setSearch(e.target.value);
     refetch();
   };
+
   const { mutateAsync: deleteMutate } = useMutation({
     mutationFn: deleteCategory,
     onSuccess: () => {
@@ -88,7 +93,6 @@ const CategoriesPage: React.FC = () => {
 
   const onEdit = (category: any) => {
     setSelectedCategoryEdit(category);
-    setUpdatedCategoryName(category.category_name);
     setOpenct(true);
   };
   const handleClose = () => {
@@ -111,14 +115,9 @@ const CategoriesPage: React.FC = () => {
   const columns = React.useMemo(
     () => [
       {
-        headerName: "Tên danh mục",
-        field: "category_name",
-        width: 250,
-      },
-      {
         headerName: "Ảnh đại diện",
         field: "category_thumb",
-        width: 250,
+        width: 100,
         renderCell: (params: any) => (
           <img
             src={
@@ -131,9 +130,26 @@ const CategoriesPage: React.FC = () => {
         ),
       },
       {
+        headerName: "Tên danh mục",
+        field: "category_name",
+        width: 200,
+      },
+
+      // {
+      //   headerName: "Số lượng SP",
+      //   field: "sl_product",
+      //   flex: 3,
+      //   renderCell: (params: any) => {
+      //     if (!localFilter) {
+      //       setLocalFilter(params.row._id);
+      //     }
+      //     return <p>{productQueryAdmin?.data?.metadata?.total || 0}</p>;
+      //   },
+      // },
+      {
         headerName: "Trạng thái",
         field: "is_active",
-        width: 250,
+        flex: 4,
         renderCell: (params: any) => (
           <Box display="flex" alignItems="center">
             <Switch
@@ -150,7 +166,7 @@ const CategoriesPage: React.FC = () => {
       {
         headerName: "Thao tác",
         field: "actions",
-        width: 250,
+        flex: 5,
         renderCell: (params: any) => (
           <>
             <div className="flex gap-3  items-center ">
@@ -170,20 +186,20 @@ const CategoriesPage: React.FC = () => {
                   <InfoIcon />
                 </span>
               </Tooltip>
-              <Tooltip title="Xóa">
+              {/* <Tooltip title="Xóa">
                 <span
                   onClick={() => onDelete(params.row)}
                   className="size-10 border text-2xl text-zinc-400 hover:border-red-500 hover:text-red-500 cursor-pointer font-light grid place-content-center"
                 >
                   <MdDeleteOutline />
                 </span>
-              </Tooltip>
+              </Tooltip> */}
             </div>
           </>
         ),
       },
     ],
-    [onDelete]
+    []
   );
   const onAdd = () => {
     setSelectedCategoryEdit(null);
@@ -275,7 +291,7 @@ const CategoriesPage: React.FC = () => {
       />
 
       {/* Modal chi tiết danh mục */}
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+      <Dialog open={open} onClose={handleClose} maxWidth="xs" fullWidth>
         <DialogTitle>
           Chi tiết danh mục
           <IconButton

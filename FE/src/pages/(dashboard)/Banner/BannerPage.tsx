@@ -2,7 +2,7 @@ import useBanner from "@/common/hooks/useBanner";
 import { useToast } from "@/common/hooks/useToast";
 import { IBannerHome } from "@/common/interfaces/banner";
 import BannerItem from "@/components/(website)/banner/bannerItem";
-import { DeleteBanners } from "@/services/banner.service";
+import { DeleteBanners, UpdateStatusBanners } from "@/services/banner.service";
 import { deleteBlog } from "@/services/blog.service";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
@@ -22,6 +22,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useState } from "react";
+import { FaBox, FaBoxOpen } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
@@ -37,19 +38,42 @@ const BannerPage = () => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [open, setOpen] = useState(false);
 
-  const { mutateAsync } = useMutation({
-    mutationFn: DeleteBanners,
+  // const { mutateAsync } = useMutation({
+  //   mutationFn: DeleteBanners,
+  //   onSuccess: (data: any) => {
+  //     setConfirmOpen(false);
+  //     toast({
+  //       variant: data.status,
+  //       content: `Xóa ảnh  thành công`,
+  //     });
+  //     DataBanners.refetch();
+  //   },
+  //   onError: (error: AxiosError) => {
+  //     setConfirmOpen(false);
+  //     const message = "Lỗi khi xóa ảnh : ";
+  //     toast({
+  //       variant: error.response?.status || "error",
+  //       content: message + (error.response?.data || error.message),
+  //     });
+  //   },
+  // });
+  const { mutate } = useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: { is_active: boolean };
+    }) => UpdateStatusBanners(id, payload),
     onSuccess: (data: any) => {
-      setConfirmOpen(false);
       toast({
         variant: data.status,
-        content: `Xóa ảnh  thành công`,
+        content: `Thao tác thành công`,
       });
       DataBanners.refetch();
     },
-    onError: (error: AxiosError) => {
-      setConfirmOpen(false);
-      const message = "Lỗi khi xóa ảnh : ";
+    onError: (error: any) => {
+      const message = "Lỗi Thao tác : ";
       toast({
         variant: error.response?.status || "error",
         content: message + (error.response?.data || error.message),
@@ -68,14 +92,26 @@ const BannerPage = () => {
     setSelectedBanner(banner);
     setOpen(true);
   };
-  const confirmDelete = async () => {
-    if (selectedBanner) {
-      await mutateAsync(selectedBanner._id!);
-    }
+  // const confirmDelete = async () => {
+  //   if (selectedBanner) {
+  //     await mutateAsync(selectedBanner._id!);
+  //   }
+  // };
+  // const onDelete = (banner: IBannerHome) => {
+  //   setSelectedBanner(banner);
+  //   setConfirmOpen(true);
+  // };
+  const onLock = (id: string) => {
+    const payload = {
+      is_active: true,
+    };
+    mutate({ id, payload });
   };
-  const onDelete = (banner: IBannerHome) => {
-    setSelectedBanner(banner);
-    setConfirmOpen(true);
+  const onUnlock = (id: string) => {
+    const payload = {
+      is_active: false,
+    };
+    mutate({ id, payload });
   };
   const columns: GridColDef[] = [
     {
@@ -127,14 +163,33 @@ const BannerPage = () => {
                 <InfoIcon />
               </span>
             </Tooltip>
-            <Tooltip title="Xóa">
+            {params.row.is_active ? (
+              <Tooltip title="Ngừng kích hoạt">
+                <span
+                  onClick={() => onUnlock(params.row._id)}
+                  className="size-10 border text-2xl text-zinc-400 hover:border-red-500 hover:text-red-500 cursor-pointer font-light grid place-content-center"
+                >
+                  <FaBoxOpen />
+                </span>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Kích hoạt">
+                <span
+                  onClick={() => onLock(params.row._id)}
+                  className="size-10 border text-2xl text-zinc-400 hover:border-red-500 hover:text-red-500 cursor-pointer font-light grid place-content-center"
+                >
+                  <FaBox className="text-[17px]" />
+                </span>
+              </Tooltip>
+            )}
+            {/* <Tooltip title="Xóa">
               <span
                 onClick={() => onDelete(params.row)}
                 className="size-10 border text-2xl text-zinc-400 hover:border-red-500 hover:text-red-500 cursor-pointer font-light grid place-content-center"
               >
                 <MdDeleteOutline />
               </span>
-            </Tooltip>
+            </Tooltip> */}
           </div>
         </>
       ),
@@ -217,7 +272,7 @@ const BannerPage = () => {
       </Paper>
 
       {/* confirm delete */}
-      <Dialog
+      {/* <Dialog
         open={confirmOpen}
         onClose={() => setConfirmOpen(false)}
         maxWidth="sm"
@@ -233,7 +288,7 @@ const BannerPage = () => {
             Xóa
           </Button>
         </Box>
-      </Dialog>
+      </Dialog> */}
       {/* blog detail */}
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
         <DialogTitle>

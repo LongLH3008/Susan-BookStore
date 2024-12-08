@@ -11,7 +11,6 @@ import CreateBannerHome from "@/pages/(dashboard)/Banner/FormBannerHome";
 import BlogPage from "@/pages/(dashboard)/Blogs/BlogPage";
 import CreateBlog from "@/pages/(dashboard)/Blogs/CreateBlog";
 import CategoriesPage from "@/pages/(dashboard)/Categories/CategoriesPage";
-import CommentsPage from "@/pages/(dashboard)/Comments/CommentsPage";
 import DiscountAdd from "@/pages/(dashboard)/Discount/discount.add";
 import DiscountEdit from "@/pages/(dashboard)/Discount/discount.edit";
 import DiscountList from "@/pages/(dashboard)/Discount/discount.list";
@@ -21,7 +20,6 @@ import FormAttr from "@/pages/(dashboard)/Products/FormAttr";
 import ProductsPage from "@/pages/(dashboard)/Products/ProductsPage";
 import UsersPage from "@/pages/(dashboard)/Users/UsersPage";
 import DashboardGuard from "./guards/dashboard.guard";
-import DetalOrder from "@/pages/(dashboard)/Orders/DetalOrder";
 // CreateBannerHome
 const DashboardRoutes = [
   {
@@ -50,7 +48,10 @@ const DashboardRoutes = [
         path: "anh-quang-cao-sale",
         element: <BannerProvider children={<BannerSalePage />} />,
       },
-      { path: "danh-muc", element: <CategoriesPage /> },
+      {
+        path: "danh-muc",
+        element: <ProductProvider children={<CategoriesPage />} />,
+      },
       {
         path: "san-pham",
         element: (
@@ -63,10 +64,7 @@ const DashboardRoutes = [
       },
       { path: "san-pham/chinh-sua/:id", element: <FormAttr /> },
       { path: "san-pham/them-moi", element: <FormAttr /> },
-      {
-        path: "binh-luan",
-        element: <OrderProvider children={<DetalOrder />} />,
-      },
+
       { path: "tin-tuc", element: <BlogProvider children={<BlogPage />} /> },
       { path: "tin-tuc/them-moi", element: <CreateBlog /> },
       { path: "tin-tuc/chinh-sua/:id", element: <CreateBlog /> },
