@@ -76,5 +76,6 @@ export interface FilterbydayandmonthResponse {
 export interface StatisticalOrderDto {
   totalOrders: number; // Tổng số đơn hàng
   totalRevenue: number; // Tổng doanh thu
+  totalSold: number; // Tổng số sách đã bán
 }
 

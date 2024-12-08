@@ -18,18 +18,18 @@ class StatisticalService {
       // Chuyển đổi ngày tháng
       const fromDate = new Date(from);
       const toDate = new Date(to);
-  
+
       // Đảm bảo toDate được đặt về cuối ngày
       toDate.setHours(23, 59, 59, 999);
-  
+
       const topSellingBooks: TopSellingBook[] = await Order.aggregate([
         {
           $match: {
             createdAt: {
-              $gte: fromDate, 
-              $lte: toDate
+              $gte: fromDate,
+              $lte: toDate,
             },
-          }
+          },
         },
         { $unwind: "$products" },
         {
@@ -37,14 +37,16 @@ class StatisticalService {
             _id: "$products.bookId",
             totalSold: { $sum: "$products.quantity" },
             bookName: { $first: "$products.title" },
-            totalRevenue: { $sum: { $multiply: ["$products.quantity", "$products.price"] } }
-          }
+            totalRevenue: {
+              $sum: { $multiply: ["$products.quantity", "$products.price"] },
+            },
+          },
         },
         { $sort: { totalSold: -1 } },
         { $skip: (page - 1) * limit },
-        { $limit: limit }
+        { $limit: limit },
       ]);
-  
+
       return {
         topSellingBooks,
         page,
@@ -54,7 +56,6 @@ class StatisticalService {
       throw error;
     }
   }
-  
 
   static async TopBuyingUsers(): Promise<TopSellingUser[]> {
     try {
@@ -207,11 +208,13 @@ class StatisticalService {
       // Pipeline
       const orderStatistics: StatisticalOrderDto[] = await Order.aggregate([
         ...(Object.keys(matchStage).length > 0 ? [{ $match: matchStage }] : []),
+        { $unwind: "$products" }, // Tách các sản phẩm trong đơn hàng
         {
           $group: {
             _id: null,
             totalOrders: { $sum: 1 }, // Tổng số đơn hàng
             totalRevenue: { $sum: "$total" }, // Tổng doanh thu
+            totalSold: { $sum: "$products.quantity" }, // Tổng số sách đã bán
           },
         },
         {
@@ -219,6 +222,7 @@ class StatisticalService {
             _id: 0,
             totalOrders: 1,
             totalRevenue: 1,
+            totalSold: 1,
           },
         },
       ]);
