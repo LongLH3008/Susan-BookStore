@@ -3,7 +3,7 @@ type Props = {};
 const AboutPage = (props: Props) => {
 	return (
 		<div className="min-[320px]:px-[5%] xl:px-[11.5%] 2xl:px-[17.5%]">
-			<div className="grid grid-cols-12 gap-4 my-10">
+			<div className="grid md:grid-cols-12 gap-4 my-10">
 				<div className="col-span-6">
 					<img
 						src="https://susan-demo.myshopify.com/cdn/shop/files/0d6f4828835899.55d4a5402cb87.jpg?v=1613590896"
@@ -12,7 +12,7 @@ const AboutPage = (props: Props) => {
 				</div>
 				<div className="col-span-6">
 					<div>
-						<h1 className="pb-5 font-bold text-4xl uppercase">
+						<h1 className="pb-5 font-bold text-2xl md:text-4xl uppercase">
 							chào mừng đến với <span className="text-[#00BFC5]">susan.</span>
 						</h1>
 						<p className="text-[#707070] text-[15px]">
