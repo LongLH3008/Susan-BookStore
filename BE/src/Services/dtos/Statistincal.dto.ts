@@ -85,3 +85,10 @@ export interface StatisticalOrderDto {
   totalSold: number; // Tổng số sách đã bán
 }
 
+export interface DayData {
+  Day: number;
+  totalOrders: number;
+  totalRevenue: number;
+  totalSold: number;
+}
+

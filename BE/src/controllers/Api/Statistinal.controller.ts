@@ -57,5 +57,18 @@ class StatisticalController {
     }).send(res);
   }
 
+  static async StatisticalFilterOrderbyWeek(
+    req: Request,
+    res: Response
+  ): Promise<any> {
+    const views = await StatisticalService.StatisticalOrderbyday(
+      req.body
+    );
+    return new SuccessResponse({
+      message: "Get all order successfully",
+      metadata: views,
+    }).send(res);
+  }
+
 }
 export default StatisticalController;

@@ -362,6 +362,10 @@ router.post(
   "/filterbydayandmonth/admin",
   asyncHandler(StatisticsController.StatisticalFilterOrderPrdayAndMonthTwo)
 );
+router.post(
+  "/filterbyday/admin",
+  asyncHandler(StatisticsController.StatisticalFilterOrderbyWeek)
+);
 
 router.patch(
   "/update-status-order/:id",
