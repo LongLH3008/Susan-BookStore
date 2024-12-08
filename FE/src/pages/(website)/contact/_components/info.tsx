@@ -3,7 +3,7 @@ type Props = {};
 
 const Info = (props: Props) => {
 	return (
-		<div className="lg:col-span-5 border-l border-[#222] ml-10 pl-10 text-[15px] h-3/4 px-6 flex flex-col justify-between">
+		<div className="lg:col-span-5 md:border-l border-[#222] md:ml-10 md:pl-10 text-[15px] h-3/4 md:px-6 flex flex-col justify-between">
 			<h2 className="font-semibold text-3xl pb-5">Thông tin liên hệ</h2>
 			<p className="text-[#535353] text-[15px]">
 				Chúng tôi luôn sẵn sàng lắng nghe và hỗ trợ bạn. Nếu có bất kỳ câu hỏi hay yêu cầu nào, vui lòng

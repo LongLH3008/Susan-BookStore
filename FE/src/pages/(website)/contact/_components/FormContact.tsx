@@ -13,7 +13,7 @@ type Props = {
 	content: string;
 };
 
-const FormContact = (props: Props) => {
+const FormContact = () => {
 	const { toast } = useToast();
 
 	const {

@@ -12,14 +12,6 @@ const DataCart = ({ user_id }: { user_id: string }) => {
 		get(user_id);
 	}, []);
 
-	console.log(data);
-	// const { onAction } = useCart({ action: "REMOVE" });
-
-	// const { data: cart } = useQuery({
-	// 	queryKey: ["cart"],
-	// 	queryFn: async () => await getCartByUser(user_id),
-	// });
-
 	const removeProduct = (product_id: string) => {
 		remove({ user_id, product_id });
 	};
@@ -42,7 +34,7 @@ const DataCart = ({ user_id }: { user_id: string }) => {
 	return (
 		<div className="relative group">
 			<span className="max-[1000px]:hidden h-full flex items-center relative">
-				<img className="w-[38px] max-[1000px]:w-[20px]" src={icon.miniCart} alt="" />
+				<img className="size-5 w-5 h-5" src={icon.miniCart} alt="" />
 				<p id="amount_books_in_miniCart" className="text-[#00BFC5] absolute bottom-1/2 -right-2">
 					{data.length}
 				</p>

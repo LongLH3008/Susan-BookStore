@@ -1,8 +1,11 @@
-import { userState } from "@/common/hooks/useAuth";
+import { useAuth, userState } from "@/common/hooks/useAuth";
+import { useToast } from "@/common/hooks/useToast";
+import { ToastVariant } from "@/common/interfaces/toast";
 import { CustomDrawerSidebar } from "@/common/ui/CustomDrawerSidebar";
+import { debounce } from "@mui/material";
 import { Drawer } from "flowbite-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type Props = {};
 
@@ -10,7 +13,38 @@ const ResponsiveSidebar = (props: Props) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleClose = () => setIsOpen(false);
-	const { id } = userState();
+	const { id, resetState } = userState();
+	const { toast, close } = useToast();
+	const [keyword, setKeyword] = useState<string>("");
+	const navigate = useNavigate();
+
+	const { onSubmit } = useAuth({
+		action: "LOGOUT",
+		onSuccess: () => {
+			resetState();
+			close();
+			setIsOpen(false);
+		},
+		onError: (err: any) => console.log(err),
+	});
+
+	const Logout = () => {
+		toast({
+			variant: ToastVariant.CONFIRM,
+			content: "Bạn muốn đăng xuất",
+			confirm: onSubmit,
+			confirmTextButton: "Đồng ý",
+		});
+	};
+
+	const changeKeyword = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+		setKeyword(e.target.value);
+	}, 300);
+
+	const search = () => {
+		navigate(`/tim-kiem?q=${keyword}`);
+		setIsOpen(false);
+	};
 
 	return (
 		<>
@@ -32,10 +66,15 @@ const ResponsiveSidebar = (props: Props) => {
 						<div className="w-[85%] flex justify-between items-center h-full bg-[#e6e6e6] text-[#707070] p-5 *:bg-transparent ">
 							<input
 								type="text"
+								onChange={(e) => changeKeyword(e)}
 								className="outline-none ring-0 border-none"
 								placeholder="Tìm kiếm ..."
 							/>
-							<button className="hover:bg-zinc-700 hover:text-white px-3 py-2 rounded-full">
+							<button
+								type="button"
+								onClick={() => search()}
+								className="hover:bg-zinc-700 hover:text-white px-3 py-2 rounded-full"
+							>
 								<i className="fa-solid fa-magnifying-glass"></i>
 							</button>
 						</div>
@@ -82,6 +121,24 @@ const ResponsiveSidebar = (props: Props) => {
 								Liên hệ
 							</Link>
 						</div>
+						<div className="mt-2 py-2 *:py-[0.9rem] grid *:font-semibold *:px-9 border-t">
+							<Link
+								className="hover:bg-zinc-700 hover:text-white"
+								onClick={() => setIsOpen(false)}
+								to={"/tra-cuu-don-hang"}
+								state={{ from: location.pathname }}
+							>
+								Tra cứu đơn hàng
+							</Link>
+							<Link
+								className="hover:bg-zinc-700 hover:text-white"
+								onClick={() => setIsOpen(false)}
+								to={"/gio-hang"}
+								state={{ from: location.pathname }}
+							>
+								Giỏ hàng
+							</Link>
+						</div>
 						{id ? (
 							<>
 								<div className="mt-2 py-2 *:py-[0.9rem] grid *:font-semibold *:px-9 border-t">
@@ -93,40 +150,22 @@ const ResponsiveSidebar = (props: Props) => {
 									>
 										Đơn hàng
 									</Link>
-									<Link
-										className="hover:bg-zinc-700 hover:text-white"
-										onClick={() => setIsOpen(false)}
-										to={"/san-pham-yeu-thich"}
-										state={{ from: location.pathname }}
-									>
-										Sản phẩm yêu thích
-									</Link>
-									<Link
-										className="hover:bg-zinc-700 hover:text-white"
-										onClick={() => setIsOpen(false)}
-										to={"/gio-hang"}
-										state={{ from: location.pathname }}
-									>
-										Giỏ hàng
-									</Link>
 								</div>
 								<div className="mt-2 py-2 *:py-[0.9rem] grid *:font-semibold *:px-9 border-t">
 									<Link
 										className="hover:bg-zinc-700 hover:text-white"
 										onClick={() => setIsOpen(false)}
-										to={"/doi-mat-khau"}
+										to={"/thong-tin-tai-khoan"}
 										state={{ from: location.pathname }}
 									>
-										Đổi mật khẩu
+										Thông tin tài khoản
 									</Link>
-									<Link
+									<span
 										className="hover:bg-zinc-700 hover:text-white"
-										onClick={() => setIsOpen(false)}
-										to={"/dang-xuat"}
-										state={{ from: location.pathname }}
+										onClick={() => Logout()}
 									>
 										Đăng xuất
-									</Link>
+									</span>
 								</div>
 							</>
 						) : (
