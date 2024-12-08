@@ -1,6 +1,7 @@
 import { any } from "joi";
 import Order from "../models/Order.model";
 import {
+  DayData,
   GetAllOrderWithStatisticalRequest,
   GetAllOrderWithStatisticalResponse,
   StatisticalOrderDto,
@@ -348,6 +349,97 @@ class StatisticalService {
         totalRevenue,
         totalSold,
         dataWeeks: processedData,
+      };
+    } catch (error: any) {
+      console.error("Error in StatisticalOrderbydayAndMonth:", error);
+      throw new Error("Không thể thống kê đơn hàng: " + error.message);
+    }
+  }
+  static async StatisticalOrderbyday(filter: {
+    startDate: string;
+    endDate: string;
+  }): Promise<{
+    totalOrders: number;
+    totalRevenue: number;
+    totalSold: number;
+    dataDays: DayData[];
+  }> {
+    try {
+      // Validate and parse input dates
+      const startDate = new Date(filter.startDate);
+      const endDate = new Date(filter.endDate);
+
+      // Validate input
+      if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+        throw new Error("Invalid date format");
+      }
+
+      // Aggregate pipeline
+      const statistics = await Order.aggregate([
+        {
+          $match: {
+            createdAt: {
+              $gte: startDate,
+              $lte: endDate,
+            },
+          },
+        },
+        {
+          $addFields: {
+            // Extract day of week (1-7)
+            dayOfWeek: { $dayOfWeek: "$createdAt" },
+          },
+        },
+        {
+          $group: {
+            _id: "$dayOfWeek",
+            totalOrders: { $sum: 1 },
+            totalRevenue: { $sum: "$total" },
+            totalSold: { $sum: { $sum: "$products.quantity" } },
+          },
+        },
+        {
+          $sort: { _id: 1 }, // Sort by day of week
+        },
+      ]);
+
+      // Process data for 7 days
+      const processedData: DayData[] = [1, 2, 3, 4, 5, 6, 7].map((dayNum) => {
+        const dayData = statistics.find((item) => item._id === dayNum);
+        return dayData
+          ? {
+              Day: dayNum,
+              totalOrders: dayData.totalOrders,
+              totalRevenue: dayData.totalRevenue,
+              totalSold: dayData.totalSold,
+            }
+          : {
+              Day: dayNum,
+              totalOrders: 0,
+              totalRevenue: 0,
+              totalSold: 0,
+            };
+      });
+
+      // Calculate totals
+      const totalOrders = processedData.reduce(
+        (sum, day) => sum + day.totalOrders,
+        0
+      );
+      const totalRevenue = processedData.reduce(
+        (sum, day) => sum + day.totalRevenue,
+        0
+      );
+      const totalSold = processedData.reduce(
+        (sum, day) => sum + day.totalSold,
+        0
+      );
+
+      return {
+        totalOrders,
+        totalRevenue,
+        totalSold,
+        dataDays: processedData,
       };
     } catch (error: any) {
       console.error("Error in StatisticalOrderbydayAndMonth:", error);
