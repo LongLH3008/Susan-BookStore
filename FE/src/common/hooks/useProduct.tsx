@@ -48,10 +48,6 @@ export const ProductProvider = ({ children }: ProdContextProps) => {
     minRating: undefined,
   });
 
-  const updateFilter = (key: string, value: any) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  };
-
   const productQuery = useQuery({
     queryKey: ["Books", filters],
     queryFn: () => fetchProducts(filters as any),
@@ -62,6 +58,9 @@ export const ProductProvider = ({ children }: ProdContextProps) => {
     queryFn: () => fetchProductsAdmin(filters as any),
     staleTime: Infinity,
   });
+  const updateFilter = (key: string, value: any) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
   // console.log("productDataFilter", productDataFilter);
   useEffect(() => {
     if (features?.price) {

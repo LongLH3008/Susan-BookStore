@@ -2,7 +2,11 @@ import useBanner from "@/common/hooks/useBanner";
 import { useToast } from "@/common/hooks/useToast";
 import { IBannerHome, IBannerSale } from "@/common/interfaces/banner";
 import BannerItem from "@/components/(website)/banner/bannerItem";
-import { DeleteBannerSale, UpdateBannerSale } from "@/services/banner.service";
+import {
+  DeleteBannerSale,
+  UpdateBannerSale,
+  UpdateStatusBannerSale,
+} from "@/services/banner.service";
 import CloseIcon from "@mui/icons-material/Close";
 import InfoIcon from "@mui/icons-material/Info";
 import {
@@ -27,6 +31,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import { FaBox, FaBoxOpen } from "react-icons/fa";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
@@ -64,6 +69,29 @@ const BannerSalePage = () => {
       });
     },
   });
+  const isActive = useMutation({
+    mutationFn: ({
+      id,
+      payload,
+    }: {
+      id: string;
+      payload: { is_active: boolean };
+    }) => UpdateStatusBannerSale(id, payload),
+    onSuccess: (data: any) => {
+      toast({
+        variant: data.status,
+        content: `Thao tác thành công`,
+      });
+      DataBannerSale.refetch();
+    },
+    onError: (error: any) => {
+      const message = "Lỗi Thao tác : ";
+      toast({
+        variant: error.response?.status || "error",
+        content: message + (error.response?.data || error.message),
+      });
+    },
+  });
 
   const onEdit = async (id: string) => {
     try {
@@ -91,19 +119,7 @@ const BannerSalePage = () => {
     }
   };
 
-  // const actions = [
-  //   {
-  //     icon: <FiEdit />,
-  //     name: "Sửa",
-  //     onClick: (item: IBannerSale) => onEdit(item),
-  //   },
-  //   {
-  //     icon: <MdDeleteOutline className="text-red-600" />,
-  //     name: "Xóa",
-  //     onClick: (item: IBannerSale) => onDelete(item),
-  //   },
-  // ];
-  //lấy ảnh đại diện
+  // lấy ảnh đại diện
   const handleCoverImageChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -123,6 +139,20 @@ const BannerSalePage = () => {
   useEffect(() => {
     setConfirmOpen(isPending);
   }, [isPending]);
+  //Block ảnh
+  const onLock = (id: string) => {
+    const payload = {
+      is_active: true,
+    };
+    isActive.mutate({ id, payload });
+  };
+  const onUnlock = (id: string) => {
+    const payload = {
+      is_active: false,
+    };
+    isActive.mutate({ id, payload });
+  };
+
   if (DataBannerSale.isLoading) {
     return (
       <div style={{ display: "flex", justifyContent: "center", padding: 20 }}>
@@ -219,22 +249,55 @@ const BannerSalePage = () => {
             )}
             {open !== item._id && (
               // Nút chỉnh sửa
-              <Box
-                sx={{
-                  transform: "translateZ(0px)",
-                  flexGrow: 1,
-                }}
-              >
-                <Tooltip
-                  title="Chỉnh sửa"
-                  className="absolute right-6 bottom-6"
-                  onClick={() => setOpen(item._id)}
+              <>
+                <Box
+                  sx={{
+                    transform: "translateZ(0px)",
+                    flexGrow: 1,
+                  }}
                 >
-                  <Fab color="primary" aria-label="add">
-                    <FiEdit className="text-xl" />
-                  </Fab>
-                </Tooltip>
-              </Box>
+                  {item.is_active ? (
+                    <Tooltip
+                      title="Ngừng kích hoạt"
+                      onClick={() => onUnlock(item._id)}
+                    >
+                      <Fab
+                        className="absolute right-6 bottom-6"
+                        color="inherit"
+                        aria-label="edit"
+                      >
+                        <FaBoxOpen className="text-xl" />{" "}
+                      </Fab>
+                    </Tooltip>
+                  ) : (
+                    <Tooltip title="Kích hoạt" onClick={() => onLock(item._id)}>
+                      <Fab
+                        className="absolute right-6 bottom-6"
+                        color="inherit"
+                        aria-label="edit"
+                      >
+                        <FaBox className="text-[17px]" />
+                      </Fab>
+                    </Tooltip>
+                  )}
+                </Box>
+                <Box
+                  sx={{
+                    transform: "translateZ(0px)",
+                    flexGrow: 1,
+                  }}
+                >
+                  <Tooltip
+                    title="Chỉnh sửa"
+                    className="absolute right-24 bottom-6"
+                    onClick={() => setOpen(item._id)}
+                  >
+                    <Fab color="primary" aria-label="add">
+                      <FiEdit className="text-xl" />
+                    </Fab>
+                  </Tooltip>
+                </Box>
+              </>
             )}
           </ImageListItem>
         ))}

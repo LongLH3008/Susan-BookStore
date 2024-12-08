@@ -20,7 +20,7 @@ export const deleteCategory = async (id: string) => {
   return await SendRequest("DELETE", `categories`, null, id);
 };
 export const inactivect = async (categories: any) => {
-  console.log(categories);
+  // console.log(categories);
   const response = await SendRequest(
     "PATCH",
     `categories`,
@@ -32,7 +32,7 @@ export const inactivect = async (categories: any) => {
   return response;
 };
 export const active = async (categories: any) => {
-  console.log(categories);
+  // console.log(categories);
   const response = await SendRequest(
     "PATCH",
     `categories`,

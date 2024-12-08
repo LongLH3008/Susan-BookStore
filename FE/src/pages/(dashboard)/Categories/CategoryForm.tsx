@@ -127,7 +127,7 @@ const CategoryForm = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle>
         {id ? "Chỉnh sửa danh mục" : "Thêm mới danh mục"}
         <IconButton

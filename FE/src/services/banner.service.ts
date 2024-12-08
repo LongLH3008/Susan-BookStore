@@ -20,6 +20,18 @@ export const DeleteBanners = async (id: string) => {
 export const UpdateBanners = async (id: string, banner: IBannerHome) => {
   return await SendRequest("PUT", `UpdateBanner/${id}`, banner);
 };
+export const UpdateStatusBanners = async (
+  id: string,
+  payload: { is_active: boolean }
+) => {
+  return await SendRequest("PATCH", "UpdateStatusbanner/" + id, payload);
+};
+export const UpdateStatusBannerSale = async (
+  id: string,
+  payload: { is_active: boolean }
+) => {
+  return await SendRequest("PATCH", "UpdateStatusbanner-sale/" + id, payload);
+};
 
 export const getAllBannerSale = async () => {
   return await SendRequest("GET", `GetAll/banner-sale/inAdmin`);
