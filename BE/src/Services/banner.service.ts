@@ -5,7 +5,11 @@ import {
 } from "../cores/error.response";
 import banners from "../models/Banner.model";
 import { deleteNullObject } from "../utils";
-import { BannerDTO, BannerPaginationDTO, BannerQueriesResponseDto } from "./dtos/Banner.dto";
+import {
+  BannerDTO,
+  BannerPaginationDTO,
+  BannerQueriesResponseDto,
+} from "./dtos/Banner.dto";
 
 class BannerService {
   static async Create(data: BannerDTO) {
@@ -23,7 +27,9 @@ class BannerService {
     }
   }
 
-  static async getAllBanerInAddmin(query : BannerPaginationDTO ) : Promise<BannerQueriesResponseDto> {
+  static async getAllBanerInAddmin(
+    query: BannerPaginationDTO
+  ): Promise<BannerQueriesResponseDto> {
     const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
     const allBanner = await banners.find().skip(skip).limit(limit).lean();
@@ -56,6 +62,24 @@ class BannerService {
     const blog = await banners.findOneAndUpdate({ _id: id }, update, {
       new: true,
     });
+    if (!blog) throw new ResourceNotFoundError("this banner not found");
+    return blog;
+  }
+
+  static async StatusBannerActive(id: string, is_active: boolean) {
+    const validStatuses = [true, false];
+    if (!validStatuses.includes(is_active)) {
+      throw new ValidationError("Invalid status value!");
+    }
+    const foundbanner = await banners.findOne({ _id: id });
+    if (!foundbanner) throw new ResourceNotFoundError("this banner not found");
+    const blog = await banners.findOneAndUpdate(
+      { _id: id },
+      { is_active: is_active },
+      {
+        new: true,
+      }
+    );
     if (!blog) throw new ResourceNotFoundError("this banner not found");
     return blog;
   }

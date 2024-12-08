@@ -1,3 +1,4 @@
+import { valid } from 'joi';
 import {
   ConflictError,
   ResourceNotFoundError,
@@ -74,6 +75,24 @@ class BannerSaleService {
     const blog = await bannerSale.findOne({ _id: id });
     if (!blog) throw new ResourceNotFoundError("this banner not found");
     blog.is_active = true;
+    return blog;
+  }
+
+  static async StatusBannerSaleActive(id : string, is_active : boolean){
+    var valid = [true, false];
+    if(!valid.includes(is_active)){
+      throw new ValidationError("Invalid status value!");
+    }
+    const foundbanner = await bannerSale.findOne({ _id: id });
+    if (!foundbanner) throw new ResourceNotFoundError("this banner not found");
+    const blog = await bannerSale.findOneAndUpdate(
+      { _id: id },
+      { is_active: is_active },
+      {
+        new: true,
+      }
+    );
+    if (!blog) throw new ResourceNotFoundError("this banner not found");
     return blog;
   }
 }

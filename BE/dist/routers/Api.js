@@ -164,6 +164,8 @@ router.get("/GetAll/banner-sale/inAdmin", (0, utils_1.asyncHandler)(bannerSale_c
 router.delete("/DeleteBanner-sale/:id", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.deleteBanner));
 router.put("/UpdateBanner-sale/:id", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.updateBanner));
 router.get("/GetByBanner-sale/client/:id", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.GetbyidwithClient));
+router.patch("/UpdateStatusbanner/:id", (0, utils_1.asyncHandler)(banner_controler_1.default.StatusBannerActive));
+router.patch("/UpdateStatusbanner-sale/:id", (0, utils_1.asyncHandler)(bannerSale_controller_1.default.UpdateStateBannerSale));
 // info user
 router.post("/create/info-user", (0, utils_1.asyncHandler)(InfoUser_Controller_1.default.Create));
 router.get("/detail/user-Info/:id", (0, utils_1.asyncHandler)(InfoUser_Controller_1.default.detail));

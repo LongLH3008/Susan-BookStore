@@ -57,6 +57,16 @@ class bannerControler {
       metadata: blog,
     }).send(res);
   }
+
+  static async StatusBannerActive(req: Request, res: Response): Promise<any> {
+    const id = req.params.id;
+    const is_active = req.body.is_active;
+    const blog = await BannerService.StatusBannerActive(id, is_active);
+    return new SuccessResponse({
+      message: "update banner successfully !",
+      metadata: blog,
+    }).send(res);
+  }
 }
 
 export default bannerControler;

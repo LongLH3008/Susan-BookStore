@@ -317,6 +317,14 @@ router.get(
   "/GetByBanner-sale/client/:id",
   asyncHandler(BannerSaleControler.GetbyidwithClient)
 );
+router.patch(
+  "/UpdateStatusbanner/:id",
+  asyncHandler(BannerControler.StatusBannerActive)
+);
+router.patch(
+  "/UpdateStatusbanner-sale/:id",
+  asyncHandler(BannerSaleControler.UpdateStateBannerSale  )
+);
 
 // info user
 router.post("/create/info-user", asyncHandler(InfoUserController.Create));
