@@ -1,6 +1,7 @@
-import { CategoryProvider } from "@/common/hooks/useCategories";
+import useCategory, { CategoryProvider } from "@/common/hooks/useCategories";
 import useProduct from "@/common/hooks/useProduct";
 import { useToast } from "@/common/hooks/useToast";
+import { ICategory } from "@/common/interfaces/category";
 import { IProduct } from "@/common/interfaces/product";
 import { ToastVariant } from "@/common/interfaces/toast";
 import { ConvertVNDString } from "@/common/shared/round-number";
@@ -54,6 +55,7 @@ const ProductsPage: React.FC = () => {
   const id = openPopover ? "simple-popover" : undefined;
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(6);
+  const { CategoryQuery } = useCategory();
 
   const { productQueryAdmin, updateFilter, setFeature, filters } = useProduct();
   const handleSearch = (e: any) => {
@@ -225,9 +227,18 @@ const ProductsPage: React.FC = () => {
         width: 100,
       },
       {
-        headerName: "Tác giả",
-        field: "author",
+        headerName: "Danh mục",
+        field: "category",
         width: 150,
+        renderCell: (params: any) => {
+          return CategoryQuery?.data?.metadata
+            ?.filter((category: ICategory) =>
+              params.row?.categories?.includes(category?.id)
+            )
+            .map((ca: ICategory, index: number) => (
+              <p key={index}>{ca?.category_name}</p>
+            ));
+        },
       },
       {
         headerName: "Số lượng",
