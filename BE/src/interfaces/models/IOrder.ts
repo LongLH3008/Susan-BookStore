@@ -49,16 +49,16 @@ export enum PaymentStatus {
     Failed = "failed",
 }
 
+export interface IUserInfo {
+    name: string;
+    phone: string;
+    email: string;
+}
+
 export interface IOrder {
     userId: mongoose.Types.ObjectId | string | null;
     shipping: IOrderShipping;
-    userInfo: {
-        name: string,
-        phoneNumber: string
-        email: string
-
-
-    }
+    userInfo: IUserInfo
     state: OrderState;
     payment: IOrderPayment;
     products: IOrderProduct[];

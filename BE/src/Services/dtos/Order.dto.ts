@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { IOrderPayment, IOrderProduct, IOrderShipping } from "../../interfaces/models/IOrder";
+import { IOrderPayment, IOrderProduct, IOrderShipping, IUserInfo } from "../../interfaces/models/IOrder";
 
 export interface CheckoutReviewInputDTO {
     userId?: string;
@@ -17,6 +17,7 @@ export interface CreateOrderInputDTO {
     email: string;
     userId: mongoose.Types.ObjectId | string;
     shipping: IOrderShipping;
+    userInfo: IUserInfo
     payment: IOrderPayment;
     products: IOrderProduct[];
     total: number;

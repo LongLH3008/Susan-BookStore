@@ -110,7 +110,7 @@ class OrderService {
     }
 
     static async createOrder(data: CreateOrderInputDTO) {
-        const { userId, shipping, code, payment, products, total, trackingNumber, email } = data;
+        const { userId, shipping, code, payment, products, total, trackingNumber,userInfo } = data;
 
         if (userId) {
             const foundUser = await User.findById(userId);
@@ -131,6 +131,7 @@ class OrderService {
         const newOrder = await Order.create({
             userId,
             shipping,
+            userInfo,
             payment,
             products,
             code,
@@ -263,14 +264,7 @@ class OrderService {
 
         await this.checkStock(productsAfterDiscount);
 
-        const bulkUpdateOperations = productsAfterDiscount.map((item: any) => ({
-            updateOne: {
-                filter: { _id: item.bookId },
-                update: { $inc: { stock: -item.quantity } },
-            },
-        }));
-
-        await Book.bulkWrite(bulkUpdateOperations);
+       
 
         console.log({ shippingInput: shippingInput });
 
@@ -286,6 +280,11 @@ class OrderService {
         //const newShipping = await GiaoHangNhanhService.CreateOrderGHN(shippingInput)
         const data: any = {
             userId,
+            userInfo: {
+                name: customerInfo.name,
+                email:customerInfo.email,
+                phone:customerInfo.phone
+            },
             shipping: {
                 street: customerInfo.address,
                 city: customerInfo.province,

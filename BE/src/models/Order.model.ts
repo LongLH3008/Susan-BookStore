@@ -22,7 +22,7 @@ const OrderSchema = new mongoose.Schema<IOrderModel>(
             name: {
                 type: String,
                 required: true
-            }, phoneNumber: {
+            }, phone: {
                 type: String,
                 required: true
             },
