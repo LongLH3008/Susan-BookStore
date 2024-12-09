@@ -19,7 +19,7 @@ const CheckoutProducts = () => {
 					<p>{ConvertVNDString(checkingOrder.subtotal)} đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">
-					<p>Giảm giá</p>
+					<p>Giảm giá sản phẩm</p>
 					<p>{ConvertVNDString(checkingOrder.discountAmount)} đ</p>
 				</div>
 				<div className="text-zinc-700 text-[14px] font-[500]">

@@ -1,17 +1,16 @@
 import axios from "axios";
-import { GiaoHangNhanhDto, PreviewShipFee } from "./dtos/GiaoHangNhanh.dto";
 import { BadRequestError, InternalServerError } from "../cores/error.response";
-import Locals from "../providers/Locals";
 import Book, { IBookModel } from "../models/Book.model";
-import Log from "../providers/Log";
+import Locals from "../providers/Locals";
+import { GiaoHangNhanhDto, PreviewShipFee } from "./dtos/GiaoHangNhanh.dto";
 
 class GiaoHangNhanhService {
-    static readonly token: string = "c5793e8f-688e-11ef-8e53-0a00184fe694";
-    static readonly shop_id: number = 195530;
+    // static readonly token: string = "c5793e8f-688e-11ef-8e53-0a00184fe694";
+    // static readonly shop_id: number = 195530;
 
     // product
-    // static readonly token: string = "c2204b30-6812-11ef-b3c4-52669f455b4f"; 
-    // static readonly shop_id: number = 5298137;
+    static readonly token: string = "c2204b30-6812-11ef-b3c4-52669f455b4f";
+    static readonly shop_id: number = 5298137;
 
     // Tạo đơn hàng bên phía giao hàng nhanh 
     static CreateOrderGHN = async (orderData: GiaoHangNhanhDto) => {
