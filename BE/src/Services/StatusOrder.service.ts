@@ -41,14 +41,15 @@ class StatusOrerService {
 
 
       if (shouldSubtractStockStatus.includes(state)) {
-        const productsFromServer = await Promise.all(udpateOrder.products.map(item => Book.findOne({ _id: item.bookId })))
-
-        if (productsFromServer.some(book => !book)) throw new ResourceNotFoundError("Book not found!")
-
-        if (productsFromServer.some((item, index) => item!.stock < udpateOrder.products[index].quantity)) throw new InternalServerError("Some books is out of stock, please check again!")
+      
 
 
         if (!udpateOrder.isSubtractedStock) {
+          const productsFromServer = await Promise.all(udpateOrder.products.map(item => Book.findOne({ _id: item.bookId })))
+
+          if (productsFromServer.some(book => !book)) throw new ResourceNotFoundError("Book not found!")
+  
+          if (productsFromServer.some((item, index) => item!.stock < udpateOrder.products[index].quantity)) throw new InternalServerError("Some books is out of stock, please check again!")
           const bulkUpdateOperations = udpateOrder.products.map((item: any) => ({
             updateOne: {
               filter: { _id: item.bookId },
