@@ -15,3 +15,7 @@ export const updateUserAddress = async (arg: any) => {
 export const removeUserAddress = async (id: string) => {
     return SendRequest('DELETE', `Delete/info-user/${id}`);
 }
+
+export const cancelOrderUser = async (id: string, state: string) => {
+    return SendRequest("PATCH", `update-status-order/${id}`, { state })
+}

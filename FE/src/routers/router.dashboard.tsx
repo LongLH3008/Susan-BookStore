@@ -1,4 +1,5 @@
 // src/routes/DashboardRoutes.js
+import { StatiticsProvider } from "@/common/context/ContextStatitics";
 import { BannerProvider } from "@/common/hooks/useBanner";
 import { BlogProvider } from "@/common/hooks/useBlog";
 import { CategoryProvider } from "@/common/hooks/useCategories";
@@ -26,7 +27,14 @@ const DashboardRoutes = [
 		path: "/quan-tri",
 		element: <DashboardGuard children={<DashboardLayout />} />,
 		children: [
-			{ path: "", element: <MainPage /> },
+			{
+				path: "",
+				element: (
+					<StatiticsProvider>
+						<MainPage />
+					</StatiticsProvider>
+				),
+			},
 			{
 				path: "don-hang",
 				element: <OrderProvider children={<OrdersPage />} />,
