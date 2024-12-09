@@ -2,6 +2,7 @@ import { stat } from "fs";
 import Order from "../models/Order.model";
 import Book from "../models/Book.model";
 import SendEmalCheckOutOrder from "../helper/EmailOrder";
+import emailQueue from "../queues/mail.queue";
 
 class StatusOrerService {
 
@@ -64,7 +65,12 @@ class StatusOrerService {
           (udpateOrder.userInfo.email, udpateOrder.trackingNumber)
 
         }
-        await SendEmalCheckOutOrder.sendCancellationNotification(udpateOrder.userInfo.email,udpateOrder.trackingNumber)
+        emailQueue.push({
+          type:"cancelOrder",
+          email:udpateOrder.userInfo.email,
+          trackingNumber:udpateOrder.trackingNumber
+          
+        })
         return await Order.findByIdAndUpdate(id, { isSubtractedStock: false }, { new: true })
       }
       return udpateOrder;

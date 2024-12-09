@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "better-queue": "^3.8.12"
+  },
+  "devDependencies": {
+    "@types/better-queue": "^3.8.6"
+  }
+}
