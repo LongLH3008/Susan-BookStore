@@ -409,7 +409,7 @@ class OrderService {
         if (!checkuserId)
             throw new ResourceNotFoundError("nguoi dung khong ton tai");
         const listfiletoselect =
-            "_id userId products trackingNumber total state createdAt userInfo ";
+            "_id userId products trackingNumber total state createdAt userInfo payment shipping ";
         const skip = (page - 1) * limit;
         let Getall: GetAllOrderWithPaginationAndUserData[] = [];
         Getall = await Order.find({ userId })
