@@ -3,6 +3,8 @@ import Order from "../models/Order.model";
 import Book from "../models/Book.model";
 import SendEmalCheckOutOrder from "../helper/EmailOrder";
 import emailQueue from "../queues/mail.queue";
+import { InternalServerError, ResourceNotFoundError } from "../cores/error.response";
+import { Interface } from "node:readline/promises";
 
 class StatusOrerService {
 
@@ -39,6 +41,13 @@ class StatusOrerService {
 
 
       if (shouldSubtractStockStatus.includes(state)) {
+        const productsFromServer = await Promise.all(udpateOrder.products.map(item => Book.findOne({ _id: item.bookId })))
+
+        if (productsFromServer.some(book => !book)) throw new ResourceNotFoundError("Book not found!")
+
+        if (productsFromServer.some((item, index) => item!.stock < udpateOrder.products[index].quantity)) throw new InternalServerError("Some books is out of stock, please check again!")
+
+
         if (!udpateOrder.isSubtractedStock) {
           const bulkUpdateOperations = udpateOrder.products.map((item: any) => ({
             updateOne: {
@@ -66,10 +75,10 @@ class StatusOrerService {
 
         }
         emailQueue.push({
-          type:"cancelOrder",
-          email:udpateOrder.userInfo.email,
-          trackingNumber:udpateOrder.trackingNumber
-          
+          type: "cancelOrder",
+          email: udpateOrder.userInfo.email,
+          trackingNumber: udpateOrder.trackingNumber
+
         })
         return await Order.findByIdAndUpdate(id, { isSubtractedStock: false }, { new: true })
       }
