@@ -18,6 +18,20 @@ const OrderSchema = new mongoose.Schema<IOrderModel>(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Users",
         },
+        userInfo: {
+            name: {
+                type: String,
+                required: true
+            }, phoneNumber: {
+                type: String,
+                required: true
+            },
+            email: {
+                type: String,
+                required: true
+            }
+
+        },
         code: {
             type: String,
             default: ""

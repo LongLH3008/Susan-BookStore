@@ -52,6 +52,13 @@ export enum PaymentStatus {
 export interface IOrder {
     userId: mongoose.Types.ObjectId | string | null;
     shipping: IOrderShipping;
+    userInfo: {
+        name: string,
+        phoneNumber: string
+        email: string
+
+
+    }
     state: OrderState;
     payment: IOrderPayment;
     products: IOrderProduct[];
