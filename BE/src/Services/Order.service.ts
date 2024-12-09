@@ -34,6 +34,7 @@ import CartService from "./Cart.service";
 import { Code } from "mongodb";
 import Discount from "../models/Discount.model";
 import SendEmalCheckOutOrder from "../helper/EmailOrder";
+import emailQueue from "../queues/mail.queue";
 
 type PaymentMethodInput = "COD" | "VNPAY";
 
@@ -111,7 +112,7 @@ class OrderService {
     }
 
     static async createOrder(data: CreateOrderInputDTO) {
-        const { userId, shipping, code, payment, products, total, trackingNumber,userInfo } = data;
+        const { userId, shipping, code, payment, products, total, trackingNumber, userInfo } = data;
 
         if (userId) {
             const foundUser = await User.findById(userId);
@@ -265,7 +266,7 @@ class OrderService {
 
         await this.checkStock(productsAfterDiscount);
 
-       
+
 
         console.log({ shippingInput: shippingInput });
 
@@ -283,8 +284,8 @@ class OrderService {
             userId,
             userInfo: {
                 name: customerInfo.name,
-                email:customerInfo.email,
-                phone:customerInfo.phone
+                email: customerInfo.email,
+                phone: customerInfo.phone
             },
             shipping: {
                 street: customerInfo.address,
@@ -370,10 +371,12 @@ class OrderService {
             if (userId) {
                 await CartService.emptyCart(userId)
             }
-            //send email to user
-            await SendEmalCheckOutOrder.sendNotificationCheckoutOrder(
-                customerInfo.email,
-                newOrder.trackingNumber);
+
+            emailQueue.push({
+                type: "createOrder",
+                email: customerInfo.email,
+                trackingNumber: newOrder.trackingNumber
+            })
             return newOrder;
         }
     }
@@ -406,7 +409,7 @@ class OrderService {
         if (!checkuserId)
             throw new ResourceNotFoundError("nguoi dung khong ton tai");
         const listfiletoselect =
-            "_id userId products trackingNumber total state createdAt";
+            "_id userId products trackingNumber total state createdAt userInfo ";
         const skip = (page - 1) * limit;
         let Getall: GetAllOrderWithPaginationAndUserData[] = [];
         Getall = await Order.find({ userId })
@@ -459,48 +462,48 @@ class OrderService {
                 .limit(parsedLimit)
                 .lean();
 
-           // Lấy danh sách userIds duy nhất (lọc bỏ các userId undefined)
-    const userIds = [
-        ...new Set(
-          orders
-            .map((order) => order.userId)
-            .filter((userId) => userId !== undefined && userId !== null) // Loại bỏ undefined hoặc null
-            .map((userId) => userId.toString()) // Chuyển đổi sang chuỗi
-        ),
-      ];
+            // Lấy danh sách userIds duy nhất (lọc bỏ các userId undefined)
+            const userIds = [
+                ...new Set(
+                    orders
+                        .map((order) => order.userId)
+                        .filter((userId) => userId !== undefined && userId !== null) // Loại bỏ undefined hoặc null
+                        .map((userId) => userId.toString()) // Chuyển đổi sang chuỗi
+                ),
+            ];
 
-        // Lấy thông tin users
-    const users = await User.find({ _id: { $in: userIds } })
-    .select("_id user_email user_name user_avatar user_phone_number")
-    .lean();
+            // Lấy thông tin users
+            const users = await User.find({ _id: { $in: userIds } })
+                .select("_id user_email user_name user_avatar user_phone_number")
+                .lean();
 
-  if (!users || users.length === 0) {
-    console.error("No users found for the given userIds:", userIds);
-  }
-    
-            
+            if (!users || users.length === 0) {
+                console.error("No users found for the given userIds:", userIds);
+            }
+
+
             // Tạo map để mapping nhanh user info
-    const userMap = new Map(
-        users.map((user) => [user._id.toString(), user]) // Sử dụng .toString()
-      );
-  
-      // Thêm thông tin user vào orders
-      orders = orders.map((order) => ({
-        ...order,
-        user_name: userMap.get(order.userId?.toString())?.user_name || "",
-        user_email: userMap.get(order.userId?.toString())?.user_email || "",
-        user_avatar: userMap.get(order.userId?.toString())?.user_avatar || "",
-        user_phone_number:
-          userMap.get(order.userId?.toString())?.user_phone_number || "",
-      }));
+            const userMap = new Map(
+                users.map((user) => [user._id.toString(), user]) // Sử dụng .toString()
+            );
+
+            // Thêm thông tin user vào orders
+            orders = orders.map((order) => ({
+                ...order,
+                user_name: userMap.get(order.userId?.toString())?.user_name || "",
+                user_email: userMap.get(order.userId?.toString())?.user_email || "",
+                user_avatar: userMap.get(order.userId?.toString())?.user_avatar || "",
+                user_phone_number:
+                    userMap.get(order.userId?.toString())?.user_phone_number || "",
+            }));
             // Đếm tổng số orders theo điều kiện tìm kiếm
             const total = await Order.countDocuments(searchCondition);
-      
 
-        const totalAmount = orders.reduce((total, order) => {
-        // quantity trong prd
-        return total + (order.total || 0);
-    },0);
+
+            const totalAmount = orders.reduce((total, order) => {
+                // quantity trong prd
+                return total + (order.total || 0);
+            }, 0);
             return {
                 data: orders,
                 total,
