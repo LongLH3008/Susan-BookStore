@@ -78,6 +78,14 @@ const BannerSalePage = () => {
 	const onEdit = async (id: string) => {
 		setLink("");
 		try {
+			if (previewCoverImage && previewCoverImage !== "") {
+				const data = {
+					image: previewCoverImage,
+					link,
+				};
+				await mutateAsync({ data, id });
+				return;
+			}
 			if (selectedCoverImage) {
 				const coverImageFormData = new FormData();
 				coverImageFormData.append("files", selectedCoverImage);
@@ -124,6 +132,13 @@ const BannerSalePage = () => {
 			reader.readAsDataURL(file);
 		}
 	};
+
+	const openItem = (arg: any) => {
+		setOpen(arg._id);
+		setLink(arg.link);
+		setPreviewCoverImage(arg.image);
+	};
+
 	useEffect(() => {
 		setConfirmOpen(isPending);
 	}, [isPending]);
@@ -227,7 +242,7 @@ const BannerSalePage = () => {
 											onChange={(e) => handleChangeLink(e)}
 											id={`dropzone-file`}
 											type="text"
-											value={item.link}
+											defaultValue={item.link}
 											className="border-zinc-300 ring-0 text-sm"
 											placeholder="Đường dẫn điều hướng"
 										/>
@@ -293,7 +308,7 @@ const BannerSalePage = () => {
 									<Tooltip
 										title="Chỉnh sửa"
 										className="absolute right-24 bottom-6"
-										onClick={() => setOpen(item._id)}
+										onClick={() => openItem(item)}
 									>
 										<Fab color="primary" aria-label="add">
 											<FiEdit className="text-xl" />
