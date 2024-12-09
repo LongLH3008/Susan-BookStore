@@ -1,6 +1,11 @@
+import { stat } from "fs";
 import Order from "../models/Order.model";
+import Book from "../models/Book.model";
+import SendEmalCheckOutOrder from "../helper/EmailOrder";
 
 class StatusOrerService {
+
+
   // pending = "pending", confirmed = "confirmed", shipped = "shipped", cancelled = "cancelled", "success" = "success"
   static async UpdateStatusOrderForAdmin(id: string, state: string) {
     try {
@@ -23,8 +28,44 @@ class StatusOrerService {
         { state: state },
         { new: true }
       );
+
       if (!udpateOrder) {
         throw new Error("Order not found");
+      }
+
+
+      const shouldSubtractStockStatus = ["confirmed", "shipped", "success"]
+
+
+      if (shouldSubtractStockStatus.includes(state)) {
+        if (!udpateOrder.isSubtractedStock) {
+          const bulkUpdateOperations = udpateOrder.products.map((item: any) => ({
+            updateOne: {
+              filter: { _id: item.bookId },
+              update: { $inc: { stock: -item.quantity } },
+            },
+          }));
+
+          await Book.bulkWrite(bulkUpdateOperations);
+          return await Order.findByIdAndUpdate(id, { isSubtractedStock: true }, { new: true })
+        }
+
+      }
+      if (state === "cancelled") {
+        if (udpateOrder.isSubtractedStock) {
+          const bulkUpdateOperations = udpateOrder.products.map((item: any) => ({
+            updateOne: {
+              filter: { _id: item.bookId },
+              update: { $inc: { stock: item.quantity } },
+            },
+          }));
+
+          await Book.bulkWrite(bulkUpdateOperations);
+          (udpateOrder.userInfo.email, udpateOrder.trackingNumber)
+
+        }
+        await SendEmalCheckOutOrder.sendCancellationNotification(udpateOrder.userInfo.email,udpateOrder.trackingNumber)
+        return await Order.findByIdAndUpdate(id, { isSubtractedStock: false }, { new: true })
       }
       return udpateOrder;
     } catch (err: any) {

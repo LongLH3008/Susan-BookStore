@@ -9,6 +9,7 @@ export interface IOrderProduct {
     name: string
     title: string;
     quantity: number;
+    image:string,
     price: number;
     subtotal: number;
     discount?: number;
@@ -65,6 +66,7 @@ export interface IOrder {
     total: number;
     trackingNumber: string;
     code?: string;
+    isSubtractedStock:boolean
 };
 
 

@@ -83,6 +83,7 @@ class OrderService {
                 discount: Math.abs(Number(productsFound[index]?.discount)) || 0,
                 product_id: book.bookId,
                 quantity: book.quantity,
+                image: productsFound[index]?.images[0]?.url || '',
                 title: productsFound[index]?.title || "",
                 product_price: productsFound[index]?.price || 0,
                 isbn: productsFound[index]?.isbn,

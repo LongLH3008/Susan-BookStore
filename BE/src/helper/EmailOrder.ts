@@ -56,6 +56,48 @@ class SendEmalCheckOutOrder {
       throw new Error(`Error sending email: ${(error as Error).message}`);
     }
   }
+  // Method to send cancellation email
+  public static async sendCancellationNotification(
+    email: string,
+    trackingNumber: string
+  ) {
+    try {
+
+      console.log("run here")
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: Locals.config().emailUser,
+          pass: Locals.config().emailPass,
+        },
+      });
+
+      const subject = "Đơn hàng của bạn đã bị hủy - Cảm ơn bạn đã liên hệ!";
+      const htmlContent = `
+            <p>Quý khách hàng thân mến,</p>
+            <p>Chúng tôi rất tiếc phải thông báo rằng đơn hàng của bạn với mã số <strong>${trackingNumber}</strong> đã bị hủy.</p>
+            <p>Chúng tôi xin lỗi vì sự bất tiện này và hy vọng sẽ phục vụ bạn tốt hơn trong tương lai.</p>
+            <p>Nếu bạn có bất kỳ câu hỏi nào, vui lòng liên hệ với chúng tôi.</p>
+            <p>Xin cảm ơn quý khách đã mua sắm cùng chúng tôi!</p>
+            <p>Trân trọng,<br/>Đội ngũ hỗ trợ</p>
+        `;
+
+      // Encode subject and HTML content in Base64
+      const base64Subject = Buffer.from(subject).toString("base64");
+      const base64HtmlContent = Buffer.from(htmlContent).toString("base64");
+
+      const mailOptions = {
+        from: Locals.config().emailUser, // Địa chỉ gửi
+        to: email, // Địa chỉ nhận
+        subject: `=?UTF-8?B?${base64Subject}?=`, // Base64 encoded subject
+        html: Buffer.from(base64HtmlContent, "base64").toString(), // Decode back the Base64 HTML content
+      };
+
+      await transporter.sendMail(mailOptions);
+    } catch (error) {
+      throw new Error(`Error sending cancellation email: ${(error as Error).message}`);
+    }
+  }
 }
 
 export default SendEmalCheckOutOrder;
