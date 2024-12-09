@@ -450,7 +450,7 @@ class OrderService {
             }
 
             const fieldsToSelect =
-                "_id userId products shipping payment trackingNumber total state createdAt";
+                "_id userId products shipping payment trackingNumber total state createdAt userInfo";
 
             // Lấy orders
             let orders: GetAllOrderWithPaginateForAdminData[] = await Order.find(
