@@ -26,7 +26,7 @@ type contextType = {
 	setLastWeek: () => void;
 	setMonth: (month: number) => void;
 	setThisWeek: () => void;
-	setTimeWeek: () => void;
+	setTimeWeek: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	setTimeFrom: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	setTimeTo: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -43,7 +43,7 @@ export const StatiticsProvider = ({ children }: { children: ReactNode }) => {
 
 	useEffect(() => {
 		(async () => {
-			if (filter.includes("Tuần")) {
+			if (filter.includes("Tuần") || filter.includes("Thời gian")) {
 				const res = await filterByDay({ startDate: time.from, endDate: time.to });
 				const { totalOrders, totalRevenue, totalSold } = res?.metadata;
 				setColumn(res.metadata.dataDays);
@@ -59,12 +59,6 @@ export const StatiticsProvider = ({ children }: { children: ReactNode }) => {
 			setTopBooks(res?.metadata.topSellingBooks);
 		})();
 	}, [time, filter]);
-
-	const checkTimePart = () => {
-		const start = Number(time.from.split("-")[2]);
-		const end = Number(time.to.split("-")[2]);
-		return end - start;
-	};
 
 	const setLastWeek = () => {
 		const { monday, sunday } = getMondayAndSunday({ lastweek: true });
@@ -83,13 +77,13 @@ export const StatiticsProvider = ({ children }: { children: ReactNode }) => {
 		setFilter("Tuần này");
 	};
 
-	const setTimeWeek = () => {
-		const inputDate = new Date(time.from);
+	const setTimeWeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const inputDate = new Date(e.target.value);
 		const newEndDate = new Date(inputDate);
-		newEndDate.setDate(inputDate.getDate() + 7);
+		newEndDate.setDate(inputDate.getDate() + 6);
 		const toDateString = newEndDate.toISOString().split("T")[0];
 		setFilter("Thời gian");
-		setTime({ from: time.from, to: toDateString });
+		setTime({ from: e.target.value, to: toDateString });
 	};
 
 	const setTimeFrom = (e: React.ChangeEvent<HTMLInputElement>) => {
