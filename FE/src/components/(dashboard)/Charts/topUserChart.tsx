@@ -11,7 +11,7 @@ const TopUsersChart = () => {
 		const options = {
 			chart: {
 				type: "bar",
-				height: 200,
+				height: 170,
 			},
 			series: [
 				{
@@ -87,7 +87,7 @@ const TopUsersChart = () => {
 	}, [DataTopUser]);
 
 	return (
-		<div className="bg-white p-4 rounded-lg mt-9">
+		<div className="bg-white p-4 rounded-lg">
 			<h2 className="font-bold text-gray-700">Top 5-10 Người Dùng Mua Hàng Nhiều Nhất</h2>
 			<div ref={chartRef}></div>
 		</div>
