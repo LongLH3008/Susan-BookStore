@@ -35,7 +35,9 @@ const CheckoutProducts = () => {
 							</span>
 						)}
 					</div>
-					<p>{ConvertVNDString(checkingOrder.discountAmountVoucher)} đ</p>
+					<span className="text-nowrap">
+						{ConvertVNDString(checkingOrder.discountAmountVoucher)} đ
+					</span>
 				</div>
 				<div className="max-lg:sticky max-lg:top-0 max-lg:left-0 text-zinc-700 text-[18px] font-semibold mt-10">
 					<p>Tổng cộng</p>

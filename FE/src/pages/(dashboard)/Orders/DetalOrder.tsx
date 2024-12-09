@@ -114,7 +114,7 @@ const DetalOrder = ({ dataOrder, statusList }: Props) => {
 									</p>
 								</div>
 								<div className="flex items-center justify-between *:text-sm *:text-end">
-									<p>Phí ship</p>
+									<p>Phí vận chuyển</p>
 									<p className="w-[25%] p-1 rounded-lg font-[500]">
 										{handleFeeShip(dataOrder.total, dataOrder.products)}đ
 									</p>

@@ -88,7 +88,7 @@ const HandleChooseProducts = ({
 	return (
 		<div className="flex flex-col gap-1">
 			<h4>
-				Áp dụng cho danh mục sản phẩm <span className="text-red-500">*</span>
+				Áp dụng cho sản phẩm <span className="text-red-500">*</span>
 			</h4>
 			<div className="relative border h-[4.6dvh] px-1 flex items-center group overflow-hidden hover:overflow-visible rounded-md border-zinc-300">
 				<div className="flex flex-nowrap translate-y-[2px] items-center gap-2 overscrollHidden overflow-x-scroll">

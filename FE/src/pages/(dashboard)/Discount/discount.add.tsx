@@ -226,6 +226,7 @@ const DiscountAdd = () => {
 							label="Áp dụng cho tất cả sản phẩm"
 							placeholder={"Tất cả sản phẩm"}
 							register={register}
+							className="disabled:text-transparent"
 							field="discount_product_ids"
 							disabled
 						/>

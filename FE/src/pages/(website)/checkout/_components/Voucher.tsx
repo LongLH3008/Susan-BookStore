@@ -82,9 +82,9 @@ const Voucher = () => {
 	const handleValue = (item: IVoucher) => {
 		let value =
 			item.discount_type == "percentage"
-				? `-${item.discount_value}%`
-				: `- ${ConvertVNDString(item.discount_value)}đ`;
-		return value + " / sản phẩm";
+				? `-${item.discount_value}% / sản phẩm`
+				: `- ${ConvertVNDString(item.discount_value)}đ / đơn hàng`;
+		return value;
 	};
 
 	const recaculate = async (code?: string) => {
@@ -117,8 +117,8 @@ const Voucher = () => {
 			<p className="text-[16px] font-semibold">Mã giảm giá</p>
 			<div className="flex z-10 items-center justify-between px-3 border border-zinc-300 rounded">
 				<label className="w-full cursor-pointer flex items-center p-4 pl-0 ms-2 text-sm font-medium text-gray-900">
-					<i className="fa-solid fa-ticket mr-3 text-[16px]"></i>
-					<span className="text-[12px]">
+					<i className="fa-solid fa-ticket mr-5 text-[16px]"></i>
+					<span className="text-[12px] max-w-[70%]">
 						{chooseVoucher.choose == "" ? "Sử dụng mã giảm giá" : chooseVoucher.choose}
 					</span>
 				</label>
