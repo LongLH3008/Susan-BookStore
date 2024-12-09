@@ -12,6 +12,7 @@ const bannerSchema = new mongoose.Schema<IBannerModel>(
     subtitle: { type: String, required: true },
     description: { type: String, required: true },
     position: { type: String, required: true },
+    url: { type: String, required: true },
     is_active: { type: Boolean, default: true },
   },
   {

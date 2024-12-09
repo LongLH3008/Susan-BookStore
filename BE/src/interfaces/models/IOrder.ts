@@ -9,6 +9,7 @@ export interface IOrderProduct {
     name: string
     title: string;
     quantity: number;
+    image:string,
     price: number;
     subtotal: number;
     discount?: number;
@@ -49,15 +50,23 @@ export enum PaymentStatus {
     Failed = "failed",
 }
 
+export interface IUserInfo {
+    name: string;
+    phone: string;
+    email: string;
+}
+
 export interface IOrder {
     userId: mongoose.Types.ObjectId | string | null;
     shipping: IOrderShipping;
+    userInfo: IUserInfo
     state: OrderState;
     payment: IOrderPayment;
     products: IOrderProduct[];
     total: number;
     trackingNumber: string;
     code?: string;
+    isSubtractedStock:boolean
 };
 
 

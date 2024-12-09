@@ -5,6 +5,7 @@ export interface IBanner {
   description: string;
   position: string;
   is_active: boolean;
+  url: string
 }
 
 export interface IBannerSale {

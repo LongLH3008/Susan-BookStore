@@ -18,6 +18,20 @@ const OrderSchema = new mongoose.Schema<IOrderModel>(
             type: mongoose.Schema.Types.ObjectId,
             ref: "Users",
         },
+        userInfo: {
+            name: {
+                type: String,
+                required: true
+            }, phone: {
+                type: String,
+                required: true
+            },
+            email: {
+                type: String,
+                required: true
+            }
+
+        },
         code: {
             type: String,
             default: ""
@@ -44,6 +58,7 @@ const OrderSchema = new mongoose.Schema<IOrderModel>(
         products: [{
             bookId: {type: mongoose.Schema.Types.ObjectId, required: true, ref: "Books"},
             title: {type: String, required: true},
+            image:{type: String, required: true},
             quantity: {type: Number, required: true, min: 1},
             price: {type: Number, required: true, min: 0},
             subtotal: {type: Number, required: true},
@@ -67,6 +82,10 @@ const OrderSchema = new mongoose.Schema<IOrderModel>(
             type: String,
             default: "",
         },
+        isSubtractedStock: {
+            type:Boolean,
+            default:false
+        }
     },
     {
         timestamps: true,

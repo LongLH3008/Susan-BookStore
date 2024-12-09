@@ -27,6 +27,7 @@ interface BookItem {
     width?: number;
     length?: number
     isbn?: string;
+    image: string
 }
 
 export interface DiscountInput {
@@ -268,8 +269,8 @@ class DiscountService {
                     length: product.length ? Math.round(product.length) : 0,
                     width: product.width ? Math.round(product.width) : 0,
                     weight: product.weight ? Math.round(product.weight) : 0,
-                    height: product.height ? Math.round(product.height) : 0
-
+                    height: product.height ? Math.round(product.height) : 0,
+                    image: product.image,
                 });
             }
             return {
@@ -398,8 +399,8 @@ class DiscountService {
                 length: product.length ? Math.round(product.length) : 0,
                 width: product.width ? Math.round(product.width) : 0,
                 weight: product.weight ? Math.round(product.weight) : 0,
-                height: product.height ? Math.round(product.height) : 0
-
+                height: product.height ? Math.round(product.height) : 0,
+                image: product.image,
             });
 
         }
