@@ -71,8 +71,6 @@ class StatusOrerService {
                     }));
 
                     await Book.bulkWrite(bulkUpdateOperations);
-                    (udpateOrder.userInfo.email, udpateOrder.trackingNumber)
-
                 }
                 emailQueue.push({
                     type: "cancelOrder",
