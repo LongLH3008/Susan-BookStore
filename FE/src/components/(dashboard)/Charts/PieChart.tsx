@@ -16,7 +16,7 @@ const TopSellingBooksChart = () => {
 		const options = {
 			chart: {
 				type: "bar",
-				height: 270,
+				height: 300,
 			},
 			series: [
 				{
@@ -83,42 +83,11 @@ const TopSellingBooksChart = () => {
 		}
 	}, [topBooks]);
 
-	// const setLastWeek = () => {
-	// 	const { monday, sunday } = getMondayAndSunday({ lastweek: true });
-	// 	setTime({ from: monday, to: sunday });
-	// 	setFilter("Tuần trước");
-	// };
-
-	// const setMonth = (value: number) => {
-	// 	const { from, to } = getTimeMonth(value);
-	// 	setTime({ from, to });
-	// 	setFilter("Tháng " + value);
-	// };
-
-	// const setThisWeek = () => {
-	// 	setTime({ from: monday, to: sunday });
-	// 	setFilter("Tuần này");
-	// };
-
-	// const setTimeFrom = (e: React.ChangeEvent<HTMLInputElement>) => {
-	// 	setFilter("Thời gian");
-	// 	setTime({ ...time, from: e.target.value });
-	// };
-
-	// const setTimeTo = (e: React.ChangeEvent<HTMLInputElement>) => {
-	// 	setFilter("Thời gian");
-	// 	setTime({ ...time, to: e.target.value });
-	// };
-
 	return (
 		<div className="bg-white rounded-lg">
 			<div className="px-4 py-2 flex items-start justify-between">
 				<div className="flex flex-col gap-1">
 					<h2 className="font-bold text-gray-700">Top 5 loại sách bán chạy</h2>
-					<span className="text-sm">
-						{new Date(time.from).toLocaleDateString("vi-VN")} -{" "}
-						{new Date(time.to).toLocaleDateString("vi-VN")}
-					</span>
 				</div>
 				{/* <div className="bg-white border group relative overflow-hidden hover:overflow-visible border-zinc-300 cursor-pointer text-[13px] flex items-center text-center justify-center w-24 h-8 rounded-md">
 					<span>{filter}</span>

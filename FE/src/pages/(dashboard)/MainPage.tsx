@@ -16,8 +16,7 @@ type Total = {
 };
 
 export default function MainPage() {
-	const { filter, setThisWeek, setLastWeek, dataTotal, setTimeFrom, setTimeTo, time, setMonth } =
-		useContext(StatiticsContext);
+	const { filter, setThisWeek, setLastWeek, dataTotal, setTimeWeek, time, setMonth } = useContext(StatiticsContext);
 
 	return (
 		<div className="p-0  h-auto dark:bg-gray-800">
@@ -60,19 +59,13 @@ export default function MainPage() {
 										<span className="px-2 py-2 relative peer cursor-pointer">
 											Thời gian
 										</span>
-										<div className="absolute -top-1/2 left-[102%] gap-2 -z-50 group-hover:z-10 group-hover:w-[200px] group-hover:h-fit w-0 h-0 bg-white shadow-sm border border-zinc-300 rounded-md flex flex-wrap p-2">
-											<div className="flex items-center w-full justify-between">
-												<span>Từ</span>
+										<div className="absolute -top-1/2 left-[102%] gap-2 -z-50 group-hover:z-10 group-hover:w-[240px] group-hover:h-fit w-0 h-0 bg-white shadow-sm border border-zinc-300 rounded-md flex flex-wrap p-2">
+											<div className="flex items-center w-full justify-between gap-2">
+												<span className="text-wrap leading-4 text-left">
+													Tuần bắt đầu từ
+												</span>
 												<input
-													onChange={(e) => setTimeFrom(e)}
-													type="date"
-													className="text-sm border-zinc-300 rounded-md"
-												/>
-											</div>
-											<div className="flex items-center w-full justify-between">
-												<span>Đến</span>
-												<input
-													onChange={(e) => setTimeTo(e)}
+													onChange={(e) => setTimeWeek(e)}
 													type="date"
 													className="text-sm border-zinc-300 rounded-md"
 												/>

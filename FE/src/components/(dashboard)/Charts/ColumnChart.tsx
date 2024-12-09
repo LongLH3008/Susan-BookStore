@@ -13,9 +13,25 @@ type Total = {
 	totalSold: column[];
 	totalOrders: column[];
 };
+
+const getDatesInRange = (startDate: string, endDate: string): string[] => {
+	const start = new Date(startDate);
+	const end = new Date(endDate);
+	const dates: string[] = [];
+
+	// Lặp qua từng ngày trong khoảng thời gian
+	while (start <= end) {
+		const day = start.getDate().toString().padStart(2, "0"); // Định dạng ngày 2 chữ số
+		const month = (start.getMonth() + 1).toString().padStart(2, "0"); // Định dạng tháng 2 chữ số
+		dates.push(`${day}/${month}`);
+		start.setDate(start.getDate() + 1); // Tăng thêm 1 ngày
+	}
+
+	return dates;
+};
 const ColumnChart = () => {
-	const { column, filter } = useContext(StatiticsContext);
-	const weekDays = ["Thứ hai", "Thứ ba", "Thứ bốn", "Thứ năm", "Thứ sáu", "Thứ bảy", "Chủ nhật"];
+	const { column, filter, time } = useContext(StatiticsContext);
+	const weekDays = getDatesInRange(time.from, time.to);
 	const [chooseType, setChooseType] = useState<"order" | "revenue" | "sold">("revenue");
 	const [total, setTotal] = useState<Total>({ totalRevenue: [], totalOrders: [], totalSold: [] });
 	const [dataColumn, setDataColumn] = useState<{ name: string; color: string; data: any[] }>({
@@ -28,35 +44,38 @@ const ColumnChart = () => {
 		setDataColumn({
 			color: "#FDBA8C",
 			name: "Doanh thu",
-			data: filter.includes("Tuần")
-				? column?.map((item: any) => ({
-						x: `${weekDays[item?.Day - 1]}`,
-						y: item?.totalRevenue,
-				  }))
-				: column?.map((item: any) => ({
-						x: `Tuần ${item?.Week}`,
-						y: item?.totalRevenue,
-				  })),
+			data:
+				filter.includes("Tuần") || filter.includes("Thời gian")
+					? column?.map((item: any) => ({
+							x: `${weekDays[item?.Day - 1]}`,
+							y: item?.totalRevenue,
+					  }))
+					: column?.map((item: any) => ({
+							x: `Tuần ${item?.Week}`,
+							y: item?.totalRevenue,
+					  })),
 		});
 		setTotal({
-			totalOrders: filter.includes("Tuần")
-				? column?.map((item: any) => ({
-						x: `${weekDays[item?.Day - 1]}`,
-						y: item?.totalOrders,
-				  }))
-				: column?.map((item: any) => ({
-						x: `Tuần ${item?.Week}`,
-						y: item?.totalOrders,
-				  })),
-			totalRevenue: filter.includes("Tuần")
-				? column?.map((item: any) => ({
-						x: `${weekDays[item?.Day - 1]}`,
-						y: item?.totalRevenue,
-				  }))
-				: column?.map((item: any) => ({
-						x: `Tuần ${item?.Week}`,
-						y: item?.totalRevenue,
-				  })),
+			totalOrders:
+				filter.includes("Tuần") || filter.includes("Thời gian")
+					? column?.map((item: any) => ({
+							x: `${weekDays[item?.Day - 1]}`,
+							y: item?.totalOrders,
+					  }))
+					: column?.map((item: any) => ({
+							x: `Tuần ${item?.Week}`,
+							y: item?.totalOrders,
+					  })),
+			totalRevenue:
+				filter.includes("Tuần") || filter.includes("Thời gian")
+					? column?.map((item: any) => ({
+							x: `${weekDays[item?.Day - 1]}`,
+							y: item?.totalRevenue,
+					  }))
+					: column?.map((item: any) => ({
+							x: `Tuần ${item?.Week}`,
+							y: item?.totalRevenue,
+					  })),
 			totalSold: filter.includes("Tuần")
 				? column?.map((item: any) => ({
 						x: `${weekDays[item?.Day - 1]}`,

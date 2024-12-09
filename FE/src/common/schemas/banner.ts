@@ -18,4 +18,8 @@ export const BannerHomeValidate = Joi.object({
     "any.required": "Vị trí chữ là bắt buộc",
     "string.empty": "Vị trí chữ không được để trống",
   }),
+  url: Joi.string().required().messages({
+    "any.required": "Link điều hướng là bắt buộc",
+    "string.empty": "Link điều hướng không được để trống",
+  }),
 });

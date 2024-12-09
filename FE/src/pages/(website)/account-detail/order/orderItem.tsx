@@ -99,15 +99,20 @@ const OrderItem = ({ item }: { item: any }) => {
 				try {
 					const res = await cancelOrderUser(id, "cancelled");
 					queryClient.invalidateQueries({ queryKey: ["orders_user"] });
-					close();
-				} catch (error) {}
+				} catch (error) {
+					toast({
+						variant: ToastVariant.ERROR,
+						content: "Hủy đơn hàng thất bại. Đã có lỗi xảy ra !",
+					});
+				}
+				close();
 			},
 			content: "Bạn chắc chắn muốn hủy đơn hàng này ?",
 		});
 	};
 
 	return (
-		<div className="max-h-fit w-full bg-[#fff] p-3 border flex flex-col justify-between shadow-md rounded-md">
+		<div className="max-h-fit w-full text-red-100 bg-[#fff] p-3 border flex flex-col justify-between shadow-md rounded-md">
 			<div className="flex justify-between items-center max-sm:flex-wrap">
 				<h4 className="font-[600] text-zinc-600">#{item.trackingNumber}</h4>
 				<div className="flex justify-between flex-wrap text-sm text-zinc-500 items-start gap-1">

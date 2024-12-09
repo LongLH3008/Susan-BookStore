@@ -10,7 +10,11 @@ export const getBannersByID = async (id: string) => {
 };
 
 export const CreateBanners = async (banner: IBannerHome) => {
-  return await SendRequest("POST", `GetbyBanner/`, banner);
+  return await SendRequest("POST", `create/banner`, banner);
+};
+
+export const createBannerSale = async (banner: { link: string, is_active: boolean, image: string }) => {
+  return await SendRequest("POST", `create/banner-sale`, banner);
 };
 
 export const DeleteBanners = async (id: string) => {

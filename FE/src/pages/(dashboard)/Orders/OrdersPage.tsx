@@ -1,25 +1,11 @@
 import useOrder from "@/common/hooks/useOrder";
 import { useToast } from "@/common/hooks/useToast";
-import { IOrder } from "@/common/interfaces/blog";
-import { IProductOrrder } from "@/common/interfaces/checkout";
+import { IOrder } from "@/common/interfaces/checkout";
 import { ToastVariant } from "@/common/interfaces/toast";
 import { ConvertVNDString } from "@/common/shared/round-number";
-import { formatDateTime } from "@/components/formatDate";
-import { getInitials } from "@/components/getInitials";
 import { UpdateStatusOrder } from "@/services/order.service";
 import CloseIcon from "@mui/icons-material/Close";
-import {
-	Avatar,
-	Button,
-	Chip,
-	CircularProgress,
-	Dialog,
-	DialogContent,
-	DialogTitle,
-	IconButton,
-	Tooltip,
-	Typography,
-} from "@mui/material";
+import { CircularProgress, Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useMutation } from "@tanstack/react-query";
@@ -62,28 +48,17 @@ const OrdersPage = () => {
 	};
 
 	const handleSelectionChange = (ids: string) => {
-		setSelectedIds(ids);
+		setSelectedIds(ids as any);
 	};
 	console.log("selectedIds", selectedIds);
 
-	const handleFeeShip = (total: number, products: any[]) => {
-		if (products.length == 0 || !products) return;
-		const calc = total - products.reduce((init: number, item: any) => item.total + init, 0);
-		return ConvertVNDString(calc);
-	};
-
 	const statusList = [
-		{ label: "pending", title: "Mới", color: "#08979c" },
-		{ label: "confirmed", title: "Xác nhận", color: "#1d4ed8" },
-		{ label: "shipped", title: "Đang vận chuyển", color: "#fbbf24" },
-		{ label: "success", title: "Đã nhận", color: "#10b981" },
-		{ label: "cancelled", title: "Xóa", color: "#b91c1c" },
+		{ label: "pending", title: "Đang chờ duyệt", color: "#f59e0b", bg: "#fef3c7" },
+		{ label: "confirmed", title: "Xác nhận", color: "#2b6cb0", bg: "#bee3f8" },
+		{ label: "shipped", title: "Đang vận chuyển", color: "#3182ce", bg: "#d4f1f4" },
+		{ label: "success", title: "Đã nhận hàng", color: "#2f855a", bg: "#c6f6d5" },
+		{ label: "cancelled", title: "Hủy", color: "#f05252", bg: "#fde8e8" },
 	];
-
-	const getStatusColor = (status: string) => {
-		const foundStatus = statusList.find((s) => s.label === status);
-		return foundStatus?.color || "#000";
-	};
 
 	const handleOption = async (id: string, e: any) => {
 		const payload = {
@@ -101,75 +76,64 @@ const OrdersPage = () => {
 		{
 			field: "trackingNumber",
 			headerName: "VC",
-			width: 100,
+			flex: 3,
 		},
 		{
-			field: "user_name",
+			field: "userInfo",
 			headerName: "Khách Hàng",
 			renderCell: (params) => {
-				const { user_name, user_avatar } = params.row;
-
-				if (!user_name) {
-					return (
-						<p onClick={() => setOpen(true)} className="text-red-600 text-[12px]">
-							Chưa điền tên
-						</p>
-					);
-				}
-
 				return (
 					<div className="flex items-center space-x-2">
-						{user_avatar ? (
-							<Avatar alt={user_name} src={user_avatar} />
-						) : (
-							<Avatar className="bg-green-900">{getInitials(user_name)}</Avatar>
-						)}
-						<p>{user_name}</p>
+						<p>{params.row.userInfo.name}</p>
 					</div>
 				);
 			},
-			width: 200,
+			flex: 2,
 		},
 		{
-			field: "products",
-			headerName: "Sản Phẩm",
+			field: "userInfo221",
+			headerName: "SDT",
 			renderCell: (params) => {
-				if (params.row.products.length <= 1) {
-					return (
-						<p>
-							{params.row.products[0]?.title} x {params.row.products[0]?.quantity}
-						</p>
-					);
-				} else {
-					const productTitles = (
-						<div>
-							{params.row.products.map((product: IProductOrrder, index: number) => (
-								<p key={index}>
-									{product.title} x {product.quantity}
-								</p>
-							))}
-						</div>
-					);
-					return (
-						<Tooltip title={productTitles} placement="right-start">
-							<Button>Nhiều sản phẩm</Button>
-						</Tooltip>
-					);
-				}
-			},
-			width: 200,
-		},
-		{
-			field: "user_phone_number",
-			headerName: "SĐT",
-			renderCell: (params) => {
-				return params?.row?.user_phone_number ? (
-					<p> {params?.row?.user_phone_number}</p>
-				) : (
-					<p className="text-red-700 text-[12px]">Chưa điền SĐT</p>
+				return (
+					<div className="flex items-center space-x-2">
+						<p>{params.row.userInfo.phone}</p>
+					</div>
 				);
 			},
+			flex: 2,
+		},
+		{
+			field: "userInfo2",
+			headerName: "Email",
+			renderCell: (params) => {
+				return (
+					<div className="flex items-center space-x-2">
+						<p>{params.row.userInfo.email}</p>
+					</div>
+				);
+			},
+			flex: 3,
+		},
+		{
+			field: "ship",
+			headerName: "Phương thức thanh toán",
+			renderCell: (params: any) => (
+				<p className="text-[13px]">
+					{params.row.payment.method == "COD" ? "Thanh toán khi nhận hàng" : "Chuyển khoản (VNPAY)"}
+				</p>
+			),
+			flex: 3.5,
+		},
+		{
+			field: "total",
+			headerName: "Giá trị",
+			renderCell: (params) => <p>{ConvertVNDString(params.row.total)} đ</p>,
 			width: 100,
+		},
+		{
+			field: "createdAt",
+			headerName: "Tạo lúc",
+			renderCell: (params) => <span>{new Date(params.row.createdAt).toLocaleString("vi-VN")}</span>,
 		},
 		{
 			field: "methodPayment",
@@ -177,49 +141,34 @@ const OrdersPage = () => {
 			renderCell: (params) => {
 				return params?.row?.payment.method === "COD" ? (
 					params?.row.state === "success" ? (
-						<Chip label="Đã thanh toán" className="bg-green-100 text-green-700 font-bold" />
+						<div className="bg-[#c6f6d5] p-2 w-full rounded-md text-[#2f855a] font-[500]">
+							Đã thanh toán
+						</div>
 					) : (
-						<Chip label="Chưa thanh toán" className="bg-blue-100 text-blue-700 font-bold" />
+						<div className="bg-blue-100 p-2 w-full rounded-md text-blue-500 font-[500]">
+							Chưa thanh toán
+						</div>
 					)
 				) : (
-					<Chip label="Đã thanh toán" className="bg-green-100 text-green-700 font-bold" />
+					<div className="bg-green-100 p-2 w-full rounded-md text-green-500 font-[500]">
+						Đã thanh toán
+					</div>
 				);
 			},
-			width: 200,
+			width: 170,
 		},
-		{
-			field: "ship",
-			headerName: "Phí VC",
-			renderCell: (params: any) => <p>{handleFeeShip(params.row.total, params.row.products)} đ</p>,
-			width: 100,
-		},
-		{
-			field: "createdAt",
-			headerName: "Tạo lúc",
-			renderCell: (params) => {
-				const today = new Date().toISOString().split("T")[0];
-				const createdAt = params.row.createdAt.split("T")[0];
-				if (today === createdAt) {
-					return <p>{formatDateTime(params.row.createdAt, "time")}</p>;
-				} else {
-					return <p>{formatDateTime(params.row.createdAt, "dateTime")}</p>;
-				}
-			},
-			width: 150,
-		},
-		{
-			field: "total",
-			headerName: "Tổng Tiền",
-			renderCell: (params) => <p>{ConvertVNDString(params.row.total)} đ</p>,
-			width: 100,
-		},
-
 		{
 			field: "active",
 			headerName: "Trạng thái đơn",
 			renderCell: (params) => {
 				const handleSelectChange = (e: any) => {
-					const newState = e.target.value;
+					if (params.row.state === "cancelled") {
+						toast({
+							variant: ToastVariant.ERROR,
+							content: "Đơn hàng đã hủy, không thể thay đổi trạng thái.",
+						});
+						return;
+					}
 
 					if (params.row.state === "success") {
 						toast({
@@ -229,7 +178,7 @@ const OrdersPage = () => {
 						return;
 					}
 
-					if (params.row.state === "shipped" && newState === "cancelled") {
+					if (params.row.state === "shipped") {
 						toast({
 							variant: ToastVariant.ERROR,
 							content: "Đơn hàng đã được giao, không thể hủy.",
@@ -242,21 +191,24 @@ const OrdersPage = () => {
 				return (
 					<select
 						id="small"
-						className="block w-full p-1 mb-6 text-sm border border-gray-300 rounded-lg  focus:ring-blue-500 focus:border-blue-500 "
 						value={params.row.state}
+						style={{
+							backgroundColor: statusList.find((item) => item.label == params.row.state)
+								?.bg,
+							color: statusList.find((item) => item.label == params.row.state)?.color,
+						}}
+						className={`block w-full text-sm border border-transparent rounded-md p-2  focus:ring-blue-500 focus:border-blue-500
+						`}
 						onChange={handleSelectChange}
 						onClick={(e) => e.stopPropagation()}
-						style={{
-							backgroundColor: getStatusColor(params.row.state),
-							color: "#FFF",
-						}}
 					>
 						{statusList.map((status) => (
 							<option
 								key={status.label}
 								value={status.label}
 								style={{
-									backgroundColor: status.color || "#000",
+									backgroundColor: status.bg,
+									color: status.color,
 								}}
 							>
 								{status.title}
@@ -333,7 +285,7 @@ const OrdersPage = () => {
 					pageSizeOptions={[5, 10]}
 					getRowHeight={() => "auto"}
 					checkboxSelection
-					onRowSelectionModelChange={(ids) => handleSelectionChange(ids)} // Lấy ID từ checkbox
+					onRowSelectionModelChange={(ids) => handleSelectionChange(ids as any)} // Lấy ID từ checkbox
 					onRowClick={onShowDetail}
 					sx={{
 						border: 0,
