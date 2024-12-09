@@ -358,22 +358,22 @@ class StatisticalService {
   static async StatisticalOrderbyday(filter: {
     startDate: string;
     endDate: string;
-  }): Promise<{
+   }): Promise<{
     totalOrders: number;
     totalRevenue: number;
     totalSold: number;
     dataDays: DayData[];
-  }> {
+   }> {
     try {
       // Validate and parse input dates
       const startDate = new Date(filter.startDate);
       const endDate = new Date(filter.endDate);
-
+   
       // Validate input
       if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
         throw new Error("Invalid date format");
       }
-
+   
       // Aggregate pipeline
       const statistics = await Order.aggregate([
         {
@@ -386,41 +386,50 @@ class StatisticalService {
         },
         {
           $addFields: {
-            // Extract day of week (1-7)
-            dayOfWeek: { $dayOfWeek: "$createdAt" },
+            // Calculate exact day number from start date
+            dayNumber: { 
+              $add: [
+                1, // Start counting from 1 
+                { $dateDiff: { 
+                  startDate: startDate, 
+                  endDate: "$createdAt", 
+                  unit: "day" 
+                } }
+              ]
+            }
           },
         },
         {
           $group: {
-            _id: "$dayOfWeek",
+            _id: { $mod: [{ $subtract: ["$dayNumber", 1] }, 7] }, // Cycle through 0-6
             totalOrders: { $sum: 1 },
             totalRevenue: { $sum: "$total" },
             totalSold: { $sum: { $sum: "$products.quantity" } },
           },
         },
         {
-          $sort: { _id: 1 }, // Sort by day of week
+          $sort: { _id: 1 }, // Sort by day number
         },
       ]);
-
+   
       // Process data for 7 days
-      const processedData: DayData[] = [1, 2, 3, 4, 5, 6, 7].map((dayNum) => {
+      const processedData: DayData[] = [0, 1, 2, 3, 4, 5, 6].map((dayNum) => {
         const dayData = statistics.find((item) => item._id === dayNum);
         return dayData
           ? {
-              Day: dayNum,
+              Day: dayNum + 1,
               totalOrders: dayData.totalOrders,
               totalRevenue: dayData.totalRevenue,
               totalSold: dayData.totalSold,
             }
           : {
-              Day: dayNum,
+              Day: dayNum + 1,
               totalOrders: 0,
               totalRevenue: 0,
               totalSold: 0,
             };
       });
-
+   
       // Calculate totals
       const totalOrders = processedData.reduce(
         (sum, day) => sum + day.totalOrders,
@@ -434,7 +443,7 @@ class StatisticalService {
         (sum, day) => sum + day.totalSold,
         0
       );
-
+   
       return {
         totalOrders,
         totalRevenue,
@@ -442,10 +451,10 @@ class StatisticalService {
         dataDays: processedData,
       };
     } catch (error: any) {
-      console.error("Error in StatisticalOrderbydayAndMonth:", error);
+      console.error("Error in StatisticalOrderbyday:", error);
       throw new Error("Không thể thống kê đơn hàng: " + error.message);
     }
-  }
+   }
 }
 
 export default StatisticalService;
