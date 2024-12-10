@@ -34,7 +34,7 @@ const AccountDetail = () => {
 				<div className="grid grid-cols-10 gap-5 w-full h-[70dvh]">
 					<div className="col-span-2 flex flex-col gap-5">
 						<div className="h-[25dvh] bg-white shadow-sm rounded-md flex flex-col gap-3 justify-center items-center">
-							<figure className="size-20 rounded-full border p-1 overflow-hidden grid place-items-center *:w-full *:h-full *:object-cover">
+							<figure className="size-20 rounded-full border overflow-hidden grid place-items-center *:w-full *:h-full *:object-cover">
 								{user?.user_avatar !== "" ? (
 									<img src={user?.user_avatar} alt="" />
 								) : (

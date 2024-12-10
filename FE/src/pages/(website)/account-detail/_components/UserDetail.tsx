@@ -120,7 +120,7 @@ const UserDetail = () => {
 					<div className="flex flex-col justify-center items-center md:w-[30%] gap-5">
 						<label
 							htmlFor="avatar"
-							className="size-36 rounded-full relative cursor-pointer border p-1 overflow-hidden grid place-items-center *:w-full *:h-full *:object-cover"
+							className="size-36 rounded-full relative cursor-pointer border overflow-hidden grid place-items-center *:w-full *:h-full *:object-cover"
 						>
 							{showImg !== "" ? (
 								<img src={showImg} alt="" />

@@ -84,7 +84,7 @@ const OrdersPage = () => {
 			renderCell: (params) => {
 				return (
 					<div className="flex items-center space-x-2">
-						<p>{params.row.userInfo.name}</p>
+						<p>{params.row.userInfo?.name}</p>
 					</div>
 				);
 			},
@@ -96,7 +96,7 @@ const OrdersPage = () => {
 			renderCell: (params) => {
 				return (
 					<div className="flex items-center space-x-2">
-						<p>{params.row.userInfo.phone}</p>
+						<p>{params.row.userInfo?.phone}</p>
 					</div>
 				);
 			},
@@ -108,7 +108,7 @@ const OrdersPage = () => {
 			renderCell: (params) => {
 				return (
 					<div className="flex items-center space-x-2">
-						<p>{params.row.userInfo.email}</p>
+						<p>{params.row.userInfo?.email}</p>
 					</div>
 				);
 			},

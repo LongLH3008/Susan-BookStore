@@ -4,14 +4,19 @@ import {
 } from "../cores/error.response";
 import { PaymentMethod, PaymentStatus } from "../interfaces/models/IOrder";
 import Book from "../models/Book.model";
+import Discount from "../models/Discount.model";
 import Order from "../models/Order.model";
 import User from "../models/User.model";
+import emailQueue from "../queues/mail.queue";
+import CartService from "./Cart.service";
 import DiscountService, { DiscountInput } from "./Discount.service";
+import GiaoHangNhanhService from "./GiaoHangNhanh.service";
+import { vnpayService } from "./Vnpay.service";
 import {
-    detailOrderData,
     GetAllOrderWithPaginateForAdminData,
     GetAllOrderWithPaginateForAdminRequest,
     GetAllOrderWithPaginateForAdminResponse,
+    detailOrderData,
 } from "./dtos/GetAllOrderWithPaginateForAdmin";
 import {
     GetAllOrderWithPaginationAndUserData,
@@ -28,13 +33,6 @@ import {
     SearchOrderCodeData,
     SearchOrderCodeReponse,
 } from "./dtos/SearchOrderCodeRequest";
-import GiaoHangNhanhService from "./GiaoHangNhanh.service";
-import { vnpayService } from "./Vnpay.service";
-import CartService from "./Cart.service";
-import { Code } from "mongodb";
-import Discount from "../models/Discount.model";
-import SendEmalCheckOutOrder from "../helper/EmailOrder";
-import emailQueue from "../queues/mail.queue";
 
 type PaymentMethodInput = "COD" | "VNPAY";
 
@@ -393,7 +391,7 @@ class OrderService {
             searchCondition.trackingNumber = { $regex: search, $options: "i" };
         }
         let order: SearchOrderCodeData[] = [];
-        order = await Order.find(searchCondition).select(fieldsToSelect).lean();
+        order = await Order.find(searchCondition).lean();
 
         return {
             data: order as SearchOrderCodeData[],

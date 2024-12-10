@@ -145,6 +145,14 @@ const DetalOrder = ({ dataOrder, statusList }: Props) => {
 								<span>SDT:</span>
 								<span>{dataOrder.userInfo.phone}</span>
 							</li>
+							<li className="flex items-center gap-2 text-sm">
+								<span>Loại khách hàng:</span>
+								<span>
+									{dataOrder.user_email !== ""
+										? "Chưa có tài khoản"
+										: "Đã đăng nhập"}
+								</span>
+							</li>
 						</ul>
 					</div>
 					<div className="bg-white border-t p-4 *:mb-4 mt-3">

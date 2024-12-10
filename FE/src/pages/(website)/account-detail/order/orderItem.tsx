@@ -1,3 +1,4 @@
+import { userState } from "@/common/hooks/useAuth";
 import { useToast } from "@/common/hooks/useToast";
 import { ToastVariant } from "@/common/interfaces/toast";
 import { ConvertVNDString } from "@/common/shared/round-number";
@@ -9,23 +10,27 @@ const ProductOrderItem = ({ product }: { product: any }) => {
 		Math.abs(product.discount) > 0 ? product.price * Math.abs((100 - product.discount) / 100) : product.price;
 
 	return (
-		<div className="max-sm:flex max-sm:flex-col grid grid-cols-7 max-sm:text-[15px] text-[13px] last-of-type:border-0 border-b border-dashed">
+		<div className="max-sm:flex max-sm:flex-col items-center grid grid-cols-8 max-sm:text-[15px] text-[13px] last-of-type:border-0 border-b border-dashed">
+			<figure className="size-14 col-span-1 grid place-items-center rounded-md border border-zinc-200 overflow-hidden">
+				<img src={product.image} alt={product.title} />
+			</figure>
 			<div className="col-span-2">{product.title}</div>
-			<div className="col-span-1">
+			<div className="col-span-1 text-right">
 				{Math.abs(product.discount) > 0 ? "- " + Math.abs(product.discount) + "%" : ""}
 			</div>
-			<div className="col-span-1 line-through">
+			<div className="col-span-1 line-through text-right">
 				{Math.abs(product.discount) > 0 ? ConvertVNDString(product.price) : ""}
 			</div>
-			<div className="col-span-1">{ConvertVNDString(calcDiscount)}đ</div>
-			<div className="col-span-1">x{product.quantity}</div>
-			<div className="col-span-1 font-[500]">{ConvertVNDString(product.total)}đ</div>
+			<div className="col-span-1 text-right">{ConvertVNDString(calcDiscount)}đ</div>
+			<div className="col-span-1 text-right">x{product.quantity}</div>
+			<div className="col-span-1 font-[500] text-right">{ConvertVNDString(product.total)}đ</div>
 		</div>
 	);
 };
 
 const OrderItem = ({ item }: { item: any }) => {
 	const queryClient = useQueryClient();
+	const { id } = userState();
 	const { toast, close } = useToast();
 	const handleStates = (state: string) => {
 		const states: Record<string, { label: string; bg: string; text: string }> = {
@@ -74,19 +79,19 @@ const OrderItem = ({ item }: { item: any }) => {
 
 	const handleFeeShip = (total: number, products: any[]) => {
 		if (products.length == 0 || !products) return;
-		const calc = total - products.reduce((init: number, item: any) => item.total + init, 0);
+		const calc = total - products.reduce((init: number, item: any) => item?.total + init, 0);
 		return ConvertVNDString(calc);
 	};
 
 	const handleFeeProducts = (products: any[]) => {
 		if (products.length == 0 || !products) return;
-		const calc = products.reduce((init: number, item: any) => item.total + init, 0);
+		const calc = products.reduce((init: number, item: any) => item?.total + init, 0);
 		return ConvertVNDString(calc);
 	};
 
 	const handleVoucher = (products: any[]) => {
 		if (products.length == 0 || !products) return;
-		const check = products.find((item) => item.discountAmountVoucher > 0);
+		const check = products.find((item) => item?.discountAmountVoucher > 0);
 		if (!check) return "";
 		return ConvertVNDString(check.discountAmountVoucher);
 	};
@@ -114,20 +119,20 @@ const OrderItem = ({ item }: { item: any }) => {
 	return (
 		<div className="max-h-fit w-full text-red-100 bg-[#fff] p-3 border flex flex-col justify-between shadow-md rounded-md">
 			<div className="flex justify-between items-center max-sm:flex-wrap">
-				<h4 className="font-[600] text-zinc-600">#{item.trackingNumber}</h4>
+				<h4 className="font-[600] text-zinc-600">#{item?.trackingNumber}</h4>
 				<div className="flex justify-between flex-wrap text-sm text-zinc-500 items-start gap-1">
 					<span className="font-[400] bg-zinc-200 text-black p-2 rounded-sm">
-						Tạo lúc {new Date(item.createdAt).toLocaleString("vi-VN")}
+						Tạo lúc {new Date(item?.createdAt).toLocaleString("vi-VN")}
 					</span>
 					<span
 						className={`p-2 rounded-sm font-[500]
-						${handleStates(item.state).bg} ${handleStates(item.state).text}`}
+						${handleStates(item?.state).bg} ${handleStates(item?.state).text}`}
 					>
-						{handleStates(item.state).label}
+						{handleStates(item?.state).label}
 					</span>
-					{item.state === "pending" && (
+					{item?.state === "pending" && (
 						<span
-							onClick={() => cancelOrder(item._id)}
+							onClick={() => cancelOrder(item?._id)}
 							className="bg-red-500 text-white p-2 cursor-pointer rounded-sm font-[500] ml-5"
 						>
 							Hủy đơn hàng
@@ -136,17 +141,35 @@ const OrderItem = ({ item }: { item: any }) => {
 				</div>
 			</div>
 			<div className="flex flex-col my-5 h-fit max-h-[25dvh] overflow-y-scroll order_scroll border-y text-zinc-500 border-zinc-300 border-dashed *:py-5">
-				{item.products.map((e: any, i: number) => (
+				{item?.products.map((e: any, i: number) => (
 					<ProductOrderItem product={e} key={i} />
 				))}
 			</div>
-			<div className="flex flex-wrap font-[400] text-sm max-sm:*:w-full text-zinc-500 max-sm:text-center justify-end items-center gap-1 *:rounded-md *:px-3 *:py-2">
-				<span className="">Tạm tính : {handleFeeProducts(item.products)}đ</span>|
-				{handleVoucher(item.products) !== "" && (
-					<span className="">Mã giảm giá : -{handleVoucher(item.products)}đ</span>
+			<div className="flex justify-between items-start gap-1 text-zinc-500 text-[13px]">
+				<span className="">
+					{item?.payment.method == "COD"
+						? `Thanh toán khi nhận hàng (COD - ${
+								item?.state == "success" ? "Đã thanh toán" : "Chưa thanh toán"
+						  })`
+						: `Chuyển khoản (VNPAY - Đã thanh toán)`}
+					<br />
+					{item?.shipping.street}, {item?.shipping.zipcode}, {item?.shipping.state},{" "}
+					{item?.shipping.city}
+				</span>
+				{id !== "" && (
+					<span className="text-right">
+						{item?.userInfo.name} <br />
+						{item?.userInfo.email} - {item?.userInfo.phone}
+					</span>
 				)}
-				<span className="">Phí giao hàng : {handleFeeShip(item.total, item.products)}đ</span>|
-				<span className="">Thành tiền : {ConvertVNDString(item.total)}đ</span>
+			</div>
+			<div className="flex flex-wrap pt-2 border-t border-dashed border-zinc-300 mt-3 font-[500] text-sm max-sm:*:w-full text-zinc-500 max-sm:text-center justify-end items-center gap-1 *:rounded-md *:px-3 *:py-2">
+				<span className="">Tạm tính : {handleFeeProducts(item?.products)}đ</span>|
+				{handleVoucher(item?.products) !== "" && (
+					<span className="">Giảm giá mã giảm giá : -{handleVoucher(item?.products)}đ</span>
+				)}
+				<span className="">Phí giao hàng : {handleFeeShip(item?.total, item?.products)}đ</span>|
+				<span className="">Thành tiền : {ConvertVNDString(item?.total)}đ</span>
 			</div>
 		</div>
 	);

@@ -17,25 +17,18 @@ const AmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 	const changeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
 		const numericValue = Number(value);
-		if (checkExistInCart && numericValue + checkExistInCart.product_quantity > detailProduct.stock) {
+		const limit = detailProduct.stock > 10 ? 10 : detailProduct.stock;
+		if (numericValue > limit) {
 			e.preventDefault();
-			return setQuantity(detailProduct.stock - checkExistInCart.product_quantity);
-		}
-		if (numericValue > detailProduct.stock) {
-			e.preventDefault();
-			return setQuantity(detailProduct.stock);
-		}
-		if (checkExistInCart && numericValue + checkExistInCart.product_quantity > 10) {
-			e.preventDefault();
-			return setQuantity(10 - checkExistInCart.product_quantity);
-		}
-		if (numericValue > 10) {
-			e.preventDefault();
-			return setQuantity(10);
+			return setQuantity(limit);
 		}
 		if (numericValue <= 1) {
 			e.preventDefault();
 			return setQuantity(0);
+		}
+		if (checkExistInCart && numericValue + checkExistInCart.product_quantity > limit) {
+			e.preventDefault();
+			return setQuantity(limit - checkExistInCart.product_quantity);
 		}
 		setQuantity(numericValue);
 	};
@@ -54,7 +47,7 @@ const AmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 	};
 
 	const AddProductToCart = (quantity: number, arg?: { checkout: boolean }) => {
-		if (detailProduct.stock == 0) return;
+		if (detailProduct.stock == 0 || quantity == 0) return;
 		if (checkExistInCart && checkExistInCart.product_quantity + quantity > detailProduct.stock) return;
 		if (quantity > detailProduct.stock || quantity == 0) return;
 		add({ ...detailProduct }, quantity);
@@ -122,10 +115,13 @@ const AmountLocal = ({ detailProduct }: { detailProduct: IProduct }) => {
 					</span>
 				</div>
 			</div>
-			{checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > 10 && (
-				<p className="text-red-500 text-sm mb-3">Số lượng sản phẩm trong giỏ đã đạt tối đa cho phép</p>
+			{quantity == 10 ||
+			(checkExistInCart && Number(quantity) + checkExistInCart.product_quantity >= 10) ? (
+				<p className="text-red-500 text-sm mb-3">Số lượng đã đạt tối đa cho phép</p>
+			) : (
+				""
 			)}
-			{quantity >= detailProduct.stock ||
+			{quantity > detailProduct.stock ||
 			(checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock) ? (
 				<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
 			) : (
