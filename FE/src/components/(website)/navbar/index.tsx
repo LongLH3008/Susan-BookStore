@@ -6,7 +6,7 @@ import { ProductProvider } from "@/common/hooks/useProduct";
 import { useToast } from "@/common/hooks/useToast";
 import { ToastVariant } from "@/common/interfaces/toast";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ScrollToTop from "../scrolltotop/scrolltoptop";
 import DropdownSearch from "./dropdownSearch";
 import DropdownShop from "./dropdownShop";
@@ -20,6 +20,7 @@ const Navbar = (props: Props) => {
 	const { AuthorUser, id, resetState } = userState();
 	const { getCart } = useLocalStorageCart();
 	const { toast, close } = useToast();
+	const nav = useNavigate();
 
 	useEffect(() => {
 		AuthorUser();
@@ -38,6 +39,7 @@ const Navbar = (props: Props) => {
 		onSuccess: () => {
 			resetState();
 			close();
+			nav("/");
 		},
 		onError: (err: any) => console.log(err),
 	});
