@@ -56,9 +56,7 @@ export default function MainPage() {
 										</div>
 									</div>
 									<div className="relative group overflow-hidden px-2 py-1 hover:overflow-visible w-full">
-										<span className="px-2 py-2 relative peer cursor-pointer">
-											Thời gian
-										</span>
+										Thời gian
 										<div className="absolute -top-1/2 left-[102%] gap-2 -z-50 group-hover:z-10 group-hover:w-[240px] group-hover:h-fit w-0 h-0 bg-white shadow-sm border border-zinc-300 rounded-md flex flex-wrap p-2">
 											<div className="flex items-center w-full justify-between gap-2">
 												<span className="text-wrap leading-4 text-left">

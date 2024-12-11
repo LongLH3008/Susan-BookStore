@@ -29,9 +29,36 @@ const getDatesInRange = (startDate: string, endDate: string): string[] => {
 
 	return dates;
 };
+
+const getWeeklyRanges = (startOfMonth: string, endOfMonth: string): string[] => {
+	const startDate = new Date(startOfMonth);
+	const endDate = new Date(endOfMonth);
+	const ranges: string[] = [];
+
+	for (let week = 0; week < 4; week++) {
+		const weekStart = new Date(startDate);
+		weekStart.setDate(startDate.getDate() + week * 7);
+
+		const weekEnd = new Date(weekStart);
+		weekEnd.setDate(weekEnd.getDate() + 6);
+
+		if (weekEnd > endDate) {
+			weekEnd.setTime(endDate.getTime());
+		}
+
+		const startFormatted = weekStart.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" });
+		const endFormatted = weekEnd.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit" });
+		ranges.push(`${startFormatted} - ${endFormatted}`);
+	}
+
+	return ranges;
+};
+
 const ColumnChart = () => {
 	const { column, filter, time } = useContext(StatiticsContext);
 	const weekDays = getDatesInRange(time.from, time.to);
+	const weeks = getWeeklyRanges(time.from, time.to);
+
 	const [chooseType, setChooseType] = useState<"order" | "revenue" | "sold">("revenue");
 	const [total, setTotal] = useState<Total>({ totalRevenue: [], totalOrders: [], totalSold: [] });
 	const [dataColumn, setDataColumn] = useState<{ name: string; color: string; data: any[] }>({
@@ -47,11 +74,11 @@ const ColumnChart = () => {
 			data:
 				filter.includes("Tuần") || filter.includes("Thời gian")
 					? column?.map((item: any) => ({
-							x: `${weekDays[item?.Day - 1]}`,
+							x: `${weekDays[item?.Day - 1] ?? ""}`,
 							y: item?.totalRevenue,
 					  }))
 					: column?.map((item: any) => ({
-							x: `Tuần ${item?.Week}`,
+							x: `Tuần ${item?.Week ?? ""} [${weeks[item?.Week - 1]}]`,
 							y: item?.totalRevenue,
 					  })),
 		});
@@ -59,30 +86,30 @@ const ColumnChart = () => {
 			totalOrders:
 				filter.includes("Tuần") || filter.includes("Thời gian")
 					? column?.map((item: any) => ({
-							x: `${weekDays[item?.Day - 1]}`,
+							x: `${weekDays[item?.Day - 1] ?? ""}`,
 							y: item?.totalOrders,
 					  }))
 					: column?.map((item: any) => ({
-							x: `Tuần ${item?.Week}`,
+							x: `${item?.Week ? `Tuần ${item.Week} [${weeks[item?.Week - 1]}]` : ""}`,
 							y: item?.totalOrders,
 					  })),
 			totalRevenue:
 				filter.includes("Tuần") || filter.includes("Thời gian")
 					? column?.map((item: any) => ({
-							x: `${weekDays[item?.Day - 1]}`,
+							x: `${weekDays[item?.Day - 1] ?? ""}`,
 							y: item?.totalRevenue,
 					  }))
 					: column?.map((item: any) => ({
-							x: `Tuần ${item?.Week}`,
+							x: `${item?.Week ? `Tuần ${item.Week} [${weeks[item?.Week - 1]}]` : ""}`,
 							y: item?.totalRevenue,
 					  })),
 			totalSold: filter.includes("Tuần")
 				? column?.map((item: any) => ({
-						x: `${weekDays[item?.Day - 1]}`,
+						x: `${weekDays[item?.Day - 1] ?? ""}`,
 						y: item?.totalSold,
 				  }))
 				: column?.map((item: any) => ({
-						x: `Tuần ${item?.Week}`,
+						x: `${item?.Week ? `Tuần ${item.Week} [${weeks[item?.Week - 1]}]` : ""}`,
 						y: item?.totalSold,
 				  })),
 		});
