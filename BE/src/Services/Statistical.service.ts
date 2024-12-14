@@ -270,6 +270,7 @@ class StatisticalService {
               $gte: startDate,
               $lte: endDate,
             },
+            state: "success", // Chỉ chọn đơn hàng có trạng thái "success"
           },
         },
         {
@@ -382,6 +383,7 @@ class StatisticalService {
               $gte: startDate,
               $lte: endDate,
             },
+            state: "success", // Chỉ chọn đơn hàng có trạng thái "success"
           },
         },
         {
