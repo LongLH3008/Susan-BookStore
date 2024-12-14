@@ -313,7 +313,7 @@ class StatisticalService {
         // Tạo mảng 4 tuần với dữ liệu từ aggregate
         const weekMap = new Map(statistics.map((item) => [item._id, item]));
 
-        processedData = [1, 2, 3, 4].map((weekNum) => {
+        processedData = [1, 2, 3, 4, 5].map((weekNum) => {
           const weekData = weekMap.get(weekNum);
           return weekData
             ? {
