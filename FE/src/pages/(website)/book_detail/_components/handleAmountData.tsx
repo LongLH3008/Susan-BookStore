@@ -13,7 +13,7 @@ const HandleAmountData = ({ detailProduct, user_id }: { detailProduct: IProduct;
 	const [quantity, setQuantity] = useState<number>(1);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { toast } = useToast();
-	const { data: cart, add, select } = cartData();
+	const { data: cart, add } = cartData();
 	const nav = useNavigate();
 
 	const checkExistInCart = cart.find((item) => item.product_id._id == detailProduct._id);
@@ -21,27 +21,10 @@ const HandleAmountData = ({ detailProduct, user_id }: { detailProduct: IProduct;
 	const changeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
 		const numericValue = Number(value);
-		const limit = detailProduct.stock > 10 ? 10 : detailProduct.stock;
-		if (numericValue > limit) {
-			e.preventDefault();
-			return setQuantity(limit);
-		}
-		if (numericValue <= 1) {
-			e.preventDefault();
-			return setQuantity(0);
-		}
-		if (checkExistInCart && numericValue + checkExistInCart.product_quantity > limit) {
-			e.preventDefault();
-			return setQuantity(limit - checkExistInCart.product_quantity);
-		}
 		setQuantity(numericValue);
 	};
 
 	const Increase = () => {
-		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock) return;
-		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > 10) return;
-		if (quantity + 1 > 10) return;
-		if (quantity + 1 > detailProduct.stock) return;
 		setQuantity(quantity + 1);
 	};
 
@@ -50,10 +33,17 @@ const HandleAmountData = ({ detailProduct, user_id }: { detailProduct: IProduct;
 		setQuantity(quantity - 1);
 	};
 
+	const checkErr = () => {
+		const limit = detailProduct.stock > 10 ? 10 : detailProduct.stock;
+		if (checkExistInCart && quantity + checkExistInCart?.product_quantity > limit)
+			return "Số lượng đã đạt tối đa cho phép";
+		if (detailProduct.stock <= 1 || quantity > limit) return "Số lượng không có sẵn";
+	};
+
 	const AddProductToCart = async (quantity: number, arg?: { checkout: boolean }) => {
+		const limit = detailProduct.stock > 10 ? 10 : detailProduct.stock;
 		if (detailProduct.stock == 0 || quantity == 0) return;
-		if (checkExistInCart && checkExistInCart.product_quantity + quantity > 10) return;
-		if (checkExistInCart && checkExistInCart.product_quantity + quantity > detailProduct.stock) return;
+		if (checkExistInCart && checkExistInCart.product_quantity + quantity > limit) return;
 		if (quantity > detailProduct.stock) return;
 
 		if (arg?.checkout) {
@@ -119,17 +109,7 @@ const HandleAmountData = ({ detailProduct, user_id }: { detailProduct: IProduct;
 							onClick={() => Increase()}
 							className={`bg-transparent text-sm hover:bg-gray-200 border border-gray-300 focus:ring-gray-100  focus:ring-2 focus:outline-none`}
 						>
-							<i
-								className={`fa-solid fa-plus duration-200 ${
-									quantity <= detailProduct.stock ||
-									(checkExistInCart &&
-										Number(quantity) + checkExistInCart.product_quantity <=
-											detailProduct.stock &&
-										Number(quantity) + checkExistInCart.product_quantity <= 10)
-										? ""
-										: "rotate-45 text-red-500"
-								}`}
-							></i>
+							<i className={`fa-solid fa-plus duration-200 `}></i>
 						</span>
 					</div>
 				</div>
@@ -144,18 +124,7 @@ const HandleAmountData = ({ detailProduct, user_id }: { detailProduct: IProduct;
 					</span>
 				</div>
 			</div>
-			{quantity == 10 ||
-			(checkExistInCart && Number(quantity) + checkExistInCart.product_quantity >= 10) ? (
-				<p className="text-red-500 text-sm mb-3">Số lượng đã đạt tối đa cho phép</p>
-			) : (
-				""
-			)}
-			{quantity > detailProduct.stock ||
-			(checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock) ? (
-				<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
-			) : (
-				""
-			)}
+			<div className="mb-5 text-red-500 text-sm">{checkErr()}</div>
 			<div className="w-full flex flex-col gap-1">
 				<button
 					onClick={() => !isLoading && AddProductToCart(quantity, { checkout: true })}
