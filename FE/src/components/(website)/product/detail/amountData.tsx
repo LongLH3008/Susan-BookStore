@@ -18,27 +18,10 @@ const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_
 	const changeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
 		const numericValue = Number(value);
-		const limit = detailProduct.stock > 10 ? 10 : detailProduct.stock;
-		if (numericValue > limit) {
-			e.preventDefault();
-			return setQuantity(limit);
-		}
-		if (numericValue <= 1) {
-			e.preventDefault();
-			return setQuantity(0);
-		}
-		if (checkExistInCart && numericValue + checkExistInCart.product_quantity > limit) {
-			e.preventDefault();
-			return setQuantity(limit - checkExistInCart.product_quantity);
-		}
 		setQuantity(numericValue);
 	};
 
 	const Increase = () => {
-		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity >= 10) return;
-		if (checkExistInCart && Number(quantity) + checkExistInCart.product_quantity >= detailProduct.stock) return;
-		if (quantity + 1 >= 10) return;
-		if (quantity + 1 >= detailProduct.stock) return;
 		setQuantity(quantity + 1);
 	};
 
@@ -47,9 +30,17 @@ const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_
 		setQuantity(quantity - 1);
 	};
 
+	const checkErr = () => {
+		const limit = detailProduct.stock > 10 ? 10 : detailProduct.stock;
+		if (checkExistInCart && quantity + checkExistInCart?.product_quantity > limit)
+			return "Số lượng đã đạt tối đa cho phép";
+		if (detailProduct.stock <= 1 || quantity > limit) return "Số lượng không có sẵn";
+	};
+
 	const AddProductToCart = async (quantity: number, arg?: { checkout: boolean }) => {
+		const limit = detailProduct.stock > 10 ? 10 : detailProduct.stock;
 		if (detailProduct.stock == 0 || quantity == 0) return;
-		if (checkExistInCart && checkExistInCart.product_quantity + quantity > detailProduct.stock) return;
+		if (checkExistInCart && checkExistInCart.product_quantity + quantity > limit) return;
 		if (quantity > detailProduct.stock) return;
 
 		if (arg?.checkout) {
@@ -109,17 +100,7 @@ const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_
 							onClick={() => Increase()}
 							className={`bg-transparent text-sm hover:bg-gray-200 border border-gray-300 focus:ring-gray-100  focus:ring-2 focus:outline-none`}
 						>
-							<i
-								className={`fa-solid fa-plus duration-200 ${
-									quantity <= detailProduct.stock ||
-									(checkExistInCart &&
-										Number(quantity) + checkExistInCart.product_quantity <=
-											detailProduct.stock &&
-										Number(quantity) + checkExistInCart.product_quantity <= 10)
-										? ""
-										: "rotate-45 text-red-500"
-								}`}
-							></i>
+							<i className={`fa-solid fa-plus duration-200`}></i>
 						</span>
 					</div>
 				</div>
@@ -134,18 +115,7 @@ const AmountData = ({ detailProduct, user_id }: { detailProduct: IProduct; user_
 					</span>
 				</div>
 			</div>
-			{quantity == 10 ||
-			(checkExistInCart && Number(quantity) + checkExistInCart.product_quantity >= 10) ? (
-				<p className="text-red-500 text-sm mb-3">Số lượng đã đạt tối đa cho phép</p>
-			) : (
-				""
-			)}
-			{quantity > detailProduct.stock ||
-			(checkExistInCart && Number(quantity) + checkExistInCart.product_quantity > detailProduct.stock) ? (
-				<p className="text-red-500 text-sm mb-3">Số lượng không có sẵn</p>
-			) : (
-				""
-			)}
+			<div className="mb-5 text-red-500 text-sm">{checkErr()}</div>
 		</>
 	);
 };

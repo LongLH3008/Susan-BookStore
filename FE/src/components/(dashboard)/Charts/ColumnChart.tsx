@@ -35,7 +35,7 @@ const getWeeklyRanges = (startOfMonth: string, endOfMonth: string): string[] => 
 	const endDate = new Date(endOfMonth);
 	const ranges: string[] = [];
 
-	for (let week = 0; week < 4; week++) {
+	for (let week = 0; week < 5; week++) {
 		const weekStart = new Date(startDate);
 		weekStart.setDate(startDate.getDate() + week * 7);
 
