@@ -35,16 +35,16 @@ const HandleAmountData = ({ detailProduct, user_id }: { detailProduct: IProduct;
 
 	const checkErr = () => {
 		const limit = detailProduct.stock > 10 ? 10 : detailProduct.stock;
-		if (checkExistInCart && quantity + checkExistInCart?.product_quantity > limit)
+		if ((checkExistInCart && quantity + checkExistInCart?.product_quantity > limit) || quantity > limit)
 			return "Số lượng đã đạt tối đa cho phép";
-		if (detailProduct.stock <= 1 || quantity > limit) return "Số lượng không có sẵn";
+		if (detailProduct.stock <= 1 || quantity > detailProduct.stock) return "Số lượng không có sẵn";
 	};
 
 	const AddProductToCart = async (quantity: number, arg?: { checkout: boolean }) => {
 		const limit = detailProduct.stock > 10 ? 10 : detailProduct.stock;
 		if (detailProduct.stock == 0 || quantity == 0) return;
 		if (checkExistInCart && checkExistInCart.product_quantity + quantity > limit) return;
-		if (quantity > detailProduct.stock) return;
+		if (quantity > limit) return;
 
 		if (arg?.checkout) {
 			setIsLoading(true);

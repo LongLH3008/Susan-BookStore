@@ -33,7 +33,7 @@ import { AxiosError } from "axios";
 import React, { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
-import { MdDeleteOutline, MdFilterListAlt, MdOutlineSearch } from "react-icons/md";
+import { MdFilterListAlt, MdOutlineSearch } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 
 const ProductsPage: React.FC = () => {
@@ -146,7 +146,7 @@ const ProductsPage: React.FC = () => {
 		onSuccess: (data) => {
 			setConfirmOpen(false);
 			toast({
-				variant: data.status,
+				variant: ToastVariant.SUCCESS,
 				content: `Kích hoạt sản phẩm thành công`,
 			});
 
@@ -235,20 +235,20 @@ const ProductsPage: React.FC = () => {
 				headerName: "Trạng thái",
 				field: "is_active",
 				renderCell: (params: any) => (
-					<Box display="flex" alignItems="center">
+					<div className="flex justify-between items-center w-full">
+						<Typography className="text-sm">
+							{params.row.isActive ? (
+								"Đang bán"
+							) : (
+								<span className="text-red-600">Ngừng bán</span>
+							)}
+						</Typography>
 						<Switch
 							checked={params.row.isActive}
 							onChange={() => handleToggleStatus(params.row)}
 							color="primary"
 						/>
-						<Typography className="text-sm">
-							{params.row.isActive ? (
-								"Kích hoạt"
-							) : (
-								<span className="text-red-600">Vô hiệu hóa</span>
-							)}
-						</Typography>
-					</Box>
+					</div>
 				),
 				width: 150,
 			},
@@ -333,8 +333,8 @@ const ProductsPage: React.FC = () => {
         error={productQueryAdmin?.isError ? productQueryAdmin?.error?.message : ""}
       /> */}
 			<Paper
+				className="h-[66dvh]"
 				sx={{
-					height: "67vh",
 					maxHeight: "calc(100vh-300px)",
 					width: "100%",
 					overflowY: "auto",

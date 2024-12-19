@@ -40,7 +40,7 @@ export const useLocalStorageCart = create<LocalStorageCart>((set) => ({
 	select: (arg) => {
 		set((state) => {
 			const cart_products = state.cart_products.map((item: ICart) =>
-				item._id == arg._id ? { ...item, selected: !item.selected } : item
+				item._id == arg._id ? { ...item, selected: arg.selected } : item
 			);
 			console.log(cart_products);
 			localStorage.setItem("cart_products", JSON.stringify(cart_products));

@@ -52,12 +52,10 @@ export default function CartProducts({ dataCart }: { dataCart: ICart[] }) {
 
 	const changeAmount = (e: React.ChangeEvent<HTMLInputElement>, detailItem: ICart) => {
 		const { value } = e.target;
-		if (Number(value) > 10) {
+		const limit = detailItem.product_id.stock > 10 ? 10 : detailItem.product_id.stock;
+		if (Number(value) > limit) {
 			e.preventDefault();
-			changeData(detailItem, 10);
-		} else if (Number(value) > detailItem.product_id.stock) {
-			e.preventDefault();
-			changeData(detailItem, detailItem.product_id.stock);
+			changeData(detailItem, limit);
 		} else if (Number(value) <= 1) {
 			e.preventDefault();
 			changeData(detailItem, 1);

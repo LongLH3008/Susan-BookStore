@@ -1,5 +1,9 @@
+import { userState } from "@/common/hooks/useAuth";
+import { cartData } from "@/common/hooks/useCart";
+import { useLocalStorageCart } from "@/common/hooks/useLocalStorageCart";
+import { getProducttById } from "@/services/product.service";
 import { debounce } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function ItemCart({
@@ -20,34 +24,81 @@ export default function ItemCart({
 	select: (arg: { _id: string; selected: boolean }) => void;
 }) {
 	const { product_quantity } = data;
-	const { coverImage, title, slug, author, _id, stock } = data.product_id;
+	const { id: user_id } = userState();
+	const { coverImage, title, slug, author } = data.product_id;
+	const { add } = cartData();
+	const { changeQuantity: changeLc, getCart } = useLocalStorageCart();
+	const [productStatus, setProductStatus] = useState<{ stock: number; isActive: boolean }>({
+		stock: 1,
+		isActive: true,
+	});
 
 	useEffect(() => {
-		stock == 0 && select({ _id: data._id, selected: false });
+		(async () => {
+			const {
+				metadata: { stock: checkStock, isActive },
+			} = await getProducttById(data.product_id._id);
+			setProductStatus({ stock: checkStock, isActive });
+			if (checkStock < 1 || !isActive) select({ _id: data._id, selected: false });
+			if (checkStock > 1 && data.product_quantity > checkStock) modifyQuantity(checkStock);
+			if (!checkStock || checkStock < 1) modifyQuantity(0);
+		})();
 	}, []);
 
+	const modifyQuantity = (quantity: number) => {
+		if (user_id) {
+			const product_quantity = quantity - data.product_quantity;
+			add({ product_id: data.product_id._id, product_quantity, user_id });
+		} else {
+			changeLc(data._id, quantity);
+			getCart();
+		}
+	};
+
 	const Increase = debounce(() => {
-		if (product_quantity + 1 > 10) return;
-		inc(_id);
+		const limit = productStatus.stock > 10 ? 10 : productStatus.stock;
+		if (product_quantity + 1 > limit || !productStatus.isActive) return;
+		inc(data.product_id._id);
 	}, 500);
 
 	const Decrease = debounce(() => {
 		if (product_quantity < 2 || product_quantity == 1) {
 			return;
 		}
-		dec(_id);
+		dec(data.product_id._id);
 	}, 300);
+
+	const changeQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (productStatus.stock < 1) return;
+		if (e.target.value.length > 3) {
+			console.log(e.target.value.length);
+			return;
+		}
+		const limit = productStatus.stock > 10 ? 10 : productStatus.stock;
+		let value = Number(e.target.value) > limit ? { target: { value: limit } } : e;
+		change(value as any, data);
+	};
+
+	const checkErr = () => {
+		if (!productStatus.isActive) return "Sản phẩm đã ngừng bán";
+		if (productStatus.stock < 1) return "Số lượng không có sẵn";
+		if (product_quantity + 1 > 10 || product_quantity + 1 > productStatus.stock)
+			return "Số lượng đã đạt tối đa cho phép";
+		return "";
+	};
 
 	return (
 		<div
 			className={`relative grid md:grid-cols-12 items-center md:border-l-2 md:pl-5 ${
-				stock > 0 && "hover:border-zinc-900"
-			} duration-100 ease-in cursor-pointer ${stock > 0 && isSelected == true && "border-zinc-900"}`}
+				productStatus.stock > 0 && productStatus.isActive && "hover:border-zinc-900"
+			} duration-100 ease-in cursor-pointer ${
+				productStatus.stock > 0 && productStatus.isActive && isSelected == true && "border-zinc-900"
+			}`}
 		>
 			<input
-				onChange={() => stock > 1 && select({ _id: data._id, selected: !data.selected })}
+				onChange={() => productStatus.stock > 1 && select({ _id: data._id, selected: !data.selected })}
 				type="checkbox"
-				disabled={stock == 0}
+				disabled={productStatus.stock == 0}
 				checked={isSelected}
 				className={`max-[640px]:absolute top-0 right-5 md:col-span-1 ring-0 ring-offset-0 checked:bg-black checked:text-white bg-white border-zinc-300`}
 			/>
@@ -59,10 +110,7 @@ export default function ItemCart({
 					{title}
 				</Link>
 				<p className="text-[12px] text-zinc-500">{author}</p>
-				{product_quantity + 1 > 10 && (
-					<p className="text-[12px] text-red-500">Số lượng sản phẩm đã đạt tối đa cho phép</p>
-				)}
-				{stock == 0 && <p className="text-[12px] text-red-500">Số lượng không có sẵn</p>}
+				<p className="text-[12px] text-red-500">{checkErr()}</p>
 			</span>
 			<div className="md:col-span-2 flex justify-between items-center border text-[15px]">
 				<span onClick={() => Decrease()} className="p-2 cursor-pointer">
@@ -71,22 +119,22 @@ export default function ItemCart({
 				<input
 					type="number"
 					className="w-14 ring-0 border-0 text-center"
-					value={stock > 0 ? product_quantity : 0}
-					onChange={(e) => stock > 1 && change(e, data)}
+					value={productStatus.stock > 0 && productStatus.isActive ? product_quantity : 0}
+					onChange={(e) => changeQuantity(e)}
 				/>
 				<button
 					type="button"
-					disabled={product_quantity + 1 > stock}
+					disabled={product_quantity + 1 > productStatus.stock}
 					onClick={() => Increase()}
 					className={`p-2 cursor-pointer duration-200 ${
-						product_quantity >= stock ? "text-red-500 rotate-45" : ""
+						product_quantity >= productStatus.stock ? "text-red-500 rotate-45" : ""
 					}`}
 				>
 					+
 				</button>
 			</div>
 			<span
-				onClick={() => remove(_id)}
+				onClick={() => remove(data.product_id._id)}
 				className="max-[640px]:absolute -top-1 right-0 md:col-span-2 justify-self-end hover:text-red-500 text-zinc-500"
 			>
 				<i className="fa-solid fa-xmark"></i>

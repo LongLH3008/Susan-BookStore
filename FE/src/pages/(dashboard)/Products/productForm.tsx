@@ -1,4 +1,5 @@
 import { useToast } from "@/common/hooks/useToast";
+import { ToastVariant } from "@/common/interfaces/toast";
 import { Book, Image } from "@/common/schemas/product";
 import { getCategories } from "@/services/categories.service";
 import { addProduct, editProduct, getProducttById } from "@/services/product.service";
@@ -61,7 +62,7 @@ const ProductForm: React.FC = () => {
 				onSuccess: (data: any) => {
 					nav("/quan-tri/san-pham");
 					toast({
-						variant: data.status,
+						variant: ToastVariant.SUCCESS,
 						content: `Cập nhật sản phẩm thành công`,
 					});
 					queryClient.invalidateQueries({ queryKey: ["BooksAdmin"] });
@@ -69,7 +70,7 @@ const ProductForm: React.FC = () => {
 				onError: (err: any) => {
 					const message = "Lỗi khi cập nhật sản phẩm: ";
 					toast({
-						variant: err.status,
+						variant: ToastVariant.ERROR,
 						content: message + err.response?.data?.error || err.message,
 					});
 				},
@@ -79,14 +80,14 @@ const ProductForm: React.FC = () => {
 				onSuccess: (data: any) => {
 					nav("/quan-tri/san-pham");
 					toast({
-						variant: data.status,
+						variant: ToastVariant.SUCCESS,
 						content: `Thêm mới sản phẩm thành công`,
 					});
 				},
 				onError: (err: any) => {
 					let message = "Lỗi khi thêm sản phẩm: ";
 					toast({
-						variant: error.status,
+						variant: ToastVariant.ERROR,
 						content: message + error.response?.data || error.message,
 					});
 				},
