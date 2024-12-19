@@ -149,8 +149,8 @@ const DetalOrder = ({ dataOrder, statusList }: Props) => {
 								<span>Loại khách hàng:</span>
 								<span>
 									{dataOrder.user_email !== ""
-										? "Chưa có tài khoản"
-										: "Đã đăng nhập"}
+										? "Khách vãng lai"
+										: "Khách hàng thành viên"}
 								</span>
 							</li>
 						</ul>
@@ -188,7 +188,9 @@ const DetalOrder = ({ dataOrder, statusList }: Props) => {
 						</div>
 						<div className="flex items-center justify-between mb-4 *:text-sm *:text-end">
 							<p>Trạng thái đơn hàng</p>
-							<p className={`font-[500]`}>{state?.title}</p>
+							<p className={`font-[500]`}>
+								{state?.title == "Hủy" ? "Đã hủy" : state?.title}
+							</p>
 						</div>
 					</div>
 				</div>
