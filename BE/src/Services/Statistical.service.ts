@@ -1,13 +1,11 @@
-import { any } from "joi";
 import Order from "../models/Order.model";
 import {
   DayData,
-  GetAllOrderWithStatisticalRequest,
   GetAllOrderWithStatisticalResponse,
   StatisticalOrderDto,
   TopSellingBook,
   TopSellingUser,
-  WeekData,
+  WeekData
 } from "./dtos/Statistincal.dto";
 
 class StatisticalService {
@@ -32,6 +30,7 @@ class StatisticalService {
               $gte: fromDate,
               $lte: toDate,
             },
+            state: 'success'
           },
         },
         { $unwind: "$products" },
@@ -317,17 +316,17 @@ class StatisticalService {
           const weekData = weekMap.get(weekNum);
           return weekData
             ? {
-                Week: weekNum,
-                totalOrders: weekData.totalOrders,
-                totalRevenue: weekData.totalRevenue,
-                totalSold: weekData.totalSold,
-              }
+              Week: weekNum,
+              totalOrders: weekData.totalOrders,
+              totalRevenue: weekData.totalRevenue,
+              totalSold: weekData.totalSold,
+            }
             : {
-                Week: weekNum,
-                totalOrders: 0,
-                totalRevenue: 0,
-                totalSold: 0,
-              };
+              Week: weekNum,
+              totalOrders: 0,
+              totalRevenue: 0,
+              totalSold: 0,
+            };
         });
       }
 
@@ -359,22 +358,22 @@ class StatisticalService {
   static async StatisticalOrderbyday(filter: {
     startDate: string;
     endDate: string;
-   }): Promise<{
+  }): Promise<{
     totalOrders: number;
     totalRevenue: number;
     totalSold: number;
     dataDays: DayData[];
-   }> {
+  }> {
     try {
       // Validate and parse input dates
       const startDate = new Date(filter.startDate);
       const endDate = new Date(filter.endDate);
-   
+
       // Validate input
       if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
         throw new Error("Invalid date format");
       }
-   
+
       // Aggregate pipeline
       const statistics = await Order.aggregate([
         {
@@ -389,14 +388,16 @@ class StatisticalService {
         {
           $addFields: {
             // Calculate exact day number from start date
-            dayNumber: { 
+            dayNumber: {
               $add: [
                 1, // Start counting from 1 
-                { $dateDiff: { 
-                  startDate: startDate, 
-                  endDate: "$createdAt", 
-                  unit: "day" 
-                } }
+                {
+                  $dateDiff: {
+                    startDate: startDate,
+                    endDate: "$createdAt",
+                    unit: "day"
+                  }
+                }
               ]
             }
           },
@@ -413,25 +414,25 @@ class StatisticalService {
           $sort: { _id: 1 }, // Sort by day number
         },
       ]);
-   
+
       // Process data for 7 days
       const processedData: DayData[] = [0, 1, 2, 3, 4, 5, 6].map((dayNum) => {
         const dayData = statistics.find((item) => item._id === dayNum);
         return dayData
           ? {
-              Day: dayNum + 1,
-              totalOrders: dayData.totalOrders,
-              totalRevenue: dayData.totalRevenue,
-              totalSold: dayData.totalSold,
-            }
+            Day: dayNum + 1,
+            totalOrders: dayData.totalOrders,
+            totalRevenue: dayData.totalRevenue,
+            totalSold: dayData.totalSold,
+          }
           : {
-              Day: dayNum + 1,
-              totalOrders: 0,
-              totalRevenue: 0,
-              totalSold: 0,
-            };
+            Day: dayNum + 1,
+            totalOrders: 0,
+            totalRevenue: 0,
+            totalSold: 0,
+          };
       });
-   
+
       // Calculate totals
       const totalOrders = processedData.reduce(
         (sum, day) => sum + day.totalOrders,
@@ -445,7 +446,7 @@ class StatisticalService {
         (sum, day) => sum + day.totalSold,
         0
       );
-   
+
       return {
         totalOrders,
         totalRevenue,
@@ -456,7 +457,7 @@ class StatisticalService {
       console.error("Error in StatisticalOrderbyday:", error);
       throw new Error("Không thể thống kê đơn hàng: " + error.message);
     }
-   }
+  }
 }
 
 export default StatisticalService;

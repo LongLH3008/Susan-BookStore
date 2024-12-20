@@ -1,4 +1,5 @@
 import { CheckoutContext } from "@/common/context/ContextCheckout";
+import { userState } from "@/common/hooks/useAuth";
 import { IOrderChecking } from "@/common/interfaces/checkout";
 import { IVoucher } from "@/common/interfaces/voucher";
 import { ConvertVNDString } from "@/common/shared/round-number";
@@ -10,6 +11,7 @@ import { useContext, useEffect, useState } from "react";
 const Voucher = () => {
 	const [chooseVoucher, setChooseVoucher] = useState({ open: false, choose: "" });
 	const [data, setData] = useState<IVoucher[]>([]);
+	const { id: user_id } = userState();
 	const {
 		data: cart,
 		checkingOrder,
@@ -113,87 +115,108 @@ const Voucher = () => {
 	};
 
 	return (
-		<div className="relative flex flex-col gap-4 group">
-			<p className="text-[16px] font-semibold">Mã giảm giá</p>
-			<div className="flex z-10 items-center justify-between px-3 border border-zinc-300 rounded">
-				<label className="w-full cursor-pointer flex items-center p-4 pl-0 ms-2 text-sm font-medium text-gray-900">
-					<i className="fa-solid fa-ticket mr-5 text-[16px]"></i>
-					<span className="text-[12px] max-w-[70%]">
-						{chooseVoucher.choose == "" ? "Sử dụng mã giảm giá" : chooseVoucher.choose}
-					</span>
-				</label>
-				{chooseVoucher.choose !== "" && (
-					<div className="flex items-center">
-						<span
-							onClick={() => reset()}
-							className="text-[#222] z-20 text-[12px] underline w-24 cursor-pointer"
-						>
-							Loại bỏ
-						</span>
-						<i className="fa-solid fa-check"></i>
-					</div>
-				)}
-			</div>
-			<div
-				className={`group-hover:h-fit group-hover:opacity-100 group-hover:translate-y-0 h-0 p-0 opacity-0 -translate-y-1
-				flex flex-col group-hover:py-2 px-2 min-h-0 max-h-[30dvh] duration-500 ease-in-out border rounded-md overflow-hidden border-[#222] gap-1`}
-			>
-				<input
-					type="search"
-					onKeyDown={(e) => e.key == "Enter" && e.preventDefault()}
-					onChange={(e) => handleInputChange(e)}
-					className="ring-0 border-0 text-sm rounded-sm py-2"
-					placeholder="Nhập mã giảm giá"
-				/>
-				<div className="border-t border-zinc-300 pt-2 mt-1 relative flex flex-col gap-2 *:px-3 *:text-sm text-zinc-500 *:cursor-pointer *:border-b overflow-hidden overflow-y-scroll">
-					{data.length > 0 ? (
-						data.map((item: IVoucher, index: number) => (
-							<div
-								key={index}
-								onClick={() => checkDiscountCode(item) && chooseDiscountCode(item)}
-								className={`${
-									checkDiscountCode(item) &&
-									chooseVoucher.choose == item.discount_code
-										? "border-l-[#00BFC5] hover:border-l-red-500"
-										: "border-l-transparent"
-								} ${
-									!checkDiscountCode(item) ? "opacity-75" : "hover:bg-zinc-100"
-								} border-l-2 py-2 flex justify-between last-of-type:border-b-0`}
-							>
-								<div className="flex flex-col gap-1">
-									<span>{item.discount_code}</span>
-									<span className="text-[12px]">{item.discount_description}</span>
-									{item.discount_min_order_value > 0 && (
-										<span className="text-[12px]">
-											Đơn hàng tối thiểu đạt{" "}
-											{ConvertVNDString(item.discount_min_order_value)}đ
-										</span>
-									)}
-								</div>
-								<div className="flex flex-col gap-1 items-end justify-center">
-									<span
-										className={`${
-											checkDiscountCode(item)
-												? "bg-black text-white"
-												: "border border-zinc-400"
-										} w-fit p-1`}
-									>
-										{handleValue(item)}
-									</span>
-									{!checkDiscountCode(item) && (
-										<span className="text-[12px] text-black">
-											Không đủ điều kiên áp dụng
-										</span>
-									)}
-								</div>
+		<>
+			{user_id !== "" && (
+				<div className="relative flex flex-col gap-4 group">
+					<p className="text-[16px] font-semibold">Mã giảm giá</p>
+					<div className="flex z-10 items-center justify-between px-3 border border-zinc-300 rounded">
+						<label className="w-full cursor-pointer flex items-center p-4 pl-0 ms-2 text-sm font-medium text-gray-900">
+							<i className="fa-solid fa-ticket mr-5 text-[16px]"></i>
+							<span className="text-[12px] max-w-[70%]">
+								{chooseVoucher.choose == ""
+									? "Sử dụng mã giảm giá"
+									: chooseVoucher.choose}
+							</span>
+						</label>
+						{chooseVoucher.choose !== "" && (
+							<div className="flex items-center">
+								<span
+									onClick={() => reset()}
+									className="text-[#222] z-20 text-[12px] underline w-24 cursor-pointer"
+								>
+									Loại bỏ
+								</span>
+								<i className="fa-solid fa-check"></i>
 							</div>
-						))
-					) : (
-						<span className="py-2 border-none">Chưa có mã giảm giá nào</span>
-					)}
+						)}
+					</div>
+					<div
+						className={`group-hover:h-fit group-hover:opacity-100 group-hover:translate-y-0 h-0 p-0 opacity-0 -translate-y-1
+				flex flex-col group-hover:py-2 px-2 min-h-0 max-h-[30dvh] duration-500 ease-in-out border rounded-md overflow-hidden border-[#222] gap-1`}
+					>
+						<input
+							type="search"
+							onKeyDown={(e) => e.key == "Enter" && e.preventDefault()}
+							onChange={(e) => handleInputChange(e)}
+							className="ring-0 border-0 text-sm rounded-sm py-2"
+							placeholder="Nhập mã giảm giá"
+						/>
+						<div className="border-t border-zinc-300 pt-2 mt-1 relative flex flex-col gap-2 *:px-3 *:text-sm text-zinc-500 *:cursor-pointer *:border-b overflow-hidden overflow-y-scroll">
+							{data.length > 0 ? (
+								data.map((item: IVoucher, index: number) => (
+									<div
+										key={index}
+										onClick={() =>
+											checkDiscountCode(item) && chooseDiscountCode(item)
+										}
+										className={`${
+											checkDiscountCode(item) &&
+											chooseVoucher.choose == item.discount_code
+												? "border-l-[#00BFC5] hover:border-l-red-500"
+												: "border-l-transparent"
+										} ${
+											!checkDiscountCode(item)
+												? "opacity-75"
+												: "hover:bg-zinc-100"
+										} border-l-2 py-2 flex justify-between items-start last-of-type:border-b-0`}
+									>
+										<div className="flex flex-col gap-1">
+											<span>{item.discount_code}</span>
+											<span className="text-[12px]">
+												{item.discount_description}
+											</span>
+											{item.discount_min_order_value > 0 && (
+												<span className="text-[12px]">
+													Đơn hàng tối thiểu đạt{" "}
+													{ConvertVNDString(
+														item.discount_min_order_value
+													)}
+													đ
+												</span>
+											)}
+											<span className="text-[12px]">
+												Hết hạn lúc{" "}
+												{new Date(
+													item.discount_end_date
+												).toLocaleString("vi-VN")}
+											</span>
+										</div>
+										<div className="flex flex-col gap-1 items-end justify-center">
+											<span
+												className={`${
+													checkDiscountCode(item)
+														? "bg-black text-white"
+														: "border border-zinc-400"
+												} w-fit p-1`}
+											>
+												{handleValue(item)}
+											</span>
+											{!checkDiscountCode(item) && (
+												<span className="text-[12px] text-black">
+													Không đủ điều kiên áp dụng
+												</span>
+											)}
+										</div>
+									</div>
+								))
+							) : (
+								<span className="py-2 border-none">Chưa có mã giảm giá nào</span>
+							)}
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
+			)}
+		</>
 	);
 };
 

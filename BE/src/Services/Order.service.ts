@@ -127,7 +127,7 @@ class OrderService {
         }
         if (!userId && code) throw new ResourceNotFoundError("ban can dang nhap de suu dung code");
 
-
+        await this.checkStock(products as any)
         const newOrder = await Order.create({
             userId,
             shipping,
@@ -140,7 +140,6 @@ class OrderService {
         });
         return newOrder;
     }
-
     static async prepareOrderInput({
         userId,
         customerInfo,
@@ -214,11 +213,7 @@ class OrderService {
         const books = await Promise.all(productPromises);
 
         if (insufficientStockProducts.length > 0) {
-            return {
-                success: false,
-                message: "Some products do not have enough stock",
-                products: insufficientStockProducts,
-            };
+            throw new BadRequestError("Some products do not have enough stock");
         }
     }
 

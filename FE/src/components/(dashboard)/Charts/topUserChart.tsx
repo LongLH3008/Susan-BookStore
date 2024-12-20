@@ -21,16 +21,9 @@ const TopUsersChart = () => {
 			],
 			xaxis: {
 				categories: DataTopUser?.data?.metadata.map((user: ITopUser) => user.user_name),
-				title: {
-					text: "Người dùng",
-					style: {
-						fontSize: "12px",
-						fontWeight: "bold",
-					},
-				},
 				labels: {
 					style: {
-						fontSize: "12px",
+						fontSize: "10px",
 					},
 				},
 			},

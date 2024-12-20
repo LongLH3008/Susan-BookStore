@@ -1,0 +1,60 @@
+[{
+  "_id": {
+    "$oid": "67513e354da1632254d013d1"
+  },
+  "province": "Hà Nội / 201",
+  "district": "Quận Hà Đông / 1542",
+  "ward": "Phường Văn Quán / 1B1515",
+  "address": "Nguyễn KHuyến",
+  "phone": "0346540479",
+  "userId": {
+    "$oid": "67513e054da1632254d013ae"
+  },
+  "createdAt": {
+    "$date": "2024-12-05T05:46:29.822Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-05T05:46:29.822Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67543241e06e6b6905981b0b"
+  },
+  "province": "An Giang / 217",
+  "district": "Huyện An Phú / 1754",
+  "ward": "Thị trấn An Phú / 510301",
+  "address": "asdasda",
+  "phone": "0945555555",
+  "userId": {
+    "$oid": "67541d018809aaaa1fa86c85"
+  },
+  "createdAt": {
+    "$date": "2024-12-07T11:32:17.634Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T11:32:17.634Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67567f64ac173242e81d1f9b"
+  },
+  "province": "An Giang / 217",
+  "district": "Huyện An Phú / 1754",
+  "ward": "Thị trấn An Phú / 510301",
+  "address": "KAdas",
+  "phone": "0944444444",
+  "userId": {
+    "$oid": "67567f2cac173242e81d1f4a"
+  },
+  "createdAt": {
+    "$date": "2024-12-09T05:25:56.277Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T05:25:56.277Z"
+  },
+  "__v": 0
+}]

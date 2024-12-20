@@ -96,7 +96,7 @@ export default function ItemCart({
 			}`}
 		>
 			<input
-				onChange={() => productStatus.stock > 1 && select({ _id: data._id, selected: !data.selected })}
+				onChange={() => productStatus.stock >= 1 && select({ _id: data._id, selected: !data.selected })}
 				type="checkbox"
 				disabled={productStatus.stock == 0}
 				checked={isSelected}

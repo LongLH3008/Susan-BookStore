@@ -49,9 +49,9 @@ export const usePayment = ({ action, onSuccess, onError }: usePayment) => {
             }
         },
         onError: (error: any) => {
-            onError && onError()
+            onError && onError(error)
             console.log(error)
-            toast({ variant: ToastVariant.ERROR, content: 'Thanh toán thât bại' });
+            !onError && toast({ variant: ToastVariant.ERROR, content: 'Thanh toán thât bại' });
         },
     });
 

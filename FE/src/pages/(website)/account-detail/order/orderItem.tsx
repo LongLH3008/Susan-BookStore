@@ -4,6 +4,7 @@ import { ToastVariant } from "@/common/interfaces/toast";
 import { ConvertVNDString } from "@/common/shared/round-number";
 import { cancelOrderUser } from "@/services/user.service";
 import { useQueryClient } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
 
 const ProductOrderItem = ({ product }: { product: any }) => {
 	const calcDiscount =
@@ -32,10 +33,12 @@ const OrderItem = ({ item }: { item: any }) => {
 	const queryClient = useQueryClient();
 	const { id } = userState();
 	const { toast, close } = useToast();
+	const location = useLocation();
+
 	const handleStates = (state: string) => {
 		const states: Record<string, { label: string; bg: string; text: string }> = {
 			pending: {
-				label: "Đang chờ duyệt",
+				label: "Đang chuẩn bị hàng",
 				bg: "bg-amber-100",
 				text: "text-amber-500",
 			},
@@ -130,14 +133,17 @@ const OrderItem = ({ item }: { item: any }) => {
 					>
 						{handleStates(item?.state).label}
 					</span>
-					{item?.state === "pending" && (
-						<span
-							onClick={() => cancelOrder(item?._id)}
-							className="bg-red-500 text-white p-2 cursor-pointer rounded-sm font-[500] ml-5"
-						>
-							Hủy đơn hàng
-						</span>
-					)}
+					{item?.state === "pending" &&
+						item.payment.method == "COD" &&
+						id !== "" &&
+						location.pathname !== "/tra-cuu-don-hang" && (
+							<span
+								onClick={() => cancelOrder(item?._id)}
+								className="bg-red-500 text-white p-2 cursor-pointer rounded-sm font-[500] ml-5"
+							>
+								Hủy đơn hàng
+							</span>
+						)}
 				</div>
 			</div>
 			<div className="flex flex-col my-5 h-fit max-h-[25dvh] overflow-y-scroll order_scroll border-y text-zinc-500 border-zinc-300 border-dashed *:py-5">

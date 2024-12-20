@@ -1,0 +1,38 @@
+[{
+  "_id": {
+    "$oid": "674bd991358a4e6da30d7196"
+  },
+  "image": "http://localhost:5000/Home-1-Slider-1.webp",
+  "title": "Khuyến mãi mùa đông",
+  "subtitle": "Giảm giá lên đến 50%",
+  "description": "Đừng bỏ lỡ cơ hội sở hữu những sản phẩm tốt nhất với giá ưu đãi đặc biệt trong mùa hè này.",
+  "position": "end",
+  "is_active": true,
+  "createdAt": {
+    "$date": "2024-12-01T03:35:45.107Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T10:11:17.108Z"
+  },
+  "__v": 0,
+  "url": "http://localhost:5173/san-pham/%22xin%22-viec-ca-the-gioi"
+},
+{
+  "_id": {
+    "$oid": "674be16637bc0c36f7437992"
+  },
+  "image": "http://localhost:5000/Home-1-Slider-2.webp",
+  "title": "Khuyến mãi mùa hè",
+  "subtitle": "Giảm giá lên đến 50%",
+  "description": "Đừng bỏ lỡ cơ hội sở hữu những sản phẩm tốt nhất với giá ưu đãi đặc biệt trong mùa hè này.",
+  "position": "start",
+  "is_active": true,
+  "createdAt": {
+    "$date": "2024-12-01T04:09:10.039Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T10:13:17.830Z"
+  },
+  "__v": 0,
+  "url": "http://localhost:5173/san-pham/%22xin%22-viec-ca-the-gioi"
+}]

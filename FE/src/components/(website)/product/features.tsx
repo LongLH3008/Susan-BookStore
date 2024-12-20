@@ -1,7 +1,9 @@
 import { userState } from "@/common/hooks/useAuth";
 import { cartData } from "@/common/hooks/useCart";
 import { useLocalStorageCart } from "@/common/hooks/useLocalStorageCart";
+import { useToast } from "@/common/hooks/useToast";
 import { IProduct } from "@/common/interfaces/product";
+import { ToastVariant } from "@/common/interfaces/toast";
 import { useState } from "react";
 import useProductContext from "../../../common/context/ContextProduct";
 import ModalDetail from "./detail/modal_detail";
@@ -10,6 +12,7 @@ const ProductFeatures = ({ product }: { product: IProduct }) => {
 	const { featuresProduct, AddToCart } = useProductContext();
 	const { add, cart_products: cartLc } = useLocalStorageCart();
 	const { data: cartDt } = cartData();
+	const { toast } = useToast();
 
 	const [loading, setLoading] = useState<Boolean>(false);
 	const { id } = userState();
@@ -37,6 +40,7 @@ const ProductFeatures = ({ product }: { product: IProduct }) => {
 		const check = checkOutOfStock();
 		if (!check) return;
 		loadCart();
+		toast({ variant: ToastVariant.SUCCESS, content: "Thêm vào giỏ hàng thành công" });
 		if (id) {
 			AddToCart({ product_id: product?._id, user_id: id, product_quantity: 1 });
 		} else {

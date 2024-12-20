@@ -29,11 +29,11 @@ const Home = () => {
 					</>
 				) : (
 					<>
-						<Link to={data[0].link || "/cua-hang"} className="">
-							<img className="max-[768px]:w-full h-[300px]" src={data[0].image} alt="" />
+						<Link to={data[0]?.link || "/cua-hang"} className="">
+							<img className="max-[768px]:w-full h-[300px]" src={data[0]?.image} alt="" />
 						</Link>
-						<Link to={data[1].link || "/cua-hang"}>
-							<img className="max-[768px]:w-full h-[300px]" src={data[1].image} alt="" />
+						<Link to={data[1]?.link || "/cua-hang"}>
+							<img className="max-[768px]:w-full h-[300px]" src={data[1]?.image} alt="" />
 						</Link>
 					</>
 				)}
@@ -52,11 +52,11 @@ const Home = () => {
 					</>
 				) : (
 					<>
-						<Link to={data[2].link || "/cua-hang"} className="">
-							<img className="max-[768px]:w-full h-[300px]" src={data[2].image} alt="" />
+						<Link to={data[2]?.link || "/cua-hang"} className="">
+							<img className="max-[768px]:w-full h-[300px]" src={data[2]?.image} alt="" />
 						</Link>
-						<Link to={data[3].link || "/cua-hang"}>
-							<img className="max-[768px]:w-full h-[300px]" src={data[3].image} alt="" />
+						<Link to={data[3]?.link || "/cua-hang"}>
+							<img className="max-[768px]:w-full h-[300px]" src={data[3]?.image} alt="" />
 						</Link>
 					</>
 				)}

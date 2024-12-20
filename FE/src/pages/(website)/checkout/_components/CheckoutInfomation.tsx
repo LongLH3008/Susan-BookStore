@@ -4,6 +4,7 @@ import { usePayment } from "@/common/hooks/usePayment";
 import { useToast } from "@/common/hooks/useToast";
 import { ToastVariant } from "@/common/interfaces/toast";
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { BeatLoader } from "react-spinners";
 import UserAddress from "./CheckoutUserAddress";
 import Contact from "./Contact";
@@ -14,6 +15,7 @@ import Voucher from "./Voucher";
 const CheckoutInfomation = () => {
 	const [loading, setLoading] = useState<boolean>(false);
 	const { toast } = useToast();
+	const nav = useNavigate();
 	const { id, user_id, data, form, orderAddress_Payment_Discount, checkingOrder } = useContext(CheckoutContext);
 	const { afterPayment } = useLocalStorageCart();
 
@@ -23,12 +25,21 @@ const CheckoutInfomation = () => {
 			setLoading(false);
 			if (!user_id) afterPayment();
 		},
-		onError: () => {
-			setLoading(false),
+		onError: (err: any) => {
+			setLoading(false);
+			if (err.response.data.message == "Some products do not have enough stock") {
 				toast({
 					variant: ToastVariant.ERROR,
-					content: "Đã có lỗi xảy ra. Tạo đơn hàng không thành công",
+					content: "Sản phẩm trong giỏ hàng không tồn tại hoặc đã hết hàng, vui lòng cập nhật lại giỏ hàng",
+					duration: 4000,
 				});
+				nav("/gio-hang");
+				return;
+			}
+			toast({
+				variant: ToastVariant.ERROR,
+				content: "Đã có lỗi xảy ra. Tạo đơn hàng không thành công",
+			});
 		},
 	});
 
@@ -37,8 +48,18 @@ const CheckoutInfomation = () => {
 		onSuccess: () => {
 			setLoading(false);
 		},
-		onError: () => {
-			setLoading(false), toast({ variant: ToastVariant.ERROR, content: "Thanh toán không thành công" });
+		onError: (err: any) => {
+			setLoading(false);
+			if (err.response.data.message == "Some products do not have enough stock") {
+				toast({
+					variant: ToastVariant.ERROR,
+					content: "Sản phẩm trong giỏ hàng không tồn tại hoặc đã hết hàng, vui lòng cập nhật lại giỏ hàng",
+					duration: 4000,
+				});
+				nav("/gio-hang");
+				return;
+			}
+			toast({ variant: ToastVariant.ERROR, content: "Thanh toán không thành công" });
 		},
 	});
 

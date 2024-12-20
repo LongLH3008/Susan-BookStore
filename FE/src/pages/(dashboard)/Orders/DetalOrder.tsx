@@ -148,7 +148,7 @@ const DetalOrder = ({ dataOrder, statusList }: Props) => {
 							<li className="flex items-center gap-2 text-sm">
 								<span>Loại khách hàng:</span>
 								<span>
-									{dataOrder.user_email !== ""
+									{dataOrder.user_email == ""
 										? "Khách vãng lai"
 										: "Khách hàng thành viên"}
 								</span>
