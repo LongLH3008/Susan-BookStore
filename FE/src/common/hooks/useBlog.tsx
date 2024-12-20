@@ -23,7 +23,7 @@ export const BlogContext = createContext<BlogContextType>(
 export const BlogProvider = ({ children }: PropContextBlog) => {
   const [filters, setFilters] = useState<FiltersType>({
     page: 1,
-    limit: 10,
+    limit: 100,
     search: "",
   });
 

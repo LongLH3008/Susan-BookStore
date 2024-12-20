@@ -1,3 +1,4 @@
+import { search } from "@/common/assets/icon";
 import useBlog from "@/common/hooks/useBlog";
 import { useToast } from "@/common/hooks/useToast";
 import { IBlog } from "@/common/interfaces/blog";
@@ -22,7 +23,7 @@ import Paper from "@mui/material/Paper";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiEdit } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
@@ -30,7 +31,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const BlogPage = () => {
   const nav = useNavigate();
-  const { DataBlogs } = useBlog();
+  const { DataBlogs, setFilters } = useBlog();
   const { toast } = useToast();
   const [selectedBlog, setSelectedBlog] = useState<IBlog | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -57,6 +58,7 @@ const BlogPage = () => {
       });
     },
   });
+  useEffect(() => {}, [search]);
   const handleClose = () => {
     setOpen(false);
     setSelectedBlog(null);

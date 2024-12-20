@@ -23,7 +23,7 @@ const OrdersPage = () => {
 		mutationFn: ({ id, payload }: { id: string; payload: { state: string } }) => UpdateStatusOrder(id, payload),
 		onSuccess: (data: any) => {
 			toast({
-				variant: ToastVariant.SUCCESS,
+				variant: data.status,
 				content: `Cập nhật trạng thái thành công`,
 			});
 			DataOrders.refetch();
@@ -31,7 +31,7 @@ const OrdersPage = () => {
 		onError: (error: any) => {
 			const message = "Lỗi cập nhật trạng thái : ";
 			toast({
-				variant: ToastVariant.ERROR,
+				variant: error.response?.status || "error",
 				content: message + (error.response?.data || error.message),
 			});
 		},
@@ -53,10 +53,25 @@ const OrdersPage = () => {
 	console.log("selectedIds", selectedIds);
 
 	const statusList = [
-		{ label: "pending", title: "Đang chờ duyệt", color: "#f59e0b", bg: "#fef3c7" },
+		{
+			label: "pending",
+			title: "Đang chờ duyệt",
+			color: "#f59e0b",
+			bg: "#fef3c7",
+		},
 		{ label: "confirmed", title: "Xác nhận", color: "#2b6cb0", bg: "#bee3f8" },
-		{ label: "shipped", title: "Đang vận chuyển", color: "#3182ce", bg: "#d4f1f4" },
-		{ label: "success", title: "Đã nhận hàng", color: "#2f855a", bg: "#c6f6d5" },
+		{
+			label: "shipped",
+			title: "Đang vận chuyển",
+			color: "#3182ce",
+			bg: "#d4f1f4",
+		},
+		{
+			label: "success",
+			title: "Đã nhận hàng",
+			color: "#2f855a",
+			bg: "#c6f6d5",
+		},
 		{ label: "cancelled", title: "Hủy", color: "#f05252", bg: "#fde8e8" },
 	];
 
@@ -73,6 +88,11 @@ const OrdersPage = () => {
 		// onUpdateStatus(newStatusId);
 	};
 	const columns: GridColDef[] = [
+		{
+			headerName: "STT",
+			field: "stt",
+			width: 100,
+		},
 		{
 			field: "trackingNumber",
 			headerName: "VC",
@@ -239,9 +259,10 @@ const OrdersPage = () => {
 		);
 	}
 
-	const rows = DataOrders.data.metadata.data.map((row: IOrder) => ({
+	const rows = DataOrders.data.metadata.data.map((row: IOrder, index: number) => ({
 		id: row._id,
 		...row,
+		stt: index + 1,
 	}));
 	// console.log("order", selectedOrder);
 
@@ -276,7 +297,6 @@ const OrdersPage = () => {
 					initialState={{ pagination: { paginationModel } }}
 					pageSizeOptions={[5, 10]}
 					getRowHeight={() => "auto"}
-					checkboxSelection
 					onRowSelectionModelChange={(ids) => handleSelectionChange(ids as any)} // Lấy ID từ checkbox
 					onRowClick={onShowDetail}
 					sx={{
