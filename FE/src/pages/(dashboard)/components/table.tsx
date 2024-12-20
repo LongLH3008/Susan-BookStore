@@ -35,17 +35,19 @@ const MyTable2: React.FC<MyTable2Props> = ({
       </div>
     );
   }
-
+  const rowsWithSTT = rows?.map((row: any, index: number) => ({
+    ...row,
+    stt: index + 1,
+  }));
   return (
     <Paper className="bg-white h-[67vh] dark:bg-gray-800 text-gray-900 dark:text-gray-100">
       <div style={{ height: "67vh", width: "100%" }}>
         <DataGrid
           columns={columns}
-          rows={rows}
+          rows={rowsWithSTT}
           initialState={{ pagination: { paginationModel } }}
           pageSizeOptions={[5, 10, 20]}
           getRowId={(row) => row?._id || row?.id}
-          checkboxSelection
           getRowHeight={() => "auto"}
           sx={{
             border: 0,
