@@ -1,6 +1,10 @@
 import { IReview } from "@/common/interfaces/review";
 import { SendRequest } from "@/config";
 
+export const updateReviewProductInOrder = async (arg: { bookId: string; isComment: boolean, orderId: string }) => {
+  return await SendRequest('PATCH', 'order/update-iscomment', arg);
+}
+
 export const getReviewByIdBook = async (_id: string) => {
   return await SendRequest("GET", `books/${_id}/reviews`);
 };

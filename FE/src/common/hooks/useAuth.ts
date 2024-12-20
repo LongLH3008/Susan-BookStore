@@ -1,4 +1,5 @@
 import { changePassword, checkOTP, confirmNewPassword, login, logout, register, requestOTP } from "@/services/auth.service";
+import { getUserDetail } from "@/services/user.service";
 import { useMutation } from "@tanstack/react-query";
 import { SubmitHandler } from "react-hook-form";
 import { create } from "zustand";
@@ -15,6 +16,7 @@ type useAuth = {
 
 type userState = {
 	id: string;
+	isActive: string;
 	user_role: "user" | "admin" | "";
 	AuthorUser: () => void;
 	resetState: () => void;
@@ -22,17 +24,20 @@ type userState = {
 
 export const userState = create<userState>((set) => ({
 	id: "",
+	isActive: "active",
 	user_role: "",
-	AuthorUser: () => {
+	AuthorUser: async () => {
 		const payload = Authentication();
 		if (payload) {
-			set({ ...payload });
+			const user = await getUserDetail({ user_id: payload.id });
+			console.log(user);
+			set({ ...payload, isActive: user.metadata.user_status });
 		}
 	},
 	resetState: () => {
 		localStorage.removeItem("refreshToken");
 		localStorage.removeItem("accessToken");
-		set({ id: "", user_role: "" });
+		set({ id: "", user_role: "", isActive: 'active' });
 	},
 }));
 

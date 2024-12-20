@@ -23,7 +23,7 @@ const OrdersPage = () => {
 		mutationFn: ({ id, payload }: { id: string; payload: { state: string } }) => UpdateStatusOrder(id, payload),
 		onSuccess: (data: any) => {
 			toast({
-				variant: data.status,
+				variant: ToastVariant.SUCCESS,
 				content: `Cập nhật trạng thái thành công`,
 			});
 			DataOrders.refetch();
@@ -31,7 +31,7 @@ const OrdersPage = () => {
 		onError: (error: any) => {
 			const message = "Lỗi cập nhật trạng thái : ";
 			toast({
-				variant: error.response?.status || "error",
+				variant: ToastVariant.ERROR,
 				content: message + (error.response?.data || error.message),
 			});
 		},
@@ -174,14 +174,6 @@ const OrdersPage = () => {
 						toast({
 							variant: ToastVariant.ERROR,
 							content: "Đơn hàng đã hoàn tất, không thể thay đổi trạng thái.",
-						});
-						return;
-					}
-
-					if (params.row.state === "shipped") {
-						toast({
-							variant: ToastVariant.ERROR,
-							content: "Đơn hàng đã được giao, không thể hủy.",
 						});
 						return;
 					}

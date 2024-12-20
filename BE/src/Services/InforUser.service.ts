@@ -29,7 +29,7 @@ class InfoUserService {
   // getbyInforUserId
   static async GetByInforUserId({ id }: { id: string }) {
     try {
-      const infoUser = await InforUser.findOne({ _id: id });
+      const infoUser = await InforUser.findById(id);
       if (!infoUser) throw new ResourceNotFoundError("this info not found !");
       return infoUser;
     } catch (error: any) {

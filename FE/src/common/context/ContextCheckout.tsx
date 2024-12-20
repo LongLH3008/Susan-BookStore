@@ -32,7 +32,7 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
 	const { id } = useParams();
 	const [data, setData] = useState<ICart[]>([]);
 	const { cart_products } = useLocalStorageCart();
-	const { id: user_id } = userState();
+	const { id: user_id, isActive, AuthorUser, resetState } = userState();
 	const [checkingOrder, setcheckingOrder] = useState<checkingOrder>({
 		feeShip: 0,
 		subtotal: 0,
@@ -54,6 +54,19 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
 	});
 
 	useEffect(() => {
+		// (async () => {
+		// 	AuthorUser();
+		// 	if (isActive == "block") {
+		// 		toast({
+		// 			variant: ToastVariant.ERROR,
+		// 			content: "Tài khoản của bạn đã bị vô hiệu hóa",
+		// 		});
+		// 		resetState();
+		// 		await logout();
+		// 		nav("/");
+		// 		return;
+		// 	}
+		// })();
 		const loadData = async () => {
 			if (user_id) {
 				const res = await fetchCartAndUserData(id as string);
@@ -68,7 +81,6 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
 				await processOrder(cart_products.filter((item) => item.selected));
 			}
 		};
-
 		loadData();
 	}, []);
 
@@ -138,23 +150,25 @@ export function CheckoutProvider({ children }: { children: ReactNode }) {
 
 	return (
 		<>
-			<CheckoutContext.Provider
-				value={{
-					data,
-					id,
-					user_id,
-					setOrder_A_P_D,
-					orderAddress_Payment_Discount,
-					toast,
-					calcFeeShip,
-					checkingOrder,
-					setcheckingOrder,
-					form,
-					nav,
-				}}
-			>
-				{children}
-			</CheckoutContext.Provider>
+			{isActive !== "block" && (
+				<CheckoutContext.Provider
+					value={{
+						data,
+						id,
+						user_id,
+						setOrder_A_P_D,
+						orderAddress_Payment_Discount,
+						toast,
+						calcFeeShip,
+						checkingOrder,
+						setcheckingOrder,
+						form,
+						nav,
+					}}
+				>
+					{children}
+				</CheckoutContext.Provider>
+			)}
 		</>
 	);
 }

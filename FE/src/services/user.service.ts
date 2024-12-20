@@ -4,6 +4,10 @@ export const getUserAddress = async (arg: { user_id: string }) => {
     return SendRequest('GET', `Getall/info-user-WithUserId?userId=${arg.user_id}&page=1&limit=12`)
 }
 
+export const getUserDetail = async (arg: { user_id: string }) => {
+    return SendRequest('GET', `user/${arg.user_id}`);
+}
+
 export const createUserAddress = async (arg: any) => {
     return SendRequest('POST', 'create/info-user', arg);
 }

@@ -182,4 +182,6 @@ router.post("/filterbydayandmonth", (0, utils_1.asyncHandler)(Statistinal_contro
 router.post("/filterbydayandmonth/admin", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.StatisticalFilterOrderPrdayAndMonthTwo));
 router.post("/filterbyday/admin", (0, utils_1.asyncHandler)(Statistinal_controller_1.default.StatisticalFilterOrderbyWeek));
 router.patch("/update-status-order/:id", (0, utils_1.asyncHandler)(StatusOrder_Controller_1.default.UpdateStatusOrderForClient));
+// cap nhat iscomment 
+router.patch("/order/update-iscomment", (0, utils_1.asyncHandler)(Order_Controller_1.default.UpdateIsComment));
 exports.default = router;

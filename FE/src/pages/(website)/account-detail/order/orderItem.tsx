@@ -5,35 +5,60 @@ import { ConvertVNDString } from "@/common/shared/round-number";
 import { cancelOrderUser } from "@/services/user.service";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
-
-const ProductOrderItem = ({ product }: { product: any }) => {
-	const calcDiscount =
-		Math.abs(product.discount) > 0 ? product.price * Math.abs((100 - product.discount) / 100) : product.price;
-
-	return (
-		<div className="max-sm:flex max-sm:flex-col items-center grid grid-cols-8 max-sm:text-[15px] text-[13px] last-of-type:border-0 border-b border-dashed">
-			<figure className="size-14 col-span-1 grid place-items-center rounded-md border border-zinc-200 overflow-hidden">
-				<img src={product.image} alt={product.title} />
-			</figure>
-			<div className="col-span-2">{product.title}</div>
-			<div className="col-span-1 text-right">
-				{Math.abs(product.discount) > 0 ? "- " + Math.abs(product.discount) + "%" : ""}
-			</div>
-			<div className="col-span-1 line-through text-right">
-				{Math.abs(product.discount) > 0 ? ConvertVNDString(product.price) : ""}
-			</div>
-			<div className="col-span-1 text-right">{ConvertVNDString(calcDiscount)}đ</div>
-			<div className="col-span-1 text-right">x{product.quantity}</div>
-			<div className="col-span-1 font-[500] text-right">{ConvertVNDString(product.total)}đ</div>
-		</div>
-	);
-};
+import { PopupReview } from "./popupReview";
 
 const OrderItem = ({ item }: { item: any }) => {
 	const queryClient = useQueryClient();
 	const { id } = userState();
 	const { toast, close } = useToast();
 	const location = useLocation();
+	const current = new Date().getDate();
+	const date = new Date(item.updatedAt).getDate();
+	const expiredReview = current - date;
+	console.log(item);
+
+	const ProductOrderItem = ({ product }: { product: any }) => {
+		console.log(product);
+		const calcDiscount =
+			Math.abs(product.discount) > 0
+				? product.price * Math.abs((100 - product.discount) / 100)
+				: product.price;
+
+		return (
+			<>
+				<div className="max-sm:flex max-sm:flex-col items-center grid grid-cols-8 max-sm:text-[15px] text-[13px] last-of-type:border-0 border-b border-dashed">
+					<figure className="size-14 col-span-1 grid place-items-center rounded-md border border-zinc-200 overflow-hidden">
+						<img src={product.image} alt={product.title} />
+					</figure>
+					<div className="col-span-2">{product.title}</div>
+					<div className="col-span-1 text-right">
+						{Math.abs(product.discount) > 0 ? "- " + Math.abs(product.discount) + "%" : ""}
+					</div>
+					<div className="col-span-1 line-through text-right">
+						{Math.abs(product.discount) > 0 ? ConvertVNDString(product.price) : ""}
+					</div>
+					<div className="col-span-1 text-right">{ConvertVNDString(calcDiscount)}đ</div>
+					<div className="col-span-1 text-right">x{product.quantity}</div>
+					<div className="col-span-1 font-[500] text-right">{ConvertVNDString(product.total)}đ</div>
+					{expiredReview < 5 &&
+						item?.state === "success" &&
+						!product.isComment &&
+						id !== "" &&
+						location.pathname !== "/tra-cuu-don-hang" && (
+							<PopupReview
+								data={product}
+								orderId={item._id}
+								trigger={
+									<div className="text-[12px] mt-4 cursor-pointer bg-[#00bfc5] px-2 py-[2px] text-white w-56 text-center">
+										Đánh giá sản phẩm (còn {5 - expiredReview} ngày)
+									</div>
+								}
+							/>
+						)}
+				</div>
+			</>
+		);
+	};
 
 	const handleStates = (state: string) => {
 		const states: Record<string, { label: string; bg: string; text: string }> = {
@@ -152,7 +177,7 @@ const OrderItem = ({ item }: { item: any }) => {
 				))}
 			</div>
 			<div className="flex justify-between items-start gap-1 text-zinc-500 text-[13px]">
-				<span className="">
+				<span className="max-w-[55%] text-wrap">
 					{item?.payment.method == "COD"
 						? `Thanh toán khi nhận hàng (COD - ${
 								item?.state == "success" ? "Đã thanh toán" : "Chưa thanh toán"

@@ -5,6 +5,7 @@ import { MegeMenuProvider } from "@/common/hooks/useMegaMenu";
 import { ProductProvider } from "@/common/hooks/useProduct";
 import { useToast } from "@/common/hooks/useToast";
 import { ToastVariant } from "@/common/interfaces/toast";
+import { logout } from "@/services/auth.service";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ScrollToTop from "../scrolltotop/scrolltoptop";
@@ -13,17 +14,23 @@ import DropdownShop from "./dropdownShop";
 import DropdownMiniCart from "./miniCart/MiniCart";
 import ResponsiveSidebar from "./responsiveSidebar";
 
-type Props = {};
-
-const Navbar = (props: Props) => {
+const Navbar = () => {
 	const [scroll, setScroll] = useState(0);
-	const { AuthorUser, id, resetState } = userState();
+	const { AuthorUser, id, isActive, resetState } = userState();
 	const { getCart } = useLocalStorageCart();
 	const { toast, close } = useToast();
 	const nav = useNavigate();
 
 	useEffect(() => {
 		AuthorUser();
+		if (isActive == "block") {
+			toast({
+				variant: ToastVariant.ERROR,
+				content: "Tài khoản của bạn đã bị vô hiệu hóa",
+			});
+			resetState();
+			Logout(false);
+		}
 		if (id == "") getCart();
 		const handleScroll = () => {
 			if (window.scrollY < 100) {
@@ -44,7 +51,11 @@ const Navbar = (props: Props) => {
 		onError: (err: any) => console.log(err),
 	});
 
-	const Logout = () => {
+	const Logout = async (isActive?: boolean) => {
+		if (isActive == false) {
+			await logout();
+			return;
+		}
 		toast({
 			variant: ToastVariant.CONFIRM,
 			content: "Bạn muốn đăng xuất",
@@ -69,11 +80,7 @@ const Navbar = (props: Props) => {
 						<Link className="hover:underline" to={"/tra-cuu-don-hang"}>
 							Tra cứu đơn hàng
 						</Link>
-						{id == "" ? (
-							<Link className="hover:underline" to={"/dang-nhap"}>
-								Đăng nhập / đăng ký
-							</Link>
-						) : (
+						{id !== "" && isActive !== "block" ? (
 							<div className="contents">
 								<Link
 									className="hover:underline"
@@ -88,6 +95,10 @@ const Navbar = (props: Props) => {
 									Đăng xuất
 								</span>
 							</div>
+						) : (
+							<Link className="hover:underline" to={"/dang-nhap"}>
+								Đăng nhập / đăng ký
+							</Link>
 						)}
 					</div>
 					<Link id="logo_header" className="col-span-1 flex items-center h-full" to={"/"}>
