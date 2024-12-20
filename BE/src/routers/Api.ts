@@ -372,6 +372,9 @@ router.patch(
   asyncHandler(StatusOrderController.UpdateStatusOrderForClient)
 );
 
+// cap nhat iscomment 
+router.patch("/order/update-iscomment", asyncHandler(OrderController.UpdateIsComment));
+
 
 
 

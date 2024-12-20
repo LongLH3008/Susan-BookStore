@@ -70,7 +70,9 @@ const OrderSchema = new mongoose.Schema<IOrderModel>(
             length: {type: Number, required: true},
             width: {type: Number, required: true},
             weight: {type: Number, required: true},
-            height: {type: Number, required: true}
+            height: {type: Number, required: true},
+            // da danh giah ay chua 
+            isComment : {type : Boolean, default : false},
 
         }],
         total: {

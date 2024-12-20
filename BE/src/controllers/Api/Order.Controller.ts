@@ -43,6 +43,13 @@ class OrderController {
       metadata: await OrderService.DetailOrder(req.params.id),
     }).send(res);
   }
+
+  // update iscomnent
+  static async UpdateIsComment(req: Request, res: Response): Promise<any> {
+    return new SuccessResponse({
+      metadata: await OrderService.Updateiscomment(req.body.orderId, req.body.bookId, req.body.isComment),
+    }).send(res);
+  }
 }
 
 export default OrderController;

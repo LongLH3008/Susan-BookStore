@@ -21,6 +21,7 @@ export interface IOrderProduct {
     width?: number;
     length?: number
     isbn?: string;
+    isComment? : boolean;
 }
 
 export interface IOrderShipping {
