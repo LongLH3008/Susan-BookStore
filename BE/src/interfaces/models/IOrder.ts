@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export enum OrderState {
-    pending = "pending", confirmed = "confirmed", shipped = "shipped", cancelled = "cancelled"
+    pending = "pending", confirmed = "confirmed", shipped = "shipped", cancelled = "cancelled", success = 'success'
 }
 
 export interface IOrderProduct {
@@ -9,7 +9,7 @@ export interface IOrderProduct {
     name: string
     title: string;
     quantity: number;
-    image:string,
+    image: string,
     price: number;
     subtotal: number;
     discount?: number;
@@ -21,7 +21,7 @@ export interface IOrderProduct {
     width?: number;
     length?: number
     isbn?: string;
-    isComment? : boolean;
+    isComment?: boolean;
 }
 
 export interface IOrderShipping {
@@ -67,7 +67,7 @@ export interface IOrder {
     total: number;
     trackingNumber: string;
     code?: string;
-    isSubtractedStock:boolean
+    isSubtractedStock: boolean
 };
 
 

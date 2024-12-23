@@ -61,12 +61,6 @@ const CheckoutSuccess = () => {
 					>
 						Tiếp tục mua hàng
 					</Link>
-					<Link
-						to="/gio-hang"
-						className="bg-black text-nowrap text-white px-[25px] py-[10px] text-[14px] hover:bg-zinc-700"
-					>
-						Giỏ hàng
-					</Link>
 					{id ? (
 						<Link
 							to="/thong-tin-tai-khoan/don-hang"
@@ -76,12 +70,18 @@ const CheckoutSuccess = () => {
 						</Link>
 					) : (
 						<Link
-							to="/"
+							to="/tra-cuu-don-hang"
 							className="bg-black text-nowrap text-white px-[25px] py-[10px] text-[14px] hover:bg-zinc-700"
 						>
-							Trở về trang chủ
+							Tra cứu đơn hàng
 						</Link>
 					)}
+					<Link
+						to="/"
+						className="bg-black text-nowrap text-white px-[25px] py-[10px] text-[14px] hover:bg-zinc-700"
+					>
+						Trở về trang chủ
+					</Link>
 				</div>
 			</div>
 		</>
