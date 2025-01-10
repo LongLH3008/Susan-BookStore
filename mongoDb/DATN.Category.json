@@ -1,0 +1,264 @@
+[{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f1ff"
+  },
+  "category_name": "Tiểu thuyết",
+  "category_thumb": "http://localhost:5000/tieu-thuyet.webp",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-12-08T08:24:16.334Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f200"
+  },
+  "category_name": "Truyện ngắn - Tản Văn",
+  "category_thumb": "http://localhost:5000/truyá»n ngáº¯n.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-12-08T08:24:39.773Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f201"
+  },
+  "category_name": "Light Novel",
+  "category_thumb": "http://localhost:5000/Light Novel.png",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-12-07T08:25:25.773Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f202"
+  },
+  "category_name": "Truyện Trinh Thám - Kiếm Hiệp",
+  "category_thumb": "http://localhost:5000/Truyá»n Trinh ThÃ¡m - Kiáº¿m Hiá»p.jpeg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-12-07T08:25:40.117Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f203"
+  },
+  "category_name": "Quản Trị - Lãnh Đạo",
+  "category_thumb": "http://localhost:5000/Quáº£n Trá» - LÃ£nh Äáº¡o.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-12-07T08:25:50.315Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f204"
+  },
+  "category_name": "Nhân vật - Bài Học Kinh doanh",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": false,
+  "updatedAt": {
+    "$date": "2024-11-25T15:52:37.399Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f205"
+  },
+  "category_name": "Marketing - Bán Hàng",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:04.374Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f206"
+  },
+  "category_name": "Khởi Nghiệp - Làm Giàu",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:05.048Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f207"
+  },
+  "category_name": "Phân Tích Kinh Tế",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:06.097Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f208"
+  },
+  "category_name": "Kỹ năng sống",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:06.771Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f209"
+  },
+  "category_name": "Tâm lý",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:08.301Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f20a"
+  },
+  "category_name": "Sách cho tuổi mới lớn",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:08.867Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f20b"
+  },
+  "category_name": "Câu Chuyện Cuộc Đời",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:10.066Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f20c"
+  },
+  "category_name": "Lịch Sử",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:11.207Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f20d"
+  },
+  "category_name": "Nghệ Thuật - Giải Trí",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:11.783Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f20e"
+  },
+  "category_name": "Chính Trị",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:13.510Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f20f"
+  },
+  "category_name": "Kinh Tế",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:14.222Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f210"
+  },
+  "category_name": "Sách Tham Khảo",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:14.715Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f211"
+  },
+  "category_name": "Sách Giáo Khoa",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:15.781Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f212"
+  },
+  "category_name": "Mẫu Giáo",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:16.503Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f213"
+  },
+  "category_name": "Sách giáo viên",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:18.053Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "670600d43fe0f93d6ef4f214"
+  },
+  "category_name": "Đại học",
+  "category_thumb": "http://localhost:5000/lamp.jpg",
+  "createdAt": "2024-10-09T10:00:00Z",
+  "is_active": true,
+  "updatedAt": {
+    "$date": "2024-10-09T04:05:18.587Z"
+  }
+}]

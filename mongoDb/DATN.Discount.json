@@ -1,0 +1,137 @@
+[{
+  "_id": {
+    "$oid": "67541c818809aaaa1fa86c2f"
+  },
+  "discount_name": "1KAMX",
+  "discount_code": "CODE1",
+  "discount_type": "percentage",
+  "discount_value": 15,
+  "discount_applies_to": "category",
+  "discount_product_ids": [],
+  "discount_category_ids": [
+    "670600d43fe0f93d6ef4f208"
+  ],
+  "discount_stock": 1000,
+  "discount_min_order_value": 0,
+  "discount_description": "dasdasd",
+  "discount_max_use_per_user": 1000,
+  "discount_users_used": [],
+  "discount_is_active": true,
+  "discount_start_date": {
+    "$date": "2024-12-07T00:00:00.000Z"
+  },
+  "discount_end_date": {
+    "$date": "2024-12-20T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2024-12-07T09:59:29.469Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-08T14:24:19.751Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67541f7e8809aaaa1fa86da0"
+  },
+  "discount_name": "1111",
+  "discount_code": "KAKA",
+  "discount_type": "percentage",
+  "discount_value": 10,
+  "discount_applies_to": "category",
+  "discount_product_ids": [],
+  "discount_category_ids": [
+    "670600d43fe0f93d6ef4f208"
+  ],
+  "discount_stock": 10000,
+  "discount_min_order_value": 0,
+  "discount_description": "",
+  "discount_max_use_per_user": 10000,
+  "discount_users_used": [],
+  "discount_is_active": true,
+  "discount_start_date": {
+    "$date": "2024-12-07T00:00:00.000Z"
+  },
+  "discount_end_date": {
+    "$date": "2024-12-20T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2024-12-07T10:12:14.740Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T10:12:14.740Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67542b1567e8d91771ba3c5f"
+  },
+  "discount_name": "knlg",
+  "discount_code": "KNLG",
+  "discount_type": "percentage",
+  "discount_value": 5,
+  "discount_applies_to": "category",
+  "discount_product_ids": [
+    {
+      "$oid": "670b7d495c839572e6154536"
+    }
+  ],
+  "discount_category_ids": [
+    "670600d43fe0f93d6ef4f204"
+  ],
+  "discount_stock": 99,
+  "discount_min_order_value": 0,
+  "discount_description": "Áp dụng các tất cả sản phẩm Nhân vật - Bài học Kinh doanh",
+  "discount_max_use_per_user": 99,
+  "discount_users_used": [],
+  "discount_is_active": true,
+  "discount_start_date": {
+    "$date": "2024-12-07T00:00:00.000Z"
+  },
+  "discount_end_date": {
+    "$date": "2025-01-09T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2024-12-07T11:01:41.950Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T11:12:19.701Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67544e2785301c2114b150f2"
+  },
+  "discount_name": "10DRLD",
+  "discount_code": "10DRLD",
+  "discount_type": "fixed_amount",
+  "discount_value": 50000,
+  "discount_applies_to": "specific",
+  "discount_product_ids": [
+    "670b7d495c839572e6154536",
+    "670a086d232b45325c1c949e"
+  ],
+  "discount_category_ids": [],
+  "discount_stock": 10,
+  "discount_min_order_value": 100000,
+  "discount_description": "Áp dụng cho oản phẩm 10 Điều Răn Lãnh Đạo tối ưu nhất thế giới",
+  "discount_max_use_per_user": 10,
+  "discount_users_used": [],
+  "discount_is_active": true,
+  "discount_start_date": {
+    "$date": "2024-12-07T00:00:00.000Z"
+  },
+  "discount_end_date": {
+    "$date": "2024-12-20T00:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2024-12-07T13:31:19.707Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T14:07:45.399Z"
+  },
+  "__v": 0
+}]

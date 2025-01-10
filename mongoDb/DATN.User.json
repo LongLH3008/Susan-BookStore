@@ -1,0 +1,181 @@
+[{
+  "_id": {
+    "$oid": "67513df24da1632254d013a8"
+  },
+  "user_name": "Quản trị viên ",
+  "user_email": "admin@gmail.com",
+  "user_password": "$2b$10$J7JbykxR4baHMIxcdjBCK.Su7EAoIaIRq8DeAIntU62b18YWR6p4u",
+  "user_status": "active",
+  "user_wishlist": [],
+  "user_reward_points": 0,
+  "user_role": "admin",
+  "user_avatar": "",
+  "user_gender": "",
+  "user_auth_type": "local",
+  "createdAt": {
+    "$date": "2024-12-05T05:45:22.060Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-08T16:40:53.518Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67513e054da1632254d013ae"
+  },
+  "user_name": "Lương Hoàng Long",
+  "user_email": "longlhph31572@fpt.edu.vn",
+  "user_password": "$2b$10$8k8RRaepUUDX4ouhyYY8n.Cpkw.XfcIEdTUuiQEBKCXEZA6liHZ3i",
+  "user_status": "active",
+  "user_wishlist": [],
+  "user_reward_points": 0,
+  "user_role": "user",
+  "user_avatar": "http://localhost:5000/chill.jpg",
+  "user_gender": "male",
+  "user_auth_type": "local",
+  "createdAt": {
+    "$date": "2024-12-05T05:45:41.577Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-08T17:21:43.841Z"
+  },
+  "__v": 0,
+  "user_birth": "2000-07-31"
+},
+{
+  "_id": {
+    "$oid": "675151d35e9402ef5cee042f"
+  },
+  "user_name": "phucuongle",
+  "user_email": "cuonglpph31044@fpt.edu.vn",
+  "user_phone_number": "0981477710",
+  "user_password": "$2b$10$odQ/JEu3OhOJoHZZ5MpLkuEaPBAklVV6WxLaByk0ddEJB7tzll/EC",
+  "user_status": "active",
+  "user_wishlist": [],
+  "user_reward_points": 0,
+  "user_address": "123 Main St, City, Country",
+  "user_role": "user",
+  "user_avatar": "https://example.com/avatar.jpg",
+  "user_gender": "male",
+  "user_auth_type": "local",
+  "createdAt": {
+    "$date": "2024-12-05T07:10:11.248Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T05:10:47.435Z"
+  },
+  "__v": 0,
+  "user_birth": "10/10/2024"
+},
+{
+  "_id": {
+    "$oid": "67528e6723c64caed779bff6"
+  },
+  "user_name": "đông ",
+  "user_email": "nguyenduydong6000@gmail.com",
+  "user_password": "$2b$10$S5aCbLTks3v9NKgzPXKTW.ybyY5oqM.tcITp9ahPL9VkLc0jjJ4Pm",
+  "user_status": "active",
+  "user_wishlist": [],
+  "user_reward_points": 0,
+  "user_role": "user",
+  "user_avatar": "",
+  "user_gender": "",
+  "user_auth_type": "local",
+  "createdAt": {
+    "$date": "2024-12-06T05:40:55.819Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-06T05:40:55.819Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6754187a21a82a2369af8f1a"
+  },
+  "user_name": "kangz",
+  "user_email": "cuong@gmail.com",
+  "user_password": "$2b$10$bvTti3zPq59zz7YqGftjPe1i/pXFc.IpSqYsEHQkWU.T43wDZDBz6",
+  "user_status": "active",
+  "user_wishlist": [],
+  "user_reward_points": 0,
+  "user_role": "admin",
+  "user_avatar": "",
+  "user_gender": "",
+  "user_auth_type": "local",
+  "createdAt": {
+    "$date": "2024-12-07T09:42:18.761Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-08T16:41:01.340Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67541d018809aaaa1fa86c85"
+  },
+  "user_name": "kangz1",
+  "user_email": "cuong1@gmail.com",
+  "user_password": "$2b$10$9fgw.IwUAnxky4prMd5cperqiEZPD8tyC2qYrfo.YFfZg1i7I.ole",
+  "user_status": "active",
+  "user_wishlist": [],
+  "user_reward_points": 0,
+  "user_role": "user",
+  "user_avatar": "",
+  "user_gender": "",
+  "user_auth_type": "local",
+  "createdAt": {
+    "$date": "2024-12-07T10:01:37.595Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-07T10:01:37.595Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6755c1624ea6f7662cdf159f"
+  },
+  "user_name": "dung ngô",
+  "user_email": "dung@gmail.com",
+  "user_password": "$2b$10$nmMb6G1gF/vnekNBmyRdJ.9AMo12BbAL.hCr9h4zS92QdBL.KOIUS",
+  "user_status": "active",
+  "user_wishlist": [],
+  "user_reward_points": 0,
+  "user_role": "user",
+  "user_avatar": "",
+  "user_gender": "",
+  "user_auth_type": "local",
+  "createdAt": {
+    "$date": "2024-12-08T15:55:14.848Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-08T15:55:14.848Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "67567f2cac173242e81d1f4a"
+  },
+  "user_name": "cuongggg",
+  "user_email": "bkak60@gmail.com",
+  "user_password": "$2b$10$Z/Gxj2pWsweV1E6yv0E79.D.FhKnlG5HMBnEgNTvpkCfXdoTGCGLu",
+  "user_status": "active",
+  "user_wishlist": [],
+  "user_reward_points": 0,
+  "user_role": "user",
+  "user_avatar": "http://localhost:5000/240_F_483231736_JbDYwCuSwNPcZMy67Qc3xG3eSnybhXMA - Copy.jpg",
+  "user_gender": "male",
+  "user_auth_type": "local",
+  "createdAt": {
+    "$date": "2024-12-09T05:25:00.610Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-09T07:19:40.461Z"
+  },
+  "__v": 0,
+  "user_birth": "2024-12-14"
+}]
